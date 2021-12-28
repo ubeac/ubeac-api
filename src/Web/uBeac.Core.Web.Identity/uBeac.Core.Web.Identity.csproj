@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Identity\uBeac.Core.Identity\uBeac.Core.Identity.csproj" />
+    <ProjectReference Include="..\uBeac.Core.Web.Common\uBeac.Core.Web.Common.csproj" />
+  </ItemGroup>
+
+</Project>
