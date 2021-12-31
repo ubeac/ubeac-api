@@ -23,4 +23,7 @@ namespace uBeac.Identity
             return Name;
         }
     }
+    public class Role : Role<Guid>, IEntity
+    {
+    }
 }

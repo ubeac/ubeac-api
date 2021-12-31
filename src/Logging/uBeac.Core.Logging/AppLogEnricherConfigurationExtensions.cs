@@ -1,7 +1,6 @@
 ﻿using Serilog;
 using Serilog.Configuration;
 using Serilog.Exceptions;
-using System;
 
 namespace uBeac.Logging
 {

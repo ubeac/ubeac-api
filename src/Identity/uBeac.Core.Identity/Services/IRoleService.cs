@@ -9,4 +9,9 @@
         Task<bool> Update(TRole role, CancellationToken cancellationToken = default);
         Task<IEnumerable<TRole>> GetAll(CancellationToken cancellationToken = default);
     }
+
+    public interface IRoleService<TRole>: IRoleService<Guid, TRole>
+       where TRole : Role
+    { 
+    }
 }

@@ -5,6 +5,10 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
 
+/// <summary>
+/// use this instead
+/// https://stackoverflow.com/questions/65817012/generic-ilogger-or-through-serilog-add-logged-property
+/// </summary>
 namespace uBeac.Logging
 {
     public class AppLogEnricher : ILogEventEnricher
@@ -33,6 +37,7 @@ namespace uBeac.Logging
                 ThreadId = Environment.CurrentManagedThreadId,
                 ThreadName = Thread.CurrentThread.Name
             };
+
 
             _cachedProperty ??= propertyFactory.CreateProperty(ApplicationLogPropertyName, log, true);
             logEvent.AddPropertyIfAbsent(_cachedProperty);

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using uBeac.Identity;
@@ -8,27 +9,88 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceExtensions
     {
-        public static IdentityBuilder AddAuthenticationServices<TUserKey, TUser, TRoleKey, TRole>(this IServiceCollection services, Action<IdentityOptions> setupIdentityAction = default)
+        public static IServiceCollection AddUserService<TUserService, TUserKey, TUser>(this IServiceCollection services)
             where TUserKey : IEquatable<TUserKey>
-            where TUser : User<TUserKey>, new()
+            where TUser : User<TUserKey>
+            where TUserService : class, IUserService<TUserKey, TUser>
+        {
+            services.TryAddScoped<IUserService<TUserKey, TUser>, TUserService>();
+            return services;
+        }
+
+        public static IServiceCollection AddUserService<TUserService, TUser>(this IServiceCollection services)
+           where TUser : User
+           where TUserService : class, IUserService<TUser>
+        {
+            services.TryAddScoped<IUserService<TUser>, TUserService>();
+            return services;
+        }
+
+        public static IServiceCollection AddRoleService<TRoleService, TRoleKey, TRole>(this IServiceCollection services)
+            where TRoleKey : IEquatable<TRoleKey>
+            where TRole : Role<TRoleKey>
+            where TRoleService : class, IRoleService<TRoleKey, TRole>
+        {
+            services.TryAddScoped<IRoleService<TRoleKey, TRole>, TRoleService>();
+            return services;
+        }
+
+        public static IServiceCollection AddRoleService<TRoleService, TRole>(this IServiceCollection services)
+            where TRole : Role
+            where TRoleService : class, IRoleService<TRole>
+        {
+            services.TryAddScoped<IRoleService<TRole>, TRoleService>();
+            return services;
+        }
+
+        public static IdentityBuilder AddIdentityUser<TUser>(this IServiceCollection services, Action<IdentityOptions>? setupIdentityAction = default)
+           where TUser : User
+        {
+            var builder = services.AddIdentityCore<TUser>(setupIdentityAction ?? (x => GetDefaultOptions()));
+
+            builder
+                .AddUserStore<UserStore<TUser>>()
+                .AddUserManager<UserManager<TUser>>()
+                .AddDefaultTokenProviders();
+
+            return builder;
+        }
+
+        public static IdentityBuilder AddIdentityUser<TUserKey, TUser>(this IServiceCollection services, Action<IdentityOptions>? setupIdentityAction = default)
+            where TUserKey : IEquatable<TUserKey>
+            where TUser : User<TUserKey>
+        {
+            var builder = services.AddIdentityCore<TUser>(setupIdentityAction ?? (x => GetDefaultOptions()));
+
+            builder
+                .AddUserStore<UserStore<TUser, TUserKey>>()
+                .AddUserManager<UserManager<TUser>>()
+                .AddDefaultTokenProviders();
+
+            return builder;
+        }
+
+        public static IdentityBuilder AddIdentityRole<TRoleKey, TRole>(this IdentityBuilder builder)
             where TRoleKey : IEquatable<TRoleKey>
             where TRole : Role<TRoleKey>
         {
 
-            services.AddScoped<IUserService<TUserKey, TUser>, UserService<TUserKey, TUser>>();
-            services.AddScoped<IRoleService<TRoleKey, TRole>, RoleService<TRoleKey, TRole>>();
-            //services.AddScoped<IUserRoleService<TKey, TUser, TRole>, UserRoleService<TKey, TUser, TRole>>();
-
-            var builder = services.AddIdentityCore<TUser>(setupIdentityAction ?? (x => GetDefaultOptions()));
-
             builder
                 .AddRoles<TRole>()
                 .AddRoleStore<RoleStore<TRole, TRoleKey>>()
-                .AddUserStore<UserStore<TUser, TUserKey>>()
-                .AddUserManager<UserManager<TUser>>()
-                .AddUserManager<UserManager<TUser>>()
-                .AddRoleManager<RoleManager<TRole>>()
-                .AddDefaultTokenProviders();
+                .AddRoleManager<RoleManager<TRole>>();
+
+            return builder;
+        }
+
+        public static IdentityBuilder AddIdentityRole<TRole>(this IdentityBuilder builder)
+            where TRole : Role
+        {
+
+            builder
+                .AddRoles<TRole>()
+                .AddRoleStore<RoleStore<TRole>>()
+                .AddRoleManager<RoleManager<TRole>>();
 
             return builder;
         }

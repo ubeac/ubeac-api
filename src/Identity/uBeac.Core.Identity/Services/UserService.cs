@@ -5,7 +5,7 @@ namespace uBeac.Identity
 {
     public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         where TUserKey : IEquatable<TUserKey>
-        where TUser : User<TUserKey>, new()
+        where TUser : User<TUserKey>
     {
         private readonly UserManager<TUser> _userManager;
         private readonly IJwtTokenProvider _jwtTokenProvider;
@@ -41,29 +41,32 @@ namespace uBeac.Identity
         /// <exception cref="NotImplementedException"></exception>
         public virtual async Task<TUser> Register(string username, string email, string password, CancellationToken cancellationToken = default)
         {
-            var user = new TUser
-            {
-                UserName = username,
-                Email = email,
-                EmailConfirmed = false,
-                PhoneNumberConfirmed = false,
-            };
+            var user = Activator.CreateInstance<TUser>();
+
+            user.UserName = username;
+            user.Email = email;
+            user.EmailConfirmed = false;
+            user.PhoneNumberConfirmed = false;
+
             await Create(user, password, cancellationToken);
+            
             return user;
         }
 
-        public virtual async Task<TokenResult<TUserKey, TUser>> Authenticate(string username, string password, CancellationToken cancellationToken = default)
+        public virtual async Task<TokenResult<TUserKey>> Authenticate(string username, string password, CancellationToken cancellationToken = default)
         {
             //validating user credentials
-           var user = await _userManager.FindByNameAsync(username);
+            var user = await _userManager.FindByNameAsync(username);
 
             if (user is null || !await _userManager.CheckPasswordAsync(user, password))
                 throw new Exception("User doesn't exist or username/password is not valid!");
 
             //generating token
             var token = _jwtTokenProvider.GenerateToken<TUserKey, TUser>(user);
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-            return new TokenResult<TUserKey, TUser>(user, new JwtSecurityTokenHandler().WriteToken(token), token.ValidTo);
+            // todo: refresh token
+            return new TokenResult<TUserKey>(user.Id, tokenString, "", token.ValidTo);
         }
 
         public virtual async Task<bool> Delete(TUserKey id, CancellationToken cancellationToken = default)
@@ -106,5 +109,13 @@ namespace uBeac.Identity
         }
 
 
+    }
+
+    public class UserService<TUser> : UserService<Guid, TUser>, IUserService<TUser>
+        where TUser : User
+    {
+        public UserService(UserManager<TUser> userManager, IJwtTokenProvider jwtTokenProvider) : base(userManager, jwtTokenProvider)
+        {
+        }
     }
 }

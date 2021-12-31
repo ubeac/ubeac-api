@@ -7,4 +7,9 @@ namespace uBeac.Identity
        where TRole : Role<TKey>
     {
     }
+
+    public interface IRoleRepository<TRole> : IRoleRepository<Guid, TRole>, IEntityRepository<TRole>
+        where TRole : Role
+    {
+    }
 }

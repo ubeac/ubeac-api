@@ -1,6 +1,10 @@
 ﻿namespace uBeac.Services
 {
-    public interface IEntityService<TKey, TEntity>
+    public interface IService
+    {
+    }
+
+    public interface IEntityService<TKey, TEntity> : IService
         where TKey : IEquatable<TKey>
         where TEntity : IEntity<TKey>
     {
@@ -12,5 +16,9 @@
         Task<IEnumerable<TEntity>> GetAll(CancellationToken cancellationToken = default);
         Task<TEntity> GetById(TKey id, CancellationToken cancellationToken = default);
         Task<IEnumerable<TEntity>> GetByIds(IEnumerable<TKey> ids, CancellationToken cancellationToken = default);
+    }
+    public interface IEntityService<TEntity> : IEntityService<Guid, TEntity>
+        where TEntity : IEntity
+    {
     }
 }

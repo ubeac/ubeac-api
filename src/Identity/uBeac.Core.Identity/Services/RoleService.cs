@@ -56,4 +56,12 @@ namespace uBeac.Identity
             return true;
         }
     }
+
+    public class RoleService<TRole> : RoleService<Guid, TRole>, IRoleService<TRole>
+        where TRole : Role
+    {
+        public RoleService(RoleManager<TRole> roleManager) : base(roleManager)
+        {
+        }
+    }
 }

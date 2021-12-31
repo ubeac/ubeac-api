@@ -2,6 +2,9 @@
 
 namespace uBeac.Web.Identity
 {
+    /// <summary>
+    /// User registration request model
+    /// </summary>
     public class RegisterRequest
     {
         [Required]

@@ -2,7 +2,11 @@
 
 namespace uBeac.Repositories
 {
-    public interface IEntityRepository<TKey, TEntity>
+    public interface IRepository 
+    {
+
+    }
+    public interface IEntityRepository<TKey, TEntity>: IRepository
         where TKey : IEquatable<TKey>
         where TEntity : IEntity<TKey>
     {
@@ -17,5 +21,10 @@ namespace uBeac.Repositories
         Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> filter, CancellationToken cancellationToken = default);
         Task<bool> Any(Expression<Func<TEntity, bool>> filter, CancellationToken cancellationToken = default);
         IQueryable<TEntity> AsQueryable();
+    }
+
+    public interface IEntityRepository<TEntity> : IEntityRepository<Guid, TEntity> 
+        where TEntity : IEntity
+    {
     }
 }

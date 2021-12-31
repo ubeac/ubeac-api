@@ -10,4 +10,11 @@ namespace uBeac.Identity.MongoDB
         {
         }
     }
+
+    public class MongoRoleRepository<TRole> : MongoEntityRepository<TRole>, IRoleRepository<TRole> where TRole : Role
+    {
+        public MongoRoleRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext)
+        {
+        }
+    }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel;
 using System.Security.Claims;
 
 namespace uBeac.Identity
@@ -70,7 +71,18 @@ namespace uBeac.Identity
         public async Task<TRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            return await _repository.GetById(ChangeType<TRoleKey>(roleId), cancellationToken);
+            var id = GetTypedKey(roleId);
+            return await _repository.GetById(id, cancellationToken);
+        }
+
+        private TRoleKey GetTypedKey(string roleId)
+        {
+            TypeConverter converter = TypeDescriptor.GetConverter(typeof(TRoleKey));
+
+            if (converter == null)
+                throw new ArgumentNullException($"Unable to convert string to type {typeof(TRoleKey).FullName}");
+
+            return (TRoleKey)converter.ConvertFromString(roleId);
         }
 
         public async Task<TRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
@@ -127,10 +139,13 @@ namespace uBeac.Identity
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+    }
 
-        static T ChangeType<T>(object obj)
+    public class RoleStore<TRole> : RoleStore<TRole, Guid>
+        where TRole : Role
+    {
+        public RoleStore(IRoleRepository<TRole> repository) : base(repository)
         {
-            return (T)Convert.ChangeType(obj, typeof(T));
         }
     }
 }

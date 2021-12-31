@@ -7,4 +7,8 @@ namespace uBeac.Identity
         where TUser : User<TKey>
     {
     }
+    public interface IUserRepository<TUser> : IUserRepository<Guid, TUser>, IEntityRepository<TUser>
+       where TUser : User
+    {
+    }
 }

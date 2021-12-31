@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using uBeac.Web.Filters;
 
 namespace uBeac.Web
 {
@@ -12,8 +13,8 @@ namespace uBeac.Web
     //[SwaggerResponse(403, "Forbidden")]
     //[SwaggerResponse(404, "Not Found")]
     //[SwaggerResponse(500, "Unhandled Exception")]
-    //[TypeFilter(typeof(ModelStateValidationFilter))]
-    //[TypeFilter(typeof(ResultSetFilter))]
+    [TypeFilter(typeof(ModelStateValidationFilter))]
+    [TypeFilter(typeof(ApiResultFilter))]
     public abstract class BaseController
     {
     }

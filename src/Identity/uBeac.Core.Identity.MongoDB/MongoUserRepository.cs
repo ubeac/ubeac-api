@@ -10,4 +10,12 @@ namespace uBeac.Identity.MongoDB
         {
         }
     }
+
+    public class MongoUserRepository<TUser> : MongoEntityRepository<TUser>, IUserRepository<TUser>
+        where TUser : User
+    {
+        public MongoUserRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext)
+        {
+        }
+    }
 }

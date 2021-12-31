@@ -1,18 +1,26 @@
 ﻿namespace uBeac.Identity
 {
-    public class TokenResult<TUserKey, TUser> 
-        where TUserKey : IEquatable<TUserKey> 
-        where TUser : User<TUserKey>
+    public class TokenResult<TUserKey>
+        where TUserKey : IEquatable<TUserKey>
     {
+        public TUserKey UserId { get; set; }
         public string Token { get; }
-        public DateTime Expires { get; }
-        public TUser User { get; set; }
+        public string RefreshToken { get; }
+        public DateTime Expiry { get; }
 
-        public TokenResult(TUser user, string token, DateTime expires)
+        public TokenResult(TUserKey userId, string token, string refreshToken, DateTime expiry)
         {
+            RefreshToken = refreshToken;
             Token = token;
-            Expires = expires;
-            User = user;
+            Expiry = expiry;
+            UserId = userId;
         }
     }
+    public class TokenResult : TokenResult<Guid>
+    {
+        public TokenResult(Guid userId, string token, string refreshToken, DateTime expirey) : base(userId, token, refreshToken, expirey)
+        {
+        }
+    }
+
 }

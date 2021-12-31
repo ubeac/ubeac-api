@@ -10,8 +10,10 @@
     <ProjectReference Include="..\Common\uBeac.Core.Configuration\uBeac.Core.Configuration.csproj" />
     <ProjectReference Include="..\Identity\uBeac.Core.Identity.MongoDB\uBeac.Core.Identity.MongoDB.csproj" />
     <ProjectReference Include="..\Interception\uBeac.Core.Interception\uBeac.Core.Interception.csproj" />
+    <ProjectReference Include="..\Logging\uBeac.Core.Logging.MongoDB\uBeac.Core.Logging.MongoDB.csproj" />
     <ProjectReference Include="..\Service\uBeac.Core.Services\uBeac.Core.Services.csproj" />
     <ProjectReference Include="..\Web\uBeac.Core.Web.Identity\uBeac.Core.Web.Identity.csproj" />
+    <ProjectReference Include="..\Web\uBeac.Core.Web.Logging\uBeac.Core.Web.Logging.csproj" />
     <ProjectReference Include="..\Web\uBeac.Core.Web.Swagger\uBeac.Core.Web.Swagger.csproj" />
   </ItemGroup>
 

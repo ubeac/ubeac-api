@@ -3,8 +3,8 @@
     public class Error
     {
         public string Code { get; set; } = string.Empty;
-        public string Description { get; set; }= string.Empty;
-        public object Trace { get; set; }
+        public string Description { get; set; } = string.Empty;
+        public string? Trace { get; set; }
 
         public Error()
         {

@@ -52,4 +52,11 @@ namespace uBeac.Services
             return Repository.Replace(entity, cancellationToken);
         }
     }
+    public class EntityService<TEntity> : EntityService<Guid, TEntity>, IEntityService<TEntity>
+        where TEntity : IEntity
+    {
+        public EntityService(IEntityRepository<TEntity> repository) : base(repository)
+        {
+        }
+    }
 }

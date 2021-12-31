@@ -99,4 +99,12 @@ namespace uBeac.Repositories.MongoDB
             return Collection.AsQueryable();
         }
     }
+
+    public class MongoEntityRepository<TEntity> : MongoEntityRepository<Guid, TEntity>, IEntityRepository<TEntity>
+        where TEntity : IEntity
+    {
+        public MongoEntityRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext)
+        {
+        }
+    }
 }

@@ -28,7 +28,7 @@ namespace uBeac.Identity
 
         public Task<IList<string>> GetRolesAsync(TUser user, CancellationToken cancellationToken)
         {
-            return Task.FromResult(user.Roles);
+            return Task.FromResult((IList<string>)user.Roles);
         }
 
         public Task<bool> IsInRoleAsync(TUser user, string roleId, CancellationToken cancellationToken)

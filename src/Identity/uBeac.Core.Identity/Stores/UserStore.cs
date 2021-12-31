@@ -18,4 +18,12 @@ namespace uBeac.Identity
             return (T)Convert.ChangeType(obj, typeof(T));
         }
     }
+
+    public class UserStore<TUser>: UserStore<TUser, Guid>
+        where TUser : User
+    {
+        public UserStore(IUserRepository<TUser> repository):base(repository)
+        {
+        }
+    }
 }

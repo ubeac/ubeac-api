@@ -1,6 +1,6 @@
 ﻿namespace uBeac.Web
 {
-    public interface IListResultSet<TResult> : IResultSet<ICollection<TResult>>
+    public interface IApiListResult<TResult> : IApiResult<IEnumerable<TResult>>
     {
         public int PageSize { get; }
         public int TotalPages { get; }
@@ -10,7 +10,7 @@
         public bool HasNext { get; }
     }
 
-    public class ListResultSet<TResult> : ResultSet<ICollection<TResult>>, IListResultSet<TResult>
+    public class ApiListResult<TResult> : ApiResult<IEnumerable<TResult>>, IApiListResult<TResult>
     {
         public int PageSize { get; }
         public int TotalPages { get; }
@@ -19,14 +19,19 @@
         public bool HasPrevious { get; }
         public bool HasNext { get; }
 
-        public ListResultSet(ICollection<TResult> items) : base(items)
+        public ApiListResult(IEnumerable<TResult> items) : base(items)
         {
+            var count = items.Count();
             PageNumber = 1;
-            PageSize = items.Count;
-            TotalCount = items.Count;
+            PageSize = count;
+            TotalCount = count;
             HasPrevious = false;
             HasNext = false;
             TotalPages = 1;
+        }
+
+        public ApiListResult(Exception exception) : base(exception)
+        {
         }
     }
 }
