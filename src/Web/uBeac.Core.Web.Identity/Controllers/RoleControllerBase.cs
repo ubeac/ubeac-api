@@ -5,8 +5,7 @@ using uBeac.Identity;
 
 namespace uBeac.Web.Identity
 {
-    //[Authorize(Roles = "admin")]
-    [AllowAnonymous]
+    [Authorize(Roles = "admin")]
     public abstract class RoleControllerBase<TRoleKey, TRole> : BaseController
        where TRoleKey : IEquatable<TRoleKey>
        where TRole : Role<TRoleKey>
