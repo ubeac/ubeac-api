@@ -23,7 +23,7 @@ namespace uBeac.Identity
         /// < param name="password"></param>
         /// <param name = "cancellationToken" ></ param >
         /// < returns ></ returns >
-        public virtual async Task Create(TUser user, string password, CancellationToken cancellationToken = default)
+        public virtual async Task Insert(TUser user, string password, CancellationToken cancellationToken = default)
         {
             var identityResult = await _userManager.CreateAsync(user, password);
             identityResult.ThrowIfInvalid();
@@ -48,7 +48,7 @@ namespace uBeac.Identity
             user.EmailConfirmed = false;
             user.PhoneNumberConfirmed = false;
 
-            await Create(user, password, cancellationToken);
+            await Insert(user, password, cancellationToken);
             
             return user;
         }

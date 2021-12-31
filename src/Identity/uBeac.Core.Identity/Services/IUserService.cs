@@ -4,7 +4,7 @@
         where TUserKey : IEquatable<TUserKey> 
         where TUser : User<TUserKey>
     {
-        Task Create(TUser user, string password, CancellationToken cancellationToken = default);
+        Task Insert(TUser user, string password, CancellationToken cancellationToken = default);
         Task<TUser> Register(string username, string email, string password, CancellationToken cancellationToken = default);
         Task<TokenResult<TUserKey>> Authenticate(string username, string password, CancellationToken cancellationToken = default);
         //Task<TUser> GetById(TKey id, CancellationToken cancellationToken = default);
