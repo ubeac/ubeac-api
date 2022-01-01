@@ -71,18 +71,8 @@ namespace uBeac.Identity
         public async Task<TRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var id = GetTypedKey(roleId);
+            var id = Helper.GetTypedKey<TRoleKey>(roleId);
             return await _repository.GetById(id, cancellationToken);
-        }
-
-        private TRoleKey GetTypedKey(string roleId)
-        {
-            TypeConverter converter = TypeDescriptor.GetConverter(typeof(TRoleKey));
-
-            if (converter == null)
-                throw new ArgumentNullException($"Unable to convert string to type {typeof(TRoleKey).FullName}");
-
-            return (TRoleKey)converter.ConvertFromString(roleId);
         }
 
         public async Task<TRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)

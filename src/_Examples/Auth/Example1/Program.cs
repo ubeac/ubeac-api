@@ -24,6 +24,7 @@ services.AddMongoDBRoleRepository<MongoDBContext, Role>();
 // Adding services
 services.AddUserService<UserService<User>, User>();
 services.AddRoleService<RoleService<Role>, Role>();
+services.AddUserRoleService<UserRoleService<User>, User>();
 
 // Adding Core Identity
 services

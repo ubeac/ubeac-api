@@ -7,12 +7,12 @@ namespace uBeac.Identity
         where TUserKey : IEquatable<TUserKey>
         where TUser : User<TUserKey>
     {
-        private readonly UserManager<TUser> _userManager;
-        private readonly IJwtTokenProvider _jwtTokenProvider;
+        protected readonly UserManager<TUser> UserManager;
+        protected readonly IJwtTokenProvider JwtTokenProvider;
         public UserService(UserManager<TUser> userManager, IJwtTokenProvider jwtTokenProvider)
         {
-            _userManager = userManager;
-            _jwtTokenProvider = jwtTokenProvider;
+            UserManager = userManager;
+            JwtTokenProvider = jwtTokenProvider;
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace uBeac.Identity
         /// < returns ></ returns >
         public virtual async Task Insert(TUser user, string password, CancellationToken cancellationToken = default)
         {
-            var identityResult = await _userManager.CreateAsync(user, password);
+            var identityResult = await UserManager.CreateAsync(user, password);
             identityResult.ThrowIfInvalid();
         }
 
@@ -56,13 +56,13 @@ namespace uBeac.Identity
         public virtual async Task<TokenResult<TUserKey>> Authenticate(string username, string password, CancellationToken cancellationToken = default)
         {
             //validating user credentials
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await UserManager.FindByNameAsync(username);
 
-            if (user is null || !await _userManager.CheckPasswordAsync(user, password))
+            if (user is null || !await UserManager.CheckPasswordAsync(user, password))
                 throw new Exception("User doesn't exist or username/password is not valid!");
 
             //generating token
-            var token = _jwtTokenProvider.GenerateToken<TUserKey, TUser>(user);
+            var token = JwtTokenProvider.GenerateToken<TUserKey, TUser>(user);
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
             // todo: refresh token
@@ -71,11 +71,11 @@ namespace uBeac.Identity
 
         public virtual async Task<bool> Delete(TUserKey id, CancellationToken cancellationToken = default)
         {
-            var user = await _userManager.FindByIdAsync(id.ToString());
+            var user = await UserManager.FindByIdAsync(id.ToString());
             if (user is null)
                 throw new Exception("User doesn't exist!");
 
-            var userRemoveResult = await _userManager.DeleteAsync(user);
+            var userRemoveResult = await UserManager.DeleteAsync(user);
             userRemoveResult.ThrowIfInvalid();
 
             return true;
@@ -83,27 +83,27 @@ namespace uBeac.Identity
 
         public virtual Task<TUser> GetById(TUserKey id, CancellationToken cancellationToken = default)
         {
-            return _userManager.FindByIdAsync(id.ToString());
+            return UserManager.FindByIdAsync(id.ToString());
         }
 
         public virtual async Task ChangePassword(ChangePassword changePassword, CancellationToken cancellationToken = default)
         {
-            var user = await _userManager.FindByNameAsync(changePassword.Username);
-            if (user is null || !await _userManager.CheckPasswordAsync(user, changePassword.OldPassword))
+            var user = await UserManager.FindByNameAsync(changePassword.Username);
+            if (user is null || !await UserManager.CheckPasswordAsync(user, changePassword.OldPassword))
                 throw new Exception("User doesn't exist or username/password is not valid!");
 
-            var idResult = await _userManager.ChangePasswordAsync(user, changePassword.OldPassword, changePassword.NewPassword);
+            var idResult = await UserManager.ChangePasswordAsync(user, changePassword.OldPassword, changePassword.NewPassword);
 
             idResult.ThrowIfInvalid();
         }
 
         public virtual async Task ForgotPassword(string username, CancellationToken cancellationToken = default)
         {
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await UserManager.FindByNameAsync(username);
             if (user is null)
                 throw new Exception("User doesn't exist!");
 
-            var resetPasswordToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var resetPasswordToken = await UserManager.GeneratePasswordResetTokenAsync(user);
             // todo: send email here
 
         }

@@ -7,39 +7,44 @@ namespace uBeac.Identity
         where TRole : Role<TKey>
     {
 
-        private readonly RoleManager<TRole> _roleManager;
+        protected readonly RoleManager<TRole> RoleManager;
 
         public RoleService(RoleManager<TRole> roleManager)
         {
-            _roleManager = roleManager;
+            RoleManager = roleManager;
         }
 
         public virtual async Task<bool> Delete(TKey id, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var role = await _roleManager.FindByIdAsync(id.ToString());
+            var role = await RoleManager.FindByIdAsync(id.ToString());
 
             if (role == null) return false;
 
-            var idResult = await _roleManager.DeleteAsync(role);
+            var idResult = await RoleManager.DeleteAsync(role);
 
             idResult.ThrowIfInvalid();
 
             return true;
         }
 
+        public virtual Task<bool> Exists(string roleName, CancellationToken cancellationToken = default)
+        {
+            return RoleManager.RoleExistsAsync(roleName);
+        }
+
         public virtual Task<IEnumerable<TRole>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            return Task.FromResult(_roleManager.Roles.AsEnumerable());
+            return Task.FromResult(RoleManager.Roles.AsEnumerable());
         }
 
         public virtual async Task Insert(TRole role, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var idResult = await _roleManager.CreateAsync(role);
+            var idResult = await RoleManager.CreateAsync(role);
 
             idResult.ThrowIfInvalid();
 
@@ -49,7 +54,7 @@ namespace uBeac.Identity
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var idResult = await _roleManager.UpdateAsync(role);
+            var idResult = await RoleManager.UpdateAsync(role);
 
             idResult.ThrowIfInvalid();
 

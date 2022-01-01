@@ -6,17 +6,17 @@ namespace uBeac.Identity
         where TUserKey : IEquatable<TUserKey>
     {
         public virtual string AuthenticatorKey { get; set; } = string.Empty;
-        public virtual List<IdentityUserClaim<TUserKey>> Claims { get; } = new();
-        public virtual List<IdentityUserLogin<TUserKey>> Logins { get; } = new();
-        public virtual List<IdentityUserToken<TUserKey>> Tokens { get; } = new();
-        public virtual List<TwoFactorRecoveryCode> RecoveryCodes { get; } = new();
-        public virtual List<string> Roles { get; } = new();
+        public virtual List<IdentityUserClaim<TUserKey>> Claims { get; set; } = new();
+        public virtual List<IdentityUserLogin<TUserKey>> Logins { get; set; } = new();
+        public virtual List<IdentityUserToken<TUserKey>> Tokens { get; set; } = new();
+        public virtual List<TwoFactorRecoveryCode> RecoveryCodes { get; set; } = new();
+        public virtual List<string> Roles { get; set; } = new();
 
         public User()
         {
         }
 
-        public User(string userName)
+        public User(string userName) : this()
         {
             UserName = userName;
         }

@@ -5,7 +5,7 @@ using uBeac.Identity;
 
 namespace uBeac.Web.Identity
 {
-    [Authorize(Roles = "admin")]
+    //[Authorize(Roles = "admin")]
     public abstract class UserControllerBase<TUserKey, TUser> : BaseController
         where TUserKey : IEquatable<TUserKey>
         where TUser : User<TUserKey>
@@ -51,4 +51,13 @@ namespace uBeac.Web.Identity
         //    return new ApiListResult<TRole>(roles);
         //}
     }
+
+    public abstract class UserControllerBase<TUser> : UserControllerBase<Guid, TUser>
+        where TUser : User
+    {
+        public UserControllerBase(IUserService<TUser> userService) : base(userService)
+        {
+        }
+    }
+
 }

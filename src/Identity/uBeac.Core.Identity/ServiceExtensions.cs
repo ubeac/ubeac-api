@@ -9,6 +9,23 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceExtensions
     {
+        public static IServiceCollection AddUserRoleService<TUserRoleService, TUserKey, TUser>(this IServiceCollection services)
+            where TUserKey : IEquatable<TUserKey>
+            where TUser : User<TUserKey>
+            where TUserRoleService : class, IUserRoleService<TUserKey, TUser>
+        {
+            services.TryAddScoped<IUserRoleService<TUserKey, TUser>, TUserRoleService>();
+            return services;
+        }
+
+        public static IServiceCollection AddUserRoleService<TUserRoleService, TUser>(this IServiceCollection services)
+           where TUser : User
+           where TUserRoleService : class, IUserRoleService<TUser>
+        {
+            services.TryAddScoped<IUserRoleService<TUser>, TUserRoleService>();
+            return services;
+        }
+
         public static IServiceCollection AddUserService<TUserService, TUserKey, TUser>(this IServiceCollection services)
             where TUserKey : IEquatable<TUserKey>
             where TUser : User<TUserKey>

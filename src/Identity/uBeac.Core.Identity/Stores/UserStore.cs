@@ -12,11 +12,6 @@ namespace uBeac.Identity
         {
             _repository = repository;
         }
-
-        static T ChangeType<T>(object obj)
-        {
-            return (T)Convert.ChangeType(obj, typeof(T));
-        }
     }
 
     public class UserStore<TUser>: UserStore<TUser, Guid>

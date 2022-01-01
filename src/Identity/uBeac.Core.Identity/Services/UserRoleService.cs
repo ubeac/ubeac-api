@@ -1,56 +1,65 @@
-﻿//using Microsoft.AspNetCore.Identity;
-//namespace uBeac.Identity
-//{
-//    public class UserRoleService<TKey, TUser, TRole> : IUserRoleService<TKey, TUser, TRole>
-//        where TKey : IEquatable<TKey>
-//        where TUser : User<TKey>
-//        where TRole : Role<TKey>
-//    {
-//        private readonly UserManager<TUser> _userManager;
-//        private readonly RoleManager<TRole> _roleManager;
+﻿using Microsoft.AspNetCore.Identity;
+namespace uBeac.Identity
+{
+    public class UserRoleService<TUserKey, TUser> : IUserRoleService<TUserKey, TUser>
+        where TUserKey : IEquatable<TUserKey>
+        where TUser : User<TUserKey>
+    {
+        private readonly UserManager<TUser> _userManager;
 
-//        public UserRoleService(UserManager<TUser> userManager, RoleManager<TRole> roleManager)
-//        {
-//            _userManager = userManager;
-//            _roleManager = roleManager;
-//        }
+        public UserRoleService(UserManager<TUser> userManager)
+        {
+            _userManager = userManager;
+        }
 
-//        public async Task<bool> AddRoles(TKey userId, IEnumerable<TKey> roleIds, CancellationToken cancellationToken = default)
-//        {
-//            cancellationToken.ThrowIfCancellationRequested();
+        public virtual async Task<bool> AddRoles(TUserKey userId, IEnumerable<string> roleNames, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
 
-//            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var user = await _userManager.FindByIdAsync(userId.ToString());
 
-//            var idResult = await _userManager.AddToRolesAsync(user, roleIds.Select(x => x.ToString()));
+            var idResult = await _userManager.AddToRolesAsync(user, roleNames);
 
-//            return true;
-//        }
+            idResult.ThrowIfInvalid();
 
-//        public async Task<IEnumerable<TRole>> GetRolesForUser(TKey userId, CancellationToken cancellationToken = default)
-//        {
-//            cancellationToken.ThrowIfCancellationRequested();
+            return true;
+        }
 
-//            var user = await _userManager.FindByIdAsync(userId.ToString());
+        public virtual async Task<IList<string>> GetRolesForUser(TUserKey userId, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
 
-//            return _roleManager.Roles.Where(x => user.Roles.Contains(x.Id)).AsEnumerable();
-//        }
+            var user = await _userManager.FindByIdAsync(userId.ToString());
 
-//        public async Task<IEnumerable<TUser>> GetUsersInRole(TKey roleId, CancellationToken cancellationToken = default)
-//        {
-//            cancellationToken.ThrowIfCancellationRequested();
+            return await _userManager.GetRolesAsync(user);
+        }
 
-//            return await _userManager.GetUsersInRoleAsync(roleId.ToString());
-//        }
+        public virtual async Task<IList<TUser>> GetUsersInRole(string roleName, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
 
-//        public async Task<bool> RemoveRoles(TKey userId, IEnumerable<TKey> roleIds, CancellationToken cancellationToken = default)
-//        {
-//            cancellationToken.ThrowIfCancellationRequested();
+            return await _userManager.GetUsersInRoleAsync(roleName);
+        }
 
-//            var user = await _userManager.FindByIdAsync(userId.ToString());
+        public virtual async Task<bool> RemoveRoles(TUserKey userId, IEnumerable<string> roleNames, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
 
-//            var idResult = await _userManager.RemoveFromRolesAsync(user, roleIds.Select(x => x.ToString()));
+            var user = await _userManager.FindByIdAsync(userId.ToString());
 
-//            return true;
-//        }
-//    }
-//}
+            var idResult = await _userManager.RemoveFromRolesAsync(user, roleNames);
+
+            idResult.ThrowIfInvalid();
+
+            return true;
+        }
+    }
+
+    public class UserRoleService<TUser> : UserRoleService<Guid, TUser>, IUserRoleService<TUser>
+        where TUser : User
+    {
+        public UserRoleService(UserManager<TUser> userManager) : base(userManager)
+        {
+        }
+    }
+}

@@ -1,13 +1,17 @@
-﻿//namespace uBeac.Identity
-//{
-//    public interface IUserRoleService<TKey, TUser, TRole>
-//        where TKey : IEquatable<TKey>
-//        where TUser : User<TKey>
-//        where TRole : Role<TKey>
-//    {
-//        Task<bool> AddRoles(TKey userId, IEnumerable<TKey> roleIds, CancellationToken cancellationToken = default);
-//        Task<bool> RemoveRoles(TKey userId, IEnumerable<TKey> roleIds, CancellationToken cancellationToken = default);
-//        Task<IEnumerable<TRole>> GetRolesForUser(TKey userId, CancellationToken cancellationToken = default);
-//        Task<IEnumerable<TUser>> GetUsersInRole(TKey roleId, CancellationToken cancellationToken = default);
-//    }
-//}
+﻿namespace uBeac.Identity
+{
+    public interface IUserRoleService<TUserKey, TUser>
+        where TUserKey : IEquatable<TUserKey>
+        where TUser : User<TUserKey>
+    {
+        Task<bool> AddRoles(TUserKey userId, IEnumerable<string> roleNames, CancellationToken cancellationToken = default);
+        Task<bool> RemoveRoles(TUserKey userId, IEnumerable<string> roleNames, CancellationToken cancellationToken = default);
+        Task<IList<string>> GetRolesForUser(TUserKey userId, CancellationToken cancellationToken = default);
+        Task<IList<TUser>> GetUsersInRole(string roleNames, CancellationToken cancellationToken = default);
+    }
+
+    public interface IUserRoleService<TUser>: IUserRoleService<Guid, TUser>
+       where TUser : User
+    {
+    }
+}
