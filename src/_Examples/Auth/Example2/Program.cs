@@ -15,10 +15,10 @@ services.AddCoreSwaggerWithJWT("uBaec.Api", "v1");
 
 services.AddMongo<MongoDBContext>("DefaultConnection");
 
-services.AddMappingProfile<MappingProfileForDTOs>();
-services.AddAuthenticationServices<Guid, User<Guid>, Guid, Role<Guid>>();
-services.AddJwtAuthentication(builder.Configuration.GetInstance<JwtOptions>("Jwt"));
-services.AddMongoDBIdentity<MongoDBContext, Guid, User<Guid>, Guid, Role<Guid>>();
+//services.AddMappingProfile<MappingProfileForDTOs>();
+//services.AddAuthenticationServices<Guid, User<Guid>, Guid, Role<Guid>>();
+//services.AddJwtAuthentication(builder.Configuration.GetInstance<JwtOptions>("Jwt"));
+//services.AddMongoDBIdentity<MongoDBContext, Guid, User<Guid>, Guid, Role<Guid>>();
 
 var app = builder.Build();
 

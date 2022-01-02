@@ -32,17 +32,17 @@ services.Intercept<ITestService>().With<TestLogInterceptor>().Build();
 
 services.AddScoped(typeof(IEntityService<,>), typeof(EntityService<,>));
 
-services.AddMappingProfile<MappingProfileForDTOs>();
+//services.AddMappingProfile<MappingProfileForDTOs>();
 
-services.AddJwtAuthentication(builder.Configuration.GetInstance<JwtOptions>("Jwt"));
+//services.AddJwtAuthentication(builder.Configuration.GetInstance<JwtOptions>("Jwt"));
 
-services.AddAuthenticationServices<Guid, User<Guid>, Guid, Role<Guid>>();
+//services.AddAuthenticationServices<Guid, User<Guid>, Guid, Role<Guid>>();
 
-services.AddCoreSwaggerWithJWT("uBaec.Api", "v1");
+//services.AddCoreSwaggerWithJWT("uBaec.Api", "v1");
 
-services.AddMongo<MongoDBContext>("DefaultConnection");
+//services.AddMongo<MongoDBContext>("DefaultConnection");
 
-services.AddMongoDBIdentity<MongoDBContext, Guid, User<Guid>, Guid, Role<Guid>>();
+//services.AddMongoDBIdentity<MongoDBContext, Guid, User<Guid>, Guid, Role<Guid>>();
 
 services.AddHttpContextAccessor();
 
