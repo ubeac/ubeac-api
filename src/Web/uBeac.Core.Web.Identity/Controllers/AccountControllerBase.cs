@@ -5,14 +5,14 @@ using uBeac.Identity;
 namespace uBeac.Web.Identity
 {
     [Authorize(Roles = "admin")]
-    public abstract class AuthControllerBase<TUserKey, TUser> : BaseController
+    public abstract class AccountControllerBase<TUserKey, TUser> : BaseController
        where TUserKey : IEquatable<TUserKey>
        where TUser : User<TUserKey>
 
     {
         protected readonly IUserService<TUserKey, TUser> UserService;
 
-        public AuthControllerBase(IUserService<TUserKey, TUser> userService)
+        public AccountControllerBase(IUserService<TUserKey, TUser> userService)
         {
             UserService = userService;
         }
@@ -77,10 +77,10 @@ namespace uBeac.Web.Identity
 
     }
 
-    public abstract class AuthControllerBase<TUser> : AuthControllerBase<Guid, TUser>
+    public abstract class AccountControllerBase<TUser> : AccountControllerBase<Guid, TUser>
         where TUser : User
     {
-        public AuthControllerBase(IUserService<TUser> userService) : base(userService)
+        public AccountControllerBase(IUserService<TUser> userService) : base(userService)
         {
         }
     }

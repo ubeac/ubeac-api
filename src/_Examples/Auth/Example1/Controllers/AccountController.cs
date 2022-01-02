@@ -5,9 +5,9 @@ using uBeac.Web.Identity;
 
 namespace Example1.Controllers
 {
-    public class AuthController : AuthControllerBase<User>
+    public class AccountController : AccountControllerBase<User>
     {
-        public AuthController(IUserService<User> userService) : base(userService)
+        public AccountController(IUserService<User> userService) : base(userService)
         {
         }
 

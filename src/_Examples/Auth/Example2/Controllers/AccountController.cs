@@ -1,6 +1,6 @@
 ﻿namespace Example2.Controllers
 {
-    public class AuthController
+    public class AccountController
     {
     }
 }
