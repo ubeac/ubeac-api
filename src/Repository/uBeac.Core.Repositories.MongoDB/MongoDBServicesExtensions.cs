@@ -13,12 +13,17 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMongo<TMongoDbContext>(this IServiceCollection services, string connectionString)
            where TMongoDbContext : class, IMongoDBContext
         {
+
             // this will store Guids in MongoDB in string format to be readable in manual queries
-            BsonSerializer.RegisterSerializer(typeof(Guid), new GuidSerializer(BsonType.String));
+            if (BsonSerializer.SerializerRegistry.GetSerializer<Guid>() == null)
+                BsonSerializer.RegisterSerializer(typeof(Guid), new GuidSerializer(BsonType.String));
 
             // supporting decimal values 
-            BsonSerializer.RegisterSerializer(typeof(decimal), new DecimalSerializer(BsonType.Decimal128));
-            BsonSerializer.RegisterSerializer(typeof(decimal?), new NullableSerializer<decimal>(new DecimalSerializer(BsonType.Decimal128)));
+            if (BsonSerializer.SerializerRegistry.GetSerializer<decimal>() == null)
+                BsonSerializer.RegisterSerializer(typeof(decimal), new DecimalSerializer(BsonType.Decimal128));
+
+            if (BsonSerializer.SerializerRegistry.GetSerializer<decimal?>() == null)
+                BsonSerializer.RegisterSerializer(typeof(decimal?), new NullableSerializer<decimal>(new DecimalSerializer(BsonType.Decimal128)));
 
             services.TryAddSingleton(provider =>
             {
