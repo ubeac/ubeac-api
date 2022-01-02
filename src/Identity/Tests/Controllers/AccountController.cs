@@ -1,4 +1,6 @@
-﻿using uBeac.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using uBeac.Identity;
 using uBeac.Web.Identity;
 
 namespace Identity
@@ -8,6 +10,14 @@ namespace Identity
         public AccountController(IUserService<User> userService) : base(userService)
         {
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public string GetAll() 
+        {
+            return "Teeee";
+        }
+
     }
 }
 
