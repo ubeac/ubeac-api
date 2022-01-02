@@ -8,12 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Identity\uBeac.Core.Identity\uBeac.Core.Identity.csproj" />
-    <ProjectReference Include="..\uBeac.Core.Web.Common\uBeac.Core.Web.Common.csproj" />
+    <Folder Include="Properties\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <ProjectReference Include="..\..\Web\uBeac.Core.Web.Common\uBeac.Core.Web.Common.csproj" />
+    <ProjectReference Include="..\uBeac.Core.Identity\uBeac.Core.Identity.csproj" />
   </ItemGroup>
 
 </Project>

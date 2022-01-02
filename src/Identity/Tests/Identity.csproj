@@ -43,7 +43,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Common\uBeac.Core.Configuration\uBeac.Core.Configuration.csproj" />
     <ProjectReference Include="..\..\Identity\uBeac.Core.Identity.MongoDB\uBeac.Core.Identity.MongoDB.csproj" />
-    <ProjectReference Include="..\..\Web\uBeac.Core.Web.Identity\uBeac.Core.Web.Identity.csproj" />
+    <ProjectReference Include="..\..\Identity\uBeac.Core.Web.Identity\uBeac.Core.Web.Identity.csproj" />
   </ItemGroup>
 
 </Project>
