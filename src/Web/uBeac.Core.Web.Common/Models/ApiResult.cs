@@ -12,7 +12,7 @@ namespace uBeac.Web
 
     public interface IApiResult<TData> : IApiResult
     {
-        TData Data { get; }
+        TData Data { get; set; }
     }
 
     public class ApiResult : IApiResult
@@ -34,13 +34,17 @@ namespace uBeac.Web
 
     public class ApiResult<TData> : ApiResult, IApiResult<TData>
     {
-        public TData Data { get; }
+        public TData Data { get; set; }
         public ApiResult(TData data)
         {
             Data = data;
         }
         public ApiResult(Exception exception) : base(exception)
         {
+        }
+        public ApiResult()
+        {
+
         }
     }
 }

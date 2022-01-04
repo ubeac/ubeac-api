@@ -1,7 +1,7 @@
 ﻿using uBeac.Identity;
 using uBeac.Web.Identity;
 
-namespace Example1.Controllers
+namespace Identity.Controllers
 {
     public class RoleController : RoleControllerBase<Role>
     {

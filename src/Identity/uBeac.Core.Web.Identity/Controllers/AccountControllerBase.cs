@@ -21,27 +21,54 @@ namespace uBeac.Web.Identity
         [HttpPost]
         public virtual async Task<IApiResult<bool>> Register([FromBody] RegisterRequest model, CancellationToken cancellationToken = default)
         {
-            await UserService.Register(model.Username, model.Email, model.Password, cancellationToken);
+            try
+            {
+                await UserService.Register(model.Username, model.Email, model.Password, cancellationToken);
+                return true.ToApiResult();
+            }
+            catch (Exception ex)
+            {
+                return ex.ToApiResult<bool>();
+            }
 
-            return true.ToApiResult();
         }
 
         [AllowAnonymous]
         [HttpPost]
         public virtual async Task<IApiResult<TokenResult<TUserKey>>> Login([FromBody] LoginRequest model, CancellationToken cancellationToken = default)
         {
-            var authResult = await UserService.Authenticate(model.Username, model.Password, cancellationToken);
-            return authResult.ToApiResult();
+            try
+            {
+                var authResult = await UserService.Authenticate(model.Username, model.Password, cancellationToken);
+                return authResult.ToApiResult();
+            }
+            catch (Exception ex)
+            {
+                return ex.ToApiResult<TokenResult<TUserKey>>();
+            }
+
         }
 
-        //[HttpGet]
-        //public virtual async Task<IResultSet<TUserResponse>> Get(CancellationToken cancellationToken = default)
-        //{
-        //    cancellationToken.ThrowIfCancellationRequested();
-        //    var user = await UserService.GetById(ApplicationContext.UserId, cancellationToken);
-        //    var res = Mapper.Map<TUserResponse>(user);
-        //    return res.ToResultSet();
-        //}
+        [HttpGet]
+        public virtual async Task<IApiResult<TUser>> Get(CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var userId = await UserService.GetCurrentUserId(cancellationToken);
+                if (userId == null)
+                    throw new Exception("Unable to resolve current user!");
+
+                var user = await UserService.GetById(userId, cancellationToken);
+                if (user == null)
+                    throw new Exception("Unable to resolve current user!");
+
+                return user.ToApiResult();
+            }
+            catch (Exception ex)
+            {
+                return ex.ToApiResult<TUser>();
+            }
+        }
 
         //[HttpPost]
         //public virtual async Task<IResultSet<bool>> Delete([FromBody][Required] TKey id, CancellationToken cancellationToken = default)

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace uBeac.Identity
@@ -9,10 +10,12 @@ namespace uBeac.Identity
     {
         protected readonly UserManager<TUser> UserManager;
         protected readonly IJwtTokenProvider JwtTokenProvider;
-        public UserService(UserManager<TUser> userManager, IJwtTokenProvider jwtTokenProvider)
+        protected readonly IHttpContextAccessor HttpContextAccessor;
+        public UserService(UserManager<TUser> userManager, IJwtTokenProvider jwtTokenProvider, IHttpContextAccessor httpContextAccessor)
         {
             UserManager = userManager;
             JwtTokenProvider = jwtTokenProvider;
+            HttpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
@@ -49,7 +52,7 @@ namespace uBeac.Identity
             user.PhoneNumberConfirmed = false;
 
             await Insert(user, password, cancellationToken);
-            
+
             return user;
         }
 
@@ -88,11 +91,13 @@ namespace uBeac.Identity
 
         public virtual async Task ChangePassword(ChangePassword changePassword, CancellationToken cancellationToken = default)
         {
-            var user = await UserManager.FindByNameAsync(changePassword.Username);
-            if (user is null || !await UserManager.CheckPasswordAsync(user, changePassword.OldPassword))
+            var currentUserId = await GetCurrentUserId(cancellationToken);
+            var currentUser = await GetById(currentUserId, cancellationToken);
+
+            if (currentUserId == null || currentUser == null || !await UserManager.CheckPasswordAsync(currentUser, changePassword.OldPassword))
                 throw new Exception("User doesn't exist or username/password is not valid!");
 
-            var idResult = await UserManager.ChangePasswordAsync(user, changePassword.OldPassword, changePassword.NewPassword);
+            var idResult = await UserManager.ChangePasswordAsync(currentUser, changePassword.OldPassword, changePassword.NewPassword);
 
             idResult.ThrowIfInvalid();
         }
@@ -100,21 +105,31 @@ namespace uBeac.Identity
         public virtual async Task ForgotPassword(string username, CancellationToken cancellationToken = default)
         {
             var user = await UserManager.FindByNameAsync(username);
-            if (user is null)
-                throw new Exception("User doesn't exist!");
+            if (user == null)
+                throw new Exception("User does not exist!");
 
             var resetPasswordToken = await UserManager.GeneratePasswordResetTokenAsync(user);
             // todo: send email here
 
         }
 
+        public Task<TUserKey> GetCurrentUserId(CancellationToken cancellationToken = default)
+        {
+            if (HttpContextAccessor.HttpContext == null)
+                return default;
 
+            var userId = UserManager.GetUserId(HttpContextAccessor.HttpContext.User);
+            if (string.IsNullOrEmpty(userId))
+                return default;
+
+            return Task.FromResult(userId.GetTypedKey<TUserKey>());
+        }
     }
 
     public class UserService<TUser> : UserService<Guid, TUser>, IUserService<TUser>
         where TUser : User
     {
-        public UserService(UserManager<TUser> userManager, IJwtTokenProvider jwtTokenProvider) : base(userManager, jwtTokenProvider)
+        public UserService(UserManager<TUser> userManager, IJwtTokenProvider jwtTokenProvider, IHttpContextAccessor httpContextAccessor) : base(userManager, jwtTokenProvider, httpContextAccessor)
         {
         }
     }
