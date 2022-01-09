@@ -1,13 +1,15 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace uBeac.Identity
 {
     public interface IJwtTokenProvider
     {
-        JwtSecurityToken GenerateToken<TKey, TUser>(TUser user) where TKey : IEquatable<TKey> where TUser : User<TKey>;
+        string GenerateToken<TKey, TUser>(TUser user) where TKey : IEquatable<TKey> where TUser : User<TKey>;
+        string GenerateRefreshToken<TKey, TUser>(TUser user) where TKey : IEquatable<TKey> where TUser : User<TKey>;
     }
 
     public class JwtTokenProvider : IJwtTokenProvider
@@ -20,7 +22,17 @@ namespace uBeac.Identity
             _options = options;
         }
 
-        public JwtSecurityToken GenerateToken<TKey, TUser>(TUser user)
+        public string GenerateRefreshToken<TKey, TUser>(TUser user)
+            where TKey : IEquatable<TKey>
+            where TUser : User<TKey>
+        {
+            var randomNumber = new byte[32];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
+        }
+
+        public string GenerateToken<TKey, TUser>(TUser user)
             where TKey : IEquatable<TKey>
             where TUser : User<TKey>
         {
@@ -34,17 +46,20 @@ namespace uBeac.Identity
                 Audience = _options.Audience,
                 Subject = new ClaimsIdentity(new[]
                     {
-                    new Claim("Id", user.Id.ToString()),
-                    new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Email, user.Email)
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Email, user.Email)
                     }
                 ),
-                Expires = DateTime.UtcNow.AddSeconds(_options.Expires),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
+                Expires = DateTime.UtcNow.AddSeconds(_options.TokenExpiry),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature),
+                NotBefore = DateTime.UtcNow,
+                IssuedAt = DateTime.UtcNow
             };
-            
-            return jwtTokenHandler.CreateJwtSecurityToken(tokenDescriptor);
+
+            var token = jwtTokenHandler.CreateJwtSecurityToken(tokenDescriptor);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

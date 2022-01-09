@@ -49,6 +49,22 @@ namespace uBeac.Web.Identity
 
         }
 
+        [AllowAnonymous]
+        [HttpPost]
+        public virtual async Task<IApiResult<TokenResult<TUserKey>>> RefreshToken(RefreshTokenRequest model, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var authResult = await UserService.RefreshToken(model.RefreshToken, model.Token, cancellationToken);
+                return authResult.ToApiResult();
+            }
+            catch (Exception ex)
+            {
+                return ex.ToApiResult<TokenResult<TUserKey>>();
+            }
+
+        }
+
         [HttpGet]
         public virtual async Task<IApiResult<TUser>> Get(CancellationToken cancellationToken = default)
         {

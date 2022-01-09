@@ -11,7 +11,8 @@
         Task<TUserKey> GetCurrentUserId(CancellationToken cancellationToken = default);
         Task ChangePassword(ChangePassword changePassword, CancellationToken cancellationToken = default);
         Task ForgotPassword(string username, CancellationToken cancellationToken = default);
-
+        Task RevokeTokens(TUserKey id, CancellationToken cancellationToken = default);
+        Task<TokenResult<TUserKey>> RefreshToken(string refreshToken, string expiredToken, CancellationToken cancellationToken = default);
     }
 
     public interface IUserService<TUser> : IUserService<Guid, TUser>
