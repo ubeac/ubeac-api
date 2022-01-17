@@ -12,19 +12,20 @@ namespace uBeac.Identity
         where TUser : User<TUserKey>
     {
         const string LOCAL_LOGIN_PROVIDER = "local";
-        const string TOKEN_NAME = "token";
         const string REFRESH_TOKEN_NAME = "refreshToken";
 
         protected readonly UserManager<TUser> UserManager;
         protected readonly IJwtTokenProvider JwtTokenProvider;
         protected readonly IHttpContextAccessor HttpContextAccessor;
         protected readonly JwtOptions JwtOptions;
-        public UserService(UserManager<TUser> userManager, IJwtTokenProvider jwtTokenProvider, IHttpContextAccessor httpContextAccessor, JwtOptions jwtOptions)
+        protected readonly IUserTokenRepository<TUserKey> UserTokenRepository;
+        public UserService(UserManager<TUser> userManager, IJwtTokenProvider jwtTokenProvider, IHttpContextAccessor httpContextAccessor, JwtOptions jwtOptions, IUserTokenRepository<TUserKey> userTokenRepository)
         {
             UserManager = userManager;
             JwtTokenProvider = jwtTokenProvider;
             HttpContextAccessor = httpContextAccessor;
             JwtOptions = jwtOptions;
+            UserTokenRepository = userTokenRepository;
         }
 
         /// <summary>

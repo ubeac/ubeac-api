@@ -19,7 +19,7 @@ namespace uBeac.Web.Identity
 
         [AllowAnonymous]
         [HttpPost]
-        public virtual async Task<IApiResult<bool>> Register([FromBody] RegisterRequest model, CancellationToken cancellationToken = default)
+        public virtual async Task<IApiResult<bool>> Register(RegisterRequest model, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace uBeac.Web.Identity
 
         [AllowAnonymous]
         [HttpPost]
-        public virtual async Task<IApiResult<TokenResult<TUserKey>>> Login([FromBody] LoginRequest model, CancellationToken cancellationToken = default)
+        public virtual async Task<IApiResult<TokenResult<TUserKey>>> Login(LoginRequest model, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -65,26 +65,42 @@ namespace uBeac.Web.Identity
 
         }
 
-        [HttpGet]
-        public virtual async Task<IApiResult<TUser>> Get(CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                var userId = await UserService.GetCurrentUserId(cancellationToken);
-                if (userId == null)
-                    throw new Exception("Unable to resolve current user!");
+        //[HttpGet]
+        //public virtual async Task<IApiResult<TUser>> Get(CancellationToken cancellationToken = default)
+        //{
+        //    try
+        //    {
+        //        var userId = await UserService.GetCurrentUserId(cancellationToken);
+        //        if (userId == null)
+        //            throw new Exception("Unable to resolve current user!");
 
-                var user = await UserService.GetById(userId, cancellationToken);
-                if (user == null)
-                    throw new Exception("Unable to resolve current user!");
+        //        var user = await UserService.GetById(userId, cancellationToken);
+        //        if (user == null)
+        //            throw new Exception("Unable to resolve current user!");
 
-                return user.ToApiResult();
-            }
-            catch (Exception ex)
-            {
-                return ex.ToApiResult<TUser>();
-            }
-        }
+        //        return user.ToApiResult();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return ex.ToApiResult<TUser>();
+        //    }
+        //}
+
+        //[AllowAnonymous]
+        //[HttpPost]
+        //public virtual async Task<IApiResult<TokenResult<TUserKey>>> Logout(LoginRequest model, CancellationToken cancellationToken = default)
+        //{
+        //    try
+        //    {
+        //        var authResult = await UserService.Authenticate(model.Username, model.Password, cancellationToken);
+        //        return authResult.ToApiResult();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return ex.ToApiResult<TokenResult<TUserKey>>();
+        //    }
+
+        //}
 
         //[HttpPost]
         //public virtual async Task<IResultSet<bool>> Delete([FromBody][Required] TKey id, CancellationToken cancellationToken = default)
