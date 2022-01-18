@@ -197,7 +197,7 @@ namespace uBeac.Identity
     public class UserService<TUser> : UserService<Guid, TUser>, IUserService<TUser>
         where TUser : User
     {
-        public UserService(UserManager<TUser> userManager, IJwtTokenProvider jwtTokenProvider, IHttpContextAccessor httpContextAccessor, JwtOptions jwtOptions) : base(userManager, jwtTokenProvider, httpContextAccessor, jwtOptions)
+        public UserService(UserManager<TUser> userManager, IJwtTokenProvider jwtTokenProvider, IHttpContextAccessor httpContextAccessor, JwtOptions jwtOptions, IUserTokenRepository userTokenRepository) : base(userManager, jwtTokenProvider, httpContextAccessor, jwtOptions, userTokenRepository)
         {
         }
     }

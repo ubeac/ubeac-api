@@ -5,7 +5,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using uBeac;
 using uBeac.Identity;
-using uBeac.Identity.Validators;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

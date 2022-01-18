@@ -1,6 +1,6 @@
 ﻿using uBeac.Extensions;
 
-namespace uBeac.Identity.Validators;
+namespace uBeac.Identity;
 
 public class UnitValidator<TKey, TUnit> : IValidator<TUnit>
     where TKey : IEquatable<TKey>
