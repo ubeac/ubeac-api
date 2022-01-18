@@ -1,6 +1,6 @@
 ﻿namespace uBeac.Identity;
 
-public interface IUnitService<TKey, TUnit>
+public interface IUnitService<TKey, TUnit> : IHasValidator<TUnit>
     where TKey : IEquatable<TKey>
     where TUnit : Unit<TKey>
 {

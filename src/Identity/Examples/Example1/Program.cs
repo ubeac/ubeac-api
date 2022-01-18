@@ -28,6 +28,9 @@ services.AddRoleService<RoleService<Role>, Role>();
 services.AddUserRoleService<UserRoleService<User>, User>();
 services.AddUnitService<UnitService<Unit>, Unit>();
 
+// Adding validators
+services.AddUnitValidators<Unit>();
+
 // Adding Core Identity
 services
     .AddIdentityUser<User>()

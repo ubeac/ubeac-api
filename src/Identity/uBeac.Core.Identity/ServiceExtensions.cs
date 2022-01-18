@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using uBeac;
 using uBeac.Identity;
+using uBeac.Identity.Validators;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -40,6 +42,21 @@ namespace Microsoft.Extensions.DependencyInjection
             where TUnitService : class, IUnitService<TUnit>
         {
             services.TryAddScoped<IUnitService<TUnit>, TUnitService>();
+            return services;
+        }
+
+        public static IServiceCollection AddUnitValidators<TUnitKey, TUnit>(this IServiceCollection services)
+            where TUnitKey : IEquatable<TUnitKey>
+            where TUnit : Unit<TUnitKey>
+        {
+            services.TryAddScoped<IValidator<TUnit>, UnitValidator<TUnitKey, TUnit>>();
+            return services;
+        }
+
+        public static IServiceCollection AddUnitValidators<TUnit>(this IServiceCollection services)
+            where TUnit : Unit
+        {
+            services.TryAddScoped<IValidator<TUnit>, UnitValidator<TUnit>>();
             return services;
         }
 
@@ -165,24 +182,32 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static IdentityOptions GetDefaultOptions()
         {
-            var options = new IdentityOptions();
-
-            // Password settings.
-            options.Password.RequireDigit = false;
-            options.Password.RequireLowercase = false;
-            options.Password.RequireNonAlphanumeric = false;
-            options.Password.RequireUppercase = false;
-            options.Password.RequiredLength = 1;
-            options.Password.RequiredUniqueChars = 0;
-
-            // Lockout settings.
-            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
-            options.Lockout.MaxFailedAccessAttempts = 5;
-            options.Lockout.AllowedForNewUsers = true;
-
-            // User settings.
-            options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-            options.User.RequireUniqueEmail = true;
+            var options = new IdentityOptions
+            {
+                Password =
+                {
+                    // Password settings.
+                    RequireDigit = false,
+                    RequireLowercase = false,
+                    RequireNonAlphanumeric = false,
+                    RequireUppercase = false,
+                    RequiredLength = 1,
+                    RequiredUniqueChars = 0
+                },
+                Lockout =
+                {
+                    // Lockout settings.
+                    DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1),
+                    MaxFailedAccessAttempts = 5,
+                    AllowedForNewUsers = true
+                },
+                User =
+                {
+                    // User settings.
+                    AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+",
+                    RequireUniqueEmail = true
+                }
+            };
 
             return options;
         }

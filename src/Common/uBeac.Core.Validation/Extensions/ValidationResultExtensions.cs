@@ -10,4 +10,7 @@ public static class ValidationResultExtensions
             throw new Exception(string.Join("\r\n", validationResult.Errors.Select(x => x.Code + "," + x.Message)));
         }
     }
+
+    public static ValidationResult CreateResult(this List<ValidationError> errors) =>
+        errors.Any() ? new ValidationResult(errors) : new ValidationResult();
 }

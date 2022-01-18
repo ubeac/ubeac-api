@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\uBeac.Core.Validation\uBeac.Core.Validation.csproj" />
     <ProjectReference Include="..\uBeac.Core.Identity.Common\uBeac.Core.Identity.Common.csproj" />
   </ItemGroup>
 

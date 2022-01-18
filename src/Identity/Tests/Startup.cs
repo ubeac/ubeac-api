@@ -44,6 +44,9 @@ namespace Identity
             services.AddUserRoleService<UserRoleService<User>, User>();
             services.AddUnitService<UnitService<Unit>, Unit>();
 
+            // Adding validators
+            services.AddUnitValidators<Unit>();
+
             // Adding Core Identity
             services
                 .AddIdentityUser<User>()
