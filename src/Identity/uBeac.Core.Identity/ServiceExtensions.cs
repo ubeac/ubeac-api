@@ -26,6 +26,23 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
+        public static IServiceCollection AddUnitService<TUnitService, TUnitKey, TUnit>(this IServiceCollection services)
+            where TUnitKey : IEquatable<TUnitKey>
+            where TUnit : Unit<TUnitKey>
+            where TUnitService : class, IUnitService<TUnitKey, TUnit>
+        {
+            services.TryAddScoped<IUnitService<TUnitKey, TUnit>, TUnitService>();
+            return services;
+        }
+
+        public static IServiceCollection AddUnitService<TUnitService, TUnit>(this IServiceCollection services)
+            where TUnit : Unit
+            where TUnitService : class, IUnitService<TUnit>
+        {
+            services.TryAddScoped<IUnitService<TUnit>, TUnitService>();
+            return services;
+        }
+
         public static IServiceCollection AddUserService<TUserService, TUserKey, TUser>(this IServiceCollection services)
             where TUserKey : IEquatable<TUserKey>
             where TUser : User<TUserKey>
