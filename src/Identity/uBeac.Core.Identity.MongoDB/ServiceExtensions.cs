@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+using uBeac.Core.Identity.MongoDB;
 using uBeac.Identity;
 using uBeac.Identity.MongoDB;
 using uBeac.Repositories.MongoDB;
@@ -81,5 +82,41 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
+        public static IServiceCollection AddMongoDBUnitRepository<TMongoDbContext, TUnitKey, TUnit>(this IServiceCollection services)
+            where TMongoDbContext : class, IMongoDBContext
+            where TUnitKey : IEquatable<TUnitKey>
+            where TUnit : Unit<TUnitKey>
+        {
+
+            services.TryAddScoped<IUnitRepository<TUnitKey, TUnit>>(provider =>
+            {
+                var dbContext = provider.GetService<TMongoDbContext>();
+
+                if (dbContext == null)
+                    throw new NullReferenceException("MongoDB Context is not registered for Role.");
+
+                return new MongoUnitRepository<TUnitKey, TUnit>(dbContext);
+            });
+
+            return services;
+        }
+
+        public static IServiceCollection AddMongoDBUnitRepository<TMongoDbContext, TUnit>(this IServiceCollection services)
+            where TMongoDbContext : class, IMongoDBContext
+            where TUnit : Unit
+        {
+
+            services.TryAddScoped<IUnitRepository<TUnit>>(provider =>
+            {
+                var dbContext = provider.GetService<TMongoDbContext>();
+
+                if (dbContext == null)
+                    throw new NullReferenceException("MongoDB Context is not registered for Role.");
+
+                return new MongoUnitRepository<TUnit>(dbContext);
+            });
+
+            return services;
+        }
     }
 }

@@ -20,6 +20,7 @@ services.AddMongo<MongoDBContext>("DefaultConnection");
 // Adding repositories
 services.AddMongoDBUserRepository<MongoDBContext, User>();
 services.AddMongoDBRoleRepository<MongoDBContext, Role>();
+services.AddMongoDBUnitRepository<MongoDBContext, Unit>();
 
 // Adding services
 services.AddUserService<UserService<User>, User>();
