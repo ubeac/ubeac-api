@@ -19,42 +19,17 @@ public class UnitService<TKey, TUnit> : HasValidator<TUnit>, IUnitService<TKey, 
         await UnitRepository.Insert(unit, cancellationToken);
     }
 
-    public virtual async Task InsertMany(IEnumerable<TUnit> units, CancellationToken cancellationToken = default)
-    {
-        await BeforeInsertMany(units, cancellationToken);
-        await UnitRepository.InsertMany(units, cancellationToken);
-    }
-
-    public virtual async Task Update(TUnit unit, CancellationToken cancellationToken = default)
-    {
-        await BeforeUpdate(unit, cancellationToken);
-        unit = await ReplaceIdByIdentifiers(unit, cancellationToken);
-        await UnitRepository.Replace(unit, cancellationToken);
-    }
-
-    public virtual async Task UpdateMany(IEnumerable<TUnit> units, CancellationToken cancellationToken = default)
-    {
-        await BeforeUpdateMany(units, cancellationToken);
-        units = await ReplaceIdsByIdentifiers(units, cancellationToken);
-        await UnitRepository.ReplaceMany(units, cancellationToken);
-    }
-
-    public virtual async Task InsertOrUpdateMany(IEnumerable<TUnit> units, CancellationToken cancellationToken = default)
-    {
-        await BeforeInsertOrUpdateMany(units, cancellationToken);
-
-        units = await ReplaceIdsByIdentifiers(units, cancellationToken);
-        var insertUnits = units.Where(unit => unit.Id == null);
-        var updateUnits = units.Where(unit => unit.Id != null);
-        await InsertMany(insertUnits, cancellationToken);
-        await UpdateMany(updateUnits, cancellationToken);
-    }
-
     protected virtual async Task BeforeInsert(TUnit unit, CancellationToken cancellationToken)
     {
         ThrowIfCancelled(cancellationToken);
         ThrowIfNull(unit);
         await ThrowIfInvalid(unit);
+    }
+
+    public virtual async Task InsertMany(IEnumerable<TUnit> units, CancellationToken cancellationToken = default)
+    {
+        await BeforeInsertMany(units, cancellationToken);
+        await UnitRepository.InsertMany(units, cancellationToken);
     }
 
     protected virtual async Task BeforeInsertMany(IEnumerable<TUnit> units, CancellationToken cancellationToken)
@@ -66,12 +41,26 @@ public class UnitService<TKey, TUnit> : HasValidator<TUnit>, IUnitService<TKey, 
         await Task.WhenAll(beforeInsertPerUnit);
     }
 
+    public virtual async Task Update(TUnit unit, CancellationToken cancellationToken = default)
+    {
+        await BeforeUpdate(unit, cancellationToken);
+        unit = await ReplaceIdByIdentifiers(unit, cancellationToken);
+        await UnitRepository.Replace(unit, cancellationToken);
+    }
+
     protected virtual async Task BeforeUpdate(TUnit unit, CancellationToken cancellationToken)
     {
         ThrowIfCancelled(cancellationToken);
         ThrowIfNull(unit);
         await ThrowIfInvalid(unit);
         await ThrowIfNotExists(unit, cancellationToken);
+    }
+
+    public virtual async Task UpdateMany(IEnumerable<TUnit> units, CancellationToken cancellationToken = default)
+    {
+        await BeforeUpdateMany(units, cancellationToken);
+        units = await ReplaceIdsByIdentifiers(units, cancellationToken);
+        await UnitRepository.ReplaceMany(units, cancellationToken);
     }
 
     protected virtual async Task BeforeUpdateMany(IEnumerable<TUnit> units, CancellationToken cancellationToken)
@@ -81,6 +70,17 @@ public class UnitService<TKey, TUnit> : HasValidator<TUnit>, IUnitService<TKey, 
 
         var beforeUpdatePerUnit = units.Select(e => BeforeUpdate(e, cancellationToken));
         await Task.WhenAll(beforeUpdatePerUnit);
+    }
+
+    public virtual async Task InsertOrUpdateMany(IEnumerable<TUnit> units, CancellationToken cancellationToken = default)
+    {
+        await BeforeInsertOrUpdateMany(units, cancellationToken);
+
+        units = await ReplaceIdsByIdentifiers(units, cancellationToken);
+        var insertUnits = units.Where(unit => unit.Id == null);
+        var updateUnits = units.Where(unit => unit.Id != null);
+        await InsertMany(insertUnits, cancellationToken);
+        await UpdateMany(updateUnits, cancellationToken);
     }
 
     protected virtual async Task BeforeInsertOrUpdateMany(IEnumerable<TUnit> units, CancellationToken cancellationToken)
