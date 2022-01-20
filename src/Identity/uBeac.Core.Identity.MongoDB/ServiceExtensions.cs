@@ -93,7 +93,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 var dbContext = provider.GetService<TMongoDbContext>();
 
                 if (dbContext == null)
-                    throw new NullReferenceException("MongoDB Context is not registered for Role.");
+                    throw new NullReferenceException("MongoDB Context is not registered for Unit.");
 
                 return new MongoUnitRepository<TUnitKey, TUnit>(dbContext);
             });
@@ -111,9 +111,46 @@ namespace Microsoft.Extensions.DependencyInjection
                 var dbContext = provider.GetService<TMongoDbContext>();
 
                 if (dbContext == null)
-                    throw new NullReferenceException("MongoDB Context is not registered for Role.");
+                    throw new NullReferenceException("MongoDB Context is not registered for Unit.");
 
                 return new MongoUnitRepository<TUnit>(dbContext);
+            });
+
+            return services;
+        }
+
+        public static IServiceCollection AddMongoDBUnitTypeRepository<TMongoDbContext, TUnitTypeKey, TUnitType>(this IServiceCollection services)
+            where TMongoDbContext : class, IMongoDBContext
+            where TUnitTypeKey : IEquatable<TUnitTypeKey>
+            where TUnitType : UnitType<TUnitTypeKey>
+        {
+
+            services.TryAddScoped<IUnitTypeRepository<TUnitTypeKey, TUnitType>>(provider =>
+            {
+                var dbContext = provider.GetService<TMongoDbContext>();
+
+                if (dbContext == null)
+                    throw new NullReferenceException("MongoDB Context is not registered for UnitType.");
+
+                return new MongoUnitTypeRepository<TUnitTypeKey, TUnitType>(dbContext);
+            });
+
+            return services;
+        }
+
+        public static IServiceCollection AddMongoDBUnitTypeRepository<TMongoDbContext, TUnitType>(this IServiceCollection services)
+            where TMongoDbContext : class, IMongoDBContext
+            where TUnitType : UnitType
+        {
+
+            services.TryAddScoped<IUnitTypeRepository<TUnitType>>(provider =>
+            {
+                var dbContext = provider.GetService<TMongoDbContext>();
+
+                if (dbContext == null)
+                    throw new NullReferenceException("MongoDB Context is not registered for UnitType.");
+
+                return new MongoUnitTypeRepository<TUnitType>(dbContext);
             });
 
             return services;

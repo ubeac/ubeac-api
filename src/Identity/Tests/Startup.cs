@@ -37,6 +37,7 @@ namespace Identity
             services.AddMongoDBUserRepository<MongoDBContext, User>();
             services.AddMongoDBRoleRepository<MongoDBContext, Role>();
             services.AddMongoDBUnitRepository<MongoDBContext, Unit>();
+            services.AddMongoDBUnitTypeRepository<MongoDBContext, UnitType>();
 
             // Adding services
             services.AddUserService<UserService<User>, User>();
