@@ -26,6 +26,12 @@ namespace uBeac.Repositories.MongoDB
             return typeof(TEntity).Name;
         }
 
+        public async Task ReplaceMany(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            await Task.WhenAll(entities.Select(e => Replace(e, cancellationToken)));
+        }
+
         public virtual async Task<bool> Delete(TKey id, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -91,7 +97,7 @@ namespace uBeac.Repositories.MongoDB
         public virtual async Task<bool> Any(Expression<Func<TEntity, bool>> filter, CancellationToken cancellationToken = default)
         {
             var findResult = await Collection.FindAsync(filter, cancellationToken: cancellationToken);
-            return findResult.ToEnumerable(cancellationToken).Any();
+            return await findResult.AnyAsync(cancellationToken);
         }
 
         public IQueryable<TEntity> AsQueryable()
