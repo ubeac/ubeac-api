@@ -1,6 +1,7 @@
 using uBeac.Identity;
 using uBeac.Repositories.MongoDB;
 using uBeac.Web.Middlewares;
+using Helper = Example1.Helper;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -41,6 +42,9 @@ services.AddJwtAuthentication(builder.Configuration.GetInstance<JwtOptions>("Jwt
 #endregion
 
 var app = builder.Build();
+
+// Inserting units
+app.InsertUnits<Unit>(Helper.DefaultUnits());
 
 app.UseDefaultFiles();
 
