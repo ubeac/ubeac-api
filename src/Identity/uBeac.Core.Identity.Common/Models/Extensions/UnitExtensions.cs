@@ -27,4 +27,19 @@ public static class UnitExtensions
     {
         return GetIdentifiers<Guid, TUnit>(units);
     }
+
+    public static UnitIdByIdentifiersResult<TUnitKey> GetIdResult<TUnitKey, TUnit>(this TUnit unit)
+        where TUnitKey : IEquatable<TUnitKey>
+        where TUnit : Unit<TUnitKey>
+    {
+
+        return new UnitIdByIdentifiersResult<TUnitKey>(unit.Id, GetIdentifiers<TUnitKey, TUnit>(unit));
+    }
+
+    public static UnitIdByIdentifiersResult GetIdResult<TUnit>(this TUnit unit)
+        where TUnit : Unit
+    {
+
+        return new UnitIdByIdentifiersResult(unit.Id, GetIdentifiers(unit));
+    }
 }

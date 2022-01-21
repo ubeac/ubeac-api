@@ -22,7 +22,7 @@ public class MongoUnitRepository<TUnitKey, TUnit> : MongoEntityRepository<TUnitK
 
     protected virtual async Task BeforeGetId(UnitIdentifiers identifiers, CancellationToken cancellationToken)
     {
-        cancellationToken.ThrowIfCancellationRequested();
+        ThrowIfCancelled(cancellationToken);
         await Task.CompletedTask;
     }
 
@@ -32,12 +32,12 @@ public class MongoUnitRepository<TUnitKey, TUnit> : MongoEntityRepository<TUnitK
         var expressionFilter = new ExpressionFilterDefinition<TUnit>(identifiers.EqualsExpression<TUnitKey, TUnit>());
         var findResult = await Collection.FindAsync(expressionFilter, cancellationToken: cancellationToken);
         var units = findResult.ToEnumerable(cancellationToken);
-        return units.Select(unit => new UnitIdByIdentifiersResult<TUnitKey>(unit.Id, new UnitIdentifiers(unit.Code, unit.Type)));
+        return units.Select(GetIdResult);
     }
 
     protected virtual async Task BeforeGetIds(IEnumerable<UnitIdentifiers> identifiers, CancellationToken cancellationToken)
     {
-        cancellationToken.ThrowIfCancellationRequested();
+        ThrowIfCancelled(cancellationToken);
         await Task.CompletedTask;
     }
 
@@ -51,9 +51,11 @@ public class MongoUnitRepository<TUnitKey, TUnit> : MongoEntityRepository<TUnitK
 
     protected virtual async Task BeforeAny(UnitIdentifiers identifiers, CancellationToken cancellationToken)
     {
-        cancellationToken.ThrowIfCancellationRequested();
+        ThrowIfCancelled(cancellationToken);
         await Task.CompletedTask;
     }
+
+    protected virtual UnitIdByIdentifiersResult<TUnitKey> GetIdResult(TUnit unit) => unit.GetIdResult<TUnitKey, TUnit>();
 }
 
 public class MongoUnitRepository<TUnit> : MongoUnitRepository<Guid, TUnit>, IUnitRepository<TUnit>
