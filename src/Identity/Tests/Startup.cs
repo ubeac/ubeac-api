@@ -48,6 +48,7 @@ namespace Identity
 
             // Adding validators
             services.AddUnitValidators<Unit>();
+            services.AddUnitTypeValidators<UnitType>();
 
             // Adding Core Identity
             services

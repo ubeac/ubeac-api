@@ -76,6 +76,21 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
+        public static IServiceCollection AddUnitTypeValidators<TUnitTypeKey, TUnitType>(this IServiceCollection services)
+            where TUnitTypeKey : IEquatable<TUnitTypeKey>
+            where TUnitType : Unit<TUnitTypeKey>
+        {
+            services.TryAddScoped<IValidator<TUnitType>, UnitValidator<TUnitTypeKey, TUnitType>>();
+            return services;
+        }
+
+        public static IServiceCollection AddUnitTypeValidators<TUnitType>(this IServiceCollection services)
+            where TUnitType : UnitType
+        {
+            services.TryAddScoped<IValidator<TUnitType>, UnitTypeValidator<TUnitType>>();
+            return services;
+        }
+
         public static IServiceCollection AddUserService<TUserService, TUserKey, TUser>(this IServiceCollection services)
             where TUserKey : IEquatable<TUserKey>
             where TUser : User<TUserKey>
