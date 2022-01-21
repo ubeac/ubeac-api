@@ -46,8 +46,9 @@ services.AddJwtAuthentication(builder.Configuration.GetInstance<JwtOptions>("Jwt
 
 var app = builder.Build();
 
-// Inserting units
-app.InsertUnits<Unit>(Helper.DefaultUnits());
+// Seeding data
+app.UseDefaultUnitTypes<UnitType>(Helper.DefaultUnitTypes());
+app.UseDefaultUnits<Unit>(Helper.DefaultUnits());
 
 app.UseDefaultFiles();
 
