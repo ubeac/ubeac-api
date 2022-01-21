@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using System.Linq.Expressions;
+using MongoDB.Driver;
 using uBeac.Repositories.MongoDB;
 
 namespace uBeac.Identity.MongoDB;
@@ -11,51 +12,49 @@ public class MongoUnitRepository<TUnitKey, TUnit> : MongoEntityRepository<TUnitK
     {
     }
 
-    public virtual async Task<UnitIdByIdentifiersResult<TUnitKey>> GetId(UnitIdentifiers identifiers, CancellationToken cancellationToken = default)
+    public virtual async Task<TUnit> CorrectId(TUnit unit, CancellationToken cancellationToken = default)
     {
-        await BeforeGetId(identifiers, cancellationToken);
-        var expressionFilter = new ExpressionFilterDefinition<TUnit>(identifiers.EqualsExpression<TUnitKey, TUnit>());
+        await BeforeCorrectId(unit, cancellationToken);
+        var expressionFilter = new ExpressionFilterDefinition<TUnit>(MatchIdentifiersExpression(unit));
         var findResult = await Collection.FindAsync(expressionFilter, cancellationToken: cancellationToken);
-        var unit = findResult.ToEnumerable(cancellationToken).Single();
-        return new UnitIdByIdentifiersResult<TUnitKey>(unit.Id, identifiers);
+        var single = findResult.ToEnumerable(cancellationToken).SingleOrDefault();
+        unit.Id = single == null ? default : single.Id;
+        return unit;
     }
 
-    protected virtual async Task BeforeGetId(UnitIdentifiers identifiers, CancellationToken cancellationToken)
+    protected virtual async Task BeforeCorrectId(TUnit unit, CancellationToken cancellationToken)
     {
         ThrowIfCancelled(cancellationToken);
         await Task.CompletedTask;
     }
 
-    public virtual async Task<IEnumerable<UnitIdByIdentifiersResult<TUnitKey>>> GetIds(IEnumerable<UnitIdentifiers> identifiers, CancellationToken cancellationToken = default)
+    public virtual async Task<IEnumerable<TUnit>> CorrectId(IEnumerable<TUnit> units, CancellationToken cancellationToken = default)
     {
-        await BeforeGetIds(identifiers, cancellationToken);
-        var expressionFilter = new ExpressionFilterDefinition<TUnit>(identifiers.EqualsExpression<TUnitKey, TUnit>());
-        var findResult = await Collection.FindAsync(expressionFilter, cancellationToken: cancellationToken);
-        var units = findResult.ToEnumerable(cancellationToken);
-        return units.Select(GetIdResult);
+        await BeforeCorrectId(units, cancellationToken);
+        return await Task.WhenAll(units.Select(unit => CorrectId(unit, cancellationToken)));
     }
 
-    protected virtual async Task BeforeGetIds(IEnumerable<UnitIdentifiers> identifiers, CancellationToken cancellationToken)
+    protected virtual async Task BeforeCorrectId(IEnumerable<TUnit> units, CancellationToken cancellationToken = default)
     {
         ThrowIfCancelled(cancellationToken);
         await Task.CompletedTask;
     }
 
-    public virtual async Task<bool> Any(UnitIdentifiers identifiers, CancellationToken cancellationToken = default)
+    public virtual async Task<bool> Any(TUnit unit, CancellationToken cancellationToken = default)
     {
-        await BeforeAny(identifiers, cancellationToken);
-        var expressionFilter = new ExpressionFilterDefinition<TUnit>(identifiers.EqualsExpression<TUnitKey, TUnit>());
+        await BeforeAny(unit, cancellationToken);
+        var expressionFilter = new ExpressionFilterDefinition<TUnit>(MatchIdentifiersExpression(unit));
         var findResult = await Collection.FindAsync(expressionFilter, cancellationToken: cancellationToken);
         return await findResult.AnyAsync(cancellationToken);
     }
 
-    protected virtual async Task BeforeAny(UnitIdentifiers identifiers, CancellationToken cancellationToken)
+    protected virtual async Task BeforeAny(TUnit unit, CancellationToken cancellationToken)
     {
         ThrowIfCancelled(cancellationToken);
         await Task.CompletedTask;
     }
 
-    protected virtual UnitIdByIdentifiersResult<TUnitKey> GetIdResult(TUnit unit) => unit.GetIdResult<TUnitKey, TUnit>();
+    protected virtual Expression<Func<TUnit, bool>> MatchIdentifiersExpression(TUnit unit) => unit.MatchIdentifiersExpression();
 }
 
 public class MongoUnitRepository<TUnit> : MongoUnitRepository<Guid, TUnit>, IUnitRepository<TUnit>

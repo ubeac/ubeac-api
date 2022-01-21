@@ -44,7 +44,7 @@ public class UnitService<TKey, TUnit> : HasValidator<TUnit>, IUnitService<TKey, 
     public virtual async Task Update(TUnit unit, CancellationToken cancellationToken = default)
     {
         await BeforeUpdate(unit, cancellationToken);
-        unit = await ReplaceIdByIdentifiers(unit, cancellationToken);
+        unit = await UnitRepository.CorrectId(unit, cancellationToken);
         await UnitRepository.Replace(unit, cancellationToken);
     }
 
@@ -59,7 +59,7 @@ public class UnitService<TKey, TUnit> : HasValidator<TUnit>, IUnitService<TKey, 
     public virtual async Task UpdateMany(IEnumerable<TUnit> units, CancellationToken cancellationToken = default)
     {
         await BeforeUpdateMany(units, cancellationToken);
-        units = await ReplaceIdsByIdentifiers(units, cancellationToken);
+        units = await UnitRepository.CorrectId(units, cancellationToken);
         await UnitRepository.ReplaceMany(units, cancellationToken);
     }
 
@@ -76,7 +76,7 @@ public class UnitService<TKey, TUnit> : HasValidator<TUnit>, IUnitService<TKey, 
     {
         await BeforeInsertOrUpdateMany(units, cancellationToken);
 
-        units = await ReplaceIdsByIdentifiers(units, cancellationToken);
+        units = await UnitRepository.CorrectId(units, cancellationToken);
         var insertUnits = units.Where(unit => unit.Id == null);
         var updateUnits = units.Where(unit => unit.Id != null);
         await InsertMany(insertUnits, cancellationToken);
@@ -102,8 +102,7 @@ public class UnitService<TKey, TUnit> : HasValidator<TUnit>, IUnitService<TKey, 
 
     protected virtual async Task ThrowIfNotExists(TUnit unit, CancellationToken cancellationToken)
     {
-        var identifiers = GetIdentifiers(unit);
-        if (!await UnitRepository.Any(identifiers, cancellationToken)) throw new ArgumentException($"{nameof(unit)} is not exists.");
+        if (!await UnitRepository.Any(unit, cancellationToken)) throw new ArgumentException($"{nameof(unit)} is not exists.");
     }
 
     protected virtual void ThrowIfCancelled(CancellationToken cancellationToken)
@@ -111,30 +110,6 @@ public class UnitService<TKey, TUnit> : HasValidator<TUnit>, IUnitService<TKey, 
 
     protected virtual async Task ThrowIfInvalid(TUnit unit)
         => (await Validate(unit)).ThrowIfInvalid();
-
-    protected virtual UnitIdentifiers GetIdentifiers(TUnit unit) => unit.GetIdentifiers<TKey, TUnit>();
-    protected virtual IEnumerable<UnitIdentifiers> GetIdentifiers(IEnumerable<TUnit> units) => units.GetIdentifiers<TKey, TUnit>();
-
-    protected virtual async Task<TUnit> ReplaceIdByIdentifiers(TUnit unit, CancellationToken cancellationToken)
-    {
-        var identifiers = GetIdentifiers(unit);
-        unit.Id = (await UnitRepository.GetId(identifiers, cancellationToken)).Id;
-        return unit;
-    }
-
-    protected virtual async Task<IEnumerable<TUnit>> ReplaceIdsByIdentifiers(IEnumerable<TUnit> units, CancellationToken cancellationToken)
-    {
-        var identifiers = GetIdentifiers(units);
-        var ids = (await UnitRepository.GetIds(identifiers, cancellationToken)).ToList();
-
-        var updatedUnits = units.ToList();
-        for (int i = 0; i < updatedUnits.Count; i++)
-        {
-            updatedUnits[i].Id = ids.GetId(updatedUnits[i]);
-        }
-
-        return updatedUnits;
-    }
 }
 
 public class UnitService<TUnit> : UnitService<Guid, TUnit>, IUnitService<TUnit>

@@ -10,7 +10,7 @@ public class UnitType<TUnitTypeKey> : IEntity<TUnitTypeKey> where TUnitTypeKey :
     }
 
     public virtual TUnitTypeKey Id { get; set; }
-    public virtual string Code { get; set; }
+    [Identifier] public virtual string Code { get; set; }
     public virtual string Name { get; set; }
 }
 

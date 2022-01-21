@@ -15,8 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\Extensions\" />
-    <Folder Include="Entities\Identifiers\Extensions\" />
+    <Folder Include="Entities\Attributes\Extensions\" />
   </ItemGroup>
 
 </Project>

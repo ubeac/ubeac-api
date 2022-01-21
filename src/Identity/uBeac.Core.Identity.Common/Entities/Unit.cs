@@ -2,7 +2,7 @@
 
 public class Unit<TUnitKey> : IEntity<TUnitKey> where TUnitKey : IEquatable<TUnitKey>
 {
-    public Unit(TUnitKey id, string name, string code, string type, string? parentUnitId = null)
+    public Unit(TUnitKey id, string name, string code, string type, string parentUnitId = null)
     {
         Id = id;
         Name = name;
@@ -13,15 +13,15 @@ public class Unit<TUnitKey> : IEntity<TUnitKey> where TUnitKey : IEquatable<TUni
 
     public virtual TUnitKey Id { get; set; }
     public virtual string Name { get; set; }
-    public virtual string Code { get; set; }
-    public virtual string Type { get; set; }
+    [Identifier] public virtual string Code { get; set; }
+    [Identifier] public virtual string Type { get; set; }
     public virtual string Description { get; set; }
     public virtual string ParentUnitId { get; set; }
 }
 
 public class Unit : Unit<Guid>, IEntity
 {
-    public Unit(string name, string code, string type, string? parentUnitId = null) : base(Guid.NewGuid(), name, code, type, parentUnitId)
+    public Unit(string name, string code, string type, string parentUnitId = null) : base(Guid.NewGuid(), name, code, type, parentUnitId)
     {
     }
 }

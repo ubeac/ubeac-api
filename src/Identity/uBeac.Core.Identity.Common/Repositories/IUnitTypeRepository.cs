@@ -6,9 +6,9 @@ public interface IUnitTypeRepository<TUnitTypeKey, TUnitType> : IEntityRepositor
     where TUnitTypeKey : IEquatable<TUnitTypeKey>
     where TUnitType : UnitType<TUnitTypeKey>
 {
-    Task<UnitTypeIdByIdentifiersResult<TUnitTypeKey>> GetId(UnitTypeIdentifiers identifiers, CancellationToken cancellationToken = default);
-    Task<IEnumerable<UnitTypeIdByIdentifiersResult<TUnitTypeKey>>> GetIds(IEnumerable<UnitTypeIdentifiers> identifiers, CancellationToken cancellationToken = default);
-    Task<bool> Any(UnitTypeIdentifiers identifiers, CancellationToken cancellationToken = default);
+    Task<TUnitType> CorrectId(TUnitType unitType, CancellationToken cancellationToken = default);
+    Task<IEnumerable<TUnitType>> CorrectId(IEnumerable<TUnitType> unitTypes, CancellationToken cancellationToken = default);
+    Task<bool> Any(TUnitType unitType, CancellationToken cancellationToken = default);
 }
 
 public interface IUnitTypeRepository<TUnitType> : IUnitTypeRepository<Guid, TUnitType>, IEntityRepository<TUnitType>
