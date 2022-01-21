@@ -1,6 +1,6 @@
 ﻿namespace uBeac.Identity;
 
-public class UnitTypeIdentifiers
+public sealed class UnitTypeIdentifiers
 {
     public UnitTypeIdentifiers(string code)
     {
