@@ -21,6 +21,7 @@ public class UnitValidator<TKey, TUnit> : IValidator<TUnit>
         if (string.IsNullOrWhiteSpace(obj.Code)) errors.Add(new ValidationError(string.Empty, "Unit code is required."));
         if (string.IsNullOrWhiteSpace(obj.Type)) errors.Add(new ValidationError(string.Empty, "Unit type is required."));
         if (await Repository.Any(obj)) errors.Add(new ValidationError(string.Empty, "Unit is already exists."));
+        if (obj.ParentUnitId == null && await Repository.Any(unit => unit.ParentUnitId == null)) errors.Add(new ValidationError(string.Empty, "Only one unit can have null parent."));
 
         return errors.CreateResult();
     }
