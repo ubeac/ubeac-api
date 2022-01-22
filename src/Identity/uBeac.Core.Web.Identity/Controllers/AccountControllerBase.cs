@@ -8,11 +8,10 @@ namespace uBeac.Web.Identity
     public abstract class AccountControllerBase<TUserKey, TUser> : BaseController
        where TUserKey : IEquatable<TUserKey>
        where TUser : User<TUserKey>
-
     {
         protected readonly IUserService<TUserKey, TUser> UserService;
 
-        public AccountControllerBase(IUserService<TUserKey, TUser> userService)
+        protected AccountControllerBase(IUserService<TUserKey, TUser> userService)
         {
             UserService = userService;
         }
@@ -139,7 +138,7 @@ namespace uBeac.Web.Identity
     public abstract class AccountControllerBase<TUser> : AccountControllerBase<Guid, TUser>
         where TUser : User
     {
-        public AccountControllerBase(IUserService<TUser> userService) : base(userService)
+        protected AccountControllerBase(IUserService<TUser> userService) : base(userService)
         {
         }
     }

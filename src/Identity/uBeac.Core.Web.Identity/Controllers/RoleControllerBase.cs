@@ -13,7 +13,7 @@ namespace uBeac.Web.Identity
 
         protected readonly IRoleService<TRoleKey, TRole> RoleService;
 
-        public RoleControllerBase(IRoleService<TRoleKey, TRole> roleService)
+        protected RoleControllerBase(IRoleService<TRoleKey, TRole> roleService)
         {
             RoleService = roleService;
         }

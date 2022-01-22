@@ -13,7 +13,7 @@ namespace uBeac.Web.Identity
 
         protected readonly IUserService<TUserKey, TUser> UserService;
 
-        public UserControllerBase(IUserService<TUserKey, TUser> userService)
+        protected UserControllerBase(IUserService<TUserKey, TUser> userService)
         {
             UserService = userService;
         }
@@ -55,7 +55,7 @@ namespace uBeac.Web.Identity
     public abstract class UserControllerBase<TUser> : UserControllerBase<Guid, TUser>
         where TUser : User
     {
-        public UserControllerBase(IUserService<TUser> userService) : base(userService)
+        protected UserControllerBase(IUserService<TUser> userService) : base(userService)
         {
         }
     }
