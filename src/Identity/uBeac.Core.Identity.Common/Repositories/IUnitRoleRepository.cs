@@ -6,6 +6,8 @@ public interface IUnitRoleRepository<TUnitRoleKey, TUnitRole> : IEntityRepositor
     where TUnitRoleKey : IEquatable<TUnitRoleKey>
     where TUnitRole : UnitRole<TUnitRoleKey>
 {
+    Task<TUnitRole> CorrectId(TUnitRole unitRole, CancellationToken cancellationToken = default);
+    Task<bool> Any(TUnitRole unitRole, CancellationToken cancellationToken = default);
 }
 
 public interface IUnitRoleRepository<TUnitRole> : IUnitRoleRepository<Guid, TUnitRole>, IEntityRepository<TUnitRole>
