@@ -41,9 +41,39 @@ public class UnitRoleService<TUnitRoleKey, TUnitRole> : HasValidator<TUnitRole>,
         await ThrowIfNotExists(unitRole, cancellationToken);
     }
 
+    public virtual async Task Remove(TUnitRoleKey unitRoleId, CancellationToken cancellationToken = default)
+    {
+        await BeforeRemove(unitRoleId, cancellationToken);
+        await UnitRoleRepository.Delete(unitRoleId, cancellationToken);
+    }
+
+    public virtual async Task BeforeRemove(TUnitRoleKey unitRoleId, CancellationToken cancellationToken)
+    {
+        ThrowIfCancelled(cancellationToken);
+        ThrowIfNull(unitRoleId);
+        await Task.CompletedTask;
+    }
+
+    public virtual async Task<IEnumerable<TUnitRole>> GetAll(CancellationToken cancellationToken = default)
+    {
+        await BeforeGetAll(cancellationToken);
+        return await UnitRoleRepository.GetAll(cancellationToken);
+    }
+
+    public virtual async Task BeforeGetAll(CancellationToken cancellationToken)
+    {
+        ThrowIfCancelled(cancellationToken);
+        await Task.CompletedTask;
+    }
+
     protected virtual void ThrowIfNull(TUnitRole unitRole)
     {
         if (unitRole == null) throw new ArgumentNullException(nameof(unitRole));
+    }
+
+    protected virtual void ThrowIfNull(TUnitRoleKey unitRoleId)
+    {
+        if (unitRoleId == null) throw new ArgumentNullException(nameof(unitRoleId));
     }
 
     protected virtual async Task ThrowIfNotExists(TUnitRole unitRole, CancellationToken cancellationToken)

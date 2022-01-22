@@ -6,6 +6,8 @@ public interface IUnitRoleService<TUnitRoleKey, TUnitRole> : IHasValidator<TUnit
 {
     Task Insert(TUnitRole unitRole, CancellationToken cancellationToken = default);
     Task Update(TUnitRole unitRole, CancellationToken cancellationToken = default);
+    Task Remove(TUnitRoleKey unitRoleId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<TUnitRole>> GetAll(CancellationToken cancellationToken = default);
 }
 
 public interface IUnitRoleService<TUnitRole> : IUnitRoleService<Guid, TUnitRole>

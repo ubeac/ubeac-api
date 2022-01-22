@@ -9,6 +9,8 @@ public interface IUnitService<TKey, TUnit> : IHasValidator<TUnit>
     Task Update(TUnit unit, CancellationToken cancellationToken = default);
     Task UpdateMany(IEnumerable<TUnit> units, CancellationToken cancellationToken = default);
     Task InsertOrUpdateMany(IEnumerable<TUnit> units, CancellationToken cancellationToken = default);
+    Task Remove(TKey unitId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<TUnit>> GetAll(CancellationToken cancellationToken = default);
 }
 
 public interface IUnitService<TUnit> : IUnitService<Guid, TUnit>

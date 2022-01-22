@@ -89,7 +89,32 @@ public class UnitTypeService<TKey, TUnitType> : HasValidator<TUnitType>, IUnitTy
         ThrowIfNull(unitTypes);
         await Task.CompletedTask;
     }
-     
+
+    public virtual async Task Remove(TKey unitTypeId, CancellationToken cancellationToken = default)
+    {
+        await BeforeRemove(unitTypeId, cancellationToken);
+        await UnitTypeRepository.Delete(unitTypeId, cancellationToken);
+    }
+
+    public virtual async Task BeforeRemove(TKey unitTypeId, CancellationToken cancellationToken)
+    {
+        ThrowIfCancelled(cancellationToken);
+        ThrowIfNull(unitTypeId);
+        await Task.CompletedTask;
+    }
+
+    public virtual async Task<IEnumerable<TUnitType>> GetAll(CancellationToken cancellationToken = default)
+    {
+        await BeforeGetAll(cancellationToken);
+        return await UnitTypeRepository.GetAll(cancellationToken);
+    }
+
+    public virtual async Task BeforeGetAll(CancellationToken cancellationToken)
+    {
+        ThrowIfCancelled(cancellationToken);
+        await Task.CompletedTask;
+    }
+
     protected virtual void ThrowIfNull(TUnitType unitType)
     {
         if (unitType == null) throw new ArgumentNullException(nameof(unitType));
@@ -98,6 +123,11 @@ public class UnitTypeService<TKey, TUnitType> : HasValidator<TUnitType>, IUnitTy
     protected virtual void ThrowIfNull(IEnumerable<TUnitType> unitTypes)
     {
         if (unitTypes == null) throw new ArgumentNullException(nameof(unitTypes));
+    }
+
+    protected virtual void ThrowIfNull(TKey unitTypeId)
+    {
+        if (unitTypeId == null) throw new ArgumentNullException(nameof(unitTypeId));
     }
 
     protected virtual async Task ThrowIfNotExists(TUnitType unitType, CancellationToken cancellationToken)

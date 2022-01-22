@@ -9,6 +9,8 @@ public interface IUnitTypeService<TKey, TUnitType>
     Task Update(TUnitType unitType, CancellationToken cancellationToken = default);
     Task UpdateMany(IEnumerable<TUnitType> unitTypes, CancellationToken cancellationToken = default);
     Task InsertOrUpdateMany(IEnumerable<TUnitType> unitTypes, CancellationToken cancellationToken = default);
+    Task Remove(TKey unitTypeId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<TUnitType>> GetAll(CancellationToken cancellationToken = default);
 }
 
 public interface IUnitTypeService<TUnitType> : IUnitTypeService<Guid, TUnitType>
