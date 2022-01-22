@@ -91,6 +91,23 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
+        public static IServiceCollection AddUnitRoleService<TUnitRoleService, TUnitRoleKey, TUnitRole>(this IServiceCollection services)
+            where TUnitRoleKey : IEquatable<TUnitRoleKey>
+            where TUnitRole : UnitRole<TUnitRoleKey>
+            where TUnitRoleService : class, IUnitRoleService<TUnitRoleKey, TUnitRole>
+        {
+            services.TryAddScoped<IUnitRoleService<TUnitRoleKey, TUnitRole>, TUnitRoleService>();
+            return services;
+        }
+
+        public static IServiceCollection AddUnitRoleService<TUnitRoleService, TUnitRole>(this IServiceCollection services)
+            where TUnitRole : UnitRole
+            where TUnitRoleService : class, IUnitRoleService<TUnitRole>
+        {
+            services.TryAddScoped<IUnitRoleService<TUnitRole>, TUnitRoleService>();
+            return services;
+        }
+
         public static IServiceCollection AddUserService<TUserService, TUserKey, TUser>(this IServiceCollection services)
             where TUserKey : IEquatable<TUserKey>
             where TUser : User<TUserKey>

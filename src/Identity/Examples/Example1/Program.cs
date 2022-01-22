@@ -31,6 +31,7 @@ services.AddRoleService<RoleService<Role>, Role>();
 services.AddUserRoleService<UserRoleService<User>, User>();
 services.AddUnitService<UnitService<Unit>, Unit>();
 services.AddUnitTypeService<UnitTypeService<UnitType>, UnitType>();
+services.AddUnitRoleService<UnitRoleService<UnitRole>, UnitRole>();
 
 // Adding validators
 services.AddUnitValidators<Unit>();

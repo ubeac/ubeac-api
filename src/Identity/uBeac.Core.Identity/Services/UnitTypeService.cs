@@ -115,7 +115,7 @@ public class UnitTypeService<TKey, TUnitType> : HasValidator<TUnitType>, IUnitTy
 public class UnitTypeService<TUnitType> : UnitTypeService<Guid, TUnitType>, IUnitTypeService<TUnitType>
     where TUnitType : UnitType
 {
-    public UnitTypeService(IUnitTypeRepository<Guid, TUnitType> unitTypeRepository, IEnumerable<IValidator<TUnitType>> validators) : base(unitTypeRepository, validators.ToList())
+    public UnitTypeService(IUnitTypeRepository<TUnitType> unitTypeRepository, IEnumerable<IValidator<TUnitType>> validators) : base(unitTypeRepository, validators.ToList())
     {
     }
 }
