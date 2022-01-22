@@ -12,17 +12,15 @@ namespace uBeac.Identity
         public virtual List<TwoFactorRecoveryCode> RecoveryCodes { get; set; } = new();
         public virtual List<string> Roles { get; set; } = new();
 
-        public User()
+        public User(string userName) : base(userName)
         {
-        }
-
-        public User(string userName) : this()
-        {
-            UserName = userName;
         }
     }
 
     public class User : User<Guid>, IEntity
     {
+        public User(string userName) : base(userName)
+        {
+        }
     }
 }
