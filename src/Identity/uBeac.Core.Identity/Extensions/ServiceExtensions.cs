@@ -78,9 +78,9 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddUnitTypeValidators<TUnitTypeKey, TUnitType>(this IServiceCollection services)
             where TUnitTypeKey : IEquatable<TUnitTypeKey>
-            where TUnitType : Unit<TUnitTypeKey>
+            where TUnitType : UnitType<TUnitTypeKey>
         {
-            services.TryAddScoped<IValidator<TUnitType>, UnitValidator<TUnitTypeKey, TUnitType>>();
+            services.TryAddScoped<IValidator<TUnitType>, UnitTypeValidator<TUnitTypeKey, TUnitType>>();
             return services;
         }
 
@@ -105,6 +105,21 @@ namespace Microsoft.Extensions.DependencyInjection
             where TUnitRoleService : class, IUnitRoleService<TUnitRole>
         {
             services.TryAddScoped<IUnitRoleService<TUnitRole>, TUnitRoleService>();
+            return services;
+        }
+
+        public static IServiceCollection AddUnitRoleValidators<TUnitRoleKey, TUnitRole>(this IServiceCollection services)
+            where TUnitRoleKey : IEquatable<TUnitRoleKey>
+            where TUnitRole : UnitRole<TUnitRoleKey>
+        {
+            services.TryAddScoped<IValidator<TUnitRole>, UnitRoleValidator<TUnitRoleKey, TUnitRole>>();
+            return services;
+        }
+
+        public static IServiceCollection AddUnitRoleValidators<TUnitRole>(this IServiceCollection services)
+            where TUnitRole : UnitRole
+        {
+            services.TryAddScoped<IValidator<TUnitRole>, UnitRoleValidator<TUnitRole>>();
             return services;
         }
 

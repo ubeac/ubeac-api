@@ -36,6 +36,7 @@ services.AddUnitRoleService<UnitRoleService<UnitRole>, UnitRole>();
 // Adding validators
 services.AddUnitValidators<Unit>();
 services.AddUnitTypeValidators<UnitType>();
+services.AddUnitRoleValidators<UnitRole>();
 
 // Adding Core Identity
 services
