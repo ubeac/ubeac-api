@@ -13,7 +13,6 @@ namespace Microsoft.Extensions.DependencyInjection
             where TUserKey : IEquatable<TUserKey>
             where TUser : User<TUserKey>
         {
-
             services.TryAddScoped<IUserRepository<TUserKey, TUser>>(provider =>
             {
                 var dbContext = provider.GetService<TMongoDbContext>();
@@ -31,7 +30,6 @@ namespace Microsoft.Extensions.DependencyInjection
            where TMongoDbContext : class, IMongoDBContext
            where TUser : User
         {
-
             services.TryAddScoped<IUserRepository<TUser>>(provider =>
             {
                 var dbContext = provider.GetService<TMongoDbContext>();
@@ -50,7 +48,6 @@ namespace Microsoft.Extensions.DependencyInjection
             where TRoleKey : IEquatable<TRoleKey>
             where TRole : Role<TRoleKey>
         {
-
             services.TryAddScoped<IRoleRepository<TRoleKey, TRole>>(provider =>
             {
                 var dbContext = provider.GetService<TMongoDbContext>();
@@ -68,7 +65,6 @@ namespace Microsoft.Extensions.DependencyInjection
             where TMongoDbContext : class, IMongoDBContext
             where TRole : Role
         {
-
             services.TryAddScoped<IRoleRepository<TRole>>(provider =>
             {
                 var dbContext = provider.GetService<TMongoDbContext>();
@@ -87,7 +83,6 @@ namespace Microsoft.Extensions.DependencyInjection
             where TUnitKey : IEquatable<TUnitKey>
             where TUnit : Unit<TUnitKey>
         {
-
             services.TryAddScoped<IUnitRepository<TUnitKey, TUnit>>(provider =>
             {
                 var dbContext = provider.GetService<TMongoDbContext>();
@@ -105,7 +100,6 @@ namespace Microsoft.Extensions.DependencyInjection
             where TMongoDbContext : class, IMongoDBContext
             where TUnit : Unit
         {
-
             services.TryAddScoped<IUnitRepository<TUnit>>(provider =>
             {
                 var dbContext = provider.GetService<TMongoDbContext>();
@@ -124,7 +118,6 @@ namespace Microsoft.Extensions.DependencyInjection
             where TUnitTypeKey : IEquatable<TUnitTypeKey>
             where TUnitType : UnitType<TUnitTypeKey>
         {
-
             services.TryAddScoped<IUnitTypeRepository<TUnitTypeKey, TUnitType>>(provider =>
             {
                 var dbContext = provider.GetService<TMongoDbContext>();
@@ -142,7 +135,6 @@ namespace Microsoft.Extensions.DependencyInjection
             where TMongoDbContext : class, IMongoDBContext
             where TUnitType : UnitType
         {
-
             services.TryAddScoped<IUnitTypeRepository<TUnitType>>(provider =>
             {
                 var dbContext = provider.GetService<TMongoDbContext>();
@@ -151,6 +143,41 @@ namespace Microsoft.Extensions.DependencyInjection
                     throw new NullReferenceException("MongoDB Context is not registered for UnitType.");
 
                 return new MongoUnitTypeRepository<TUnitType>(dbContext);
+            });
+
+            return services;
+        }
+
+        public static IServiceCollection AddMongoDBUnitRoleRepository<TMongoDbContext, TUnitRoleKey, TUnitRole>(this IServiceCollection services)
+            where TMongoDbContext : class, IMongoDBContext
+            where TUnitRoleKey : IEquatable<TUnitRoleKey>
+            where TUnitRole : UnitRole<TUnitRoleKey>
+        {
+            services.TryAddScoped<IUnitRoleRepository<TUnitRoleKey, TUnitRole>>(provider =>
+            {
+                var dbContext = provider.GetService<TMongoDbContext>();
+
+                if (dbContext == null)
+                    throw new NullReferenceException("MongoDB Context is not registered for UnitRole.");
+
+                return new MongoUnitRoleRepository<TUnitRoleKey, TUnitRole>(dbContext);
+            });
+
+            return services;
+        }
+
+        public static IServiceCollection AddMongoDBUnitRoleRepository<TMongoDbContext, TUnitRole>(this IServiceCollection services)
+            where TMongoDbContext : class, IMongoDBContext
+            where TUnitRole : UnitRole
+        {
+            services.TryAddScoped<IUnitRoleRepository<TUnitRole>>(provider =>
+            {
+                var dbContext = provider.GetService<TMongoDbContext>();
+
+                if (dbContext == null)
+                    throw new NullReferenceException("MongoDB Context is not registered for UnitRole.");
+
+                return new MongoUnitRoleRepository<TUnitRole>(dbContext);
             });
 
             return services;
