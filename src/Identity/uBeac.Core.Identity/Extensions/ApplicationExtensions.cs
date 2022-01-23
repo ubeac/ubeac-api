@@ -30,28 +30,4 @@ public static class ApplicationExtensions
         return app;
     }
 
-    public static WebApplication UseDefaultUnitTypes<TUnitTypeKey, TUnitType>(this WebApplication app, IEnumerable<TUnitType> unitTypes)
-        where TUnitTypeKey : IEquatable<TUnitTypeKey>
-        where TUnitType : UnitType<TUnitTypeKey>
-    {
-        var service = app.Services.GetService<IUnitTypeService<TUnitTypeKey, TUnitType>>();
-
-        if (service == null)
-            throw new NullReferenceException("Service is not registered for unit type");
-
-        service.InsertOrUpdateMany(unitTypes);
-        return app;
-    }
-
-    public static WebApplication UseDefaultUnitTypes<TUnitType>(this WebApplication app, IEnumerable<TUnitType> unitTypes)
-        where TUnitType : UnitType
-    {
-        var service = app.Services.GetService<IUnitTypeService<TUnitType>>();
-
-        if (service == null)
-            throw new NullReferenceException("Service is not registered for unit type");
-
-        service.InsertOrUpdateMany(unitTypes);
-        return app;
-    }
 }

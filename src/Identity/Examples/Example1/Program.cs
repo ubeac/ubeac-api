@@ -30,7 +30,7 @@ services.AddUserService<UserService<User>, User>();
 services.AddRoleService<RoleService<Role>, Role>();
 services.AddUserRoleService<UserRoleService<User>, User>();
 services.AddUnitService<UnitService<Unit>, Unit>();
-services.AddUnitTypeService<UnitTypeService<UnitType>, UnitType>();
+services.AddUnitTypeService<UnitTypeService<UnitType>, UnitType>(Helper.DefaultUnitTypes());
 services.AddUnitRoleService<UnitRoleService<UnitRole>, UnitRole>();
 
 // Adding validators
@@ -50,7 +50,6 @@ services.AddJwtAuthentication(builder.Configuration.GetInstance<JwtOptions>("Jwt
 var app = builder.Build();
 
 // Seeding data
-app.UseDefaultUnitTypes<UnitType>(Helper.DefaultUnitTypes());
 app.UseDefaultUnits<Unit>(Helper.DefaultUnits());
 
 app.UseDefaultFiles();

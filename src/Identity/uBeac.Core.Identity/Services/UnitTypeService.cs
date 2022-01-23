@@ -1,12 +1,14 @@
-﻿namespace uBeac.Identity;
+﻿using uBeac.Services;
 
-public class UnitTypeService<TKey, TUnitType> : IUnitTypeService<TKey, TUnitType>
+namespace uBeac.Identity;
+
+public class UnitTypeService<TKey, TUnitType> : EntityService<TKey, TUnitType>, IUnitTypeService<TKey, TUnitType>
     where TKey : IEquatable<TKey>
     where TUnitType : UnitType<TKey>
 {
     protected readonly IUnitTypeRepository<TKey, TUnitType> UnitTypeRepository;
 
-    public UnitTypeService(IUnitTypeRepository<TKey, TUnitType> unitTypeRepository) 
+    public UnitTypeService(IUnitTypeRepository<TKey, TUnitType> unitTypeRepository) : base(unitTypeRepository)
     {
         UnitTypeRepository = unitTypeRepository;
     }

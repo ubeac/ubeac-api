@@ -1,11 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using uBeac.Core.Web.Identity.Consts;
 using uBeac.Identity;
 
 namespace uBeac.Web.Identity;
 
+//TODO: correct here
 [Authorize(Roles = Roles.Admin)]
 public abstract class UnitTypesControllerBase<TUnitTypeKey, TUnitType> : BaseController
     where TUnitTypeKey : IEquatable<TUnitTypeKey>
@@ -19,7 +19,7 @@ public abstract class UnitTypesControllerBase<TUnitTypeKey, TUnitType> : BaseCon
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Create([FromBody, Required] TUnitType unitType, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<bool>> Create([FromBody] TUnitType unitType, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -32,12 +32,12 @@ public abstract class UnitTypesControllerBase<TUnitTypeKey, TUnitType> : BaseCon
         }
     }
 
-    [HttpPut]
-    public virtual async Task<IApiResult<bool>> Update([FromBody, Required] TUnitType unitType, CancellationToken cancellationToken = default)
+    [HttpPost]
+    public virtual async Task<IApiResult<bool>> Update([FromBody] TUnitType unitType, CancellationToken cancellationToken = default)
     {
         try
         {
-            await UnitTypeService.Update(unitType, cancellationToken);
+            await UnitTypeService.Replace(unitType, cancellationToken);
             return true.ToApiResult();
         }
         catch (Exception ex)
@@ -46,12 +46,12 @@ public abstract class UnitTypesControllerBase<TUnitTypeKey, TUnitType> : BaseCon
         }
     }
 
-    [HttpDelete]
-    public virtual async Task<IApiResult<bool>> Delete([FromBody, Required] TUnitTypeKey id, CancellationToken cancellationToken = default)
+    [HttpPost]
+    public virtual async Task<IApiResult<bool>> Delete([FromBody] IdRequest<TUnitTypeKey> id, CancellationToken cancellationToken = default)
     {
         try
         {
-            await UnitTypeService.Remove(id, cancellationToken);
+            await UnitTypeService.Delete(id.Id, cancellationToken);
             return true.ToApiResult();
         }
         catch (Exception ex)
@@ -80,5 +80,19 @@ public abstract class UnitTypesControllerBase<TUnitType> : UnitTypesControllerBa
 {
     protected UnitTypesControllerBase(IUnitTypeService<TUnitType> unitTypeService) : base(unitTypeService)
     {
+    }
+
+    [HttpPost]
+    public virtual async Task<IApiResult<bool>> Delete([FromBody] IdRequest id, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            await UnitTypeService.Delete(id.Id, cancellationToken);
+            return true.ToApiResult();
+        }
+        catch (Exception ex)
+        {
+            return ex.ToApiResult<bool>();
+        }
     }
 }

@@ -14,10 +14,16 @@ public static class Helper
         yield return mirdamadBranch;
     }
 
-    public static IEnumerable<UnitType> DefaultUnitTypes()
+    public static DefaultUnitTypes<UnitType> DefaultUnitTypes()
     {
-        yield return new UnitType { Code = "HQ", Name = "Headquarter" };
-        yield return new UnitType { Code = "BH", Name = "Branch" };
-        yield return new UnitType { Code = "BR", Name = "Branch 2" };
+        return new DefaultUnitTypes<UnitType>()
+        {
+            Values = new List<UnitType>
+            {
+                new UnitType { Code = "HQ", Name = "Headquarter", Description = "Desc 1" },
+                new UnitType { Code = "BH", Name = "Branch", Description = "Desc 1" },
+                new UnitType { Code = "BR", Name = "Branch 2", Description = "Desc 1" }
+            }
+        };
     }
 }

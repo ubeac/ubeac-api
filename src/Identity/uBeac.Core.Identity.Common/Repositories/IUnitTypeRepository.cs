@@ -2,9 +2,9 @@
 
 namespace uBeac.Identity;
 
-public interface IUnitTypeRepository<TUnitTypeKey, TUnitType> : IEntityRepository<TUnitTypeKey, TUnitType>
-    where TUnitTypeKey : IEquatable<TUnitTypeKey>
-    where TUnitType : UnitType<TUnitTypeKey>
+public interface IUnitTypeRepository<TKey, TUnitType> : IEntityRepository<TKey, TUnitType>
+    where TKey : IEquatable<TKey>
+    where TUnitType : UnitType<TKey>
 {
 }
 

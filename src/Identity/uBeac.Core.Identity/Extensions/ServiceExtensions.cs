@@ -76,6 +76,54 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
+        public static IServiceCollection AddUnitTypeService<TUnitTypeService, TUnitTypeKey, TUnitType>(this IServiceCollection services, DefaultUnitTypes<TUnitTypeKey, TUnitType> defaultUnitTypeOptions)
+            where TUnitTypeKey : IEquatable<TUnitTypeKey>
+            where TUnitType : UnitType<TUnitTypeKey>
+            where TUnitTypeService : class, IUnitTypeService<TUnitTypeKey, TUnitType>
+        {
+            services.TryAddSingleton(provider =>
+            {
+                try
+                {
+                    var unitTypeService = provider.GetService<TUnitTypeService>();
+                    unitTypeService.InsertMany(defaultUnitTypeOptions.Values);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+
+                return defaultUnitTypeOptions;
+            });
+
+            services.TryAddScoped<IUnitTypeService<TUnitTypeKey, TUnitType>, TUnitTypeService>();
+            return services;
+        }
+
+        public static IServiceCollection AddUnitTypeService<TUnitTypeService, TUnitType>(this IServiceCollection services, DefaultUnitTypes<TUnitType> defaultUnitTypeOptions)
+            where TUnitType : UnitType
+            where TUnitTypeService : class, IUnitTypeService<TUnitType>
+        {
+            services.TryAddSingleton(provider =>
+            {
+                try
+                {
+                    var unitTypeService = provider.GetService<TUnitTypeService>();
+                    unitTypeService.InsertMany(defaultUnitTypeOptions.Values);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+
+                return defaultUnitTypeOptions;
+            });
+
+            services.TryAddScoped<IUnitTypeService<TUnitType>, TUnitTypeService>();
+            return services;
+        }
+
+
         public static IServiceCollection AddUnitTypeValidators<TUnitTypeKey, TUnitType>(this IServiceCollection services)
             where TUnitTypeKey : IEquatable<TUnitTypeKey>
             where TUnitType : UnitType<TUnitTypeKey>
