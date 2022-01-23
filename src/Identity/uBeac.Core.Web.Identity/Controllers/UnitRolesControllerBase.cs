@@ -80,18 +80,4 @@ public abstract class UnitRolesControllerBase<TUnitRole> : UnitRolesControllerBa
     protected UnitRolesControllerBase(IUnitRoleService<TUnitRole> unitRoleService) : base(unitRoleService)
     {
     }
-
-    [HttpPost]
-    public virtual async Task<IApiResult<bool>> Delete([FromBody] IdRequest id, CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            await UnitRoleService.Delete(id.Id, cancellationToken);
-            return true.ToApiResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToApiResult<bool>();
-        }
-    }
 }

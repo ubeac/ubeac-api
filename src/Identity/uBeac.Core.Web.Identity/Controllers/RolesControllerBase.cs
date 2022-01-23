@@ -20,7 +20,7 @@ namespace uBeac.Web.Identity
         }
 
         [HttpPost]
-        public virtual async Task<IApiResult<bool>> Create([FromBody, Required] TRole role, CancellationToken cancellationToken = default)
+        public virtual async Task<IApiResult<bool>> Insert([FromBody, Required] TRole role, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace uBeac.Web.Identity
             }
         }
 
-        [HttpPut]
+        [HttpPost]
         public virtual async Task<IApiResult<bool>> Update([FromBody, Required] TRole role, CancellationToken cancellationToken = default)
         {
             try
@@ -47,7 +47,7 @@ namespace uBeac.Web.Identity
             }
         }
 
-        [HttpDelete]
+        [HttpPost]
         public virtual async Task<IApiResult<bool>> Delete([FromBody, Required] TRoleKey id, CancellationToken cancellationToken = default)
         {
             try
@@ -76,10 +76,10 @@ namespace uBeac.Web.Identity
         }
     }
 
-    public abstract class RoleControllerBase<TRole> : RolesControllerBase<Guid, TRole>
+    public abstract class RolesControllerBase<TRole> : RolesControllerBase<Guid, TRole>
        where TRole : Role
     {
-        protected RoleControllerBase(IRoleService<TRole> roleService) : base(roleService)
+        protected RolesControllerBase(IRoleService<TRole> roleService) : base(roleService)
         {
         }
     }

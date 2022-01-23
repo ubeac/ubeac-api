@@ -71,24 +71,10 @@ public abstract class UnitsControllerBase<TKey, TUnit> : BaseController
     }
 }
 
-public abstract class UnitControllerBase<TUnit> : UnitsControllerBase<Guid, TUnit>
+public abstract class UnitsControllerBase<TUnit> : UnitsControllerBase<Guid, TUnit>
     where TUnit : Unit
 {
-    protected UnitControllerBase(IUnitService<TUnit> unitService) : base(unitService)
+    protected UnitsControllerBase(IUnitService<TUnit> unitService) : base(unitService)
     {
-    }
-
-    [HttpPost]
-    public virtual async Task<IApiResult<bool>> Delete([FromBody] IdRequest id, CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            await UnitService.Delete(id.Id, cancellationToken);
-            return true.ToApiResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToApiResult<bool>();
-        }
     }
 }

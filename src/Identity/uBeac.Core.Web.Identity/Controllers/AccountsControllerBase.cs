@@ -18,7 +18,7 @@ namespace uBeac.Web.Identity
         }
 
         [AllowAnonymous]
-        [HttpPost("Register")]
+        [HttpPost]
         public virtual async Task<IApiResult<bool>> Register(RegisterRequest model, CancellationToken cancellationToken = default)
         {
             try
@@ -33,7 +33,7 @@ namespace uBeac.Web.Identity
         }
 
         [AllowAnonymous]
-        [HttpPost("Login")]
+        [HttpPost]
         public virtual async Task<IApiResult<TokenResult<TUserKey>>> Login(LoginRequest model, CancellationToken cancellationToken = default)
         {
             try
@@ -48,7 +48,7 @@ namespace uBeac.Web.Identity
         }
 
         [AllowAnonymous]
-        [HttpPut("RefreshToken")]
+        [HttpPost]
         public virtual async Task<IApiResult<TokenResult<TUserKey>>> RefreshToken(RefreshTokenRequest model, CancellationToken cancellationToken = default)
         {
             try
@@ -64,10 +64,10 @@ namespace uBeac.Web.Identity
 
     }
 
-    public abstract class AccountControllerBase<TUser> : AccountsControllerBase<Guid, TUser>
+    public abstract class AccountsControllerBase<TUser> : AccountsControllerBase<Guid, TUser>
         where TUser : User
     {
-        protected AccountControllerBase(IUserService<TUser> userService) : base(userService)
+        protected AccountsControllerBase(IUserService<TUser> userService) : base(userService)
         {
         }
     }

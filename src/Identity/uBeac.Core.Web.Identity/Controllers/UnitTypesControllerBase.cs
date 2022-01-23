@@ -77,18 +77,4 @@ public abstract class UnitTypesControllerBase<TUnitType> : UnitTypesControllerBa
     protected UnitTypesControllerBase(IUnitTypeService<TUnitType> unitTypeService) : base(unitTypeService)
     {
     }
-
-    [HttpPost]
-    public virtual async Task<IApiResult<bool>> Delete([FromBody] IdRequest id, CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            await UnitTypeService.Delete(id.Id, cancellationToken);
-            return true.ToApiResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToApiResult<bool>();
-        }
-    }
 }

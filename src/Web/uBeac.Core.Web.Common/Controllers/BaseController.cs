@@ -3,7 +3,7 @@ using uBeac.Web.Filters;
 
 namespace uBeac.Web
 {
-    [Route("api/[controller]/[action]/")]
+    [Route("API/[controller]/[action]/")]
     //[Authorize]
     [ApiController]
     [Produces("application/json")]
