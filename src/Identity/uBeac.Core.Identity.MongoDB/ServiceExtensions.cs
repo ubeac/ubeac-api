@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
-using uBeac.Core.Identity.MongoDB;
 using uBeac.Identity;
 using uBeac.Identity.MongoDB;
 using uBeac.Repositories.MongoDB;

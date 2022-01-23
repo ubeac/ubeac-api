@@ -1,8 +1,7 @@
-﻿namespace uBeac.Identity
+﻿namespace uBeac.Identity;
+
+public class ChangePassword
 {
-    public class ChangePassword
-    {
-        public string OldPassword { get; set; } = string.Empty;
-        public string NewPassword { get; set; } = string.Empty;
-    }
+    public string OldPassword { get; set; }
+    public string NewPassword { get; set; }
 }

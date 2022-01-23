@@ -1,9 +1,8 @@
 ﻿using System.Linq.Expressions;
 using MongoDB.Driver;
-using uBeac.Identity;
 using uBeac.Repositories.MongoDB;
 
-namespace uBeac.Core.Identity.MongoDB;
+namespace uBeac.Identity.MongoDB;
 
 public class MongoUnitTypeRepository<TUnitTypeKey, TUnitType> : MongoEntityRepository<TUnitTypeKey, TUnitType>, IUnitTypeRepository<TUnitTypeKey, TUnitType>
     where TUnitTypeKey : IEquatable<TUnitTypeKey>
