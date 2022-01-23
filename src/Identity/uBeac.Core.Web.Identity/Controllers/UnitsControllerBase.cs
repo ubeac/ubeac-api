@@ -1,25 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using uBeac.Core.Web.Identity.Consts;
+﻿using Microsoft.AspNetCore.Mvc;
 using uBeac.Identity;
 
 namespace uBeac.Web.Identity;
 
-[Authorize(Roles = Roles.Admin)]
-public abstract class UnitsControllerBase<TUnitKey, TUnit> : BaseController
-    where TUnitKey : IEquatable<TUnitKey>
-    where TUnit : Unit<TUnitKey>
+public abstract class UnitsControllerBase<TKey, TUnit> : BaseController
+    where TKey : IEquatable<TKey>
+    where TUnit : Unit<TKey>
 {
-    protected readonly IUnitService<TUnitKey, TUnit> UnitService;
+    protected readonly IUnitService<TKey, TUnit> UnitService;
 
-    protected UnitsControllerBase(IUnitService<TUnitKey, TUnit> unitService)
+    protected UnitsControllerBase(IUnitService<TKey, TUnit> unitService)
     {
         UnitService = unitService;
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Create([FromBody, Required] TUnit unit, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<bool>> Insert([FromBody] TUnit unit, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -32,12 +28,12 @@ public abstract class UnitsControllerBase<TUnitKey, TUnit> : BaseController
         }
     }
 
-    [HttpPut]
-    public virtual async Task<IApiResult<bool>> Update([FromBody, Required] TUnit unit, CancellationToken cancellationToken = default)
+    [HttpPost]
+    public virtual async Task<IApiResult<bool>> Replace([FromBody] TUnit unit, CancellationToken cancellationToken = default)
     {
         try
         {
-            await UnitService.Update(unit, cancellationToken);
+            await UnitService.Replace(unit, cancellationToken);
             return true.ToApiResult();
         }
         catch (Exception ex)
@@ -46,12 +42,12 @@ public abstract class UnitsControllerBase<TUnitKey, TUnit> : BaseController
         }
     }
 
-    [HttpDelete]
-    public virtual async Task<IApiResult<bool>> Delete([FromBody, Required] TUnitKey id, CancellationToken cancellationToken = default)
+    [HttpPost]
+    public virtual async Task<IApiResult<bool>> Delete([FromBody] IdRequest<TKey> id, CancellationToken cancellationToken = default)
     {
         try
         {
-            await UnitService.Remove(id, cancellationToken);
+            await UnitService.Delete(id.Id, cancellationToken);
             return true.ToApiResult();
         }
         catch (Exception ex)
@@ -80,5 +76,19 @@ public abstract class UnitControllerBase<TUnit> : UnitsControllerBase<Guid, TUni
 {
     protected UnitControllerBase(IUnitService<TUnit> unitService) : base(unitService)
     {
+    }
+
+    [HttpPost]
+    public virtual async Task<IApiResult<bool>> Delete([FromBody] IdRequest id, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            await UnitService.Delete(id.Id, cancellationToken);
+            return true.ToApiResult();
+        }
+        catch (Exception ex)
+        {
+            return ex.ToApiResult<bool>();
+        }
     }
 }

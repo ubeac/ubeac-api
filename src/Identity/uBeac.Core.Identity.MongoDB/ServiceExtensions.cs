@@ -42,6 +42,39 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
+        public static IServiceCollection AddMongoDBUserTokenRepository<TMongoDbContext, TUserKey>(this IServiceCollection services)
+            where TMongoDbContext : class, IMongoDBContext
+            where TUserKey : IEquatable<TUserKey>
+        {
+            services.TryAddScoped<IUserTokenRepository<TUserKey>>(provider =>
+            {
+                var dbContext = provider.GetService<TMongoDbContext>();
+
+                if (dbContext == null)
+                    throw new NullReferenceException("MongoDB Context is not registered for UserToken.");
+
+                return new MongoUserTokenRepository<TUserKey>(dbContext);
+            });
+
+            return services;
+        }
+
+        public static IServiceCollection AddMongoDBUserTokenRepository<TMongoDbContext>(this IServiceCollection services)
+            where TMongoDbContext : class, IMongoDBContext
+        {
+            services.TryAddScoped<IUserTokenRepository>(provider =>
+            {
+                var dbContext = provider.GetService<TMongoDbContext>();
+
+                if (dbContext == null)
+                    throw new NullReferenceException("MongoDB Context is not registered for UserToken.");
+
+                return new MongoUserTokenRepository(dbContext);
+            });
+
+            return services;
+        }
+
         public static IServiceCollection AddMongoDBRoleRepository<TMongoDbContext, TRoleKey, TRole>(this IServiceCollection services)
             where TMongoDbContext : class, IMongoDBContext
             where TRoleKey : IEquatable<TRoleKey>

@@ -44,18 +44,34 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        public static IServiceCollection AddUnitValidators<TUnitKey, TUnit>(this IServiceCollection services)
-            where TUnitKey : IEquatable<TUnitKey>
-            where TUnit : Unit<TUnitKey>
+        public static IServiceCollection AddUnitService<TUnitService, TKey, TUnit>(this IServiceCollection services, DefaultUnitOptions<TKey, TUnit> defaultUnitOptions)
+            where TKey : IEquatable<TKey>
+            where TUnit : Unit<TKey>
+            where TUnitService : class, IUnitService<TKey, TUnit>
         {
-            services.TryAddScoped<IValidator<TUnit>, UnitValidator<TUnitKey, TUnit>>();
+            services.TryAddSingleton(provider =>
+            {
+                var unitService = provider.GetRequiredService<TUnitService>();
+                unitService.InsertMany(defaultUnitOptions.Values);
+                return defaultUnitOptions;
+            });
+
+            services.TryAddScoped<IUnitService<TKey, TUnit>, TUnitService>();
             return services;
         }
 
-        public static IServiceCollection AddUnitValidators<TUnit>(this IServiceCollection services)
+        public static IServiceCollection AddUnitService<TUnitService, TUnit>(this IServiceCollection services, DefaultUnitOptions<TUnit> defaultUnitOptions)
             where TUnit : Unit
+            where TUnitService : class, IUnitService<TUnit>
         {
-            services.TryAddScoped<IValidator<TUnit>, UnitValidator<TUnit>>();
+            services.TryAddSingleton(provider =>
+            {
+                var unitService = provider.GetRequiredService<TUnitService>();
+                unitService.InsertMany(defaultUnitOptions.Values);
+                return defaultUnitOptions;
+            });
+
+            services.TryAddScoped<IUnitService<TUnit>, TUnitService>();
             return services;
         }
 
@@ -76,23 +92,15 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        public static IServiceCollection AddUnitTypeService<TUnitTypeService, TUnitTypeKey, TUnitType>(this IServiceCollection services, DefaultUnitTypes<TUnitTypeKey, TUnitType> defaultUnitTypeOptions)
+        public static IServiceCollection AddUnitTypeService<TUnitTypeService, TUnitTypeKey, TUnitType>(this IServiceCollection services, DefaultUnitTypeOptions<TUnitTypeKey, TUnitType> defaultUnitTypeOptions)
             where TUnitTypeKey : IEquatable<TUnitTypeKey>
             where TUnitType : UnitType<TUnitTypeKey>
             where TUnitTypeService : class, IUnitTypeService<TUnitTypeKey, TUnitType>
         {
             services.TryAddSingleton(provider =>
             {
-                try
-                {
-                    var unitTypeService = provider.GetService<TUnitTypeService>();
-                    unitTypeService.InsertMany(defaultUnitTypeOptions.Values);
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-
+                var unitTypeService = provider.GetRequiredService<TUnitTypeService>();
+                unitTypeService.InsertMany(defaultUnitTypeOptions.Values);
                 return defaultUnitTypeOptions;
             });
 
@@ -100,42 +108,18 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        public static IServiceCollection AddUnitTypeService<TUnitTypeService, TUnitType>(this IServiceCollection services, DefaultUnitTypes<TUnitType> defaultUnitTypeOptions)
+        public static IServiceCollection AddUnitTypeService<TUnitTypeService, TUnitType>(this IServiceCollection services, DefaultUnitTypeOptions<TUnitType> defaultUnitTypeOptions)
             where TUnitType : UnitType
             where TUnitTypeService : class, IUnitTypeService<TUnitType>
         {
             services.TryAddSingleton(provider =>
             {
-                try
-                {
-                    var unitTypeService = provider.GetService<TUnitTypeService>();
-                    unitTypeService.InsertMany(defaultUnitTypeOptions.Values);
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-
+                var unitTypeService = provider.GetRequiredService<TUnitTypeService>();
+                unitTypeService.InsertMany(defaultUnitTypeOptions.Values);
                 return defaultUnitTypeOptions;
             });
 
             services.TryAddScoped<IUnitTypeService<TUnitType>, TUnitTypeService>();
-            return services;
-        }
-
-
-        public static IServiceCollection AddUnitTypeValidators<TUnitTypeKey, TUnitType>(this IServiceCollection services)
-            where TUnitTypeKey : IEquatable<TUnitTypeKey>
-            where TUnitType : UnitType<TUnitTypeKey>
-        {
-            services.TryAddScoped<IValidator<TUnitType>, UnitTypeValidator<TUnitTypeKey, TUnitType>>();
-            return services;
-        }
-
-        public static IServiceCollection AddUnitTypeValidators<TUnitType>(this IServiceCollection services)
-            where TUnitType : UnitType
-        {
-            services.TryAddScoped<IValidator<TUnitType>, UnitTypeValidator<TUnitType>>();
             return services;
         }
 
@@ -153,21 +137,6 @@ namespace Microsoft.Extensions.DependencyInjection
             where TUnitRoleService : class, IUnitRoleService<TUnitRole>
         {
             services.TryAddScoped<IUnitRoleService<TUnitRole>, TUnitRoleService>();
-            return services;
-        }
-
-        public static IServiceCollection AddUnitRoleValidators<TUnitRoleKey, TUnitRole>(this IServiceCollection services)
-            where TUnitRoleKey : IEquatable<TUnitRoleKey>
-            where TUnitRole : UnitRole<TUnitRoleKey>
-        {
-            services.TryAddScoped<IValidator<TUnitRole>, UnitRoleValidator<TUnitRoleKey, TUnitRole>>();
-            return services;
-        }
-
-        public static IServiceCollection AddUnitRoleValidators<TUnitRole>(this IServiceCollection services)
-            where TUnitRole : UnitRole
-        {
-            services.TryAddScoped<IValidator<TUnitRole>, UnitRoleValidator<TUnitRole>>();
             return services;
         }
 
@@ -205,7 +174,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        public static IdentityBuilder AddIdentityUser<TUser>(this IServiceCollection services, Action<IdentityOptions>? setupIdentityAction = default)
+        public static IdentityBuilder AddIdentityUser<TUser>(this IServiceCollection services, Action<IdentityOptions> setupIdentityAction = default)
            where TUser : User
         {
             var builder = services.AddIdentityCore<TUser>(setupIdentityAction ?? (x => GetDefaultOptions()));
@@ -218,7 +187,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
-        public static IdentityBuilder AddIdentityUser<TUserKey, TUser>(this IServiceCollection services, Action<IdentityOptions>? setupIdentityAction = default)
+        public static IdentityBuilder AddIdentityUser<TUserKey, TUser>(this IServiceCollection services, Action<IdentityOptions> setupIdentityAction = default)
             where TUserKey : IEquatable<TUserKey>
             where TUser : User<TUserKey>
         {

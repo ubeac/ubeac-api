@@ -6,7 +6,8 @@ namespace uBeac.Web.Filters
 {
     public class ApiResultFilter : IActionFilter
     {
-        private Stopwatch? stopwatch;
+        private Stopwatch stopwatch;
+
         public void OnActionExecuting(ActionExecutingContext context)
         {
             stopwatch = Stopwatch.StartNew();

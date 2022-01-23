@@ -1,25 +1,21 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using uBeac.Core.Web.Identity.Consts;
+﻿using Microsoft.AspNetCore.Mvc;
 using uBeac.Identity;
 
 namespace uBeac.Web.Identity;
 
-//TODO: correct here
-[Authorize(Roles = Roles.Admin)]
-public abstract class UnitTypesControllerBase<TUnitTypeKey, TUnitType> : BaseController
-    where TUnitTypeKey : IEquatable<TUnitTypeKey>
-    where TUnitType : UnitType<TUnitTypeKey>
+public abstract class UnitTypesControllerBase<TKey, TUnitType> : BaseController
+    where TKey : IEquatable<TKey>
+    where TUnitType : UnitType<TKey>
 {
-    protected readonly IUnitTypeService<TUnitTypeKey, TUnitType> UnitTypeService;
+    protected readonly IUnitTypeService<TKey, TUnitType> UnitTypeService;
 
-    protected UnitTypesControllerBase(IUnitTypeService<TUnitTypeKey, TUnitType> unitTypeService)
+    protected UnitTypesControllerBase(IUnitTypeService<TKey, TUnitType> unitTypeService)
     {
         UnitTypeService = unitTypeService;
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Create([FromBody] TUnitType unitType, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<bool>> Insert([FromBody] TUnitType unitType, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -33,7 +29,7 @@ public abstract class UnitTypesControllerBase<TUnitTypeKey, TUnitType> : BaseCon
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Update([FromBody] TUnitType unitType, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<bool>> Replace([FromBody] TUnitType unitType, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -47,7 +43,7 @@ public abstract class UnitTypesControllerBase<TUnitTypeKey, TUnitType> : BaseCon
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Delete([FromBody] IdRequest<TUnitTypeKey> id, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<bool>> Delete([FromBody] IdRequest<TKey> id, CancellationToken cancellationToken = default)
     {
         try
         {

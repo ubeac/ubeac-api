@@ -11,13 +11,13 @@ namespace uBeac
             Language = "en";
             SessionId = id;
             TraceId = id;
-            Username = string.Empty;
+            UserName = string.Empty;
             UserId = default;
         }
 
         public virtual TUserKey? UserId { get; }
 
-        public virtual string Username { get; }
+        public virtual string UserName { get; }
 
         public virtual IPAddress UserIp { get; }
 

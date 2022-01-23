@@ -1,13 +1,11 @@
 ﻿namespace uBeac.Identity;
 
-public class Unit<TUnitKey> : IEntity<TUnitKey> where TUnitKey : IEquatable<TUnitKey>
+public class Unit<TKey> : IEntity<TKey> where TKey : IEquatable<TKey>
 {
-    public virtual TUnitKey Id { get; set; }
+    public virtual TKey Id { get; set; }
     public virtual string Name { get; set; }
-    // TODO: do we really need the Identifier attribute?
-    [Identifier] public virtual string Code { get; set; }
-    // TODO: do we really need the Identifier attribute?
-    [Identifier] public virtual string Type { get; set; }
+    public virtual string Code { get; set; }
+    public virtual string Type { get; set; }
     public virtual string Description { get; set; }
     public virtual string ParentUnitId { get; set; }
 }

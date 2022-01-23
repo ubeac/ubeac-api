@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using uBeac.Core.Web.Identity.Consts;
 using uBeac.Identity;
@@ -7,19 +6,19 @@ using uBeac.Identity;
 namespace uBeac.Web.Identity;
 
 [Authorize(Roles = Roles.Admin)]
-public abstract class UnitRolesControllerBase<TUnitRoleKey, TUnitRole> : BaseController
-    where TUnitRoleKey : IEquatable<TUnitRoleKey>
-    where TUnitRole : UnitRole<TUnitRoleKey>
+public abstract class UnitRolesControllerBase<TKey, TUnitRole> : BaseController
+    where TKey : IEquatable<TKey>
+    where TUnitRole : UnitRole<TKey>
 {
-    protected readonly IUnitRoleService<TUnitRoleKey, TUnitRole> UnitRoleService;
+    protected readonly IUnitRoleService<TKey, TUnitRole> UnitRoleService;
 
-    protected UnitRolesControllerBase(IUnitRoleService<TUnitRoleKey, TUnitRole> unitRoleService)
+    protected UnitRolesControllerBase(IUnitRoleService<TKey, TUnitRole> unitRoleService)
     {
         UnitRoleService = unitRoleService;
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Create([FromBody, Required] TUnitRole unitRole, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<bool>> Insert([FromBody] TUnitRole unitRole, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -32,12 +31,12 @@ public abstract class UnitRolesControllerBase<TUnitRoleKey, TUnitRole> : BaseCon
         }
     }
 
-    [HttpPut]
-    public virtual async Task<IApiResult<bool>> Update([FromBody, Required] TUnitRole unitRole, CancellationToken cancellationToken = default)
+    [HttpPost]
+    public virtual async Task<IApiResult<bool>> Replace([FromBody] TUnitRole unitRole, CancellationToken cancellationToken = default)
     {
         try
         {
-            await UnitRoleService.Update(unitRole, cancellationToken);
+            await UnitRoleService.Replace(unitRole, cancellationToken);
             return true.ToApiResult();
         }
         catch (Exception ex)
@@ -46,12 +45,12 @@ public abstract class UnitRolesControllerBase<TUnitRoleKey, TUnitRole> : BaseCon
         }
     }
 
-    [HttpDelete]
-    public virtual async Task<IApiResult<bool>> Delete([FromBody, Required] TUnitRoleKey id, CancellationToken cancellationToken = default)
+    [HttpPost]
+    public virtual async Task<IApiResult<bool>> Delete([FromBody] IdRequest<TKey> id, CancellationToken cancellationToken = default)
     {
         try
         {
-            await UnitRoleService.Remove(id, cancellationToken);
+            await UnitRoleService.Delete(id.Id, cancellationToken);
             return true.ToApiResult();
         }
         catch (Exception ex)
@@ -71,6 +70,28 @@ public abstract class UnitRolesControllerBase<TUnitRoleKey, TUnitRole> : BaseCon
         catch (Exception ex)
         {
             return ex.ToApiListResult<TUnitRole>();
+        }
+    }
+}
+
+public abstract class UnitRolesControllerBase<TUnitRole> : UnitRolesControllerBase<Guid, TUnitRole>
+    where TUnitRole : UnitRole
+{
+    protected UnitRolesControllerBase(IUnitRoleService<TUnitRole> unitRoleService) : base(unitRoleService)
+    {
+    }
+
+    [HttpPost]
+    public virtual async Task<IApiResult<bool>> Delete([FromBody] IdRequest id, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            await UnitRoleService.Delete(id.Id, cancellationToken);
+            return true.ToApiResult();
+        }
+        catch (Exception ex)
+        {
+            return ex.ToApiResult<bool>();
         }
     }
 }

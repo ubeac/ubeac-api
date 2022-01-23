@@ -14,8 +14,4 @@
     <ProjectReference Include="..\..\Repository\uBeac.Core.Repositories.Abstractions\uBeac.Core.Repositories.Abstractions.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Entities\Attributes\Extensions\" />
-  </ItemGroup>
-
 </Project>

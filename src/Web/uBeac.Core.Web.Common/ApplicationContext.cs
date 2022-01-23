@@ -36,10 +36,10 @@ namespace uBeac.Web
 
         }
 
-        public TUserKey? UserId { get; }
+        public TUserKey UserId { get; }
         public IPAddress UserIp { get; }
 
-        public string Username { get; }
+        public string UserName { get; }
 
         public string Language { get; }
 

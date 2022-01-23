@@ -1,8 +1,8 @@
 ﻿namespace uBeac.Identity;
 
-public class UnitType<TUnitTypeKey> : IEntity<TUnitTypeKey> where TUnitTypeKey : IEquatable<TUnitTypeKey>
+public class UnitType<TKey> : IEntity<TKey> where TKey : IEquatable<TKey>
 {
-    public virtual TUnitTypeKey Id { get; set; }
+    public virtual TKey Id { get; set; }
     public virtual string Code { get; set; }
     public virtual string Name { get; set; }
     public virtual string Description { get; set; }

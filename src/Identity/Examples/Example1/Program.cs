@@ -20,6 +20,7 @@ services.AddMongo<MongoDBContext>("DefaultConnection");
 
 // Adding repositories
 services.AddMongoDBUserRepository<MongoDBContext, User>();
+services.AddMongoDBUserTokenRepository<MongoDBContext>();
 services.AddMongoDBRoleRepository<MongoDBContext, Role>();
 services.AddMongoDBUnitRepository<MongoDBContext, Unit>();
 services.AddMongoDBUnitTypeRepository<MongoDBContext, UnitType>();
@@ -29,14 +30,9 @@ services.AddMongoDBUnitRoleRepository<MongoDBContext, UnitRole>();
 services.AddUserService<UserService<User>, User>();
 services.AddRoleService<RoleService<Role>, Role>();
 services.AddUserRoleService<UserRoleService<User>, User>();
-services.AddUnitService<UnitService<Unit>, Unit>();
-services.AddUnitTypeService<UnitTypeService<UnitType>, UnitType>(Helper.DefaultUnitTypes());
+services.AddUnitService<UnitService<Unit>, Unit>(Helper.DefaultUnitOptions());
+services.AddUnitTypeService<UnitTypeService<UnitType>, UnitType>(Helper.DefaultUnitTypeOptions());
 services.AddUnitRoleService<UnitRoleService<UnitRole>, UnitRole>();
-
-// Adding validators
-services.AddUnitValidators<Unit>();
-services.AddUnitTypeValidators<UnitType>();
-services.AddUnitRoleValidators<UnitRole>();
 
 // Adding Core Identity
 services
@@ -48,9 +44,6 @@ services.AddJwtAuthentication(builder.Configuration.GetInstance<JwtOptions>("Jwt
 #endregion
 
 var app = builder.Build();
-
-// Seeding data
-app.UseDefaultUnits<Unit>(Helper.DefaultUnits());
 
 app.UseDefaultFiles();
 
