@@ -3,9 +3,12 @@
     public class MongoDBOptions<T> where T : IMongoDBContext
     {
         public string ConnectionString { get; }
-        public MongoDBOptions(string connectionString)
+        public bool DropExistDatabase { get; set; } = false;
+
+        public MongoDBOptions(string connectionString, bool dropExistDatabase = false)
         {
             ConnectionString = connectionString;
+            DropExistDatabase = dropExistDatabase;
         }
     }
 }
