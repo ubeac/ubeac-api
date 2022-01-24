@@ -33,7 +33,8 @@ public abstract class UnitsControllerBase<TKey, TUnit> : BaseController
     {
         try
         {
-            await UnitService.Replace(unit, cancellationToken);
+            unit = await UnitService.Replace(unit, cancellationToken);
+            if (unit == null) throw new NullReferenceException("Unit not found");
             return true.ToApiResult();
         }
         catch (Exception ex)
@@ -62,7 +63,7 @@ public abstract class UnitsControllerBase<TKey, TUnit> : BaseController
         try
         {
             var units = await UnitService.GetAll(cancellationToken);
-            return new ApiListResult<TUnit>(units);
+            return units.ToApiListResult();
         }
         catch (Exception ex)
         {

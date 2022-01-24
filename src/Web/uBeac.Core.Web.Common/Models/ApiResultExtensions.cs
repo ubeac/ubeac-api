@@ -2,7 +2,7 @@
 {
     public static class ApiResultExtensions
     {
-        public static IApiListResult<T> ToApiListResult<T>(this ICollection<T> values)
+        public static IApiListResult<T> ToApiListResult<T>(this IEnumerable<T> values)
         {
             return new ApiListResult<T>(values);
         }
