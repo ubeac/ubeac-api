@@ -62,7 +62,7 @@ public abstract class UnitTypesControllerBase<TKey, TUnitType> : BaseController
         try
         {
             var unitTypes = await UnitTypeService.GetAll(cancellationToken);
-            return unitTypes.ToApiListResult();
+            return unitTypes.ToList().ToApiListResult();
         }
         catch (Exception ex)
         {

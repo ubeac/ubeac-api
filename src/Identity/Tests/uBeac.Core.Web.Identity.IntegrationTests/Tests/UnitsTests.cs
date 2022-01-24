@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -20,7 +21,7 @@ public class UnitsTests : BaseTestClass
     protected const string AllUri = "/API/Units/All";
 
     [Fact, TestPriority(1)]
-    public async Task Insert_ReturnsSuccessStatusCode()
+    public async Task Insert_ReturnsSuccessApiResult()
     {
         var content = new StringContent(JsonConvert.SerializeObject(new Unit
         {
@@ -31,17 +32,24 @@ public class UnitsTests : BaseTestClass
         }), Encoding.UTF8, "application/json");
         var response = await Client.PostAsync(InsertUri, content);
         response.EnsureSuccessStatusCode();
+
+        var result = await response.GetApiResult<bool>();
+        Assert.True(result.Data);
     }
 
     [Fact, TestPriority(2)]
-    public async Task All_ReturnsSuccessStatusCode()
+    public async Task All_ReturnsSuccessApiResult()
     {
         var response = await Client.GetAsync(AllUri);
         response.EnsureSuccessStatusCode();
+
+        var result = await response.GetApiResult<IEnumerable<Unit>>();
+        Assert.NotNull(result.Data);
+        Assert.True(result.Data.Any());
     }
 
     [Fact, TestPriority(3)]
-    public async Task Replace_ReturnsSuccessStatusCode()
+    public async Task Replace_ReturnsSuccessApiResult()
     {
         var unitId = (await ApiFactory.Instance.Services.CreateScope().ServiceProvider.GetRequiredService<IUnitRepository<Unit>>().GetAll()).First().Id;
         var content = new StringContent(JsonConvert.SerializeObject(new Unit
@@ -53,10 +61,13 @@ public class UnitsTests : BaseTestClass
         }), Encoding.UTF8, "application/json");
         var response = await Client.PostAsync(ReplaceUri, content);
         response.EnsureSuccessStatusCode();
+
+        var result = await response.GetApiResult<bool>();
+        Assert.True(result.Data);
     }
 
     [Fact, TestPriority(4)]
-    public async Task Delete_ReturnsSuccessStatusCode()
+    public async Task Delete_ReturnsSuccessApiResult()
     {
         var unitId = (await ApiFactory.Instance.Services.CreateScope().ServiceProvider.GetRequiredService<IUnitRepository<Unit>>().GetAll()).First().Id;
         var content = new StringContent(JsonConvert.SerializeObject(new Unit
@@ -65,5 +76,8 @@ public class UnitsTests : BaseTestClass
         }), Encoding.UTF8, "application/json");
         var response = await Client.PostAsync(DeleteUri, content);
         response.EnsureSuccessStatusCode();
+
+        var result = await response.GetApiResult<bool>();
+        Assert.True(result.Data);
     }
 }
