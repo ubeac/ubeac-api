@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using uBeac.Core.Web.Identity.Consts;
 using uBeac.Identity;
 
 namespace uBeac.Web.Identity;
 
+// TODO: this shouldn't be hardcoded. The admin role name should be defined in stratup config
+[Authorize(Roles = Roles.Admin)]
 public abstract class UnitTypesControllerBase<TKey, TUnitType> : BaseController
     where TKey : IEquatable<TKey>
     where TUnitType : UnitType<TKey>

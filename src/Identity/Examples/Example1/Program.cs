@@ -36,8 +36,16 @@ services.AddUnitRoleService<UnitRoleService<UnitRole>, UnitRole>();
 
 // Adding Core Identity
 services
-    .AddIdentityUser<User>()
-    .AddIdentityRole<Role>();
+    .AddIdentityUser<User>(opt =>
+    {
+        var adminUser = new Role { Name = "ADMIN" };
+    })
+    .AddIdentityRole<Role>(opt =>
+    {
+        var adminRole = new Role { Name = "ADMIN" };
+        opt.Values = new List<Role> { adminRole };
+        opt.AdminRole = adminRole;
+    });
 
 services.AddJwtAuthentication(builder.Configuration.GetInstance<JwtOptions>("Jwt"));
 

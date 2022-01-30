@@ -201,7 +201,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
-        public static IdentityBuilder AddIdentityRole<TRoleKey, TRole>(this IdentityBuilder builder)
+        public static IdentityBuilder AddIdentityRole<TRoleKey, TRole>(this IdentityBuilder builder, Action<DefaultRoleOptions<TRoleKey, TRole>> options)
             where TRoleKey : IEquatable<TRoleKey>
             where TRole : Role<TRoleKey>
         {
@@ -214,10 +214,9 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
-        public static IdentityBuilder AddIdentityRole<TRole>(this IdentityBuilder builder)
+        public static IdentityBuilder AddIdentityRole<TRole>(this IdentityBuilder builder, Action<DefaultRoleOptions<TRole>> options)
             where TRole : Role
         {
-
             builder
                 .AddRoles<TRole>()
                 .AddRoleStore<RoleStore<TRole>>()
