@@ -5,8 +5,6 @@ using uBeac.Identity;
 
 namespace uBeac.Web.Identity;
 
-// TODO: this shouldn't be hardcoded. The admin role name should be defined in stratup config
-[Authorize(Roles = Roles.Admin)]
 public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
    where TRoleKey : IEquatable<TRoleKey>
    where TRole : Role<TRoleKey>
@@ -20,7 +18,7 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Insert([FromBody, Required] TRole role, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<bool>> Insert([FromBody] TRole role, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -34,7 +32,7 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Update([FromBody, Required] TRole role, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<bool>> Update([FromBody] TRole role, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -48,7 +46,7 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Delete([FromBody, Required] TRoleKey id, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<bool>> Delete([FromBody] TRoleKey id, CancellationToken cancellationToken = default)
     {
         try
         {
