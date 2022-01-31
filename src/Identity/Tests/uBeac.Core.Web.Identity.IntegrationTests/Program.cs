@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +32,33 @@ builder.Services.AddUnitTypeService<UnitTypeService<UnitType>, UnitType>();
 builder.Services.AddUnitRoleService<UnitRoleService<UnitRole>, UnitRole>();
 
 // Adding Core Identity
-builder.Services.AddIdentityUser<User>().AddIdentityRole<Role>();
+builder.Services
+    .AddIdentityUser<User>(configureOptions: options =>
+    {
+        var adminUser = new User("admin");
+        options.AdminUser = adminUser;
+        options.AdminPassword = "1qaz!QAZ";
+    })
+    .AddIdentityRole<Role>(options =>
+    {
+        var adminRole = new Role("ADMIN");
+        options.DefaultValues = new List<Role> { adminRole };
+        options.AdminRole = adminRole;
+    })
+    .AddIdentityUnit<Unit>(options =>
+    {
+        var headquarter = new Unit { Name = "Management Office", Code = "1000", Type = "HQ" };
+        var tehranBranch = new Unit { Name = "Tehran Central Branch", Code = "4000", Type = "BH", ParentUnitId = headquarter.Id.ToString() };
+        var mirdamadBranch = new Unit { Name = "Mirdamad Branch", Code = "40001", Type = "BR", ParentUnitId = tehranBranch.Id.ToString() };
+        options.DefaultValues = new List<Unit> { headquarter, tehranBranch, mirdamadBranch };
+    })
+    .AddIdentityUnitType<UnitType>(options =>
+    {
+        var headquarter = new UnitType { Code = "HQ", Name = "Headquarter", Description = "Desc" };
+        var firstBranch = new UnitType { Code = "FB", Name = "First Branch", Description = "Desc" };
+        var secondBranch = new UnitType { Code = "SB", Name = "Second Branch", Description = "Desc" };
+        options.DefaultValues = new List<UnitType> { headquarter, firstBranch, secondBranch };
+    });
 
 builder.Services.AddJwtAuthentication(builder.Configuration.GetInstance<JwtOptions>("Jwt"));
 

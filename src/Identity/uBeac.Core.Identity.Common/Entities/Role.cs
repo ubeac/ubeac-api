@@ -10,10 +10,8 @@ public class Role<TRoleKey> : IdentityRole<TRoleKey>, IEntity<TRoleKey> where TR
     {
     }
 
-    public Role(string name) : this()
+    public Role(string name) : base(name)
     {
-        Name = name;
-        NormalizedName = name.ToUpperInvariant();
     }
 
     public override string ToString()
@@ -24,4 +22,7 @@ public class Role<TRoleKey> : IdentityRole<TRoleKey>, IEntity<TRoleKey> where TR
 
 public class Role : Role<Guid>, IEntity
 {
+    public Role(string name) : base(name)
+    {
+    }
 }

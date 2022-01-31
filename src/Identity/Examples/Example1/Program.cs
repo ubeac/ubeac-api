@@ -1,53 +1,64 @@
 using uBeac.Identity;
 using uBeac.Repositories.MongoDB;
 using uBeac.Web.Middlewares;
-using Helper = Example1.Helper;
 
 var builder = WebApplication.CreateBuilder(args);
-var services = builder.Services;
 
-services.AddHttpContextAccessor();
-
-services.AddControllers();
-
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddControllers();
 builder.Configuration.AddJsonConfig(builder.Environment);
+builder.Services.AddCoreSwaggerWithJWT("Authentication - Example 1");
 
-services.AddCoreSwaggerWithJWT("Authentication - Example 1");
-
-services.AddMongo<MongoDBContext>("DefaultConnection");
+builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
 
 #region Identity
 
 // Adding repositories
-services.AddMongoDBUserRepository<MongoDBContext, User>();
-services.AddMongoDBUserTokenRepository<MongoDBContext>();
-services.AddMongoDBRoleRepository<MongoDBContext, Role>();
-services.AddMongoDBUnitRepository<MongoDBContext, Unit>();
-services.AddMongoDBUnitTypeRepository<MongoDBContext, UnitType>();
-services.AddMongoDBUnitRoleRepository<MongoDBContext, UnitRole>();
+builder.Services.AddMongoDBUserRepository<MongoDBContext, User>();
+builder.Services.AddMongoDBUserTokenRepository<MongoDBContext>();
+builder.Services.AddMongoDBRoleRepository<MongoDBContext, Role>();
+builder.Services.AddMongoDBUnitRepository<MongoDBContext, Unit>();
+builder.Services.AddMongoDBUnitTypeRepository<MongoDBContext, UnitType>();
+builder.Services.AddMongoDBUnitRoleRepository<MongoDBContext, UnitRole>();
 
 // Adding services
-services.AddUserService<UserService<User>, User>();
-services.AddRoleService<RoleService<Role>, Role>();
-services.AddUserRoleService<UserRoleService<User>, User>();
-services.AddUnitService<UnitService<Unit>, Unit>(Helper.DefaultUnitOptions());
-services.AddUnitTypeService<UnitTypeService<UnitType>, UnitType>(Helper.DefaultUnitTypeOptions());
-services.AddUnitRoleService<UnitRoleService<UnitRole>, UnitRole>();
+builder.Services.AddUserService<UserService<User>, User>();
+builder.Services.AddRoleService<RoleService<Role>, Role>();
+builder.Services.AddUserRoleService<UserRoleService<User>, User>();
+builder.Services.AddUnitService<UnitService<Unit>, Unit>();
+builder.Services.AddUnitTypeService<UnitTypeService<UnitType>, UnitType>();
+builder.Services.AddUnitRoleService<UnitRoleService<UnitRole>, UnitRole>();
 
 // Adding Core Identity
-services
-    .AddIdentityUser<User>(opt =>
+builder.Services
+    .AddIdentityUser<User>(configureOptions: options =>
     {
-        var adminUser = new Role { Name = "ADMIN" };
+        var adminUser = new User("admin");
+        options.AdminUser = adminUser;
+        options.AdminPassword = "1qaz!QAZ";
     })
-    .AddIdentityRole<Role>(opt =>
+    .AddIdentityRole<Role>(options =>
     {
-        var adminRole = new Role { Name = "ADMIN" };
-        opt.Values = new List<Role> { adminRole };
-        opt.AdminRole = adminRole;
+        var adminRole = new Role("ADMIN");
+        options.DefaultValues = new List<Role> { adminRole };
+        options.AdminRole = adminRole;
+    })
+    .AddIdentityUnit<Unit>(options =>
+    {
+        var headquarter = new Unit { Name = "Management Office", Code = "1000", Type = "HQ" };
+        var tehranBranch = new Unit { Name = "Tehran Central Branch", Code = "4000", Type = "BH", ParentUnitId = headquarter.Id.ToString() };
+        var mirdamadBranch = new Unit { Name = "Mirdamad Branch", Code = "40001", Type = "BR", ParentUnitId = tehranBranch.Id.ToString() };
+        options.DefaultValues = new List<Unit> { headquarter, tehranBranch, mirdamadBranch };
+    })
+    .AddIdentityUnitType<UnitType>(options =>
+    {
+        var headquarter = new UnitType { Code = "HQ", Name = "Headquarter", Description = "Desc" };
+        var firstBranch = new UnitType { Code = "FB", Name = "First Branch", Description = "Desc" };
+        var secondBranch = new UnitType { Code = "SB", Name = "Second Branch", Description = "Desc" };
+        options.DefaultValues = new List<UnitType> { headquarter, firstBranch, secondBranch };
     });
 
-services.AddJwtAuthentication(builder.Configuration.GetInstance<JwtOptions>("Jwt"));
+builder.Services.AddJwtAuthentication(builder.Configuration.GetInstance<JwtOptions>("Jwt"));
 
 #endregion
 

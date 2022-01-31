@@ -44,36 +44,6 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        public static IServiceCollection AddUnitService<TUnitService, TKey, TUnit>(this IServiceCollection services, DefaultUnitOptions<TKey, TUnit> defaultUnitOptions)
-            where TKey : IEquatable<TKey>
-            where TUnit : Unit<TKey>
-            where TUnitService : class, IUnitService<TKey, TUnit>
-        {
-            services.TryAddSingleton(provider =>
-            {
-                var unitService = provider.GetRequiredService<TUnitService>();
-                unitService.InsertMany(defaultUnitOptions.Values);
-                return defaultUnitOptions;
-            });
-
-            services.TryAddScoped<IUnitService<TKey, TUnit>, TUnitService>();
-            return services;
-        }
-
-        public static IServiceCollection AddUnitService<TUnitService, TUnit>(this IServiceCollection services, DefaultUnitOptions<TUnit> defaultUnitOptions)
-            where TUnit : Unit
-            where TUnitService : class, IUnitService<TUnit>
-        {
-            services.TryAddSingleton(provider =>
-            {
-                var unitService = provider.GetRequiredService<TUnitService>();
-                unitService.InsertMany(defaultUnitOptions.Values);
-                return defaultUnitOptions;
-            });
-
-            services.TryAddScoped<IUnitService<TUnit>, TUnitService>();
-            return services;
-        }
 
         public static IServiceCollection AddUnitTypeService<TUnitTypeService, TUnitTypeKey, TUnitType>(this IServiceCollection services)
             where TUnitTypeKey : IEquatable<TUnitTypeKey>
@@ -88,37 +58,6 @@ namespace Microsoft.Extensions.DependencyInjection
             where TUnitType : UnitType
             where TUnitTypeService : class, IUnitTypeService<TUnitType>
         {
-            services.TryAddScoped<IUnitTypeService<TUnitType>, TUnitTypeService>();
-            return services;
-        }
-
-        public static IServiceCollection AddUnitTypeService<TUnitTypeService, TUnitTypeKey, TUnitType>(this IServiceCollection services, DefaultUnitTypeOptions<TUnitTypeKey, TUnitType> defaultUnitTypeOptions)
-            where TUnitTypeKey : IEquatable<TUnitTypeKey>
-            where TUnitType : UnitType<TUnitTypeKey>
-            where TUnitTypeService : class, IUnitTypeService<TUnitTypeKey, TUnitType>
-        {
-            services.TryAddSingleton(provider =>
-            {
-                var unitTypeService = provider.GetRequiredService<TUnitTypeService>();
-                unitTypeService.InsertMany(defaultUnitTypeOptions.Values);
-                return defaultUnitTypeOptions;
-            });
-
-            services.TryAddScoped<IUnitTypeService<TUnitTypeKey, TUnitType>, TUnitTypeService>();
-            return services;
-        }
-
-        public static IServiceCollection AddUnitTypeService<TUnitTypeService, TUnitType>(this IServiceCollection services, DefaultUnitTypeOptions<TUnitType> defaultUnitTypeOptions)
-            where TUnitType : UnitType
-            where TUnitTypeService : class, IUnitTypeService<TUnitType>
-        {
-            services.TryAddSingleton(provider =>
-            {
-                var unitTypeService = provider.GetRequiredService<TUnitTypeService>();
-                unitTypeService.InsertMany(defaultUnitTypeOptions.Values);
-                return defaultUnitTypeOptions;
-            });
-
             services.TryAddScoped<IUnitTypeService<TUnitType>, TUnitTypeService>();
             return services;
         }
@@ -174,10 +113,11 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        public static IdentityBuilder AddIdentityUser<TUser>(this IServiceCollection services, Action<IdentityOptions> setupIdentityAction = default)
+        public static IdentityBuilder AddIdentityUser<TUser>(this IServiceCollection services, Action<IdentityOptions> configureIdentityOptions = default, Action<UserOptions<TUser>> configureOptions = default)
            where TUser : User
         {
-            var builder = services.AddIdentityCore<TUser>(setupIdentityAction ?? (x => GetDefaultOptions()));
+            var builder = services.AddIdentityCore<TUser>(configureIdentityOptions ?? (x => GetDefaultOptions()));
+            builder.Services.Configure(configureOptions);
 
             builder
                 .AddUserStore<UserStore<TUser>>()
@@ -187,11 +127,12 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
-        public static IdentityBuilder AddIdentityUser<TUserKey, TUser>(this IServiceCollection services, Action<IdentityOptions> setupIdentityAction = default)
+        public static IdentityBuilder AddIdentityUser<TUserKey, TUser>(this IServiceCollection services, Action<IdentityOptions> configureIdentityOptions = default, Action<UserOptions<TUserKey, TUser>> configureOptions = default)
             where TUserKey : IEquatable<TUserKey>
             where TUser : User<TUserKey>
         {
-            var builder = services.AddIdentityCore<TUser>(setupIdentityAction ?? (x => GetDefaultOptions()));
+            var builder = services.AddIdentityCore<TUser>(configureIdentityOptions ?? (x => GetDefaultOptions()));
+            builder.Services.Configure(configureOptions);
 
             builder
                 .AddUserStore<UserStore<TUser, TUserKey>>()
@@ -201,10 +142,11 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
-        public static IdentityBuilder AddIdentityRole<TRoleKey, TRole>(this IdentityBuilder builder, Action<DefaultRoleOptions<TRoleKey, TRole>> options)
+        public static IdentityBuilder AddIdentityRole<TRoleKey, TRole>(this IdentityBuilder builder, Action<RoleOptions<TRoleKey, TRole>> configureOptions = default)
             where TRoleKey : IEquatable<TRoleKey>
             where TRole : Role<TRoleKey>
         {
+            builder.Services.Configure(configureOptions);
 
             builder
                 .AddRoles<TRole>()
@@ -214,13 +156,49 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
-        public static IdentityBuilder AddIdentityRole<TRole>(this IdentityBuilder builder, Action<DefaultRoleOptions<TRole>> options)
+        public static IdentityBuilder AddIdentityRole<TRole>(this IdentityBuilder builder, Action<RoleOptions<TRole>> configureOptions = default)
             where TRole : Role
         {
+            builder.Services.Configure(configureOptions);
+
             builder
                 .AddRoles<TRole>()
                 .AddRoleStore<RoleStore<TRole>>()
                 .AddRoleManager<RoleManager<TRole>>();
+
+            return builder;
+        }
+
+        public static IdentityBuilder AddIdentityUnit<TUnitKey, TUnit>(this IdentityBuilder builder, Action<UnitOptions<TUnitKey, TUnit>> configureOptions = default)
+            where TUnitKey : IEquatable<TUnitKey>
+            where TUnit : Unit<TUnitKey>
+        {
+            builder.Services.Configure(configureOptions);
+
+            return builder;
+        }
+
+        public static IdentityBuilder AddIdentityUnit<TUnit>(this IdentityBuilder builder, Action<UnitOptions<TUnit>> configureOptions = default)
+            where TUnit : Unit
+        {
+            builder.Services.Configure(configureOptions);
+
+            return builder;
+        }
+
+        public static IdentityBuilder AddIdentityUnitType<TUnitTypeKey, TUnitType>(this IdentityBuilder builder, Action<UnitTypeOptions<TUnitTypeKey, TUnitType>> configureOptions)
+            where TUnitTypeKey : IEquatable<TUnitTypeKey>
+            where TUnitType : UnitType<TUnitTypeKey>
+        {
+            builder.Services.Configure(configureOptions);
+
+            return builder;
+        }
+
+        public static IdentityBuilder AddIdentityUnitType<TUnitType>(this IdentityBuilder builder, Action<UnitTypeOptions<TUnitType>> configureOptions)
+            where TUnitType : UnitType
+        {
+            builder.Services.Configure(configureOptions);
 
             return builder;
         }
