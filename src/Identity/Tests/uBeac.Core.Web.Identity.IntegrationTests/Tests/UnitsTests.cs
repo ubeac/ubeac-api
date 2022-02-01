@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using uBeac.Identity;
 using uBeac.Repositories.MongoDB;
+using uBeac.Web;
 using uBeac.Web.Identity.IntegrationTests;
 using Xunit;
 
@@ -70,7 +71,7 @@ public class UnitsTests : BaseTestClass
     public async Task Delete_ReturnsSuccessApiResult()
     {
         var unitId = (await ApiFactory.Instance.Services.CreateScope().ServiceProvider.GetRequiredService<IUnitRepository<Unit>>().GetAll()).First().Id;
-        var content = new StringContent(JsonConvert.SerializeObject(new Unit
+        var content = new StringContent(JsonConvert.SerializeObject(new IdRequest
         {
             Id = unitId
         }), Encoding.UTF8, "application/json");

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using System.Net.Http;
+using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace uBeac.Web.Identity.IntegrationTests;
 

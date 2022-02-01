@@ -10,6 +10,9 @@ public class UnitService<TKey, TUnit> : EntityService<TKey, TUnit>, IUnitService
     public UnitService(IUnitRepository<TKey, TUnit> repository) : base(repository)
     {
     }
+
+    public async Task<bool> Exists(string code, string type, CancellationToken cancellationToken = default)
+        => (await Repository.Find(unit => unit.Code == code && unit.Type == type, cancellationToken)).Any();
 }
 
 public class UnitService<TUnit> : UnitService<Guid, TUnit>, IUnitService<TUnit>

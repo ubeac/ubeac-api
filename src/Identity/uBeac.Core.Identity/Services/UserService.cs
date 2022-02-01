@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Data.Entity;
 
 namespace uBeac.Identity
 {
@@ -19,6 +20,7 @@ namespace uBeac.Identity
         protected readonly IHttpContextAccessor HttpContextAccessor;
         protected readonly JwtOptions JwtOptions;
         protected readonly IUserTokenRepository<TUserKey> UserTokenRepository;
+
         public UserService(UserManager<TUser> userManager, IJwtTokenProvider jwtTokenProvider, IHttpContextAccessor httpContextAccessor, JwtOptions jwtOptions, IUserTokenRepository<TUserKey> userTokenRepository)
         {
             UserManager = userManager;
@@ -30,7 +32,7 @@ namespace uBeac.Identity
 
         /// <summary>
         /// This method creates user: this should be used by high-level/admin users to create users
-        /// Some user properties may be set by admin manualy
+        /// Some user properties may be set by admin manually
         /// </summary>
         /// <param name = "user" ></ param >
         /// < param name="password"></param>
@@ -40,6 +42,18 @@ namespace uBeac.Identity
         {
             var identityResult = await UserManager.CreateAsync(user, password);
             identityResult.ThrowIfInvalid();
+        }
+
+        public async Task Insert(InsertUser user, string password, CancellationToken cancellationToken = default)
+        {
+            var entity = Activator.CreateInstance<TUser>();
+            entity.UserName = user.UserName;
+            entity.PhoneNumber = user.PhoneNumber;
+            entity.PhoneNumberConfirmed = user.PhoneNumberConfirmed;
+            entity.Email = user.Email;
+            entity.EmailConfirmed = user.EmailConfirmed;
+
+            await Insert(entity, password, cancellationToken);
         }
 
         /// <summary>
@@ -90,6 +104,11 @@ namespace uBeac.Identity
             };
         }
 
+        public virtual async Task Replace(TUser entity, CancellationToken cancellationToken = default)
+        {
+            await UserManager.UpdateAsync(entity);
+        }
+
         public virtual async Task<bool> Delete(TUserKey id, CancellationToken cancellationToken = default)
         {
             var user = await UserManager.FindByIdAsync(id.ToString());
@@ -102,20 +121,24 @@ namespace uBeac.Identity
             return true;
         }
 
+        public async Task<IEnumerable<TUser>> GetAll(CancellationToken cancellationToken = default)
+        {
+            return await Task.Run(() => UserManager.Users.ToList(), cancellationToken);
+        }
+
         public virtual Task<TUser> GetById(TUserKey id, CancellationToken cancellationToken = default)
         {
             return UserManager.FindByIdAsync(id.ToString());
         }
 
-        public virtual async Task ChangePassword(ChangePassword changePassword, CancellationToken cancellationToken = default)
+        public virtual async Task ChangePassword(ChangePassword<TUserKey> changePassword, CancellationToken cancellationToken = default)
         {
-            var currentUserId = await GetCurrentUserId(cancellationToken);
-            var currentUser = await GetById(currentUserId, cancellationToken);
+            var user = await GetById(changePassword.UserId, cancellationToken);
 
-            if (currentUserId == null || currentUser == null || !await UserManager.CheckPasswordAsync(currentUser, changePassword.OldPassword))
+            if (changePassword.UserId == null || user == null || !await UserManager.CheckPasswordAsync(user, changePassword.CurrentPassword))
                 throw new Exception("User doesn't exist or username/password is not valid!");
 
-            var idResult = await UserManager.ChangePasswordAsync(currentUser, changePassword.OldPassword, changePassword.NewPassword);
+            var idResult = await UserManager.ChangePasswordAsync(user, changePassword.CurrentPassword, changePassword.NewPassword);
 
             idResult.ThrowIfInvalid();
         }
@@ -159,8 +182,8 @@ namespace uBeac.Identity
             var principal = GetPrincipalFromExpiredToken(expiredToken);
             var username = principal?.Identity?.Name;
             var user = await UserManager.FindByNameAsync(username);
-            var soredRefreshToken = await UserManager.GetAuthenticationTokenAsync(user, LOCAL_LOGIN_PROVIDER, REFRESH_TOKEN_NAME);
-            if (soredRefreshToken != refreshToken)
+            var storedRefreshToken = await UserManager.GetAuthenticationTokenAsync(user, LOCAL_LOGIN_PROVIDER, REFRESH_TOKEN_NAME);
+            if (storedRefreshToken != refreshToken)
                 throw new Exception("Token expired!");
 
             var newToken = JwtTokenProvider.GenerateToken<TUserKey, TUser>(user);

@@ -6,7 +6,6 @@ namespace uBeac.Identity
         where TKey : IEquatable<TKey>
         where TRole : Role<TKey>
     {
-
         protected readonly RoleManager<TRole> RoleManager;
 
         public RoleService(RoleManager<TRole> roleManager)

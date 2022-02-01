@@ -36,12 +36,12 @@ builder.Services
         var adminUser = new User("admin");
         options.AdminUser = adminUser;
         options.AdminPassword = "1qaz!QAZ";
+        options.AdminRole = "ADMIN";
     })
     .AddIdentityRole<Role>(options =>
     {
         var adminRole = new Role("ADMIN");
         options.DefaultValues = new List<Role> { adminRole };
-        options.AdminRole = adminRole;
     })
     .AddIdentityUnit<Unit>(options =>
     {

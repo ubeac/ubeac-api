@@ -15,7 +15,6 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
         UserService = userService;
     }
 
-    [AllowAnonymous]
     [HttpPost]
     public virtual async Task<IApiResult<bool>> Register(RegisterRequest model, CancellationToken cancellationToken = default)
     {
@@ -30,7 +29,6 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
         }
     }
 
-    [AllowAnonymous]
     [HttpPost]
     public virtual async Task<IApiResult<TokenResult<TUserKey>>> Login(LoginRequest model, CancellationToken cancellationToken = default)
     {
@@ -45,7 +43,6 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
         }
     }
 
-    [AllowAnonymous]
     [HttpPost]
     public virtual async Task<IApiResult<TokenResult<TUserKey>>> RefreshToken(RefreshTokenRequest model, CancellationToken cancellationToken = default)
     {
