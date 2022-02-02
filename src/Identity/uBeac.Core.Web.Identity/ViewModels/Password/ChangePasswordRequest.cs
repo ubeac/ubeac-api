@@ -2,17 +2,10 @@
 
 namespace uBeac.Web.Identity;
 
-public class ResetPasswordRequest
-{
-    [Required]
-    [EmailAddress]
-    public virtual string Email { get; set; }
-}
-
 public class ChangePasswordRequest<TKey> where TKey : IEquatable<TKey>
 {
     [Required]
-    public TKey UserId { get; set; }
+    public virtual TKey UserId { get; set; }
 
     [Required]
     [DataType(DataType.Password)]
@@ -25,10 +18,4 @@ public class ChangePasswordRequest<TKey> where TKey : IEquatable<TKey>
 
 public class ChangePasswordRequest : ChangePasswordRequest<Guid>
 {
-}
-
-public class ForgotPasswordRequest
-{
-    [Required]
-    public virtual string Username { get; set; }
 }

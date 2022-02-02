@@ -14,4 +14,11 @@
     <ProjectReference Include="..\..\Repository\uBeac.Core.Repositories.Abstractions\uBeac.Core.Repositories.Abstractions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\UnitRole\" />
+    <Folder Include="Models\UnitType\" />
+    <Folder Include="Models\Unit\" />
+    <Folder Include="Models\Role\" />
+  </ItemGroup>
+
 </Project>

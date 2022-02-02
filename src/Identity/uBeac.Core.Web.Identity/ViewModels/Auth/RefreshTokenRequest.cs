@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace uBeac.Web.Identity;
+
 public class RefreshTokenRequest
 {
     [Required]
-    public virtual string Token { get; set; } = string.Empty;
+    public virtual string Token { get; set; }
 
     [Required]
-    public virtual string RefreshToken { get; set; } = string.Empty;
+    public virtual string RefreshToken { get; set; }
 }

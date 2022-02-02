@@ -34,6 +34,7 @@ public class UsersTests : BaseTestClass
             EmailConfirmed = false
         }), Encoding.UTF8, "application/json");
         var response = await Client.PostAsync(InsertUri, content);
+        response.EnsureSuccessStatusCode();
 
         var result = await response.GetApiResult<bool>();
         Assert.True(result.Data);
@@ -45,7 +46,7 @@ public class UsersTests : BaseTestClass
         var response = await Client.GetAsync(AllUri);
         response.EnsureSuccessStatusCode();
 
-        var result = await response.GetApiResult<IEnumerable<User>>();
+        var result = await response.GetApiResult<IEnumerable<UserViewModel>>();
         Assert.NotNull(result.Data);
         Assert.True(result.Data.Any());
     }
@@ -57,7 +58,7 @@ public class UsersTests : BaseTestClass
         var response = await Client.GetAsync($"{FindUri}?id={userId}");
         response.EnsureSuccessStatusCode();
 
-        var result = await response.GetApiResult<User>();
+        var result = await response.GetApiResult<UserViewModel>();
         Assert.NotNull(result.Data);
         Assert.Equal(result.Data.Id, userId);
     }

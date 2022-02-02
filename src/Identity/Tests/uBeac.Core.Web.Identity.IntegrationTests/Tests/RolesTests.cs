@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -7,26 +6,26 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using uBeac.Identity;
+using uBeac.Web;
 using uBeac.Web.Identity;
 using uBeac.Web.Identity.IntegrationTests;
 using Xunit;
 
 namespace uBeac.Core.Web.Identity.IntegrationTests;
 
-public class UnitTypesTests : BaseTestClass
+public class RolesTests : BaseTestClass
 {
-    protected const string InsertUri = "/API/UnitTypes/Insert";
-    protected const string ReplaceUri = "/API/UnitTypes/Replace";
-    protected const string DeleteUri = "/API/UnitTypes/Delete";
-    protected const string AllUri = "/API/UnitTypes/All";
+    protected const string InsertUri = "/API/Roles/Insert";
+    protected const string ReplaceUri = "/API/Roles/Replace";
+    protected const string DeleteUri = "/API/Roles/Delete";
+    protected const string AllUri = "/API/Roles/All";
 
     [Fact, TestPriority(1)]
     public async Task Insert_ReturnsSuccessApiResult()
     {
-        var content = new StringContent(JsonConvert.SerializeObject(new InsertUnitType
+        var content = new StringContent(JsonConvert.SerializeObject(new InsertRoleRequest
         {
-            Code = "HQ",
-            Name = "Headquarter"
+            Name = "default"
         }), Encoding.UTF8, "application/json");
         var response = await Client.PostAsync(InsertUri, content);
         response.EnsureSuccessStatusCode();
@@ -41,7 +40,7 @@ public class UnitTypesTests : BaseTestClass
         var response = await Client.GetAsync(AllUri);
         response.EnsureSuccessStatusCode();
 
-        var result = await response.GetApiResult<IEnumerable<UnitTypeViewModel>>();
+        var result = await response.GetApiResult<IEnumerable<RoleViewModel>>();
         Assert.NotNull(result.Data);
         Assert.True(result.Data.Any());
     }
@@ -49,12 +48,11 @@ public class UnitTypesTests : BaseTestClass
     [Fact, TestPriority(3)]
     public async Task Replace_ReturnsSuccessApiResult()
     {
-        var unitTypeId = (await ApiFactory.Instance.Services.CreateScope().ServiceProvider.GetRequiredService<IUnitTypeRepository<UnitType>>().GetAll()).First().Id;
-        var content = new StringContent(JsonConvert.SerializeObject(new ReplaceUnitType
+        var roleId = (await ApiFactory.Instance.Services.CreateScope().ServiceProvider.GetRequiredService<IRoleRepository<Role>>().GetAll()).First().Id;
+        var content = new StringContent(JsonConvert.SerializeObject(new ReplaceRoleRequest
         {
-            Id = unitTypeId,
-            Code = "HQ",
-            Name = "Headquarter"
+            Id = roleId,
+            Name = "default"
         }), Encoding.UTF8, "application/json");
         var response = await Client.PostAsync(ReplaceUri, content);
         response.EnsureSuccessStatusCode();
@@ -66,10 +64,10 @@ public class UnitTypesTests : BaseTestClass
     [Fact, TestPriority(4)]
     public async Task Delete_ReturnsSuccessApiResult()
     {
-        var unitTypeId = (await ApiFactory.Instance.Services.CreateScope().ServiceProvider.GetRequiredService<IUnitTypeRepository<UnitType>>().GetAll()).First().Id;
-        var content = new StringContent(JsonConvert.SerializeObject(new Unit
+        var roleId = (await ApiFactory.Instance.Services.CreateScope().ServiceProvider.GetRequiredService<IRoleRepository<Role>>().GetAll()).First().Id;
+        var content = new StringContent(JsonConvert.SerializeObject(new IdRequest
         {
-            Id = unitTypeId
+            Id = roleId,
         }), Encoding.UTF8, "application/json");
         var response = await Client.PostAsync(DeleteUri, content);
         response.EnsureSuccessStatusCode();

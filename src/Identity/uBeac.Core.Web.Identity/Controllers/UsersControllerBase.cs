@@ -77,30 +77,48 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     }
 
     [HttpGet]
-    public virtual async Task<IApiResult<TUser>> Find([FromQuery] IdRequest<TUserKey> request, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<UserViewModel<TUserKey>>> Find([FromQuery] IdRequest<TUserKey> request, CancellationToken cancellationToken = default)
     {
         try
         {
             var user = await UserService.GetById(request.Id, cancellationToken);
-            return user.ToApiResult();
+            var userVm = new UserViewModel<TUserKey>
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+                EmailConfirmed = user.EmailConfirmed,
+                PhoneNumber = user.PhoneNumber,
+                PhoneNumberConfirmed = user.PhoneNumberConfirmed
+            };
+            return userVm.ToApiResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<TUser>();
+            return ex.ToApiResult<UserViewModel<TUserKey>>();
         }
     }
 
     [HttpGet]
-    public virtual async Task<IApiListResult<TUser>> All(CancellationToken cancellationToken = default)
+    public virtual async Task<IApiListResult<UserViewModel<TUserKey>>> All(CancellationToken cancellationToken = default)
     {
         try
         {
             var users = await UserService.GetAll(cancellationToken);
-            return users.ToList().ToApiListResult();
+            var usersVm = users.Select(u => new UserViewModel<TUserKey>
+            {
+                Id = u.Id,
+                UserName = u.UserName,
+                Email = u.Email,
+                EmailConfirmed = u.EmailConfirmed,
+                PhoneNumber = u.PhoneNumber,
+                PhoneNumberConfirmed = u.PhoneNumberConfirmed
+            });
+            return usersVm.ToApiListResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiListResult<TUser>();
+            return ex.ToApiListResult<UserViewModel<TUserKey>>();
         }
     }
 }

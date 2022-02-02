@@ -9,7 +9,6 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
    where TRoleKey : IEquatable<TRoleKey>
    where TRole : Role<TRoleKey>
 {
-
     protected readonly IRoleService<TRoleKey, TRole> RoleService;
 
     protected RolesControllerBase(IRoleService<TRoleKey, TRole> roleService)
@@ -18,11 +17,14 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Insert([FromBody] TRole role, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<bool>> Insert([FromBody] InsertRoleRequest role, CancellationToken cancellationToken = default)
     {
         try
         {
-            await RoleService.Insert(role, cancellationToken);
+            await RoleService.Insert(new InsertRole
+            {
+                Name = role.Name
+            }, cancellationToken);
             return true.ToApiResult();
         }
         catch (Exception ex)
@@ -32,11 +34,15 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Update([FromBody] TRole role, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<bool>> Replace([FromBody] ReplaceRoleRequest<TRoleKey> role, CancellationToken cancellationToken = default)
     {
         try
         {
-            await RoleService.Update(role, cancellationToken);
+            await RoleService.Update(new ReplaceRole<TRoleKey>
+            {
+                Id = role.Id,
+                Name = role.Name
+            }, cancellationToken);
             return true.ToApiResult();
         }
         catch (Exception ex)
@@ -46,11 +52,11 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Delete([FromBody] TRoleKey id, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<bool>> Delete([FromBody] IdRequest<TRoleKey> request, CancellationToken cancellationToken = default)
     {
         try
         {
-            await RoleService.Delete(id, cancellationToken);
+            await RoleService.Delete(request.Id, cancellationToken);
             return true.ToApiResult();
         }
         catch (Exception ex)
@@ -60,16 +66,21 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     }
 
     [HttpGet]
-    public virtual async Task<IApiListResult<TRole>> All(CancellationToken cancellationToken = default)
+    public virtual async Task<IApiListResult<RoleViewModel<TRoleKey>>> All(CancellationToken cancellationToken = default)
     {
         try
         {
             var roles = await RoleService.GetAll(cancellationToken);
-            return new ApiListResult<TRole>(roles);
+            var rolesVm = roles.Select(r => new RoleViewModel<TRoleKey>
+            {
+                Id = r.Id,
+                Name = r.Name
+            });
+            return new ApiListResult<RoleViewModel<TRoleKey>>(rolesVm);
         }
         catch (Exception ex)
         {
-            return ex.ToApiListResult<TRole>();
+            return ex.ToApiListResult<RoleViewModel<TRoleKey>>();
         }
     }
 }

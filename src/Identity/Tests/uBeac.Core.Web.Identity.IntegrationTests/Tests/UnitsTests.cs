@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using uBeac.Identity;
-using uBeac.Repositories.MongoDB;
 using uBeac.Web;
+using uBeac.Web.Identity;
 using uBeac.Web.Identity.IntegrationTests;
 using Xunit;
 
@@ -24,9 +24,8 @@ public class UnitsTests : BaseTestClass
     [Fact, TestPriority(1)]
     public async Task Insert_ReturnsSuccessApiResult()
     {
-        var content = new StringContent(JsonConvert.SerializeObject(new Unit
+        var content = new StringContent(JsonConvert.SerializeObject(new InsertUnitRequest
         {
-            Id = Guid.NewGuid(),
             Name = "Headquarter",
             Code = "1",
             Type = "HQ"
@@ -44,7 +43,7 @@ public class UnitsTests : BaseTestClass
         var response = await Client.GetAsync(AllUri);
         response.EnsureSuccessStatusCode();
 
-        var result = await response.GetApiResult<IEnumerable<Unit>>();
+        var result = await response.GetApiResult<IEnumerable<UnitViewModel>>();
         Assert.NotNull(result.Data);
         Assert.True(result.Data.Any());
     }
@@ -53,7 +52,7 @@ public class UnitsTests : BaseTestClass
     public async Task Replace_ReturnsSuccessApiResult()
     {
         var unitId = (await ApiFactory.Instance.Services.CreateScope().ServiceProvider.GetRequiredService<IUnitRepository<Unit>>().GetAll()).First().Id;
-        var content = new StringContent(JsonConvert.SerializeObject(new Unit
+        var content = new StringContent(JsonConvert.SerializeObject(new ReplaceUnitRequest
         {
             Id = unitId,
             Name = "Headquarter",

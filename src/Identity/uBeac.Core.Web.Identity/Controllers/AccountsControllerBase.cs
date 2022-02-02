@@ -16,7 +16,7 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Register(RegisterRequest model, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<bool>> Register([FromBody] RegisterRequest model, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -30,7 +30,7 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<TokenResult<TUserKey>>> Login(LoginRequest model, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<TokenResult<TUserKey>>> Login([FromBody] LoginRequest model, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -44,7 +44,7 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<TokenResult<TUserKey>>> RefreshToken(RefreshTokenRequest model, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<TokenResult<TUserKey>>> RefreshToken([FromBody] RefreshTokenRequest model, CancellationToken cancellationToken = default)
     {
         try
         {

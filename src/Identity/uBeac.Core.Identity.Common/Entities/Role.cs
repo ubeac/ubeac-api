@@ -22,6 +22,10 @@ public class Role<TRoleKey> : IdentityRole<TRoleKey>, IEntity<TRoleKey> where TR
 
 public class Role : Role<Guid>, IEntity
 {
+    public Role()
+    {
+    }
+
     public Role(string name) : base(name)
     {
     }
