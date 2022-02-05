@@ -93,11 +93,18 @@ public static class UnitExtensions
         where TUnit : Unit<TUnitKey>
     {
         if (values is null || values.Any() is false) return;
+
+        // Insert default values
         foreach (var unit in values)
         {
             // If unit was not inserted before, insert it
             if (service.Exists(unit.Code, unit.Type).Result is false)
             {
+                // Set parent id
+                var parent = unit.GetParentUnit();
+                if (parent != null) unit.ParentUnitId = parent.Id;
+
+                // Insert
                 service.Insert(unit).Wait();
             }
         }

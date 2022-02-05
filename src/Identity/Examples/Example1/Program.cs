@@ -45,9 +45,11 @@ builder.Services
     })
     .AddIdentityUnit<Unit>(options =>
     {
-        var headquarter = new Unit { Name = "Management Office", Code = "1000", Type = "HQ" };
-        var tehranBranch = new Unit { Name = "Tehran Central Branch", Code = "4000", Type = "BH", ParentUnitId = headquarter.Id.ToString() };
-        var mirdamadBranch = new Unit { Name = "Mirdamad Branch", Code = "40001", Type = "BR", ParentUnitId = tehranBranch.Id.ToString() };
+        var headquarter = new Unit { Name = "Management Office", Code = "1000", Type = "HQ", Description = "Desc" };
+        var tehranBranch = new Unit { Name = "Tehran Central Branch", Code = "4000", Type = "BH", Description = "Desc" };
+        tehranBranch.SetParentUnit(headquarter);
+        var mirdamadBranch = new Unit { Name = "Mirdamad Branch", Code = "40001", Type = "BR", Description = "Desc" };
+        mirdamadBranch.SetParentUnit(tehranBranch);
         options.DefaultValues = new List<Unit> { headquarter, tehranBranch, mirdamadBranch };
     })
     .AddIdentityUnitType<UnitType>(options =>
