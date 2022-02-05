@@ -19,14 +19,12 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     {
         try
         {
-            var user = new InsertUser
-            {
-                UserName = request.UserName,
-                PhoneNumber = request.PhoneNumber,
-                PhoneNumberConfirmed = request.PhoneNumberConfirmed,
-                Email = request.Email,
-                EmailConfirmed = request.EmailConfirmed
-            };
+            var user = Activator.CreateInstance<TUser>();
+            user.UserName = request.UserName;
+            user.PhoneNumber = request.PhoneNumber;
+            user.PhoneNumberConfirmed = request.PhoneNumberConfirmed;
+            user.Email = request.Email;
+            user.EmailConfirmed = request.EmailConfirmed;
             await UserService.Insert(user, request.Password, cancellationToken);
             return true.ToApiResult();
         }

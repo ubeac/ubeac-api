@@ -24,7 +24,7 @@ public class UnitsTests : BaseTestClass
     [Fact, TestPriority(1)]
     public async Task Insert_ReturnsSuccessApiResult()
     {
-        var content = new StringContent(JsonConvert.SerializeObject(new InsertUnitRequest
+        var content = new StringContent(JsonConvert.SerializeObject(new Unit
         {
             Name = "Headquarter",
             Code = "1",
@@ -43,7 +43,7 @@ public class UnitsTests : BaseTestClass
         var response = await Client.GetAsync(AllUri);
         response.EnsureSuccessStatusCode();
 
-        var result = await response.GetApiResult<IEnumerable<UnitViewModel>>();
+        var result = await response.GetApiResult<IEnumerable<Unit>>();
         Assert.NotNull(result.Data);
         Assert.True(result.Data.Any());
     }
@@ -52,7 +52,7 @@ public class UnitsTests : BaseTestClass
     public async Task Replace_ReturnsSuccessApiResult()
     {
         var unitId = (await ApiFactory.Instance.Services.CreateScope().ServiceProvider.GetRequiredService<IUnitRepository<Unit>>().GetAll()).First().Id;
-        var content = new StringContent(JsonConvert.SerializeObject(new ReplaceUnitRequest
+        var content = new StringContent(JsonConvert.SerializeObject(new Unit
         {
             Id = unitId,
             Name = "Headquarter",

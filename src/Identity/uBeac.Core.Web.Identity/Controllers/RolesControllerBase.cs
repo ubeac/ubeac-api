@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
 using uBeac.Identity;
 
 namespace uBeac.Web.Identity;
@@ -17,14 +15,11 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Insert([FromBody] InsertRoleRequest role, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<bool>> Insert([FromBody] TRole role, CancellationToken cancellationToken = default)
     {
         try
         {
-            await RoleService.Insert(new InsertRole
-            {
-                Name = role.Name
-            }, cancellationToken);
+            await RoleService.Insert(role, cancellationToken);
             return true.ToApiResult();
         }
         catch (Exception ex)
@@ -34,15 +29,11 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Replace([FromBody] ReplaceRoleRequest<TRoleKey> role, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<bool>> Replace([FromBody] TRole role, CancellationToken cancellationToken = default)
     {
         try
         {
-            await RoleService.Update(new ReplaceRole<TRoleKey>
-            {
-                Id = role.Id,
-                Name = role.Name
-            }, cancellationToken);
+            await RoleService.Update(role, cancellationToken);
             return true.ToApiResult();
         }
         catch (Exception ex)
@@ -66,21 +57,16 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     }
 
     [HttpGet]
-    public virtual async Task<IApiListResult<RoleViewModel<TRoleKey>>> All(CancellationToken cancellationToken = default)
+    public virtual async Task<IApiListResult<TRole>> All(CancellationToken cancellationToken = default)
     {
         try
         {
             var roles = await RoleService.GetAll(cancellationToken);
-            var rolesVm = roles.Select(r => new RoleViewModel<TRoleKey>
-            {
-                Id = r.Id,
-                Name = r.Name
-            });
-            return new ApiListResult<RoleViewModel<TRoleKey>>(rolesVm);
+            return roles.ToApiListResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiListResult<RoleViewModel<TRoleKey>>();
+            return ex.ToApiListResult<TRole>();
         }
     }
 }

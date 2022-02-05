@@ -23,7 +23,7 @@ public class RolesTests : BaseTestClass
     [Fact, TestPriority(1)]
     public async Task Insert_ReturnsSuccessApiResult()
     {
-        var content = new StringContent(JsonConvert.SerializeObject(new InsertRoleRequest
+        var content = new StringContent(JsonConvert.SerializeObject(new Role
         {
             Name = "default"
         }), Encoding.UTF8, "application/json");
@@ -40,7 +40,7 @@ public class RolesTests : BaseTestClass
         var response = await Client.GetAsync(AllUri);
         response.EnsureSuccessStatusCode();
 
-        var result = await response.GetApiResult<IEnumerable<RoleViewModel>>();
+        var result = await response.GetApiResult<IEnumerable<Role>>();
         Assert.NotNull(result.Data);
         Assert.True(result.Data.Any());
     }
@@ -49,7 +49,7 @@ public class RolesTests : BaseTestClass
     public async Task Replace_ReturnsSuccessApiResult()
     {
         var roleId = (await ApiFactory.Instance.Services.CreateScope().ServiceProvider.GetRequiredService<IRoleRepository<Role>>().GetAll()).First().Id;
-        var content = new StringContent(JsonConvert.SerializeObject(new ReplaceRoleRequest
+        var content = new StringContent(JsonConvert.SerializeObject(new Role
         {
             Id = roleId,
             Name = "default"

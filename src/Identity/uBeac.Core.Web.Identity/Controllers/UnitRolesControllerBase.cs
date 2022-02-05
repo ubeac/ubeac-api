@@ -15,17 +15,11 @@ public abstract class UnitRolesControllerBase<TKey, TUnitRole> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Insert([FromBody] InsertUnitRoleRequest unitRole, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<bool>> Insert([FromBody] TUnitRole unitRole, CancellationToken cancellationToken = default)
     {
         try
         {
-            await UnitRoleService.Insert(new InsertUnitRole
-            {
-                UserName = unitRole.UserName,
-                UnitCode = unitRole.UnitCode,
-                UnitType = unitRole.UnitType,
-                Role = unitRole.Role
-            }, cancellationToken);
+            await UnitRoleService.Insert(unitRole, cancellationToken);
             return true.ToApiResult();
         }
         catch (Exception ex)
@@ -35,18 +29,11 @@ public abstract class UnitRolesControllerBase<TKey, TUnitRole> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Replace([FromBody] ReplaceUnitRoleRequest<TKey> unitRole, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<bool>> Replace([FromBody] TUnitRole unitRole, CancellationToken cancellationToken = default)
     {
         try
         {
-            await UnitRoleService.Replace(new ReplaceUnitRole<TKey>
-            {
-                Id = unitRole.Id,
-                UserName = unitRole.UserName,
-                UnitCode = unitRole.UnitCode,
-                UnitType = unitRole.UnitType,
-                Role = unitRole.Role
-            }, cancellationToken);
+            await UnitRoleService.Replace(unitRole, cancellationToken);
             return true.ToApiResult();
         }
         catch (Exception ex)

@@ -15,25 +15,6 @@ public class UnitTypeService<TKey, TUnitType> : EntityService<TKey, TUnitType>, 
 
     public async Task<bool> Exists(string code, CancellationToken cancellationToken = default)
         => (await Repository.Find(unit => unit.Code == code, cancellationToken)).Any();
-
-    public async Task Insert(InsertUnitType unit, CancellationToken cancellationToken = default)
-    {
-        var entity = Activator.CreateInstance<TUnitType>();
-        entity.Code = unit.Code;
-        entity.Name = unit.Name;
-        entity.Description = unit.Description;
-        await Insert(entity, cancellationToken);
-    }
-
-    public async Task Replace(ReplaceUnitType<TKey> unit, CancellationToken cancellationToken = default)
-    {
-        var entity = Activator.CreateInstance<TUnitType>();
-        entity.Id = unit.Id;
-        entity.Code = unit.Code;
-        entity.Name = unit.Name;
-        entity.Description = unit.Description;
-        await Replace(entity, cancellationToken);
-    }
 }
 
 public class UnitTypeService<TUnitType> : UnitTypeService<Guid, TUnitType>, IUnitTypeService<TUnitType>

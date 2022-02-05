@@ -15,16 +15,11 @@ public abstract class UnitTypesControllerBase<TKey, TUnitType> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Insert([FromBody] InsertUnitTypeRequest unitType, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<bool>> Insert([FromBody] TUnitType unitType, CancellationToken cancellationToken = default)
     {
         try
         {
-            await UnitTypeService.Insert(new InsertUnitType
-            {
-                Code = unitType.Code,
-                Name = unitType.Name,
-                Description = unitType.Description
-            }, cancellationToken);
+            await UnitTypeService.Insert(unitType, cancellationToken);
             return true.ToApiResult();
         }
         catch (Exception ex)
@@ -34,17 +29,11 @@ public abstract class UnitTypesControllerBase<TKey, TUnitType> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Replace([FromBody] ReplaceUnitTypeRequest<TKey> unitType, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<bool>> Replace([FromBody] TUnitType unitType, CancellationToken cancellationToken = default)
     {
         try
         {
-            await UnitTypeService.Replace(new ReplaceUnitType<TKey>
-            {
-                Id = unitType.Id,
-                Code = unitType.Code,
-                Name = unitType.Name,
-                Description = unitType.Description
-            }, cancellationToken);
+            await UnitTypeService.Replace(unitType, cancellationToken);
             return true.ToApiResult();
         }
         catch (Exception ex)
@@ -68,23 +57,16 @@ public abstract class UnitTypesControllerBase<TKey, TUnitType> : BaseController
     }
 
     [HttpGet]
-    public virtual async Task<IApiListResult<UnitTypeViewModel<TKey>>> All(CancellationToken cancellationToken = default)
+    public virtual async Task<IApiListResult<TUnitType>> All(CancellationToken cancellationToken = default)
     {
         try
         {
             var unitTypes = await UnitTypeService.GetAll(cancellationToken);
-            var unitTypesVm = unitTypes.Select(u => new UnitTypeViewModel<TKey>
-            {
-                Id = u.Id,
-                Code = u.Code,
-                Name = u.Name,
-                Description = u.Description
-            });
-            return unitTypesVm.ToApiListResult();
+            return unitTypes.ToApiListResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiListResult<UnitTypeViewModel<TKey>>();
+            return ex.ToApiListResult<TUnitType>();
         }
     }
 }

@@ -23,7 +23,7 @@ public class UnitTypesTests : BaseTestClass
     [Fact, TestPriority(1)]
     public async Task Insert_ReturnsSuccessApiResult()
     {
-        var content = new StringContent(JsonConvert.SerializeObject(new InsertUnitType
+        var content = new StringContent(JsonConvert.SerializeObject(new UnitType
         {
             Code = "HQ",
             Name = "Headquarter"
@@ -41,7 +41,7 @@ public class UnitTypesTests : BaseTestClass
         var response = await Client.GetAsync(AllUri);
         response.EnsureSuccessStatusCode();
 
-        var result = await response.GetApiResult<IEnumerable<UnitTypeViewModel>>();
+        var result = await response.GetApiResult<IEnumerable<UnitType>>();
         Assert.NotNull(result.Data);
         Assert.True(result.Data.Any());
     }
@@ -50,7 +50,7 @@ public class UnitTypesTests : BaseTestClass
     public async Task Replace_ReturnsSuccessApiResult()
     {
         var unitTypeId = (await ApiFactory.Instance.Services.CreateScope().ServiceProvider.GetRequiredService<IUnitTypeRepository<UnitType>>().GetAll()).First().Id;
-        var content = new StringContent(JsonConvert.SerializeObject(new ReplaceUnitType
+        var content = new StringContent(JsonConvert.SerializeObject(new UnitType
         {
             Id = unitTypeId,
             Code = "HQ",

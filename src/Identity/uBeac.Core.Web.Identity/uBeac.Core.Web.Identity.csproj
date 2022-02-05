@@ -10,11 +10,6 @@
   <ItemGroup>
     <Folder Include="Properties\" />
     <Folder Include="ViewModels\Auth\" />
-    <Folder Include="ViewModels\UnitRole\" />
-    <Folder Include="ViewModels\UnitType\" />
-    <Folder Include="ViewModels\Unit\" />
-    <Folder Include="ViewModels\User\" />
-    <Folder Include="ViewModels\Role\" />
   </ItemGroup>
 
   <ItemGroup>

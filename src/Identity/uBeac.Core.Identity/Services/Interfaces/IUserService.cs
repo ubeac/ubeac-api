@@ -6,7 +6,7 @@ namespace uBeac.Identity
         where TUserKey : IEquatable<TUserKey>
         where TUser : User<TUserKey>
     {
-        Task Insert(InsertUser user, string password, CancellationToken cancellationToken = default);
+        Task Insert(TUser user, string password, CancellationToken cancellationToken = default);
         Task<TUser> Register(string username, string email, string password, CancellationToken cancellationToken = default);
         Task<TokenResult<TUserKey>> Authenticate(string username, string password, CancellationToken cancellationToken = default);
         Task<TUserKey> GetCurrentUserId(CancellationToken cancellationToken = default);

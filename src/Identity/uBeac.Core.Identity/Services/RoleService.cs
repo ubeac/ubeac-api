@@ -40,17 +40,16 @@ namespace uBeac.Identity
             return Task.FromResult(RoleManager.Roles.AsEnumerable());
         }
 
-        public virtual async Task Insert(InsertRole role, CancellationToken cancellationToken = default)
+        public virtual async Task Insert(TRole role, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var entity = Activator.CreateInstance(typeof(TRole), role.Name) as TRole;
-            var idResult = await RoleManager.CreateAsync(entity);
+            var idResult = await RoleManager.CreateAsync(role);
             idResult.ThrowIfInvalid();
 
         }
 
-        public virtual async Task<bool> Update(ReplaceRole<TKey> role, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> Update(TRole role, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 

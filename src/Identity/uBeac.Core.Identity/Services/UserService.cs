@@ -44,18 +44,6 @@ namespace uBeac.Identity
             identityResult.ThrowIfInvalid();
         }
 
-        public async Task Insert(InsertUser user, string password, CancellationToken cancellationToken = default)
-        {
-            var entity = Activator.CreateInstance<TUser>();
-            entity.UserName = user.UserName;
-            entity.PhoneNumber = user.PhoneNumber;
-            entity.PhoneNumberConfirmed = user.PhoneNumberConfirmed;
-            entity.Email = user.Email;
-            entity.EmailConfirmed = user.EmailConfirmed;
-
-            await Insert(entity, password, cancellationToken);
-        }
-
         /// <summary>
         /// This method is for public users' registration, the email won't be confirmed
         /// A confirmation email will be sent to the user
