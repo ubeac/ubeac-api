@@ -14,7 +14,6 @@ namespace uBeac.Identity
 
     public class JwtTokenProvider : IJwtTokenProvider
     {
-
         private readonly JwtOptions _options;
 
         public JwtTokenProvider(JwtOptions options)
@@ -36,21 +35,15 @@ namespace uBeac.Identity
             where TKey : IEquatable<TKey>
             where TUser : User<TKey>
         {
-
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_options.Secret);
+            var claims = GetClaims<TKey, TUser>(user);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Issuer = _options.Issuer,
                 Audience = _options.Audience,
-                Subject = new ClaimsIdentity(new[]
-                    {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(ClaimTypes.Email, user.Email)
-                    }
-                ),
+                Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddSeconds(_options.TokenExpiry),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature),
                 NotBefore = DateTime.UtcNow,
@@ -58,8 +51,29 @@ namespace uBeac.Identity
             };
 
             var token = jwtTokenHandler.CreateJwtSecurityToken(tokenDescriptor);
-
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        private List<Claim> GetClaims<TKey, TUser>(TUser user)
+            where TKey : IEquatable<TKey>   
+            where TUser : User<TKey>
+        {
+            var userId = user.Id.ToString();
+            var result = new List<Claim>
+            {
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new(JwtRegisteredClaimNames.Iat, DateTime.Now.ToLongDateString()),
+                new(JwtRegisteredClaimNames.Sub, userId),
+                new(ClaimTypes.NameIdentifier, userId),
+                new(ClaimTypes.Name, user.UserName)
+            };
+            if (user.Email != null) result.Add(new Claim(ClaimTypes.Email, user.Email));
+            if (user.Roles?.Any() is true)
+            {
+                var claims = user.Roles.Select(role => new Claim(ClaimTypes.Role, role));
+                result.AddRange(claims);
+            }
+            return result;
         }
     }
 }

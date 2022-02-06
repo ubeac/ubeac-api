@@ -1,4 +1,6 @@
-﻿global using uBeac;
+﻿global using PhoneBook;
+
+global using uBeac;
 global using uBeac.Web.Middlewares;
 global using uBeac.Repositories;
 global using uBeac.Services;

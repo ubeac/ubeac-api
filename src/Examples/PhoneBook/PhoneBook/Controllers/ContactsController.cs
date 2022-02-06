@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace PhoneBook;
 
+[Authorize]
 public class ContactsController : BaseController
 {
     private readonly IContactService _contactService;
@@ -12,6 +14,7 @@ public class ContactsController : BaseController
     }
 
     [HttpGet]
+    [Authorize(Roles = "ADMIN")]
     public async Task<IApiListResult<ContactViewModel>> All(CancellationToken cancellationToken = default)
     {
         var contacts = await _contactService.GetAll(cancellationToken);
