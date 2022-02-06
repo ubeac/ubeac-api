@@ -1,12 +1,11 @@
 ﻿using uBeac.Identity;
 using uBeac.Web.Identity;
 
-namespace Example1.Controllers
+namespace GettingStarted;
+
+public class RolesController : RolesControllerBase<Role>
 {
-    public class RolesController : RolesControllerBase<Role>
+    public RolesController(IRoleService<Role> roleService) : base(roleService)
     {
-        public RolesController(IRoleService<Role> roleService) : base(roleService)
-        {
-        }
     }
 }

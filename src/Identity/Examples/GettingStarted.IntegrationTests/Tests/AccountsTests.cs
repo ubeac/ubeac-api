@@ -7,7 +7,7 @@ using uBeac.Identity;
 using uBeac.Web.Identity;
 using Xunit;
 
-namespace PhoneBook.Identity.IntegrationTests;
+namespace GettingStarted.IntegrationTests;
 
 public class AccountsTests : BaseTestClass, IClassFixture<Factory>
 {

@@ -7,9 +7,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 builder.Configuration.AddJsonConfig(builder.Environment);
-builder.Services.AddCoreSwaggerWithJWT("Authentication - Example 1");
+builder.Services.AddCoreSwaggerWithJWT("Getting Started Example - Authentication");
 
-builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
+if (builder.Environment.IsEnvironment("Testing"))
+{
+    builder.Services.AddMongo<MongoDBContext>("TestConnection", true);
+}
+else
+{
+    builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
+}
 
 #region Identity
 
@@ -87,3 +94,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }

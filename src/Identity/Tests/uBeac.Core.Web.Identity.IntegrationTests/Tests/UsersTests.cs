@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -36,8 +37,8 @@ public class UsersTests : BaseTestClass
         var response = await Client.PostAsync(InsertUri, content);
         response.EnsureSuccessStatusCode();
 
-        var result = await response.GetApiResult<bool>();
-        Assert.True(result.Data);
+        var result = await response.GetApiResult<Guid>();
+        Assert.NotEqual(default, result.Data);
     }
 
     [Fact, TestPriority(2)]

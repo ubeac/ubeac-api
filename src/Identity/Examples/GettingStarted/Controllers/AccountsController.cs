@@ -1,12 +1,11 @@
 ﻿using uBeac.Identity;
 using uBeac.Web.Identity;
 
-namespace Example1.Controllers
+namespace GettingStarted;
+
+public class AccountsController : AccountsControllerBase<User>
 {
-    public class AccountsController : AccountsControllerBase<User>
+    public AccountsController(IUserService<User> userService) : base(userService)
     {
-        public AccountsController(IUserService<User> userService) : base(userService)
-        {
-        }
     }
 }

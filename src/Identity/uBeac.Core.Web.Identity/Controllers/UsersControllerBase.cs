@@ -15,7 +15,7 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Insert([FromBody] InsertUserRequest request, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<TUserKey>> Insert([FromBody] InsertUserRequest request, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -26,11 +26,11 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
             user.Email = request.Email;
             user.EmailConfirmed = request.EmailConfirmed;
             await UserService.Insert(user, request.Password, cancellationToken);
-            return true.ToApiResult();
+            return user.Id.ToApiResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<bool>();
+            return ex.ToApiResult<TUserKey>();
         }
     }
 
