@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace PhoneBook;
 
-[Authorize]
+[CustomAuthorize]
 public class ContactsController : BaseController
 {
     private readonly IContactService _contactService;
@@ -14,7 +13,7 @@ public class ContactsController : BaseController
     }
 
     [HttpGet]
-    [Authorize(Roles = "ADMIN")]
+    [CustomAuthorize(UnitType = "M")]
     public async Task<IApiListResult<ContactViewModel>> All(CancellationToken cancellationToken = default)
     {
         var contacts = await _contactService.GetAll(cancellationToken);
@@ -30,7 +29,22 @@ public class ContactsController : BaseController
     }
 
     [HttpGet]
-    public async Task<IApiResult<ContactViewModel>> ById(IdRequest request, CancellationToken cancellationToken = default)
+    public async Task<IApiListResult<ContactViewModel>> AllByUser(CancellationToken cancellationToken = default)
+    {
+        var contacts = await _contactService.GetAllByUser(cancellationToken);
+        var contactsVm = contacts.Select(c => new ContactViewModel
+        {
+            Id = c.Id,
+            FirstName = c.FirstName,
+            LastName = c.LastName,
+            PhoneNumber = c.PhoneNumber,
+            EmailAddress = c.EmailAddress
+        });
+        return contactsVm.ToApiListResult();
+    }
+
+    [HttpGet]
+    public async Task<IApiResult<ContactViewModel>> ById([FromQuery] IdRequest request, CancellationToken cancellationToken = default)
     {
         var contact = await _contactService.GetById(request.Id, cancellationToken);
         var contactVm = new ContactViewModel

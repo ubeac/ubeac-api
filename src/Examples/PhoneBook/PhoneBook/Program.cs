@@ -22,6 +22,9 @@ builder.Services.AddScoped<IContactRepository, MongoContactRepository>();
 // Adding services
 builder.Services.AddScoped<IContactService, ContactService>();
 
+// Adding user info
+builder.Services.AddScoped<IUserInfo, UserInfo>();
+
 // Adding jwt authentication
 builder.Services.AddAuthentication(configureOptions =>
     {
