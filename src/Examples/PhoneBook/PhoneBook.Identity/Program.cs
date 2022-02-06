@@ -10,7 +10,14 @@ builder.Configuration.AddJsonConfig(builder.Environment);
 builder.Services.AddCoreSwaggerWithJWT("Phone Book - Identity");
 
 // Adding mongodb
-builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
+if (builder.Environment.IsEnvironment("Testing"))
+{
+    builder.Services.AddMongo<MongoDBContext>("TestConnection", true);
+}
+else
+{
+    builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
+}
 
 // Adding repositories
 builder.Services.AddMongoDBUserRepository<MongoDBContext, AppUser>();
@@ -54,3 +61,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
+
+public partial class Program { }
