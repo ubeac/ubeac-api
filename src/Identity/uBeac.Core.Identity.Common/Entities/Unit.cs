@@ -9,7 +9,6 @@ public class Unit<TKey> : IEntity<TKey> where TKey : IEquatable<TKey>
     public virtual string Description { get; set; }
     public virtual TKey ParentUnitId { get; set; }
 
-
     private Unit<TKey> _parent;
 
     public void SetParentUnit(Unit<TKey> parent)

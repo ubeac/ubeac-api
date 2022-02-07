@@ -13,7 +13,8 @@ public class ContactsController : BaseController
     }
 
     [HttpGet]
-    [CustomAuthorize(UnitType = "M")]
+    [CustomAuthorize(Roles = "ADMIN")]
+    // [CustomAuthorize(UnitType = "M")]
     public async Task<IApiListResult<ContactViewModel>> All(CancellationToken cancellationToken = default)
     {
         var contacts = await _contactService.GetAll(cancellationToken);
