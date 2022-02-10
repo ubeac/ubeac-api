@@ -1,4 +1,5 @@
 var builder = WebApplication.CreateBuilder(args);
+Options.Environment = builder.Environment.EnvironmentName;
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();

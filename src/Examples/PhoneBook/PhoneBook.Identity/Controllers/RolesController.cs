@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿namespace PhoneBook.Identity;
 
-namespace PhoneBook.Identity;
-
-[Authorize(Roles = "ADMIN")]
+// [Authorize(Roles = "ADMIN")]
 public class RolesController : RolesControllerBase<AppRole>
 {
     public RolesController(IRoleService<AppRole> roleService) : base(roleService)
