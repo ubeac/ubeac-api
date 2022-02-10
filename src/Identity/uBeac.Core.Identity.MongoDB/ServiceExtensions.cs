@@ -14,11 +14,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.TryAddScoped<IUserRepository<TUserKey, TUser>>(provider =>
             {
-                var dbContext = provider.GetService<TMongoDbContext>();
-
-                if (dbContext == null)
-                    throw new NullReferenceException("MongoDB Context is not registered for User.");
-
+                var dbContext = provider.GetRequiredService<TMongoDbContext>();
                 return new MongoUserRepository<TUserKey, TUser>(dbContext);
             });
 
@@ -31,11 +27,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.TryAddScoped<IUserRepository<TUser>>(provider =>
             {
-                var dbContext = provider.GetService<TMongoDbContext>();
-
-                if (dbContext == null)
-                    throw new NullReferenceException("MongoDB Context is not registered for User.");
-
+                var dbContext = provider.GetRequiredService<TMongoDbContext>();
                 return new MongoUserRepository<TUser>(dbContext);
             });
 
@@ -48,11 +40,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.TryAddScoped<IUserTokenRepository<TUserKey>>(provider =>
             {
-                var dbContext = provider.GetService<TMongoDbContext>();
-
-                if (dbContext == null)
-                    throw new NullReferenceException("MongoDB Context is not registered for UserToken.");
-
+                var dbContext = provider.GetRequiredService<TMongoDbContext>();
                 return new MongoUserTokenRepository<TUserKey>(dbContext);
             });
 
@@ -64,11 +52,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.TryAddScoped<IUserTokenRepository>(provider =>
             {
-                var dbContext = provider.GetService<TMongoDbContext>();
-
-                if (dbContext == null)
-                    throw new NullReferenceException("MongoDB Context is not registered for UserToken.");
-
+                var dbContext = provider.GetRequiredService<TMongoDbContext>();
                 return new MongoUserTokenRepository(dbContext);
             });
 
@@ -82,11 +66,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.TryAddScoped<IRoleRepository<TRoleKey, TRole>>(provider =>
             {
-                var dbContext = provider.GetService<TMongoDbContext>();
-
-                if (dbContext == null)
-                    throw new NullReferenceException("MongoDB Context is not registered for Role.");
-
+                var dbContext = provider.GetRequiredService<TMongoDbContext>();
                 return new MongoRoleRepository<TRoleKey, TRole>(dbContext);
             });
 
@@ -99,11 +79,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.TryAddScoped<IRoleRepository<TRole>>(provider =>
             {
-                var dbContext = provider.GetService<TMongoDbContext>();
-
-                if (dbContext == null)
-                    throw new NullReferenceException("MongoDB Context is not registered for Role.");
-
+                var dbContext = provider.GetRequiredService<TMongoDbContext>();
                 return new MongoRoleRepository<TRole>(dbContext);
             });
 
@@ -117,11 +93,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.TryAddScoped<IUnitRepository<TUnitKey, TUnit>>(provider =>
             {
-                var dbContext = provider.GetService<TMongoDbContext>();
-
-                if (dbContext == null)
-                    throw new NullReferenceException("MongoDB Context is not registered for Unit.");
-
+                var dbContext = provider.GetRequiredService<TMongoDbContext>();
                 return new MongoUnitRepository<TUnitKey, TUnit>(dbContext);
             });
 
@@ -134,11 +106,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.TryAddScoped<IUnitRepository<TUnit>>(provider =>
             {
-                var dbContext = provider.GetService<TMongoDbContext>();
-
-                if (dbContext == null)
-                    throw new NullReferenceException("MongoDB Context is not registered for Unit.");
-
+                var dbContext = provider.GetRequiredService<TMongoDbContext>();
                 return new MongoUnitRepository<TUnit>(dbContext);
             });
 
@@ -152,11 +120,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.TryAddScoped<IUnitTypeRepository<TUnitTypeKey, TUnitType>>(provider =>
             {
-                var dbContext = provider.GetService<TMongoDbContext>();
-
-                if (dbContext == null)
-                    throw new NullReferenceException("MongoDB Context is not registered for UnitType.");
-
+                var dbContext = provider.GetRequiredService<TMongoDbContext>();
                 return new MongoUnitTypeRepository<TUnitTypeKey, TUnitType>(dbContext);
             });
 
@@ -169,11 +133,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.TryAddScoped<IUnitTypeRepository<TUnitType>>(provider =>
             {
-                var dbContext = provider.GetService<TMongoDbContext>();
-
-                if (dbContext == null)
-                    throw new NullReferenceException("MongoDB Context is not registered for UnitType.");
-
+                var dbContext = provider.GetRequiredService<TMongoDbContext>();
                 return new MongoUnitTypeRepository<TUnitType>(dbContext);
             });
 
@@ -187,11 +147,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.TryAddScoped<IUnitRoleRepository<TUnitRoleKey, TUnitRole>>(provider =>
             {
-                var dbContext = provider.GetService<TMongoDbContext>();
-
-                if (dbContext == null)
-                    throw new NullReferenceException("MongoDB Context is not registered for UnitRole.");
-
+                var dbContext = provider.GetRequiredService<TMongoDbContext>();
                 return new MongoUnitRoleRepository<TUnitRoleKey, TUnitRole>(dbContext);
             });
 
@@ -204,12 +160,35 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.TryAddScoped<IUnitRoleRepository<TUnitRole>>(provider =>
             {
-                var dbContext = provider.GetService<TMongoDbContext>();
-
-                if (dbContext == null)
-                    throw new NullReferenceException("MongoDB Context is not registered for UnitRole.");
-
+                var dbContext = provider.GetRequiredService<TMongoDbContext>();
                 return new MongoUnitRoleRepository<TUnitRole>(dbContext);
+            });
+
+            return services;
+        }
+
+        public static IServiceCollection AddMongoDBPermissionRepository<TMongoDbContext, TPermissionKey, TPermission>(this IServiceCollection services)
+            where TMongoDbContext : class, IMongoDBContext
+            where TPermissionKey : IEquatable<TPermissionKey>
+            where TPermission : Permission<TPermissionKey>
+        {
+            services.TryAddScoped<IPermissionRepository<TPermissionKey, TPermission>>(provider =>
+            {
+                var dbContext = provider.GetRequiredService<TMongoDbContext>();
+                return new MongoPermissionRepository<TPermissionKey, TPermission>(dbContext);
+            });
+
+            return services;
+        }
+
+        public static IServiceCollection AddMongoDBPermissionRepository<TMongoDbContext, TPermission>(this IServiceCollection services)
+            where TMongoDbContext : class, IMongoDBContext
+            where TPermission : Permission
+        {
+            services.TryAddScoped<IPermissionRepository<TPermission>>(provider =>
+            {
+                var dbContext = provider.GetRequiredService<TMongoDbContext>();
+                return new MongoPermissionRepository<TPermission>(dbContext);
             });
 
             return services;

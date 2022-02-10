@@ -27,6 +27,7 @@ builder.Services.AddMongoDBRoleRepository<MongoDBContext, AppRole>();
 builder.Services.AddMongoDBUnitRepository<MongoDBContext, AppUnit>();
 builder.Services.AddMongoDBUnitTypeRepository<MongoDBContext, AppUnitType>();
 builder.Services.AddMongoDBUnitRoleRepository<MongoDBContext, AppUnitRole>();
+builder.Services.AddMongoDBPermissionRepository<MongoDBContext, AppPermission>();
 
 // Adding services
 builder.Services.AddUserService<AppUserService, AppUser>();
@@ -35,6 +36,7 @@ builder.Services.AddUserRoleService<AppUserRoleService, AppUser>();
 builder.Services.AddUnitService<AppUnitService, AppUnit>();
 builder.Services.AddUnitTypeService<AppUnitTypeService, AppUnitType>();
 builder.Services.AddUnitRoleService<AppUnitRoleService, AppUnitRole>();
+builder.Services.AddPermissionService<AppPermissionService, AppPermission>();
 
 // Adding identity core
 builder.Services
