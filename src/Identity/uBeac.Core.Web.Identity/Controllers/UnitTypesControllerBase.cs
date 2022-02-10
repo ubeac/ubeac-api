@@ -43,11 +43,11 @@ public abstract class UnitTypesControllerBase<TKey, TUnitType> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Delete([FromBody] IdRequest<TKey> id, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<bool>> Delete([FromBody] IdRequest<TKey> request, CancellationToken cancellationToken = default)
     {
         try
         {
-            await UnitTypeService.Delete(id.Id, cancellationToken);
+            await UnitTypeService.Delete(request.Id, cancellationToken);
             return true.ToApiResult();
         }
         catch (Exception ex)
