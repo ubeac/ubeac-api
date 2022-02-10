@@ -15,16 +15,16 @@ public abstract class UnitTypesControllerBase<TKey, TUnitType> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Insert([FromBody] TUnitType unitType, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<TKey>> Insert([FromBody] TUnitType unitType, CancellationToken cancellationToken = default)
     {
         try
         {
             await UnitTypeService.Insert(unitType, cancellationToken);
-            return true.ToApiResult();
+            return unitType.Id.ToApiResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<bool>();
+            return ex.ToApiResult<TKey>();
         }
     }
 

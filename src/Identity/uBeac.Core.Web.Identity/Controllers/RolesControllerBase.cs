@@ -15,16 +15,16 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Insert([FromBody] TRole role, CancellationToken cancellationToken = default)
+    public virtual async Task<IApiResult<TRoleKey>> Insert([FromBody] TRole role, CancellationToken cancellationToken = default)
     {
         try
         {
             await RoleService.Insert(role, cancellationToken);
-            return true.ToApiResult();
+            return role.Id.ToApiResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<bool>();
+            return ex.ToApiResult<TRoleKey>();
         }
     }
 
