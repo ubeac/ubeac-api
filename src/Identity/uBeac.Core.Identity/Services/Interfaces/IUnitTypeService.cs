@@ -9,7 +9,7 @@ public interface IUnitTypeService<TKey, TUnitType> : IEntityService<TKey, TUnitT
     Task<bool> Exists(string code, CancellationToken cancellationToken = default);
 }
 
-public interface IUnitTypeService<TUnitType> : IUnitTypeService<Guid, TUnitType>
+public interface IUnitTypeService<TUnitType> : IUnitTypeService<Guid, TUnitType>, IEntityService<TUnitType>
     where TUnitType : UnitType
 {
 }

@@ -67,7 +67,7 @@ namespace uBeac.Identity
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            await _repository.Replace(user, cancellationToken);
+            await _repository.Update(user, cancellationToken);
 
             return IdentityResult.Success;
         }

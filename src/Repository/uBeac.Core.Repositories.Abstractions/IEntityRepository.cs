@@ -4,15 +4,15 @@ namespace uBeac.Repositories
 {
     public interface IRepository 
     {
-
     }
+
     public interface IEntityRepository<TKey, TEntity>: IRepository
         where TKey : IEquatable<TKey>
         where TEntity : IEntity<TKey>
     {
         Task Insert(TEntity entity, CancellationToken cancellationToken = default);
         Task InsertMany(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
-        Task<TEntity> Replace(TEntity entity, CancellationToken cancellationToken = default);
+        Task<TEntity> Update(TEntity entity, CancellationToken cancellationToken = default);
         Task<bool> Delete(TKey id, CancellationToken cancellationToken = default);
         Task<long> DeleteMany(IEnumerable<TKey> ids, CancellationToken cancellationToken = default);
         Task<IEnumerable<TEntity>> GetAll(CancellationToken cancellationToken = default);

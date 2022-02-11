@@ -77,7 +77,7 @@ namespace uBeac.Repositories.MongoDB
             await Collection.InsertManyAsync(entities, null, cancellationToken);
         }
 
-        public virtual async Task<TEntity> Replace(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntity> Update(TEntity entity, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             var idFilter = Builders<TEntity>.Filter.Eq(x => x.Id, entity.Id);

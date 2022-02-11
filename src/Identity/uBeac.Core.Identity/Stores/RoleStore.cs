@@ -30,7 +30,7 @@ namespace uBeac.Identity
         public async Task<IdentityResult> UpdateAsync(TRole role, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await _repository.Replace(role, cancellationToken);
+            await _repository.Update(role, cancellationToken);
             return IdentityResult.Success;
         }
 

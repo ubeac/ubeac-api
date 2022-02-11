@@ -48,11 +48,12 @@ namespace uBeac.Services
             await Repository.InsertMany(entities, cancellationToken);
         }
 
-        public virtual async Task<TEntity> Replace(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntity> Update(TEntity entity, CancellationToken cancellationToken = default)
         {
-            return await Repository.Replace(entity, cancellationToken);
+            return await Repository.Update(entity, cancellationToken);
         }
     }
+
     public class EntityService<TEntity> : EntityService<Guid, TEntity>, IEntityService<TEntity>
         where TEntity : IEntity
     {

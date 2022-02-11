@@ -8,7 +8,7 @@ public interface IUnitRoleService<TKey, TUnitRole> : IEntityService<TKey, TUnitR
 {
 }
 
-public interface IUnitRoleService<TUnitRole> : IUnitRoleService<Guid, TUnitRole>
+public interface IUnitRoleService<TUnitRole> : IUnitRoleService<Guid, TUnitRole>, IEntityService<TUnitRole>
     where TUnitRole : UnitRole
 {
 }
