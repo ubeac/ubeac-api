@@ -166,32 +166,5 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return services;
         }
-
-        public static IServiceCollection AddMongoDBPermissionRepository<TMongoDbContext, TPermissionKey, TPermission>(this IServiceCollection services)
-            where TMongoDbContext : class, IMongoDBContext
-            where TPermissionKey : IEquatable<TPermissionKey>
-            where TPermission : Permission<TPermissionKey>
-        {
-            services.TryAddScoped<IPermissionRepository<TPermissionKey, TPermission>>(provider =>
-            {
-                var dbContext = provider.GetRequiredService<TMongoDbContext>();
-                return new MongoPermissionRepository<TPermissionKey, TPermission>(dbContext);
-            });
-
-            return services;
-        }
-
-        public static IServiceCollection AddMongoDBPermissionRepository<TMongoDbContext, TPermission>(this IServiceCollection services)
-            where TMongoDbContext : class, IMongoDBContext
-            where TPermission : Permission
-        {
-            services.TryAddScoped<IPermissionRepository<TPermission>>(provider =>
-            {
-                var dbContext = provider.GetRequiredService<TMongoDbContext>();
-                return new MongoPermissionRepository<TPermission>(dbContext);
-            });
-
-            return services;
-        }
     }
 }
