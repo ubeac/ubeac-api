@@ -2,10 +2,9 @@
 
 namespace uBeac
 {
-    public interface IApplicationContext<TUserKey> where TUserKey : IEquatable<TUserKey>
+    public interface IApplicationContext
     {
         public string TraceId { get; }
-        public TUserKey? UserId { get; }
         public string UserName { get; }
         public IPAddress UserIp { get; }
         public string Language { get; }

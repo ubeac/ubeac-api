@@ -2,7 +2,7 @@
 
 namespace uBeac
 {
-    public class DummyApplicationContext<TUserKey> : IApplicationContext<TUserKey> where TUserKey : IEquatable<TUserKey>
+    public class DummyApplicationContext : IApplicationContext
     {
         public DummyApplicationContext()
         {
@@ -12,19 +12,12 @@ namespace uBeac
             SessionId = id;
             TraceId = id;
             UserName = string.Empty;
-            UserId = default;
         }
 
-        public virtual TUserKey? UserId { get; }
-
         public virtual string UserName { get; }
-
         public virtual IPAddress UserIp { get; }
-
         public virtual string Language { get; }
-
         public virtual string SessionId { get; }
-
         public virtual string TraceId { get; }
     }
 }

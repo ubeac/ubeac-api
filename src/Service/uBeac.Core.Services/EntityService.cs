@@ -7,10 +7,12 @@ namespace uBeac.Services
        where TEntity : IEntity<TKey>
     {
         protected readonly IEntityRepository<TKey, TEntity> Repository;
+        protected readonly IApplicationContext AppContext;
 
-        public EntityService(IEntityRepository<TKey, TEntity> repository)
+        public EntityService(IEntityRepository<TKey, TEntity> repository, IApplicationContext appContext)
         {
             Repository = repository;
+            AppContext = appContext;
         }
 
         public virtual async Task<bool> Delete(TKey id, CancellationToken cancellationToken = default)
@@ -40,6 +42,14 @@ namespace uBeac.Services
 
         public virtual async Task Insert(TEntity entity, CancellationToken cancellationToken = default)
         {
+            // Set audit properties
+            if (typeof(TEntity).IsAssignableFrom(typeof(IAuditEntity<TKey>)))
+            {
+                // var auditEntity = entity as AuditEntity<TKey>;
+                // auditEntity.CreatedBy = AppContext.UserName;
+                // auditEntity.CreatedAt = DateTime.Now;
+            }
+
             await Repository.Insert(entity, cancellationToken);
         }
 
@@ -50,6 +60,14 @@ namespace uBeac.Services
 
         public virtual async Task<TEntity> Update(TEntity entity, CancellationToken cancellationToken = default)
         {
+            // Set audit properties
+            if (typeof(TEntity).IsAssignableFrom(typeof(IAuditEntity<TKey>)))
+            {
+                // var auditEntity = entity as AuditEntity<TKey>;
+                // auditEntity.LastUpdatedBy = AppContext.UserName;
+                // auditEntity.LastUpdatedAt = DateTime.Now;
+            }
+
             return await Repository.Update(entity, cancellationToken);
         }
     }
@@ -57,7 +75,7 @@ namespace uBeac.Services
     public class EntityService<TEntity> : EntityService<Guid, TEntity>, IEntityService<TEntity>
         where TEntity : IEntity
     {
-        public EntityService(IEntityRepository<TEntity> repository) : base(repository)
+        public EntityService(IEntityRepository<TEntity> repository, IApplicationContext appContext) : base(repository, appContext)
         {
         }
     }
