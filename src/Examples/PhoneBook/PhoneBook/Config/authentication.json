@@ -1,7 +1,0 @@
-{
-  "Jwt": {
-    "Issuer": "https://localhost:44305",
-    "Audience": "https://localhost:44305",
-    "Secret": "THIS SHOULD BE A COMPLEX SECRET!"
-  }
-}
