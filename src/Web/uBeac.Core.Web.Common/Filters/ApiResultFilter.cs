@@ -6,24 +6,23 @@ namespace uBeac.Web.Filters
 {
     public class ApiResultFilter : IActionFilter
     {
-        private Stopwatch stopwatch;
+        private Stopwatch _stopwatch;
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            stopwatch = Stopwatch.StartNew();
+            _stopwatch = Stopwatch.StartNew();
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            stopwatch?.Stop();
+            _stopwatch.Stop();
 
             if (context.Result != null && typeof(ObjectResult) == context.Result.GetType())
             {
                 var objectResult = (ObjectResult)context.Result;
-                if (typeof(IApiResult).IsAssignableFrom(objectResult.Value.GetType()))
+                if (objectResult.Value is IApiResult result)
                 {
-                    var result = (IApiResult)objectResult.Value;
-                    result.Duration = stopwatch.Elapsed.TotalMilliseconds;
+                    result.Duration = _stopwatch.Elapsed.TotalMilliseconds;
                     result.TraceId = context.HttpContext.TraceIdentifier;
                     context.HttpContext.Response.StatusCode = result.Code;
                 }
