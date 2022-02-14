@@ -1,19 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <GenerateDocumentationFile>False</GenerateDocumentationFile>
-  </PropertyGroup>
+	<PropertyGroup>
+		<PackageId>uBeac.Web.Identity</PackageId>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<GenerateDocumentationFile>False</GenerateDocumentationFile>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Properties\" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Web\uBeac.Core.Web.Common\uBeac.Core.Web.Common.csproj" />
-    <ProjectReference Include="..\uBeac.Core.Identity\uBeac.Core.Identity.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\Web\uBeac.Core.Web.Common\uBeac.Core.Web.Common.csproj" />
+		<ProjectReference Include="..\uBeac.Core.Identity\uBeac.Core.Identity.csproj" />
+	</ItemGroup>
 
 </Project>
