@@ -4,7 +4,7 @@ namespace uBeac.Identity
 {
     public static class Helper
     {
-        public static TKey GetTypedKey<TKey>(string id)
+        public static TKey GetTypedKey<TKey>(this string id)
         {
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(TKey));
 

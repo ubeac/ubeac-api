@@ -47,9 +47,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Logging", "Loggi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Logging.MongoDB", "Logging\uBeac.Core.Logging.MongoDB\uBeac.Core.Logging.MongoDB.csproj", "{2345E1D5-6FB1-4425-BCC8-CE52709BF7BE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Web.Identity", "Identity\uBeac.Core.Web.Identity\uBeac.Core.Web.Identity.csproj", "{069EA1C6-C301-4232-A97C-6C1EFFED3F92}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Web.Logging", "Logging\uBeac.Core.Web.Logging\uBeac.Core.Web.Logging.csproj", "{D46D669F-61A9-4F54-8C54-F8CEF9A6C80A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.EmailProvider", "Common\uBeac.Core.EmailProvider\uBeac.Core.EmailProvider.csproj", "{3D9D0F87-1A8A-4D2E-8F1A-CF398CD8D2FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -117,14 +117,14 @@ Global
 		{2345E1D5-6FB1-4425-BCC8-CE52709BF7BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2345E1D5-6FB1-4425-BCC8-CE52709BF7BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2345E1D5-6FB1-4425-BCC8-CE52709BF7BE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{069EA1C6-C301-4232-A97C-6C1EFFED3F92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{069EA1C6-C301-4232-A97C-6C1EFFED3F92}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{069EA1C6-C301-4232-A97C-6C1EFFED3F92}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{069EA1C6-C301-4232-A97C-6C1EFFED3F92}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D46D669F-61A9-4F54-8C54-F8CEF9A6C80A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D46D669F-61A9-4F54-8C54-F8CEF9A6C80A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D46D669F-61A9-4F54-8C54-F8CEF9A6C80A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D46D669F-61A9-4F54-8C54-F8CEF9A6C80A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D9D0F87-1A8A-4D2E-8F1A-CF398CD8D2FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D9D0F87-1A8A-4D2E-8F1A-CF398CD8D2FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D9D0F87-1A8A-4D2E-8F1A-CF398CD8D2FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D9D0F87-1A8A-4D2E-8F1A-CF398CD8D2FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -145,8 +145,8 @@ Global
 		{5A970DD6-DCCF-4EDC-9160-13E34DAB9479} = {E7E46979-28DA-4C69-B036-9EB871014379}
 		{57699FC2-B2B3-4FDD-BCF3-65571BC8AD9D} = {117FC7BE-0153-4819-9A27-0FDA22132FA1}
 		{2345E1D5-6FB1-4425-BCC8-CE52709BF7BE} = {117FC7BE-0153-4819-9A27-0FDA22132FA1}
-		{069EA1C6-C301-4232-A97C-6C1EFFED3F92} = {EA4A3C91-FB93-49E8-8DF9-8CE86C150F71}
 		{D46D669F-61A9-4F54-8C54-F8CEF9A6C80A} = {117FC7BE-0153-4819-9A27-0FDA22132FA1}
+		{3D9D0F87-1A8A-4D2E-8F1A-CF398CD8D2FA} = {D910F4C0-CDE2-422F-A476-CDB87D8008A6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {247F9BF0-18BB-4A57-BB3E-2870DDAEF0D1}

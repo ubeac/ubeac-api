@@ -36,7 +36,6 @@ namespace uBeac.Repositories.MongoDB
 
         public virtual async Task<long> DeleteMany(IEnumerable<TKey> ids, CancellationToken cancellationToken = default)
         {
-            cancellationToken.ThrowIfCancellationRequested();
             var idsFilter = Builders<TEntity>.Filter.In(x => x.Id, ids);
             var deleteResult = await Collection.DeleteManyAsync(idsFilter, cancellationToken);
             return deleteResult.DeletedCount;
@@ -46,21 +45,24 @@ namespace uBeac.Repositories.MongoDB
         {
             cancellationToken.ThrowIfCancellationRequested();
             var filter = Builders<TEntity>.Filter.Empty;
-            return (await Collection.FindAsync(filter, null, cancellationToken)).ToEnumerable(cancellationToken);
+            var findResult = await Collection.FindAsync(filter, null, cancellationToken);
+            return await findResult.ToListAsync(cancellationToken);
         }
 
         public virtual async Task<TEntity> GetById(TKey id, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             var idFilter = Builders<TEntity>.Filter.Eq(x => x.Id, id);
-            return (await Collection.FindAsync(idFilter, null, cancellationToken)).SingleOrDefault(cancellationToken);
+            var findResult = await Collection.FindAsync(idFilter, null, cancellationToken);
+            return await findResult.SingleOrDefaultAsync(cancellationToken);
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetByIds(IEnumerable<TKey> ids, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             var idsFilter = Builders<TEntity>.Filter.In(x => x.Id, ids);
-            return (await Collection.FindAsync(idsFilter, null, cancellationToken)).ToEnumerable(cancellationToken);
+            var findResult = await Collection.FindAsync(idsFilter, null, cancellationToken);
+            return await findResult.ToListAsync(cancellationToken);
         }
 
         public virtual async Task Insert(TEntity entity, CancellationToken cancellationToken = default)
@@ -75,7 +77,7 @@ namespace uBeac.Repositories.MongoDB
             await Collection.InsertManyAsync(entities, null, cancellationToken);
         }
 
-        public virtual async Task<TEntity> Replace(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntity> Update(TEntity entity, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             var idFilter = Builders<TEntity>.Filter.Eq(x => x.Id, entity.Id);
@@ -84,20 +86,13 @@ namespace uBeac.Repositories.MongoDB
 
         public virtual async Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> filter, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             var findResult = await Collection.FindAsync(filter, cancellationToken: cancellationToken);
-            return findResult.ToEnumerable(cancellationToken);
+            return await findResult.ToListAsync(cancellationToken);
         }
 
-        public virtual async Task<bool> Any(Expression<Func<TEntity, bool>> filter, CancellationToken cancellationToken = default)
-        {
-            var findResult = await Collection.FindAsync(filter, cancellationToken: cancellationToken);
-            return findResult.ToEnumerable(cancellationToken).Any();
-        }
+        public IQueryable<TEntity> AsQueryable() => Collection.AsQueryable();
 
-        public IQueryable<TEntity> AsQueryable()
-        {
-            return Collection.AsQueryable();
-        }
     }
 
     public class MongoEntityRepository<TEntity> : MongoEntityRepository<Guid, TEntity>, IEntityRepository<TEntity>

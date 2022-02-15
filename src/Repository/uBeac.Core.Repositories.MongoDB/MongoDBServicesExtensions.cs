@@ -10,7 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class MongoDBServicesExtensions
     {
-        public static IServiceCollection AddMongo<TMongoDbContext>(this IServiceCollection services, string connectionString)
+        public static IServiceCollection AddMongo<TMongoDbContext>(this IServiceCollection services, string connectionString, bool dropExistDatabase = false)
            where TMongoDbContext : class, IMongoDBContext
         {
 
@@ -28,7 +28,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddSingleton(provider =>
             {
                 var configuration = provider.GetService<IConfiguration>();
-                return new MongoDBOptions<TMongoDbContext>(configuration.GetConnectionString(connectionString));
+                return new MongoDBOptions<TMongoDbContext>(configuration.GetConnectionString(connectionString), dropExistDatabase);
             });
 
             services.TryAddSingleton<TMongoDbContext>();
@@ -38,7 +38,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         }
 
-        public static IServiceCollection AddReporitory<TInterface, TImplementation>(this IServiceCollection services)
+        public static IServiceCollection AddRepository<TInterface, TImplementation>(this IServiceCollection services)
             where TInterface : IRepository
             where TImplementation : class, IRepository
         {
@@ -46,7 +46,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
 
         }
-        public static IServiceCollection AddReporitory(this IServiceCollection services, Type interfaceType, Type implementationType)
+        public static IServiceCollection AddRepository(this IServiceCollection services, Type interfaceType, Type implementationType)
         {
             services.TryAddScoped(interfaceType, implementationType);
             return services;

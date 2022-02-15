@@ -30,7 +30,7 @@ namespace uBeac.Identity
         public async Task<IdentityResult> UpdateAsync(TRole role, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await _repository.Replace(role, cancellationToken);
+            await _repository.Update(role, cancellationToken);
             return IdentityResult.Success;
         }
 
@@ -71,7 +71,7 @@ namespace uBeac.Identity
         public async Task<TRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var id = Helper.GetTypedKey<TRoleKey>(roleId);
+            var id = roleId.GetTypedKey<TRoleKey>();
             return await _repository.GetById(id, cancellationToken);
         }
 

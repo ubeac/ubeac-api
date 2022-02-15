@@ -53,7 +53,7 @@ namespace uBeac.Identity
         public async Task<TUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            return await _repository.GetById(Helper.GetTypedKey<TUserKey>(userId), cancellationToken);
+            return await _repository.GetById(userId.GetTypedKey<TUserKey>(), cancellationToken);
         }
 
         public async Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
@@ -67,7 +67,7 @@ namespace uBeac.Identity
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            await _repository.Replace(user, cancellationToken);
+            await _repository.Update(user, cancellationToken);
 
             return IdentityResult.Success;
         }

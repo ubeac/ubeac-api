@@ -7,55 +7,75 @@ namespace uBeac.Services
        where TEntity : IEntity<TKey>
     {
         protected readonly IEntityRepository<TKey, TEntity> Repository;
-        public EntityService(IEntityRepository<TKey, TEntity> repository)
+        protected readonly IApplicationContext AppContext;
+
+        public EntityService(IEntityRepository<TKey, TEntity> repository, IApplicationContext appContext)
         {
             Repository = repository;
+            AppContext = appContext;
         }
 
-        public virtual Task<bool> Delete(TKey id, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> Delete(TKey id, CancellationToken cancellationToken = default)
         {
-            return Repository.Delete(id, cancellationToken);
+            return await Repository.Delete(id, cancellationToken);
         }
 
-        public virtual Task<long> DeleteMany(IEnumerable<TKey> ids, CancellationToken cancellationToken = default)
+        public virtual async Task<long> DeleteMany(IEnumerable<TKey> ids, CancellationToken cancellationToken = default)
         {
-            return Repository.DeleteMany(ids, cancellationToken);
+            return await Repository.DeleteMany(ids, cancellationToken);
         }
 
-        public virtual Task<IEnumerable<TEntity>> GetAll(CancellationToken cancellationToken = default)
+        public virtual async Task<IEnumerable<TEntity>> GetAll(CancellationToken cancellationToken = default)
         {
-            return Repository.GetAll(cancellationToken);
+            return await Repository.GetAll(cancellationToken);
         }
 
-        public virtual Task<TEntity> GetById(TKey id, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntity> GetById(TKey id, CancellationToken cancellationToken = default)
         {
-            return Repository.GetById(id, cancellationToken);
+            return await Repository.GetById(id, cancellationToken);
         }
 
-        public virtual Task<IEnumerable<TEntity>> GetByIds(IEnumerable<TKey> ids, CancellationToken cancellationToken = default)
+        public virtual async Task<IEnumerable<TEntity>> GetByIds(IEnumerable<TKey> ids, CancellationToken cancellationToken = default)
         {
-            return Repository.GetByIds(ids, cancellationToken);
+            return await Repository.GetByIds(ids, cancellationToken);
         }
 
-        public virtual Task Insert(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual async Task Insert(TEntity entity, CancellationToken cancellationToken = default)
         {
-            return Repository.Insert(entity, cancellationToken);
+            // Set audit properties
+            if (typeof(TEntity).IsAssignableFrom(typeof(IAuditEntity<TKey>)))
+            {
+                // var auditEntity = entity as AuditEntity<TKey>;
+                // auditEntity.CreatedBy = AppContext.UserName;
+                // auditEntity.CreatedAt = DateTime.Now;
+            }
+
+            await Repository.Insert(entity, cancellationToken);
         }
 
-        public virtual Task InsertMany(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+        public virtual async Task InsertMany(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
         {
-            return Repository.InsertMany(entities, cancellationToken);
+            await Repository.InsertMany(entities, cancellationToken);
         }
 
-        public virtual Task<TEntity> Replace(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntity> Update(TEntity entity, CancellationToken cancellationToken = default)
         {
-            return Repository.Replace(entity, cancellationToken);
+            // Set audit properties
+            if (typeof(TEntity).IsAssignableFrom(typeof(IAuditEntity<TKey>)))
+            {
+                // var auditEntity = entity as AuditEntity<TKey>;
+                // auditEntity.LastUpdatedBy = AppContext.UserName;
+                // auditEntity.LastUpdatedAt = DateTime.Now;
+            }
+
+            return await Repository.Update(entity, cancellationToken);
         }
     }
+
     public class EntityService<TEntity> : EntityService<Guid, TEntity>, IEntityService<TEntity>
         where TEntity : IEntity
     {
-        public EntityService(IEntityRepository<TEntity> repository) : base(repository)
+        public EntityService(IEntityRepository<TEntity> repository, IApplicationContext appContext) : base(repository, appContext)
         {
         }
     }

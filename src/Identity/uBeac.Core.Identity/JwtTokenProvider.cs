@@ -1,50 +1,73 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
-namespace uBeac.Identity
+namespace uBeac.Identity;
+
+public interface IJwtTokenProvider
 {
-    public interface IJwtTokenProvider
+    string GenerateToken<TKey, TUser>(TUser user) where TKey : IEquatable<TKey> where TUser : User<TKey>;
+    string GenerateRefreshToken<TKey, TUser>(TUser user) where TKey : IEquatable<TKey> where TUser : User<TKey>;
+}
+
+public class JwtTokenProvider : IJwtTokenProvider
+{
+    private readonly JwtOptions _options;
+
+    public JwtTokenProvider(JwtOptions options)
     {
-        JwtSecurityToken GenerateToken<TKey, TUser>(TUser user) where TKey : IEquatable<TKey> where TUser : User<TKey>;
+        _options = options;
     }
 
-    public class JwtTokenProvider : IJwtTokenProvider
+    public string GenerateRefreshToken<TKey, TUser>(TUser user)
+        where TKey : IEquatable<TKey>
+        where TUser : User<TKey>
     {
+        var randomNumber = new byte[32];
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
+        return Convert.ToBase64String(randomNumber);
+    }
 
-        private readonly JwtOptions _options;
+    public string GenerateToken<TKey, TUser>(TUser user)
+        where TKey : IEquatable<TKey>
+        where TUser : User<TKey>
+    {
+        var jwtTokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.ASCII.GetBytes(_options.Secret);
+        var claims = GetClaims<TKey, TUser>(user);
 
-        public JwtTokenProvider(JwtOptions options)
+        var tokenDescriptor = new SecurityTokenDescriptor
         {
-            _options = options;
-        }
+            Issuer = _options.Issuer,
+            Audience = _options.Audience,
+            Subject = new ClaimsIdentity(claims),
+            Expires = DateTime.UtcNow.AddSeconds(_options.TokenExpiry),
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature),
+            NotBefore = DateTime.UtcNow,
+            IssuedAt = DateTime.UtcNow
+        };
 
-        public JwtSecurityToken GenerateToken<TKey, TUser>(TUser user)
-            where TKey : IEquatable<TKey>
-            where TUser : User<TKey>
-        {
+        var token = jwtTokenHandler.CreateJwtSecurityToken(tokenDescriptor);
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
 
-            var jwtTokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_options.Secret);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
+    private List<Claim> GetClaims<TKey, TUser>(TUser user)
+        where TKey : IEquatable<TKey>
+        where TUser : User<TKey>
+    {
+        var userId = user.Id.ToString();
+        var result = new List<Claim>
             {
-                Issuer = _options.Issuer,
-                Audience = _options.Audience,
-                Subject = new ClaimsIdentity(new[]
-                    {
-                    new Claim("Id", user.Id.ToString()),
-                    new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Email, user.Email)
-                    }
-                ),
-                Expires = DateTime.UtcNow.AddSeconds(_options.Expires),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new(JwtRegisteredClaimNames.Iat, DateTime.Now.ToLongDateString()),
+                new(JwtRegisteredClaimNames.Sub, userId),
+                new(ClaimTypes.NameIdentifier, userId),
+                new(ClaimTypes.Name, user.UserName)
             };
-            
-            return jwtTokenHandler.CreateJwtSecurityToken(tokenDescriptor);
-        }
+        if (user.Email != null) result.Add(new Claim(ClaimTypes.Email, user.Email));
+        return result;
     }
 }

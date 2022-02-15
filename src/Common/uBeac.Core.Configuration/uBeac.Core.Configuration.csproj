@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
+	
 	<PropertyGroup>
 		<PackageId>uBeac.Configuration</PackageId>
 		<TargetFramework>net6.0</TargetFramework>
