@@ -40,7 +40,7 @@ namespace uBeac.Services
             return await Repository.GetByIds(ids, cancellationToken);
         }
 
-        public virtual async Task Insert(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual async Task Create(TEntity entity, CancellationToken cancellationToken = default)
         {
             // Set audit properties
             if (typeof(TEntity).IsAssignableFrom(typeof(IAuditEntity<TKey>)))
@@ -50,12 +50,12 @@ namespace uBeac.Services
                 // auditEntity.CreatedAt = DateTime.Now;
             }
 
-            await Repository.Insert(entity, cancellationToken);
+            await Repository.Create(entity, cancellationToken);
         }
 
-        public virtual async Task InsertMany(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+        public virtual async Task CreateMany(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
         {
-            await Repository.InsertMany(entities, cancellationToken);
+            await Repository.CreateMany(entities, cancellationToken);
         }
 
         public virtual async Task<TEntity> Update(TEntity entity, CancellationToken cancellationToken = default)

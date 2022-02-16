@@ -39,7 +39,7 @@ namespace uBeac.Identity
         public async Task<IdentityResult> CreateAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await _repository.Insert(user, cancellationToken);
+            await _repository.Create(user, cancellationToken);
             return IdentityResult.Success;
         }
 

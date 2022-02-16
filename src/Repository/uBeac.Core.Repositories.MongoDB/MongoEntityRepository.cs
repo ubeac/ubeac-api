@@ -65,13 +65,13 @@ namespace uBeac.Repositories.MongoDB
             return await findResult.ToListAsync(cancellationToken);
         }
 
-        public virtual async Task Insert(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual async Task Create(TEntity entity, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             await Collection.InsertOneAsync(entity, null, cancellationToken);
         }
 
-        public virtual async Task InsertMany(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+        public virtual async Task CreateMany(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             await Collection.InsertManyAsync(entities, null, cancellationToken);
