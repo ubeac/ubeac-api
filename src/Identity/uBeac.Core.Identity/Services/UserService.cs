@@ -19,14 +19,16 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
     protected readonly IHttpContextAccessor HttpContextAccessor;
     protected readonly JwtOptions JwtOptions;
     protected readonly IUserTokenRepository<TUserKey> UserTokenRepository;
+    protected readonly IEmailProvider EmailProvider;
 
-    public UserService(UserManager<TUser> userManager, IJwtTokenProvider jwtTokenProvider, IHttpContextAccessor httpContextAccessor, JwtOptions jwtOptions, IUserTokenRepository<TUserKey> userTokenRepository)
+    public UserService(UserManager<TUser> userManager, IJwtTokenProvider jwtTokenProvider, IHttpContextAccessor httpContextAccessor, JwtOptions jwtOptions, IUserTokenRepository<TUserKey> userTokenRepository, IEmailProvider emailProvider)
     {
         UserManager = userManager;
         JwtTokenProvider = jwtTokenProvider;
         HttpContextAccessor = httpContextAccessor;
         JwtOptions = jwtOptions;
         UserTokenRepository = userTokenRepository;
+        EmailProvider = emailProvider;
     }
 
     /// <summary>
@@ -137,8 +139,12 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
             throw new Exception("User does not exist!");
 
         var resetPasswordToken = await UserManager.GeneratePasswordResetTokenAsync(user);
-        // todo: send email here
+        await SendResetPasswordToken(user, resetPasswordToken);
+    }
 
+    protected virtual async Task SendResetPasswordToken(TUser user, string token)
+    {
+        await EmailProvider.Send(user.Email, ForgotPasswordMessage.Subject, ForgotPasswordMessage.GetBodyWithReplaces(token));
     }
 
     public virtual Task<TUserKey> GetCurrentUserId(CancellationToken cancellationToken = default)
