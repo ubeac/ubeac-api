@@ -1,4 +1,5 @@
-﻿using uBeac.Repositories.MongoDB;
+﻿using MongoDB.Driver;
+using uBeac.Repositories.MongoDB;
 
 namespace uBeac.Identity.MongoDB;
 
@@ -8,6 +9,11 @@ public class MongoUserRepository<TUserKey, TUser> : MongoEntityRepository<TUserK
 {
     public MongoUserRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext)
     {
+        // Create Indexes
+        var indexOptions = new CreateIndexOptions { Unique = true };
+        var indexKeys = Builders<TUser>.IndexKeys.Ascending(user => user.NormalizedUserName);
+        var indexModel = new CreateIndexModel<TUser>(indexKeys, indexOptions);
+        Collection.Indexes.CreateOne(indexModel);
     }
 }
 
