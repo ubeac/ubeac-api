@@ -23,7 +23,7 @@ namespace uBeac.Identity
         public async Task<IdentityResult> CreateAsync(TRole role, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await _repository.Insert(role, cancellationToken);
+            await _repository.Create(role, cancellationToken);
             return IdentityResult.Success;
         }
 

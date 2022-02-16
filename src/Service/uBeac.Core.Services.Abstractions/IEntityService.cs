@@ -8,8 +8,8 @@ public interface IEntityService<TKey, TEntity> : IService
     where TKey : IEquatable<TKey>
     where TEntity : IEntity<TKey>
 {
-    Task Insert(TEntity entity, CancellationToken cancellationToken = default);
-    Task InsertMany(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
+    Task Create(TEntity entity, CancellationToken cancellationToken = default);
+    Task CreateMany(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
     Task<TEntity> Update(TEntity entity, CancellationToken cancellationToken = default);
     Task<bool> Delete(TKey id, CancellationToken cancellationToken = default);
     Task<long> DeleteMany(IEnumerable<TKey> ids, CancellationToken cancellationToken = default);

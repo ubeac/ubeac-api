@@ -98,7 +98,7 @@ public static class UnitTypeExtensions
             // If unit type was not inserted before, insert it
             if (service.Exists(unitType.Code).Result is false)
             {
-                service.Insert(unitType).Wait();
+                service.Create(unitType).Wait();
             }
         }
     }

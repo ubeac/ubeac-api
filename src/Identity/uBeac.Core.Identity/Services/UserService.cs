@@ -213,7 +213,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
 public class UserService<TUser> : UserService<Guid, TUser>, IUserService<TUser>
     where TUser : User
 {
-    public UserService(UserManager<TUser> userManager, IJwtTokenProvider jwtTokenProvider, IHttpContextAccessor httpContextAccessor, JwtOptions jwtOptions, IUserTokenRepository userTokenRepository) : base(userManager, jwtTokenProvider, httpContextAccessor, jwtOptions, userTokenRepository)
+    public UserService(UserManager<TUser> userManager, IJwtTokenProvider jwtTokenProvider, IHttpContextAccessor httpContextAccessor, JwtOptions jwtOptions, IUserTokenRepository userTokenRepository, IEmailProvider emailProvider) : base(userManager, jwtTokenProvider, httpContextAccessor, jwtOptions, userTokenRepository, emailProvider)
     {
     }
 }
