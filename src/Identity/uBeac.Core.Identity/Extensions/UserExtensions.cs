@@ -40,9 +40,10 @@ public static class UserExtensions
             var options = builder.Services.RegisterUserOptions(configureOptions);
 
             // Insert default values
-            builder.Services.BuildServiceProvider().CreateScope().ServiceProvider
-                .GetRequiredService<UserManager<TUser>>()
-                .InsertAdminUserAndAssignRole<TUserKey, TUser>(options.AdminRole, options.AdminUser, options.AdminPassword);
+            var scope = builder.Services.BuildServiceProvider().CreateScope();
+            var userService = scope.ServiceProvider.GetRequiredService<IUserService<TUserKey, TUser>>();
+            var userRoleService = scope.ServiceProvider.GetRequiredService<IUserRoleService<TUserKey, TUser>>();
+            userService.InsertAdminUserAndAssignRole(userRoleService, options.AdminRole, options.AdminUser, options.AdminPassword);
         }
 
         return builder;
@@ -65,9 +66,10 @@ public static class UserExtensions
             var options = builder.Services.RegisterUserOptions(configureOptions);
 
             // Insert default values
-            builder.Services.BuildServiceProvider().CreateScope().ServiceProvider
-                .GetRequiredService<UserManager<TUser>>()
-                .InsertAdminUserAndAssignRole(options.AdminRole, options.AdminUser, options.AdminPassword);
+            var scope = builder.Services.BuildServiceProvider().CreateScope();
+            var userService = scope.ServiceProvider.GetRequiredService<IUserService<TUser>>();
+            var userRoleService = scope.ServiceProvider.GetRequiredService<IUserRoleService<TUser>>();
+            userService.InsertAdminUserAndAssignRole(userRoleService, options.AdminRole, options.AdminUser, options.AdminPassword);
         }
 
         return builder;
@@ -136,23 +138,30 @@ public static class UserExtensions
         return options;
     }
 
-    private static void InsertAdminUserAndAssignRole<TUserKey, TUser>(this UserManager<TUser> manager, string role, TUser user, string password)
+    private static void InsertAdminUserAndAssignRole<TUserKey, TUser>(this IUserService<TUserKey, TUser> userService, IUserRoleService<TUserKey, TUser> userRoleService, string role, TUser user, string password)
         where TUserKey : IEquatable<TUserKey>
         where TUser : User<TUserKey>
     {
         if (user is null || password is null) return;
 
         // If user was not inserted before, insert it
-        if (manager.Users.Any(u => u.UserName == user.UserName || u.NormalizedUserName == user.NormalizedUserName) is false)
+        try
         {
-            manager.CreateAsync(user, password).Wait();
-            if (role is not null) manager.AddToRoleAsync(user, role).Wait();
+            if (userService.ExistsUserName(user.UserName).Result is false)
+            {
+                userService.Insert(user, password).Wait();
+                if (role is not null) userRoleService.AddRoles(user.Id, new List<string> { role }).Wait();
+            }
+        }
+        catch (Exception)
+        {
+            // ignored
         }
     }
 
-    private static void InsertAdminUserAndAssignRole<TUser>(this UserManager<TUser> manager, string role, TUser user, string password)
+    private static void InsertAdminUserAndAssignRole<TUser>(this IUserService<TUser> userService, IUserRoleService<TUser> userRoleService, string role, TUser user, string password)
         where TUser : User
     {
-        manager.InsertAdminUserAndAssignRole<Guid, TUser>(role, user, password);
+        userService.InsertAdminUserAndAssignRole<Guid, TUser>(userRoleService, role, user, password);
     }
 }

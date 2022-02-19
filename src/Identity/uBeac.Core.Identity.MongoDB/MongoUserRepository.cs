@@ -10,14 +10,21 @@ public class MongoUserRepository<TUserKey, TUser> : MongoEntityRepository<TUserK
     public MongoUserRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext)
     {
         // Create Indexes
-        var indexOptions = new CreateIndexOptions { Unique = true };
-        var indexKeys = Builders<TUser>.IndexKeys.Ascending(user => user.NormalizedUserName);
-        var indexModel = new CreateIndexModel<TUser>(indexKeys, indexOptions);
-        Collection.Indexes.CreateOne(indexModel);
+        try
+        {
+            var indexOptions = new CreateIndexOptions { Unique = true };
+            var indexKeys = Builders<TUser>.IndexKeys.Ascending(user => user.NormalizedUserName);
+            var indexModel = new CreateIndexModel<TUser>(indexKeys, indexOptions);
+            Collection.Indexes.CreateOne(indexModel);
+        }
+        catch (Exception)
+        {
+            // ignored
+        }
     }
 }
 
-public class MongoUserRepository<TUser> : MongoEntityRepository<TUser>, IUserRepository<TUser>
+public class MongoUserRepository<TUser> : MongoUserRepository<Guid, TUser>, IUserRepository<TUser>
     where TUser : User
 {
     public MongoUserRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext)

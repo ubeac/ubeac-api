@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\uBeac.Core.Common\uBeac.Core.Common.csproj" />
+    <ProjectReference Include="..\..\..\Common\uBeac.Core.Configuration\uBeac.Core.Configuration.csproj" />
+    <ProjectReference Include="..\..\..\Web\uBeac.Core.Web.Common\uBeac.Core.Web.Common.csproj" />
+    <ProjectReference Include="..\..\uBeac.Core.Identity.Common\uBeac.Core.Identity.Common.csproj" />
+    <ProjectReference Include="..\..\uBeac.Core.Identity.MongoDB\uBeac.Core.Identity.MongoDB.csproj" />
+    <ProjectReference Include="..\..\uBeac.Core.Identity\uBeac.Core.Identity.csproj" />
+  </ItemGroup>
+
+</Project>

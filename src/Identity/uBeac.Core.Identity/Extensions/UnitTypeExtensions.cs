@@ -95,10 +95,17 @@ public static class UnitTypeExtensions
         if (values is null || values.Any() is false) return;
         foreach (var unitType in values)
         {
-            // If unit type was not inserted before, insert it
-            if (service.Exists(unitType.Code).Result is false)
+            try
             {
-                service.Create(unitType).Wait();
+                // If unit type was not inserted before, insert it
+                if (service.Exists(unitType.Code).Result is false)
+                {
+                    service.Create(unitType).Wait();
+                }
+            }
+            catch (Exception)
+            {
+                // ignored
             }
         }
     }
