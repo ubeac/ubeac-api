@@ -10,10 +10,17 @@ public class MongoRoleRepository<TRoleKey, TRole> : MongoEntityRepository<TRoleK
     public MongoRoleRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext)
     {
         // Create Indexes
-        var indexOptions = new CreateIndexOptions { Unique = true };
-        var indexKeys = Builders<TRole>.IndexKeys.Ascending(role => role.NormalizedName);
-        var indexModel = new CreateIndexModel<TRole>(indexKeys, indexOptions);
-        Collection.Indexes.CreateOne(indexModel);
+        try
+        {
+            var indexOptions = new CreateIndexOptions { Unique = true };
+            var indexKeys = Builders<TRole>.IndexKeys.Ascending(role => role.NormalizedName);
+            var indexModel = new CreateIndexModel<TRole>(indexKeys, indexOptions);
+            Collection.Indexes.CreateOne(indexModel);
+        }
+        catch (Exception)
+        {
+            // ignored
+        }
     }
 }
 

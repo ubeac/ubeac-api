@@ -10,14 +10,21 @@ public class MongoUnitRepository<TKey, TUnit> : MongoEntityRepository<TKey, TUni
     public MongoUnitRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext)
     {
         // Create Indexes
-        var indexOptions = new CreateIndexOptions { Unique = true };
-        var indexKeys = Builders<TUnit>.IndexKeys.Combine(new List<IndexKeysDefinition<TUnit>>
+        try
         {
-            Builders<TUnit>.IndexKeys.Ascending(unit => unit.Type),
-            Builders<TUnit>.IndexKeys.Ascending(unit => unit.Code)
-        });
-        var indexModel = new CreateIndexModel<TUnit>(indexKeys, indexOptions);
-        Collection.Indexes.CreateOne(indexModel);
+            var indexOptions = new CreateIndexOptions { Unique = true };
+            var indexKeys = Builders<TUnit>.IndexKeys.Combine(new List<IndexKeysDefinition<TUnit>>
+            {
+                Builders<TUnit>.IndexKeys.Ascending(unit => unit.Type),
+                Builders<TUnit>.IndexKeys.Ascending(unit => unit.Code)
+            });
+            var indexModel = new CreateIndexModel<TUnit>(indexKeys, indexOptions);
+            Collection.Indexes.CreateOne(indexModel);
+        }
+        catch (Exception)
+        {
+            // ignored
+        }
     }
 }
 
