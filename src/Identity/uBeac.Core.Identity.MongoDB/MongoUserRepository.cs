@@ -17,7 +17,7 @@ public class MongoUserRepository<TUserKey, TUser> : MongoEntityRepository<TUserK
     }
 }
 
-public class MongoUserRepository<TUser> : MongoEntityRepository<TUser>, IUserRepository<TUser>
+public class MongoUserRepository<TUser> : MongoUserRepository<Guid, TUser>, IUserRepository<TUser>
     where TUser : User
 {
     public MongoUserRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext)
