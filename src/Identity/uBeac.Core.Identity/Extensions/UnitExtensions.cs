@@ -97,15 +97,22 @@ public static class UnitExtensions
         // Insert default values
         foreach (var unit in values)
         {
-            // If unit was not inserted before, insert it
-            if (service.Exists(unit.Code, unit.Type).Result is false)
+            try
             {
-                // Set parent id
-                var parent = unit.GetParentUnit();
-                if (parent != null) unit.ParentUnitId = parent.Id;
+                // If unit was not inserted before, insert it
+                if (service.Exists(unit.Code, unit.Type).Result is false)
+                {
+                    // Set parent id
+                    var parent = unit.GetParentUnit();
+                    if (parent != null) unit.ParentUnitId = parent.Id;
 
-                // Insert
-                service.Create(unit).Wait();
+                    // Insert
+                    service.Create(unit).Wait();
+                }
+            }
+            catch (Exception)
+            {
+                // ignored
             }
         }
     }

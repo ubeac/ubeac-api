@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Data.Entity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -96,6 +97,12 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
     public virtual async Task Replace(TUser entity, CancellationToken cancellationToken = default)
     {
         await UserManager.UpdateAsync(entity);
+    }
+
+    public async Task<bool> ExistsUserName(string userName, CancellationToken cancellationToken = default)
+    {
+        userName = userName.ToUpperInvariant();
+        return await UserManager.FindByNameAsync(userName) != null;
     }
 
     public virtual async Task<bool> Delete(TUserKey id, CancellationToken cancellationToken = default)

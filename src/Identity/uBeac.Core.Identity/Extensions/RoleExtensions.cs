@@ -108,10 +108,17 @@ public static class RoleExtensions
         if (values is null || values.Any() is false) return;
         foreach (var role in values)
         {
-            // If role was not inserted before, insert it
-            if (service.Exists(role.Name).Result is false)
+            try
             {
-                service.Insert(role).Wait();
+                // If role was not inserted before, insert it
+                if (service.Exists(role.Name).Result is false)
+                {
+                    service.Insert(role).Wait();
+                }
+            }
+            catch (Exception)
+            {
+                // ignored
             }
         }
     }

@@ -17,6 +17,7 @@ public interface IUserService<TKey, TUser> : IService
     Task<IEnumerable<TUser>> GetAll(CancellationToken cancellationToken = default);
     Task<TUser> GetById(TKey id, CancellationToken cancellationToken = default);
     Task Replace(TUser user, CancellationToken cancellationToken = default);
+    Task<bool> ExistsUserName(string userName, CancellationToken cancellationToken = default);
 }
 
 public interface IUserService<TUser> : IUserService<Guid, TUser>
