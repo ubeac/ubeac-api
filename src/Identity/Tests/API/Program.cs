@@ -54,8 +54,22 @@ builder.Services
     {
         options.DefaultValues = new List<Role> { new("ADMIN") };
     })
-    .AddIdentityUnit<Unit>()
-    .AddIdentityUnitType<UnitType>();
+    .AddIdentityUnit<Unit>(configureOptions: options =>
+    {
+        var firstUnit = new Unit { Code = "1", Name = "First", Type = "A" };
+        var secondUnit = new Unit { Code = "2", Name = "Second", Type = "B" };
+        secondUnit.SetParentUnit(firstUnit);
+
+        options.DefaultValues = new List<Unit> { firstUnit, secondUnit };
+    })
+    .AddIdentityUnitType<UnitType>(configureOptions: options =>
+    {
+        options.DefaultValues = new List<UnitType>
+        {
+            new() { Code = "A", Name = "First" },
+            new() { Code = "B", Name = "Second" }
+        };
+    });
 
 var app = builder.Build();
 app.UseHttpsRedirection();
