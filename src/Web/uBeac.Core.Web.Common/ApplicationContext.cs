@@ -7,6 +7,8 @@ namespace uBeac.Web
     {
         public ApplicationContext(IHttpContextAccessor httpContextAccessor)
         {
+            if (httpContextAccessor.HttpContext == null) return;
+
             var httpContext = httpContextAccessor.HttpContext;
 
             UserIp = httpContext.Connection.RemoteIpAddress;
