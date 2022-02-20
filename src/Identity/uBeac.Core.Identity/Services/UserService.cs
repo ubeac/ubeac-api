@@ -154,6 +154,16 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         await EmailProvider.Send(user.Email, ForgotPasswordMessage.Subject, ForgotPasswordMessage.GetBodyWithReplaces(token));
     }
 
+    public virtual async Task ResetPassword(string username, string token, string newPassword, CancellationToken cancellationToken = default)
+    {
+        var user = await UserManager.FindByNameAsync(username);
+        if (user == null)
+            throw new Exception("User does not exist!");
+
+        var result = await UserManager.ResetPasswordAsync(user, token, newPassword);
+        result.ThrowIfInvalid();
+    }
+
     public virtual Task<TUserKey> GetCurrentUserId(CancellationToken cancellationToken = default)
     {
         if (HttpContextAccessor.HttpContext == null)

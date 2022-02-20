@@ -12,6 +12,7 @@ public interface IUserService<TKey, TUser> : IService
     Task<TKey> GetCurrentUserId(CancellationToken cancellationToken = default);
     Task ChangePassword(ChangePassword<TKey> changePassword, CancellationToken cancellationToken = default);
     Task ForgotPassword(string username, CancellationToken cancellationToken = default);
+    Task ResetPassword(string username, string token, string newPassword, CancellationToken cancellationToken = default);
     Task RevokeTokens(TKey id, CancellationToken cancellationToken = default);
     Task<TokenResult<TKey>> RefreshToken(string refreshToken, string expiredToken, CancellationToken cancellationToken = default);
     Task<IEnumerable<TUser>> GetAll(CancellationToken cancellationToken = default);
