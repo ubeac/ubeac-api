@@ -16,7 +16,11 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
     private const string RegisterUri = "/API/Accounts/Register";
     private const string LoginUri = "/API/Accounts/Login";
     private const string RefreshTokenUri = "/API/Accounts/RefreshToken";
+    private const string ForgotPasswordUri = "/API/Accounts/ForgotPassword";
 
+    private static string _userName = "amir";
+    private static string _email = "ap@ubeac.io";
+    private static string _password = "1qaz!QAZ";
     private static Guid _userId;
     private static string _accessToken;
     private static string _refreshToken;
@@ -33,9 +37,9 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         var client = _factory.CreateClient();
         var content = new StringContent(JsonConvert.SerializeObject(new RegisterRequest
         {
-            UserName = "amir",
-            Email = "ap@ubeac.com",
-            Password = "1qaz!QAZ"
+            UserName = _userName,
+            Email = _email,
+            Password = _password
         }), Encoding.UTF8, "application/json");
 
         // Act
@@ -54,8 +58,8 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         var client = _factory.CreateClient();
         var content = new StringContent(JsonConvert.SerializeObject(new LoginRequest
         {
-            UserName = "amir",
-            Password = "1qaz!QAZ"
+            UserName = _userName,
+            Password = _password
         }), Encoding.UTF8, "application/json");
 
         // Act
@@ -95,5 +99,24 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         _userId = result.Data.UserId;
         _accessToken = result.Data.Token;
         _refreshToken = result.Data.RefreshToken;
+    }
+
+    [Fact, TestPriority(4)]
+    public async Task ForgotPassword_ReturnsSuccessApiResult()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        var content = new StringContent(JsonConvert.SerializeObject(new ForgotPasswordRequest
+        {
+            UserName = _userName
+        }), Encoding.UTF8, "application/json");
+
+        // Act
+        var response = await client.PostAsync(ForgotPasswordUri, content);
+        response.EnsureSuccessStatusCode();
+        var result = await response.GetApiResult<bool>();
+
+        // Assert
+        Assert.True(result.Data);
     }
 }
