@@ -13,7 +13,14 @@ namespace uBeac.Repositories.MongoDB
         {
             var mongoUrl = new MongoUrl(options.ConnectionString);
             var client = new MongoClient(mongoUrl);
-            if (options.DropExistDatabase) client.DropDatabase(mongoUrl.DatabaseName);
+            try
+            {
+                if (options.DropExistDatabase) client.DropDatabase(mongoUrl.DatabaseName);
+            }
+            catch
+            {
+                // ignored
+            }
             Database = client.GetDatabase(mongoUrl.DatabaseName);
         }
 
