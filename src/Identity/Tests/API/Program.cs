@@ -14,6 +14,9 @@ builder.Configuration.AddJsonConfig(builder.Environment);
 var emailOptions = builder.Configuration.GetInstance<EmailProviderOptions>("Email");
 var jwtOptions = builder.Configuration.GetInstance<JwtOptions>("Jwt");
 
+// Adding swagger
+builder.Services.AddCoreSwaggerWithJWT("Example");
+
 // Adding mongodb
 builder.Services.AddMongo<MongoDBContext>("DefaultConnection", builder.Environment.IsEnvironment("Testing"));
 
@@ -78,6 +81,7 @@ app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.UseCoreSwagger();
 app.Run();
 
 // For access test projects
