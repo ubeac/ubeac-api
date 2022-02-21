@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.ComponentModel;
+using System.Data.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -151,7 +152,11 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
 
     protected virtual async Task SendResetPasswordToken(TUser user, string token)
     {
-        await EmailProvider.Send(user.Email, ForgotPasswordMessage.Subject, ForgotPasswordMessage.GetBodyWithReplaces(token));
+        // Sending email in background
+        var backgroundWorker = new BackgroundWorker();
+        backgroundWorker.DoWork += async (_, _) => await EmailProvider.Send(user.Email, ForgotPasswordMessage.Subject, ForgotPasswordMessage.GetBodyWithReplaces(token));
+        backgroundWorker.RunWorkerAsync();
+        await Task.CompletedTask;
     }
 
     public virtual async Task ResetPassword(string username, string token, string newPassword, CancellationToken cancellationToken = default)
