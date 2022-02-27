@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Mail;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace uBeac;
 
@@ -12,27 +13,36 @@ public interface IEmailProvider
 public class EmailProvider : IEmailProvider
 {
     protected readonly EmailProviderOptions Options;
+    protected readonly ILogger<EmailProvider> Logger;
 
-    public EmailProvider(EmailProviderOptions options)
+    public EmailProvider(EmailProviderOptions options, ILogger<EmailProvider> logger)
     {
         Options = options;
+        Logger = logger;
     }
 
     public virtual async Task Send(string receptor, string subject, string body, bool isBodyHtml = false)
     {
-        var smtpClient = new SmtpClient(Options.SmtpHost, Options.SmtpPort)
+        try
         {
-            Credentials = new NetworkCredential(Options.UserName, Options.Password)
-        };
-        var mailMessage = new MailMessage
+            var smtpClient = new SmtpClient(Options.SmtpHost, Options.SmtpPort)
+            {
+                Credentials = new NetworkCredential(Options.UserName, Options.Password)
+            };
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress(Options.MailAddress, Options.DisplayName, Encoding.UTF8),
+                To = { new MailAddress(receptor) },
+                Subject = subject,
+                Body = body,
+                BodyEncoding = Encoding.UTF8,
+                IsBodyHtml = isBodyHtml
+            };
+            await smtpClient.SendMailAsync(mailMessage);
+        }
+        catch (Exception e)
         {
-            From = new MailAddress(Options.MailAddress, Options.DisplayName, Encoding.UTF8),
-            To = { new MailAddress(receptor) },
-            Subject = subject,
-            Body = body,
-            BodyEncoding = Encoding.UTF8,
-            IsBodyHtml = isBodyHtml
-        };
-        await smtpClient.SendMailAsync(mailMessage);
+            Logger.LogError(e, e.Message);
+        }
     }
 }
