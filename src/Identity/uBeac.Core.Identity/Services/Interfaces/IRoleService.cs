@@ -11,6 +11,7 @@ public interface IRoleService<TKey, TRole> : IService
     Task<bool> Update(TRole role, CancellationToken cancellationToken = default);
     Task<bool> Exists(string roleName, CancellationToken cancellationToken = default);
     Task<IEnumerable<TRole>> GetAll(CancellationToken cancellationToken = default);
+    Task<TRole> GetById(TKey id, CancellationToken cancellationToken = default);
 }
 
 public interface IRoleService<TRole> : IRoleService<Guid, TRole>
