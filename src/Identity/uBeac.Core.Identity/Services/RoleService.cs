@@ -59,10 +59,8 @@ public class RoleService<TKey, TRole> : IRoleService<TKey, TRole>
     public virtual async Task<bool> Update(TRole role, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
-
-        var entity = Activator.CreateInstance(typeof(TRole), role.Name) as TRole;
-        entity.Id = role.Id;
-        var idResult = await RoleManager.UpdateAsync(entity);
+        
+        var idResult = await RoleManager.UpdateAsync(role);
         idResult.ThrowIfInvalid();
 
         return true;
