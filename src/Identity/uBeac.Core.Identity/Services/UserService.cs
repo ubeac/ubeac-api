@@ -41,7 +41,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
     /// < param name="password"></param>
     /// <param name = "cancellationToken" ></ param >
     /// < returns ></ returns >
-    public virtual async Task Insert(TUser user, string password, CancellationToken cancellationToken = default)
+    public virtual async Task Create(TUser user, string password, CancellationToken cancellationToken = default)
     {
         var identityResult = await UserManager.CreateAsync(user, password);
         identityResult.ThrowIfInvalid();
@@ -66,7 +66,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         user.EmailConfirmed = false;
         user.PhoneNumberConfirmed = false;
 
-        await Insert(user, password, cancellationToken);
+        await Create(user, password, cancellationToken);
 
         return user;
     }
@@ -90,12 +90,13 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         return new TokenResult<TUserKey>
         {
             UserId = user.Id,
+            Roles = user.Roles,
             Token = token,
             RefreshToken = refreshToken
         };
     }
 
-    public virtual async Task Replace(TUser entity, CancellationToken cancellationToken = default)
+    public virtual async Task Update(TUser entity, CancellationToken cancellationToken = default)
     {
         await UserManager.UpdateAsync(entity);
     }
@@ -206,6 +207,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         return new TokenResult<TUserKey>
         {
             UserId = user.Id,
+            Roles = user.Roles,
             Token = newToken,
             RefreshToken = refreshToken
         };
