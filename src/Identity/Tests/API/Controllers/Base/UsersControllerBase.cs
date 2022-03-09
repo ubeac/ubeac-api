@@ -27,7 +27,7 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
         try
         {
             var user = Mapper.Map<TUser>(request);
-            await UserService.Insert(user, request.Password, cancellationToken);
+            await UserService.Create(user, request.Password, cancellationToken);
             return user.Id.ToApiResult();
         }
         catch (Exception ex)
@@ -48,7 +48,7 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
             user.EmailConfirmed = request.EmailConfirmed;
             user.LockoutEnabled = request.LockoutEnabled;
             user.LockoutEnd = request.LockoutEnd;
-            await UserService.Replace(user, cancellationToken);
+            await UserService.Update(user, cancellationToken);
             return true.ToApiResult();
         }
         catch (Exception ex)
