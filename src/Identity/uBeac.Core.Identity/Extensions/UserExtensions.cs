@@ -149,7 +149,7 @@ public static class UserExtensions
         {
             if (userService.ExistsUserName(user.UserName).Result is false)
             {
-                userService.Insert(user, password).Wait();
+                userService.Create(user, password).Wait();
                 if (role is not null) userRoleService.AddRoles(user.Id, new List<string> { role }).Wait();
             }
         }
