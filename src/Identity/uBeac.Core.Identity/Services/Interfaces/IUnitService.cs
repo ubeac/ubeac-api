@@ -7,6 +7,7 @@ public interface IUnitService<TKey, TUnit> : IEntityService<TKey, TUnit>
     where TUnit : Unit<TKey>
 {
     Task<bool> Exists(string code, string type, CancellationToken cancellationToken = default);
+    Task<IEnumerable<TUnit>> GetByParentId(TKey parentUnitId, CancellationToken cancellationToken = default);
 }
 
 public interface IUnitService<TUnit> : IUnitService<Guid, TUnit>, IEntityService<TUnit>
