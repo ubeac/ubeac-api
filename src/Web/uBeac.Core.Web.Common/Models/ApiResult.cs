@@ -5,6 +5,7 @@ namespace uBeac.Web
     public interface IApiResult
     {
         List<Error> Errors { get; }
+        object Debug { get; set; }
         string TraceId { get; set; }
         double Duration { get; set; }
         int Code { get; set; }
@@ -18,13 +19,15 @@ namespace uBeac.Web
     public class ApiResult : IApiResult
     {
         public List<Error> Errors { get; } = new List<Error>();
+        public object Debug { get; set; }
         public string TraceId { get; set; } = string.Empty;
         public double Duration { get; set; } = 0;
         public int Code { get; set; } = StatusCodes.Status200OK;
+
         public ApiResult()
         {
-
         }
+
         public ApiResult(Exception exception)
         {
             Errors.Add(new Error(exception));
@@ -35,16 +38,18 @@ namespace uBeac.Web
     public class ApiResult<TData> : ApiResult, IApiResult<TData>
     {
         public TData Data { get; set; }
+
         public ApiResult(TData data)
         {
             Data = data;
         }
+
         public ApiResult(Exception exception) : base(exception)
         {
         }
+
         public ApiResult()
         {
-
         }
     }
 }
