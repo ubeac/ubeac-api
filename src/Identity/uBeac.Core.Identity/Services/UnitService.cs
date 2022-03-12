@@ -6,12 +6,18 @@ public class UnitService<TKey, TUnit> : EntityService<TKey, TUnit>, IUnitService
     where TKey : IEquatable<TKey>
     where TUnit : Unit<TKey>
 {
+    protected readonly IUnitRepository<TKey, TUnit> UnitRepository;
+
     public UnitService(IUnitRepository<TKey, TUnit> repository, IApplicationContext appContext) : base(repository, appContext)
     {
+        UnitRepository = repository;
     }
 
-    public async Task<bool> Exists(string code, string type, CancellationToken cancellationToken = default)
+    public virtual async Task<bool> Exists(string code, string type, CancellationToken cancellationToken = default)
         => (await Repository.Find(unit => unit.Code == code && unit.Type == type, cancellationToken)).Any();
+
+    public virtual async Task<IEnumerable<TUnit>> GetByParentId(TKey parentUnitId, CancellationToken cancellationToken = default)
+        => await UnitRepository.GetByParentId(parentUnitId, cancellationToken);
 }
 
 public class UnitService<TUnit> : UnitService<Guid, TUnit>, IUnitService<TUnit>

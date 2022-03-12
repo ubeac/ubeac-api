@@ -26,6 +26,14 @@ public class MongoUnitRepository<TKey, TUnit> : MongoEntityRepository<TKey, TUni
             // ignored
         }
     }
+
+    public virtual async Task<IEnumerable<TUnit>> GetByParentId(TKey parentUnitId, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        var parentIdFilter = Builders<TUnit>.Filter.Eq(x => x.ParentUnitId, parentUnitId);
+        var findResult = await Collection.FindAsync(parentIdFilter, null, cancellationToken);
+        return await findResult.ToListAsync(cancellationToken);
+    }
 }
 
 public class MongoUnitRepository<TUnit> : MongoUnitRepository<Guid, TUnit>, IUnitRepository<TUnit>
