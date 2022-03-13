@@ -10,6 +10,7 @@ public interface IJwtTokenProvider
 {
     string GenerateToken<TKey, TUser>(TUser user) where TKey : IEquatable<TKey> where TUser : User<TKey>;
     string GenerateRefreshToken<TKey, TUser>(TUser user) where TKey : IEquatable<TKey> where TUser : User<TKey>;
+    bool ValidateToken(string token);
 }
 
 public class JwtTokenProvider : IJwtTokenProvider
@@ -29,6 +30,36 @@ public class JwtTokenProvider : IJwtTokenProvider
         using var rng = RandomNumberGenerator.Create();
         rng.GetBytes(randomNumber);
         return Convert.ToBase64String(randomNumber);
+    }
+
+    public bool ValidateToken(string token)
+    {
+        if (token == null) return false;
+
+        var jwtTokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.ASCII.GetBytes(_options.Secret);
+
+        try
+        {
+            jwtTokenHandler.ValidateToken(token, new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true, // this will validate the 3rd part of the jwt token using the secret that we added in the appsettings and verify we have generated the jwt token
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                RequireExpirationTime = true,
+                ValidateLifetime = true,
+                SaveSigninToken = true,
+                ValidAudience = _options.Audience,
+                ValidIssuer = _options.Issuer
+            }, out _);
+
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     public string GenerateToken<TKey, TUser>(TUser user)
