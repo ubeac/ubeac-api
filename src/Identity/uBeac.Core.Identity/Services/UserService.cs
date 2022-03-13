@@ -91,8 +91,9 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         {
             UserId = user.Id,
             Roles = user.Roles,
-            Token = token,
-            RefreshToken = refreshToken
+            Token = token.Token,
+            RefreshToken = refreshToken,
+            Expiry = token.Expiry
         };
     }
 
@@ -208,8 +209,9 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         {
             UserId = user.Id,
             Roles = user.Roles,
-            Token = newToken,
-            RefreshToken = refreshToken
+            Token = newToken.Token,
+            RefreshToken = refreshToken,
+            Expiry = newToken.Expiry
         };
     }
 
