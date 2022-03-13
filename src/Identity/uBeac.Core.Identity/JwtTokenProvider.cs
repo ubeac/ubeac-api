@@ -8,7 +8,7 @@ namespace uBeac.Identity;
 
 public interface IJwtTokenProvider
 {
-    string GenerateToken<TKey, TUser>(TUser user) where TKey : IEquatable<TKey> where TUser : User<TKey>;
+    GenerateTokenResult GenerateToken<TKey, TUser>(TUser user) where TKey : IEquatable<TKey> where TUser : User<TKey>;
     string GenerateRefreshToken<TKey, TUser>(TUser user) where TKey : IEquatable<TKey> where TUser : User<TKey>;
     bool ValidateToken(string token);
 }
@@ -62,7 +62,7 @@ public class JwtTokenProvider : IJwtTokenProvider
         }
     }
 
-    public string GenerateToken<TKey, TUser>(TUser user)
+    public GenerateTokenResult GenerateToken<TKey, TUser>(TUser user)
         where TKey : IEquatable<TKey>
         where TUser : User<TKey>
     {
@@ -82,7 +82,11 @@ public class JwtTokenProvider : IJwtTokenProvider
         };
 
         var token = jwtTokenHandler.CreateJwtSecurityToken(tokenDescriptor);
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        return new GenerateTokenResult
+        {
+            Token = new JwtSecurityTokenHandler().WriteToken(token),
+            Expiry = tokenDescriptor.Expires.Value
+        };
     }
 
     private List<Claim> GetClaims<TKey, TUser>(TUser user)
