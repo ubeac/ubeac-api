@@ -13,18 +13,6 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMongo<TMongoDbContext>(this IServiceCollection services, string connectionString, bool dropExistDatabase = false)
            where TMongoDbContext : class, IMongoDBContext
         {
-
-            // this will store Guids in MongoDB in string format to be readable in manual queries
-            if (BsonSerializer.SerializerRegistry.GetSerializer<Guid>() == null)
-                BsonSerializer.RegisterSerializer(typeof(Guid), new GuidSerializer(BsonType.String));
-
-            // supporting decimal values 
-            if (BsonSerializer.SerializerRegistry.GetSerializer<decimal>() == null)
-                BsonSerializer.RegisterSerializer(typeof(decimal), new DecimalSerializer(BsonType.Decimal128));
-
-            if (BsonSerializer.SerializerRegistry.GetSerializer<decimal?>() == null)
-                BsonSerializer.RegisterSerializer(typeof(decimal?), new NullableSerializer<decimal>(new DecimalSerializer(BsonType.Decimal128)));
-
             services.TryAddSingleton(provider =>
             {
                 var configuration = provider.GetService<IConfiguration>();
@@ -35,7 +23,18 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddSingleton<IMongoDBContext, TMongoDbContext>();
 
             return services;
+        }
 
+        public static IServiceCollection AddDefaultBsonSerializers(this IServiceCollection services)
+        {
+            #pragma warning disable CS0618 // Type or member is obsolete
+            BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
+            #pragma warning restore CS0618 // Type or member is obsolete
+
+            BsonSerializer.RegisterSerializer(typeof(Guid), new GuidSerializer(GuidRepresentation.Standard));
+            BsonSerializer.RegisterSerializer(typeof(decimal), new DecimalSerializer(BsonType.Decimal128));
+            BsonSerializer.RegisterSerializer(typeof(decimal?), new NullableSerializer<decimal>(new DecimalSerializer(BsonType.Decimal128)));
+            return services;
         }
 
         public static IServiceCollection AddRepository<TInterface, TImplementation>(this IServiceCollection services)
@@ -46,11 +45,11 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
 
         }
+
         public static IServiceCollection AddRepository(this IServiceCollection services, Type interfaceType, Type implementationType)
         {
             services.TryAddScoped(interfaceType, implementationType);
             return services;
-
         }
     }
 }

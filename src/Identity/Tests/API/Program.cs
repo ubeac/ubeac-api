@@ -18,7 +18,8 @@ var jwtOptions = builder.Configuration.GetInstance<JwtOptions>("Jwt");
 builder.Services.AddCoreSwaggerWithJWT("Example");
 
 // Adding mongodb
-builder.Services.AddMongo<MongoDBContext>("DefaultConnection", builder.Environment.IsEnvironment("Testing"));
+builder.Services.AddMongo<MongoDBContext>("DefaultConnection", builder.Environment.IsEnvironment("Testing"))
+    .AddDefaultBsonSerializers();
 
 // Adding application context
 builder.Services.AddScoped<IApplicationContext, ApplicationContext>();
