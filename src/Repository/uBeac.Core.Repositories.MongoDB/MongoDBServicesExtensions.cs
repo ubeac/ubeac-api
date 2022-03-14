@@ -27,6 +27,10 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddDefaultBsonSerializers(this IServiceCollection services)
         {
+            #pragma warning disable CS0618 // Type or member is obsolete
+            BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
+            #pragma warning restore CS0618 // Type or member is obsolete
+
             BsonSerializer.RegisterSerializer(typeof(Guid), new GuidSerializer(GuidRepresentation.Standard));
             BsonSerializer.RegisterSerializer(typeof(decimal), new DecimalSerializer(BsonType.Decimal128));
             BsonSerializer.RegisterSerializer(typeof(decimal?), new NullableSerializer<decimal>(new DecimalSerializer(BsonType.Decimal128)));
