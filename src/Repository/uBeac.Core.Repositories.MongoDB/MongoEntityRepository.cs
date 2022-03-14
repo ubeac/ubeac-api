@@ -102,4 +102,56 @@ namespace uBeac.Repositories.MongoDB
         {
         }
     }
+
+    public class MongoAuditEntityRepository<TKey, TAuditEntity> : MongoEntityRepository<TKey, TAuditEntity>
+        where TKey : IEquatable<TKey>
+        where TAuditEntity : IAuditEntity<TKey>
+    {
+        protected readonly IApplicationContext AppContext;
+
+        public MongoAuditEntityRepository(IApplicationContext appContext, IMongoDBContext mongoDbContext) : base(mongoDbContext)
+        {
+            AppContext = appContext;
+        }
+
+        public override async Task Create(TAuditEntity entity, CancellationToken cancellationToken = default)
+        {
+            entity = OnCreate(entity);
+            await base.Create(entity, cancellationToken);
+        }
+
+        public override async Task CreateMany(IEnumerable<TAuditEntity> entities, CancellationToken cancellationToken = default)
+        {
+            entities = entities.Select(OnCreate);
+            await base.CreateMany(entities, cancellationToken);
+        }
+
+        public override async Task<TAuditEntity> Update(TAuditEntity entity, CancellationToken cancellationToken = default)
+        {
+            entity = OnUpdate(entity);
+            return await base.Update(entity, cancellationToken);
+        }
+
+        protected virtual TAuditEntity OnCreate(TAuditEntity entity)
+        {
+            entity.CreatedAt = DateTime.Now;
+            entity.CreatedBy = AppContext.UserName;
+            return entity;
+        }
+
+        protected virtual TAuditEntity OnUpdate(TAuditEntity entity)
+        {
+            entity.LastUpdatedAt = DateTime.Now;
+            entity.LastUpdatedBy = AppContext.UserName;
+            return entity;
+        }
+    }
+
+    public class MongoAuditEntityRepository<TAuditEntity> : MongoEntityRepository<TAuditEntity>
+        where TAuditEntity : IAuditEntity
+    {
+        public MongoAuditEntityRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext)
+        {
+        }
+    }
 }

@@ -42,14 +42,6 @@ namespace uBeac.Services
 
         public virtual async Task Create(TEntity entity, CancellationToken cancellationToken = default)
         {
-            // Set audit properties
-            if (typeof(TEntity).IsAssignableFrom(typeof(IAuditEntity<TKey>)))
-            {
-                // var auditEntity = entity as AuditEntity<TKey>;
-                // auditEntity.CreatedBy = AppContext.UserName;
-                // auditEntity.CreatedAt = DateTime.Now;
-            }
-
             await Repository.Create(entity, cancellationToken);
         }
 
@@ -60,14 +52,6 @@ namespace uBeac.Services
 
         public virtual async Task<TEntity> Update(TEntity entity, CancellationToken cancellationToken = default)
         {
-            // Set audit properties
-            if (typeof(TEntity).IsAssignableFrom(typeof(IAuditEntity<TKey>)))
-            {
-                // var auditEntity = entity as AuditEntity<TKey>;
-                // auditEntity.LastUpdatedBy = AppContext.UserName;
-                // auditEntity.LastUpdatedAt = DateTime.Now;
-            }
-
             return await Repository.Update(entity, cancellationToken);
         }
     }
