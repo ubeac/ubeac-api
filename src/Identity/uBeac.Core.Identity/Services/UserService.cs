@@ -22,8 +22,9 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
     protected readonly JwtOptions JwtOptions;
     protected readonly IUserTokenRepository<TUserKey> UserTokenRepository;
     protected readonly IEmailProvider EmailProvider;
+    protected readonly IApplicationContext AppContext;
 
-    public UserService(UserManager<TUser> userManager, IJwtTokenProvider jwtTokenProvider, IHttpContextAccessor httpContextAccessor, JwtOptions jwtOptions, IUserTokenRepository<TUserKey> userTokenRepository, IEmailProvider emailProvider)
+    public UserService(UserManager<TUser> userManager, IJwtTokenProvider jwtTokenProvider, IHttpContextAccessor httpContextAccessor, JwtOptions jwtOptions, IUserTokenRepository<TUserKey> userTokenRepository, IEmailProvider emailProvider, IApplicationContext appContext)
     {
         UserManager = userManager;
         JwtTokenProvider = jwtTokenProvider;
@@ -31,61 +32,45 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         JwtOptions = jwtOptions;
         UserTokenRepository = userTokenRepository;
         EmailProvider = emailProvider;
+        AppContext = appContext;
     }
 
-    /// <summary>
-    /// This method creates user: this should be used by high-level/admin users to create users
-    /// Some user properties may be set by admin manually
-    /// </summary>
-    /// <param name = "user" ></ param >
-    /// < param name="password"></param>
-    /// <param name = "cancellationToken" ></ param >
-    /// < returns ></ returns >
     public virtual async Task Create(TUser user, string password, CancellationToken cancellationToken = default)
     {
         var identityResult = await UserManager.CreateAsync(user, password);
         identityResult.ThrowIfInvalid();
     }
 
-    /// <summary>
-    /// This method is for public users' registration, the email won't be confirmed
-    /// A confirmation email will be sent to the user
-    /// </summary>
-    /// <param name="username"></param>
-    /// <param name="email"></param>
-    /// <param name="password"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
     public virtual async Task<TUser> Register(string username, string email, string password, CancellationToken cancellationToken = default)
     {
         var user = Activator.CreateInstance<TUser>();
-
         user.UserName = username;
         user.Email = email;
         user.EmailConfirmed = false;
         user.PhoneNumberConfirmed = false;
-
         await Create(user, password, cancellationToken);
-
         return user;
     }
 
     public virtual async Task<TokenResult<TUserKey>> Authenticate(string username, string password, CancellationToken cancellationToken = default)
     {
-        //validating user credentials
         var user = await UserManager.FindByNameAsync(username);
 
-        if (user is null || !await UserManager.CheckPasswordAsync(user, password))
-            throw new Exception("User doesn't exist or username/password is not valid!");
+        // Validate user password
+        if (user is null || !await UserManager.CheckPasswordAsync(user, password)) throw new Exception("User doesn't exist or username/password is not valid!");
 
-        //generating tokens
+        // Generate tokens
         var token = JwtTokenProvider.GenerateToken<TUserKey, TUser>(user);
         var refreshToken = JwtTokenProvider.GenerateRefreshToken<TUserKey, TUser>(user);
 
-        // storing refresh token
+        // Store refresh token
         var identityResult = await UserManager.SetAuthenticationTokenAsync(user, LOCAL_LOGIN_PROVIDER, REFRESH_TOKEN_NAME, refreshToken);
         identityResult.ThrowIfInvalid();
+
+        // Update user properties related to login
+        user.LastLoginAt = AppContext.Time;
+        user.LoginsCount++;
+        await UserManager.UpdateAsync(user);
 
         return new TokenResult<TUserKey>
         {
@@ -107,11 +92,23 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         return await UserManager.FindByNameAsync(userName) != null;
     }
 
+    public async Task EnableOrDisable(TUserKey id, CancellationToken cancellationToken = default)
+    {
+        var user = await UserManager.FindByIdAsync(id.ToString());
+        if (user is null) throw new Exception("User doesn't exist!");
+
+        user.Enabled = !user.Enabled;
+        user.LastEnabledOrDisabledAt = AppContext.Time;
+        user.LastEnabledOrDisabledBy = AppContext.UserName;
+
+        var result = await UserManager.UpdateAsync(user);
+        result.ThrowIfInvalid();
+    }
+
     public virtual async Task<bool> Delete(TUserKey id, CancellationToken cancellationToken = default)
     {
         var user = await UserManager.FindByIdAsync(id.ToString());
-        if (user is null)
-            throw new Exception("User doesn't exist!");
+        if (user is null) throw new Exception("User doesn't exist!");
 
         var userRemoveResult = await UserManager.DeleteAsync(user);
         userRemoveResult.ThrowIfInvalid();
@@ -121,6 +118,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
 
     public async Task<IEnumerable<TUser>> GetAll(CancellationToken cancellationToken = default)
     {
+        // TODO: Check this: ToListAsync() is not working - throws exception! For this reason, the ToList() method is used
         return await Task.Run(() => UserManager.Users.ToList(), cancellationToken);
     }
 
@@ -139,13 +137,17 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         var idResult = await UserManager.ChangePasswordAsync(user, changePassword.CurrentPassword, changePassword.NewPassword);
 
         idResult.ThrowIfInvalid();
+
+        // Update user properties related to password changing
+        user.LastPasswordChangedAt = AppContext.Time;
+        user.LastPasswordChangedBy = AppContext.UserName;
+        await UserManager.UpdateAsync(user);
     }
 
     public virtual async Task ForgotPassword(string username, CancellationToken cancellationToken = default)
     {
         var user = await UserManager.FindByNameAsync(username);
-        if (user == null)
-            throw new Exception("User does not exist!");
+        if (user == null) throw new Exception("User does not exist!");
 
         var resetPasswordToken = await UserManager.GeneratePasswordResetTokenAsync(user);
         await SendResetPasswordToken(user, resetPasswordToken);
@@ -153,7 +155,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
 
     protected virtual async Task SendResetPasswordToken(TUser user, string token)
     {
-        // Sending email in background
+        // Send email in background to prevent in interruptions
         var backgroundWorker = new BackgroundWorker();
         backgroundWorker.DoWork += async (_, _) => await EmailProvider.Send(user.Email, ForgotPasswordMessage.Subject, ForgotPasswordMessage.GetBodyWithReplaces(token));
         backgroundWorker.RunWorkerAsync();
@@ -163,30 +165,29 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
     public virtual async Task ResetPassword(string username, string token, string newPassword, CancellationToken cancellationToken = default)
     {
         var user = await UserManager.FindByNameAsync(username);
-        if (user == null)
-            throw new Exception("User does not exist!");
+        if (user == null) throw new Exception("User does not exist!");
 
         var result = await UserManager.ResetPasswordAsync(user, token, newPassword);
         result.ThrowIfInvalid();
+
+        // Update user properties related to password changing
+        user.LastPasswordChangedAt = AppContext.Time;
+        user.LastPasswordChangedBy = AppContext.UserName;
+        await UserManager.UpdateAsync(user);
     }
 
     public virtual Task<TUserKey> GetCurrentUserId(CancellationToken cancellationToken = default)
     {
-        if (HttpContextAccessor.HttpContext == null)
-            return default;
+        if (HttpContextAccessor.HttpContext == null) return default;
 
         var userId = UserManager.GetUserId(HttpContextAccessor.HttpContext.User);
-        if (string.IsNullOrEmpty(userId))
-            return default;
-
-        return Task.FromResult(userId.GetTypedKey<TUserKey>());
+        return string.IsNullOrEmpty(userId) ? default : Task.FromResult(userId.GetTypedKey<TUserKey>());
     }
 
     public virtual async Task RevokeTokens(TUserKey id, CancellationToken cancellationToken = default)
     {
         var user = await UserManager.FindByIdAsync(id.ToString());
-        if (user == null)
-            return;
+        if (user == null) return;
 
         var identityResult = await UserManager.ResetAuthenticatorKeyAsync(user);
         identityResult.ThrowIfInvalid();
@@ -199,10 +200,14 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         var username = principal?.Identity?.Name;
         var user = await UserManager.FindByNameAsync(username);
         var storedRefreshToken = await UserManager.GetAuthenticationTokenAsync(user, LOCAL_LOGIN_PROVIDER, REFRESH_TOKEN_NAME);
-        if (storedRefreshToken != refreshToken)
-            throw new Exception("Token expired!");
+        if (storedRefreshToken != refreshToken) throw new Exception("Token expired!");
 
         var newToken = JwtTokenProvider.GenerateToken<TUserKey, TUser>(user);
+
+        // Update user properties related to login
+        user.LastLoginAt = AppContext.Time;
+        user.LoginsCount++;
+        await UserManager.UpdateAsync(user);
 
         return new TokenResult<TUserKey>
         {
@@ -217,19 +222,16 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
     {
         var tokenValidationParameters = new TokenValidationParameters
         {
-            ValidateAudience = true, //you might want to validate the audience and issuer depending on your use case
+            ValidateAudience = true, // You might want to validate the audience and issuer depending on your use case
             ValidateIssuer = true,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(JwtOptions.Secret)),
-            ValidateLifetime = false, //here we are saying that we don't care about the token's expiration date,
+            ValidateLifetime = false, // Here we are saying that we don't care about the token's expiration date
             ValidAudience = JwtOptions.Audience,
             ValidIssuer = JwtOptions.Issuer
         };
         var tokenHandler = new JwtSecurityTokenHandler();
         var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
-        //var jwtSecurityToken = securityToken as JwtSecurityToken;
-        //if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha512Signature))
-        //    throw new SecurityTokenException("Invalid token");
         return principal;
     }
 }
@@ -237,7 +239,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
 public class UserService<TUser> : UserService<Guid, TUser>, IUserService<TUser>
     where TUser : User
 {
-    public UserService(UserManager<TUser> userManager, IJwtTokenProvider jwtTokenProvider, IHttpContextAccessor httpContextAccessor, JwtOptions jwtOptions, IUserTokenRepository userTokenRepository, IEmailProvider emailProvider) : base(userManager, jwtTokenProvider, httpContextAccessor, jwtOptions, userTokenRepository, emailProvider)
+    public UserService(UserManager<TUser> userManager, IJwtTokenProvider jwtTokenProvider, IHttpContextAccessor httpContextAccessor, JwtOptions jwtOptions, IUserTokenRepository userTokenRepository, IEmailProvider emailProvider, IApplicationContext appContext) : base(userManager, jwtTokenProvider, httpContextAccessor, jwtOptions, userTokenRepository, emailProvider, appContext)
     {
     }
 }

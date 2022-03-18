@@ -2,8 +2,16 @@
 
 namespace uBeac.Identity;
 
-public class User<TUserKey> : IdentityUser<TUserKey> where TUserKey : IEquatable<TUserKey>
+public class User<TUserKey> : IdentityUser<TUserKey>, IAuditEntity<TUserKey> where TUserKey : IEquatable<TUserKey>
 {
+    public virtual DateTime? LastLoginAt { get; set; }
+    public virtual int LoginsCount { get; set; }
+    public virtual DateTime? LastPasswordChangedAt { get; set; }
+    public virtual string LastPasswordChangedBy { get; set; }
+    public virtual bool Enabled { get; set; } = false;
+    public virtual DateTime? LastEnabledOrDisabledAt { get; set; }
+    public virtual string LastEnabledOrDisabledBy { get; set; }
+
     public virtual string AuthenticatorKey { get; set; }
     public virtual List<IdentityUserClaim<TUserKey>> Claims { get; set; } = new();
     public virtual List<IdentityUserLogin<TUserKey>> Logins { get; set; } = new();
