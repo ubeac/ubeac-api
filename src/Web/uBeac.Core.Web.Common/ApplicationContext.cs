@@ -14,6 +14,7 @@ namespace uBeac.Web
             UserIp = httpContext.Connection.RemoteIpAddress;
             TraceId = httpContext.TraceIdentifier;
             Language = httpContext.Request.GetTypedHeaders().AcceptLanguage.FirstOrDefault()?.Value.Value ?? "EN";
+            Time = DateTime.Now;
 
 
             if (httpContext.User?.Identity != null && httpContext.User?.Claims?.Count() > 0)
@@ -27,6 +28,7 @@ namespace uBeac.Web
         }
 
         public IPAddress UserIp { get; }
+        public DateTime Time { get; }
         public string UserName { get; }
         public string Language { get; }
         public string SessionId => throw new NotImplementedException();

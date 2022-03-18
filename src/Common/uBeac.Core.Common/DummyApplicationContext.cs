@@ -12,6 +12,7 @@ namespace uBeac
             SessionId = id;
             TraceId = id;
             UserName = string.Empty;
+            Time = DateTime.Now;
         }
 
         public virtual string UserName { get; }
@@ -19,5 +20,6 @@ namespace uBeac
         public virtual string Language { get; }
         public virtual string SessionId { get; }
         public virtual string TraceId { get; }
+        public virtual DateTime Time { get; }
     }
 }

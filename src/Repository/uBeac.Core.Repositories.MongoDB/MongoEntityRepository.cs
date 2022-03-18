@@ -5,8 +5,8 @@ using System.Linq.Expressions;
 namespace uBeac.Repositories.MongoDB
 {
     public class MongoEntityRepository<TKey, TEntity> : IEntityRepository<TKey, TEntity>
-         where TKey : IEquatable<TKey>
-         where TEntity : IEntity<TKey>
+        where TKey : IEquatable<TKey>
+        where TEntity : IEntity<TKey>
     {
         protected readonly IMongoCollection<TEntity> Collection;
         protected readonly IMongoCollection<BsonDocument> BsonCollection;
@@ -57,7 +57,8 @@ namespace uBeac.Repositories.MongoDB
             return await findResult.SingleOrDefaultAsync(cancellationToken);
         }
 
-        public virtual async Task<IEnumerable<TEntity>> GetByIds(IEnumerable<TKey> ids, CancellationToken cancellationToken = default)
+        public virtual async Task<IEnumerable<TEntity>> GetByIds(IEnumerable<TKey> ids,
+            CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             var idsFilter = Builders<TEntity>.Filter.In(x => x.Id, ids);
@@ -71,7 +72,8 @@ namespace uBeac.Repositories.MongoDB
             await Collection.InsertOneAsync(entity, null, cancellationToken);
         }
 
-        public virtual async Task CreateMany(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+        public virtual async Task CreateMany(IEnumerable<TEntity> entities,
+            CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             await Collection.InsertManyAsync(entities, null, cancellationToken);
@@ -84,7 +86,8 @@ namespace uBeac.Repositories.MongoDB
             return await Collection.FindOneAndReplaceAsync(idFilter, entity, null, cancellationToken);
         }
 
-        public virtual async Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> filter, CancellationToken cancellationToken = default)
+        public virtual async Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> filter,
+            CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             var findResult = await Collection.FindAsync(filter, cancellationToken: cancellationToken);
@@ -99,58 +102,6 @@ namespace uBeac.Repositories.MongoDB
         where TEntity : IEntity
     {
         public MongoEntityRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext)
-        {
-        }
-    }
-
-    public class MongoAuditEntityRepository<TKey, TAuditEntity> : MongoEntityRepository<TKey, TAuditEntity>
-        where TKey : IEquatable<TKey>
-        where TAuditEntity : IAuditEntity<TKey>
-    {
-        protected readonly IApplicationContext AppContext;
-
-        public MongoAuditEntityRepository(IApplicationContext appContext, IMongoDBContext mongoDbContext) : base(mongoDbContext)
-        {
-            AppContext = appContext;
-        }
-
-        public override async Task Create(TAuditEntity entity, CancellationToken cancellationToken = default)
-        {
-            entity = OnCreate(entity);
-            await base.Create(entity, cancellationToken);
-        }
-
-        public override async Task CreateMany(IEnumerable<TAuditEntity> entities, CancellationToken cancellationToken = default)
-        {
-            entities = entities.Select(OnCreate);
-            await base.CreateMany(entities, cancellationToken);
-        }
-
-        public override async Task<TAuditEntity> Update(TAuditEntity entity, CancellationToken cancellationToken = default)
-        {
-            entity = OnUpdate(entity);
-            return await base.Update(entity, cancellationToken);
-        }
-
-        protected virtual TAuditEntity OnCreate(TAuditEntity entity)
-        {
-            entity.CreatedAt = DateTime.Now;
-            entity.CreatedBy = AppContext.UserName;
-            return entity;
-        }
-
-        protected virtual TAuditEntity OnUpdate(TAuditEntity entity)
-        {
-            entity.LastUpdatedAt = DateTime.Now;
-            entity.LastUpdatedBy = AppContext.UserName;
-            return entity;
-        }
-    }
-
-    public class MongoAuditEntityRepository<TAuditEntity> : MongoEntityRepository<TAuditEntity>
-        where TAuditEntity : IAuditEntity
-    {
-        public MongoAuditEntityRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext)
         {
         }
     }
