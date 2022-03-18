@@ -17,31 +17,43 @@ namespace uBeac.Services
 
         public virtual async Task<bool> Delete(TKey id, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+            
             return await Repository.Delete(id, cancellationToken);
         }
 
         public virtual async Task<long> DeleteMany(IEnumerable<TKey> ids, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             return await Repository.DeleteMany(ids, cancellationToken);
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetAll(CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             return await Repository.GetAll(cancellationToken);
         }
 
         public virtual async Task<TEntity> GetById(TKey id, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             return await Repository.GetById(id, cancellationToken);
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetByIds(IEnumerable<TKey> ids, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             return await Repository.GetByIds(ids, cancellationToken);
         }
 
         public virtual async Task Create(TEntity entity, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             // If the entity is extend from IAuditEntity, the audit properties (CreatedAt, CreatedBy, etc.) should be set
             SetAuditPropsOnCreate(entity);
 
@@ -50,6 +62,8 @@ namespace uBeac.Services
 
         public virtual async Task CreateMany(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             // If the entities is extend from IAuditEntity, the audit properties (CreatedAt, CreatedBy, etc.) should be set
             foreach (var entity in entities) SetAuditPropsOnCreate(entity);
 
@@ -58,6 +72,8 @@ namespace uBeac.Services
 
         public virtual async Task<TEntity> Update(TEntity entity, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             // If the entity is extend from IAuditEntity, the audit properties (LastUpdatedAt, LastUpdatedBy, etc.) should be set
             SetAuditPropsOnUpdate(entity);
 
