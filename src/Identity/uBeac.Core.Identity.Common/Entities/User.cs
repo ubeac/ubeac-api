@@ -2,7 +2,7 @@
 
 namespace uBeac.Identity;
 
-public class User<TUserKey> : IdentityUser<TUserKey>, IAuditEntity<TUserKey> where TUserKey : IEquatable<TUserKey>
+public class User<TUserKey> : IdentityUser<TUserKey> where TUserKey : IEquatable<TUserKey>
 {
     public virtual string AuthenticatorKey { get; set; }
     public virtual List<IdentityUserClaim<TUserKey>> Claims { get; set; } = new();
@@ -18,14 +18,9 @@ public class User<TUserKey> : IdentityUser<TUserKey>, IAuditEntity<TUserKey> whe
     public User(string userName) : base(userName)
     {
     }
-
-    public virtual string CreatedBy { get; set; }
-    public virtual DateTime CreatedAt { get; set; }
-    public virtual string LastUpdatedBy { get; set; }
-    public virtual DateTime LastUpdatedAt { get; set; }
 }
 
-public class User : User<Guid>, IAuditEntity
+public class User : User<Guid>
 {
     public User()
     {
