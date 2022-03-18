@@ -18,73 +18,73 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Register([FromBody] RegisterRequest model, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<bool>> Register([FromBody] RegisterRequest model, CancellationToken cancellationToken = default)
     {
         try
         {
             await UserService.Register(model.UserName, model.Email, model.Password, cancellationToken);
-            return true.ToApiResult();
+            return true.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<bool>();
+            return ex.ToResult<bool>();
         }
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<TokenResult<TUserKey>>> Login([FromBody] LoginRequest model, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<TokenResult<TUserKey>>> Login([FromBody] LoginRequest model, CancellationToken cancellationToken = default)
     {
         try
         {
             var authResult = await UserService.Authenticate(model.UserName, model.Password, cancellationToken);
-            return authResult.ToApiResult();
+            return authResult.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<TokenResult<TUserKey>>();
+            return ex.ToResult<TokenResult<TUserKey>>();
         }
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<TokenResult<TUserKey>>> RefreshToken([FromBody] RefreshTokenRequest model, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<TokenResult<TUserKey>>> RefreshToken([FromBody] RefreshTokenRequest model, CancellationToken cancellationToken = default)
     {
         try
         {
             var authResult = await UserService.RefreshToken(model.RefreshToken, model.Token, cancellationToken);
-            return authResult.ToApiResult();
+            return authResult.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<TokenResult<TUserKey>>();
+            return ex.ToResult<TokenResult<TUserKey>>();
         }
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> ForgotPassword([FromBody] ForgotPasswordRequest model, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<bool>> ForgotPassword([FromBody] ForgotPasswordRequest model, CancellationToken cancellationToken = default)
     {
         try
         {
             await UserService.ForgotPassword(model.UserName, cancellationToken);
-            return true.ToApiResult();
+            return true.ToResult();
 
         }
         catch (Exception)
         {
-            return false.ToApiResult();
+            return false.ToResult();
         }
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> ResetPassword([FromBody] ResetPasswordRequest model, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<bool>> ResetPassword([FromBody] ResetPasswordRequest model, CancellationToken cancellationToken = default)
     {
         try
         {
             await UserService.ResetPassword(model.UserName, model.Token, model.NewPassword, cancellationToken);
-            return true.ToApiResult();
+            return true.ToResult();
         }
         catch (Exception)
         {
-            return false.ToApiResult();
+            return false.ToResult();
         }
     }
 }

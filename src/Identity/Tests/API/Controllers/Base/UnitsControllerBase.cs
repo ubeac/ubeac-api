@@ -18,58 +18,58 @@ public abstract class UnitsController<TKey, TUnit> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<TKey>> Create([FromBody] TUnit unit, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<TKey>> Create([FromBody] TUnit unit, CancellationToken cancellationToken = default)
     {
         try
         {
             await UnitService.Create(unit, cancellationToken);
-            return unit.Id.ToApiResult();
+            return unit.Id.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<TKey>();
+            return ex.ToResult<TKey>();
         }
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Update([FromBody] TUnit unit, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<bool>> Update([FromBody] TUnit unit, CancellationToken cancellationToken = default)
     {
         try
         {
             await UnitService.Update(unit, cancellationToken);
-            return true.ToApiResult();
+            return true.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<bool>();
+            return ex.ToResult<bool>();
         }
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Delete([FromBody] IdRequest<TKey> request, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<bool>> Delete([FromBody] IdRequest<TKey> request, CancellationToken cancellationToken = default)
     {
         try
         {
             await UnitService.Delete(request.Id, cancellationToken);
-            return true.ToApiResult();
+            return true.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<bool>();
+            return ex.ToResult<bool>();
         }
     }
 
     [HttpGet]
-    public virtual async Task<IApiListResult<TUnit>> GetAll(CancellationToken cancellationToken = default)
+    public virtual async Task<IListResult<TUnit>> GetAll(CancellationToken cancellationToken = default)
     {
         try
         {
             var units = await UnitService.GetAll(cancellationToken);
-            return units.ToApiListResult();
+            return units.ToListResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiListResult<TUnit>();
+            return ex.ToListResult<TUnit>();
         }
     }
 }
