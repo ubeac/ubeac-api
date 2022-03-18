@@ -1,6 +1,6 @@
 ﻿namespace uBeac.Identity;
 
-public class Unit<TKey> : IEntity<TKey>, IAuditEntity<TKey> where TKey : IEquatable<TKey>
+public class Unit<TKey> : IEntity<TKey> where TKey : IEquatable<TKey>
 {
     public virtual TKey Id { get; set; }
     public virtual string Name { get; set; }
@@ -20,11 +20,6 @@ public class Unit<TKey> : IEntity<TKey>, IAuditEntity<TKey> where TKey : IEquata
     {
         return _parent;
     }
-
-    public virtual string CreatedBy { get; set; }
-    public virtual DateTime CreatedAt { get; set; }
-    public virtual string LastUpdatedBy { get; set; }
-    public virtual DateTime LastUpdatedAt { get; set; }
 }
 
 public class Unit : Unit<Guid>, IEntity
