@@ -20,7 +20,7 @@ namespace uBeac.Web.Filters
             if (context.Result != null && typeof(ObjectResult) == context.Result.GetType())
             {
                 var objectResult = (ObjectResult)context.Result;
-                if (objectResult.Value is IApiResult result)
+                if (objectResult.Value is IResult result)
                 {
                     result.Duration = _stopwatch.Elapsed.TotalMilliseconds;
                     result.TraceId = context.HttpContext.TraceIdentifier;

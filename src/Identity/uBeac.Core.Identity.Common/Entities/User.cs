@@ -2,7 +2,7 @@
 
 namespace uBeac.Identity;
 
-public class User<TUserKey> : IdentityUser<TUserKey>, IAuditEntity<TUserKey> where TUserKey : IEquatable<TUserKey>
+public class User<TUserKey> : IdentityUser<TUserKey>, IEntity<TUserKey> where TUserKey : IEquatable<TUserKey>
 {
     public virtual DateTime? LastLoginAt { get; set; }
     public virtual int LoginsCount { get; set; }
@@ -28,7 +28,7 @@ public class User<TUserKey> : IdentityUser<TUserKey>, IAuditEntity<TUserKey> whe
     }
 }
 
-public class User : User<Guid>
+public class User : User<Guid>, IEntity
 {
     public User()
     {
