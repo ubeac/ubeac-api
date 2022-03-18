@@ -87,6 +87,7 @@ namespace uBeac.Services
             {
                 audit.CreatedAt = AppContext.Time;
                 audit.CreatedBy = AppContext.UserName;
+                audit.CreatedByIp = AppContext.UserIp.ToString();
             }
         }
 
@@ -97,6 +98,7 @@ namespace uBeac.Services
             {
                 audit.LastUpdatedAt = AppContext.Time;
                 audit.LastUpdatedBy = AppContext.UserName;
+                audit.LastUpdatedByIp = AppContext.UserIp.ToString();
             }
         }
     }
