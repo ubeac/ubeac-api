@@ -4,6 +4,7 @@ namespace uBeac.Identity;
 
 public class Role<TRoleKey> : IdentityRole<TRoleKey>, IEntity<TRoleKey> where TRoleKey : IEquatable<TRoleKey>
 {
+    public virtual string Description { get; set; }
     public virtual List<IdentityRoleClaim<TRoleKey>> Claims { get; set; } = new();
 
     public Role()
