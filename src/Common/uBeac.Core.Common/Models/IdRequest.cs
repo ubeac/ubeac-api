@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace uBeac.Web;
+namespace uBeac;
 
 public class IdRequest<TKey> where TKey : IEquatable<TKey>
 {

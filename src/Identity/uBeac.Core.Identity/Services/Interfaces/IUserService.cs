@@ -19,6 +19,7 @@ public interface IUserService<TKey, TUser> : IService
     Task<TUser> GetById(TKey id, CancellationToken cancellationToken = default);
     Task Update(TUser user, CancellationToken cancellationToken = default);
     Task<bool> ExistsUserName(string userName, CancellationToken cancellationToken = default);
+    Task EnableOrDisable(TKey id, CancellationToken cancellationToken = default);
 }
 
 public interface IUserService<TUser> : IUserService<Guid, TUser>
