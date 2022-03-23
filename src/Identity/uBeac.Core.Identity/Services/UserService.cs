@@ -93,19 +93,6 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         return await UserManager.FindByNameAsync(userName) != null;
     }
 
-    public async Task EnableOrDisable(TUserKey id, CancellationToken cancellationToken = default)
-    {
-        var user = await UserManager.FindByIdAsync(id.ToString());
-        if (user is null) throw new Exception("User doesn't exist!");
-
-        user.Enabled = !user.Enabled;
-        user.LastEnabledOrDisabledAt = AppContext.Time;
-        user.LastEnabledOrDisabledBy = AppContext.UserName;
-
-        var result = await UserManager.UpdateAsync(user);
-        result.ThrowIfInvalid();
-    }
-
     public virtual async Task<bool> Delete(TUserKey id, CancellationToken cancellationToken = default)
     {
         var user = await UserManager.FindByIdAsync(id.ToString());
