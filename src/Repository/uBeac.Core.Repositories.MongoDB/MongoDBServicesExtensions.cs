@@ -27,9 +27,8 @@ public static class MongoDBServicesExtensions
 
     public static IServiceCollection AddDefaultBsonSerializers(this IServiceCollection services)
     {
-#pragma warning disable CS0618 // Type or member is obsolete
+
         BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
-#pragma warning restore CS0618 // Type or member is obsolete
 
         try
         {
