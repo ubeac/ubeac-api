@@ -13,7 +13,7 @@ namespace uBeac.Web
 
             UserIp = httpContext.Connection.RemoteIpAddress;
             TraceId = httpContext.TraceIdentifier;
-            Language = httpContext.Request.GetTypedHeaders().AcceptLanguage.FirstOrDefault()?.Value.Value ?? "EN";
+            Language = httpContext.Request.GetTypedHeaders().AcceptLanguage.FirstOrDefault()?.Value.Value ?? "en-US";
 
 
             if (httpContext.User?.Identity != null && httpContext.User?.Claims?.Count() > 0)
