@@ -1,4 +1,5 @@
-﻿using uBeac.Services;
+﻿using System.Security.Claims;
+using uBeac.Services;
 
 namespace uBeac.Identity;
 
@@ -17,6 +18,7 @@ public interface IUserService<TKey, TUser> : IService
     Task<TokenResult<TKey>> RefreshToken(string refreshToken, string expiredToken, CancellationToken cancellationToken = default);
     Task<IEnumerable<TUser>> GetAll(CancellationToken cancellationToken = default);
     Task<TUser> GetById(TKey id, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Claim>> GetClaims(TUser user, CancellationToken cancellationToken = default);
     Task Update(TUser user, CancellationToken cancellationToken = default);
     Task<bool> ExistsUserName(string userName, CancellationToken cancellationToken = default);
 }

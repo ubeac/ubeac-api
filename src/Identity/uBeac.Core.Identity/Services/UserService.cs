@@ -82,6 +82,9 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         };
     }
 
+    public async Task<IEnumerable<Claim>> GetClaims(TUser user, CancellationToken cancellationToken = default)
+        => await UserManager.GetClaimsAsync(user);
+
     public virtual async Task Update(TUser entity, CancellationToken cancellationToken = default)
     {
         await UserManager.UpdateAsync(entity);
