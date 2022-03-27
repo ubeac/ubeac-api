@@ -15,7 +15,7 @@ public static class RoleExtensions
         services.TryAddScoped<IRoleRepository<TRoleKey, TRole>>(provider =>
         {
             var dbContext = provider.GetRequiredService<TMongoDbContext>();
-            return new MongoRoleRepository<TRoleKey, TRole>(dbContext);
+            return new MongoRoleRepository<TRoleKey, TRole, TMongoDbContext>(dbContext);
         });
 
         return services;
@@ -28,7 +28,7 @@ public static class RoleExtensions
         services.TryAddScoped<IRoleRepository<TRole>>(provider =>
         {
             var dbContext = provider.GetRequiredService<TMongoDbContext>();
-            return new MongoRoleRepository<TRole>(dbContext);
+            return new MongoRoleRepository<TRole, TMongoDbContext>(dbContext);
         });
 
         return services;

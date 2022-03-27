@@ -15,7 +15,7 @@ public static class UnitExtensions
         services.TryAddScoped<IUnitRepository<TUnitKey, TUnit>>(provider =>
         {
             var dbContext = provider.GetRequiredService<TMongoDbContext>();
-            return new MongoUnitRepository<TUnitKey, TUnit>(dbContext);
+            return new MongoUnitRepository<TUnitKey, TUnit, TMongoDbContext>(dbContext);
         });
 
         return services;
@@ -28,7 +28,7 @@ public static class UnitExtensions
         services.TryAddScoped<IUnitRepository<TUnit>>(provider =>
         {
             var dbContext = provider.GetRequiredService<TMongoDbContext>();
-            return new MongoUnitRepository<TUnit>(dbContext);
+            return new MongoUnitRepository<TUnit, TMongoDbContext>(dbContext);
         });
 
         return services;

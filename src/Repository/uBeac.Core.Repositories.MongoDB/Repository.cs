@@ -4,16 +4,17 @@ using System.Linq.Expressions;
 
 namespace uBeac.Repositories.MongoDB;
 
-public class MongoEntityRepository<TKey, TEntity> : IEntityRepository<TKey, TEntity>
+public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<TKey, TEntity>
         where TKey : IEquatable<TKey>
         where TEntity : IEntity<TKey>
+        where TContext : IMongoDBContext
 {
     protected readonly IMongoCollection<TEntity> Collection;
     protected readonly IMongoCollection<BsonDocument> BsonCollection;
     protected readonly IMongoDatabase MongoDatabase;
-    protected readonly IMongoDBContext MongoDbContext;
+    protected readonly TContext MongoDbContext;
 
-    public MongoEntityRepository(IMongoDBContext mongoDbContext)
+    public MongoEntityRepository(TContext mongoDbContext)
     {
         MongoDatabase = mongoDbContext.Database;
         Collection = mongoDbContext.Database.GetCollection<TEntity>(GetCollectionName());
@@ -107,10 +108,11 @@ public class MongoEntityRepository<TKey, TEntity> : IEntityRepository<TKey, TEnt
     public IQueryable<TEntity> AsQueryable() => Collection.AsQueryable();
 }
 
-public class MongoEntityRepository<TEntity> : MongoEntityRepository<Guid, TEntity>, IEntityRepository<TEntity>
+public class MongoEntityRepository<TEntity, TContext> : MongoEntityRepository<Guid, TEntity, TContext>, IEntityRepository<TEntity>
     where TEntity : IEntity
+    where TContext : IMongoDBContext
 {
-    public MongoEntityRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext)
+    public MongoEntityRepository(TContext mongoDbContext) : base(mongoDbContext)
     {
     }
 }
