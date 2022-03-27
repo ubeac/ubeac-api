@@ -12,6 +12,7 @@ public static class UserExtensions
         where TUserKey : IEquatable<TUserKey>
         where TUser : User<TUserKey>
     {
+        services.TryAddScoped<IUserRepository<TUserKey, TUser>, MongoUserRepository<TUserKey, TUser>>();
         services.TryAddScoped<IUserRepository<TUserKey, TUser>>(provider =>
         {
             var dbContext = provider.GetRequiredService<TMongoDbContext>();

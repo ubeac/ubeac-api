@@ -31,4 +31,3 @@ public class MongoUserRepository<TUser> : MongoUserRepository<Guid, TUser>, IUse
     {
     }
 }
-

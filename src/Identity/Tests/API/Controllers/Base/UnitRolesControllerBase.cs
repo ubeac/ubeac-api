@@ -18,58 +18,58 @@ public abstract class UnitRolesControllerBase<TKey, TUnitRole> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Create([FromBody] TUnitRole unitRole, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<bool>> Create([FromBody] TUnitRole unitRole, CancellationToken cancellationToken = default)
     {
         try
         {
             await UnitRoleService.Create(unitRole, cancellationToken);
-            return true.ToApiResult();
+            return true.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<bool>();
+            return ex.ToResult<bool>();
         }
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Update([FromBody] TUnitRole unitRole, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<bool>> Update([FromBody] TUnitRole unitRole, CancellationToken cancellationToken = default)
     {
         try
         {
             await UnitRoleService.Update(unitRole, cancellationToken);
-            return true.ToApiResult();
+            return true.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<bool>();
+            return ex.ToResult<bool>();
         }
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Delete([FromBody] IdRequest<TKey> request, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<bool>> Delete([FromBody] IdRequest<TKey> request, CancellationToken cancellationToken = default)
     {
         try
         {
             await UnitRoleService.Delete(request.Id, cancellationToken);
-            return true.ToApiResult();
+            return true.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<bool>();
+            return ex.ToResult<bool>();
         }
     }
 
     [HttpGet]
-    public virtual async Task<IApiListResult<TUnitRole>> GetAll(CancellationToken cancellationToken = default)
+    public virtual async Task<IListResult<TUnitRole>> GetAll(CancellationToken cancellationToken = default)
     {
         try
         {
             var unitRoles = await UnitRoleService.GetAll(cancellationToken);
-            return new ApiListResult<TUnitRole>(unitRoles);
+            return unitRoles.ToListResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiListResult<TUnitRole>();
+            return ex.ToListResult<TUnitRole>();
         }
     }
 }

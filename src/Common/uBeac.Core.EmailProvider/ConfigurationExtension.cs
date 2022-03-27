@@ -2,7 +2,7 @@
 
 namespace Microsoft.Extensions.DependencyInjection;
 
-public static class Extensions
+public static class ConfigurationExtension
 {
     public static IServiceCollection AddEmailProvider<TEmailProvider>(this IServiceCollection services, EmailProviderOptions options)
         where TEmailProvider : class, IEmailProvider

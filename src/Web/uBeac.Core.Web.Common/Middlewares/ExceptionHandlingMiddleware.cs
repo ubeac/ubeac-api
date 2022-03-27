@@ -26,7 +26,7 @@ namespace uBeac.Web.Middlewares
 
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            var apiResult = new ApiResult(exception)
+            var apiResult = new Result(exception)
             {
                 Code = StatusCodes.Status500InternalServerError,
                 TraceId = context.TraceIdentifier

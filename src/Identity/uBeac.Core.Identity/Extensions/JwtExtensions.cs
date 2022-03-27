@@ -12,6 +12,7 @@ public static class JwtExtensions
         services.AddSingleton(options);
         services.AddScoped<IJwtTokenProvider, JwtTokenProvider>();
 
+        // TODO: Remove this & Add authentication middleware:
         services.AddAuthentication(configureOptions =>
             {
                 configureOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

@@ -14,7 +14,7 @@ namespace uBeac.Web.Filters
             }
             else
             {
-                var result = new ApiResult
+                var result = new Result
                 {
                     Code = StatusCodes.Status400BadRequest
                 };

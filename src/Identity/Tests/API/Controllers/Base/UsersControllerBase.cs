@@ -22,22 +22,22 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<TUserKey>> Create([FromBody] InsertUserRequest request, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<TUserKey>> Create([FromBody] InsertUserRequest request, CancellationToken cancellationToken = default)
     {
         try
         {
             var user = Mapper.Map<TUser>(request);
             await UserService.Create(user, request.Password, cancellationToken);
-            return user.Id.ToApiResult();
+            return user.Id.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<TUserKey>();
+            return ex.ToResult<TUserKey>();
         }
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> Update([FromBody] ReplaceUserRequest<TUserKey> request, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<bool>> Update([FromBody] ReplaceUserRequest<TUserKey> request, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -49,16 +49,16 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
             user.LockoutEnabled = request.LockoutEnabled;
             user.LockoutEnd = request.LockoutEnd;
             await UserService.Update(user, cancellationToken);
-            return true.ToApiResult();
+            return true.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<bool>();
+            return ex.ToResult<bool>();
         }
     }
 
     [HttpPost]
-    public virtual async Task<IApiResult<bool>> ChangePassword([FromBody] ChangePasswordRequest<TUserKey> request, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<bool>> ChangePassword([FromBody] ChangePasswordRequest<TUserKey> request, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -68,16 +68,16 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
                 CurrentPassword = request.CurrentPassword,
                 NewPassword = request.NewPassword
             }, cancellationToken);
-            return true.ToApiResult();
+            return true.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<bool>();
+            return ex.ToResult<bool>();
         }
     }
 
     [HttpGet]
-    public virtual async Task<IApiResult<UserResponse<TUserKey>>> GetById([FromQuery] IdRequest<TUserKey> request, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<UserResponse<TUserKey>>> GetById([FromQuery] IdRequest<TUserKey> request, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -91,16 +91,16 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
                 PhoneNumber = user.PhoneNumber,
                 PhoneNumberConfirmed = user.PhoneNumberConfirmed
             };
-            return userVm.ToApiResult();
+            return userVm.ToResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiResult<UserResponse<TUserKey>>();
+            return ex.ToResult<UserResponse<TUserKey>>();
         }
     }
 
     [HttpGet]
-    public virtual async Task<IApiListResult<UserResponse<TUserKey>>> GetAll(CancellationToken cancellationToken = default)
+    public virtual async Task<IListResult<UserResponse<TUserKey>>> GetAll(CancellationToken cancellationToken = default)
     {
         try
         {
@@ -114,11 +114,11 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
                 PhoneNumber = u.PhoneNumber,
                 PhoneNumberConfirmed = u.PhoneNumberConfirmed
             });
-            return usersVm.ToApiListResult();
+            return usersVm.ToListResult();
         }
         catch (Exception ex)
         {
-            return ex.ToApiListResult<UserResponse<TUserKey>>();
+            return ex.ToListResult<UserResponse<TUserKey>>();
         }
     }
 }
