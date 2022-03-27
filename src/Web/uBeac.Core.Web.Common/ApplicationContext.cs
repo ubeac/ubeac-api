@@ -8,12 +8,11 @@ public class ApplicationContext : IApplicationContext
     public ApplicationContext(IHttpContextAccessor httpContextAccessor)
     {
         if (httpContextAccessor.HttpContext == null) return;
-
+        
         var httpContext = httpContextAccessor.HttpContext;
-
         UserIp = httpContext.Connection.RemoteIpAddress;
         TraceId = httpContext.TraceIdentifier;
-        Language = httpContext.Request.GetTypedHeaders().AcceptLanguage.FirstOrDefault()?.Value.Value ?? "EN";
+        Language = httpContext.Request.GetTypedHeaders().AcceptLanguage.FirstOrDefault()?.Value.Value ?? "en-US";
 
         if (httpContext.User?.Identity != null && httpContext.User?.Claims?.Count() > 0)
         {
