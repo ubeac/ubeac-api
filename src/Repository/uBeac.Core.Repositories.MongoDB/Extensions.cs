@@ -16,7 +16,10 @@ public static class MongoDBServicesExtensions
         services.TryAddSingleton(provider =>
         {
             var configuration = provider.GetService<IConfiguration>();
-            return new MongoDBOptions<TMongoDbContext>(configuration.GetConnectionString(connectionString), dropExistDatabase);
+            var connString = configuration.GetConnectionString(connectionString);
+            return typeof(TMongoDbContext) == typeof(MongoDBContext)
+                ? new MongoDBOptions(connString, dropExistDatabase)
+                : new MongoDBOptions<TMongoDbContext>(connString, dropExistDatabase);
         });
 
         services.TryAddSingleton<TMongoDbContext>();
@@ -27,7 +30,6 @@ public static class MongoDBServicesExtensions
 
     public static IServiceCollection AddDefaultBsonSerializers(this IServiceCollection services)
     {
-
         BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
 
         try
