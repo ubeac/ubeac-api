@@ -7,6 +7,7 @@ namespace uBeac.Web
     [ApiController]
     [Produces("application/json")]
     [TypeFilter(typeof(ModelStateValidationFilter))]
+    [TypeFilter(typeof(ResponseDebuggerFilter))]
     [TypeFilter(typeof(ApiResultFilter))]
     public abstract class BaseController
     {
