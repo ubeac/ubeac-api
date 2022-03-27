@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace uBeac.Web.Filters;
 
-public class ResponseDebuggerFilter : IActionFilter
+public class DebuggingFilter : IActionFilter
 {
     private readonly IDebugger _debugger;
 
-    public ResponseDebuggerFilter(IDebugger debugger)
+    public DebuggingFilter(IDebugger debugger)
     {
         _debugger = debugger;
     }

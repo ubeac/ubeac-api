@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace uBeac.Web.Filters
 {
-    public class ApiResultFilter : IActionFilter
+    public class ResultFilter : IActionFilter
     {
         private Stopwatch _stopwatch;
 
