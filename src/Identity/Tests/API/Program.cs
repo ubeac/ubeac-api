@@ -1,4 +1,5 @@
 using System.Reflection;
+using Microsoft.AspNetCore.Mvc;
 using uBeac.Repositories.MongoDB;
 using uBeac.Web;
 
@@ -13,6 +14,12 @@ builder.Configuration.AddJsonConfig(builder.Environment);
 // Get options from configuration files
 var emailOptions = builder.Configuration.GetInstance<EmailProviderOptions>("Email");
 var jwtOptions = builder.Configuration.GetInstance<JwtOptions>("Jwt");
+
+// Disabling automatic model state validation
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
 
 // Adding debugger
 builder.Services.AddDebugger();
