@@ -9,7 +9,7 @@ public interface IMongoDBContext
 
 public class MongoDBContext : IMongoDBContext
 {
-    public MongoDBContext(MongoDBOptions<MongoDBContext> options)
+    public MongoDBContext(MongoDBOptions options)
     {
         var mongoUrl = new MongoUrl(options.ConnectionString);
         var client = new MongoClient(mongoUrl);
