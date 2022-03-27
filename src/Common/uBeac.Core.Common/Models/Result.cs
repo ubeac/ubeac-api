@@ -5,6 +5,7 @@ public interface IResult
     List<Error> Errors { get; }
     List<object> Debug { get; set; }
     string TraceId { get; set; }
+    string SessionId { get; set; }
     double Duration { get; set; }
     int Code { get; set; }
 }
@@ -18,7 +19,8 @@ public class Result : IResult
 {
     public List<Error> Errors { get; } = new List<Error>();
     public List<object> Debug { get; set; } = new List<object>();
-    public string TraceId { get; set; } = string.Empty;
+    public string TraceId { get; set; }
+    public string SessionId { get; set; }
     public double Duration { get; set; } = 0;
     public int Code { get; set; } = 200;
 

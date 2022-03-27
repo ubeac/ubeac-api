@@ -1,30 +1,33 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.Diagnostics;
 
 namespace uBeac.Web;
 
-public class ResultFilter : IActionFilter
+public class ResultFilter : IAsyncAlwaysRunResultFilter
 {
-    private Stopwatch _stopwatch;
+    protected readonly IDebugger Debugger;
+    protected readonly IApplicationContext AppContext;
 
-    public void OnActionExecuting(ActionExecutingContext context)
+    public ResultFilter(IDebugger debugger, IApplicationContext appContext)
     {
-        _stopwatch = Stopwatch.StartNew();
+        Debugger = debugger;
+        AppContext = appContext;
     }
 
-    public void OnActionExecuted(ActionExecutedContext context)
+    public async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
     {
-        _stopwatch.Stop();
-
         if (context.Result is null || typeof(ObjectResult) != context.Result.GetType()) return;
 
         var objectResult = ((ObjectResult)context.Result).Value;
         if (objectResult is IResult result)
         {
-            result.Duration = _stopwatch.Elapsed.TotalMilliseconds;
-            result.TraceId = context.HttpContext.TraceIdentifier;
+            result.TraceId = AppContext.TraceId;
+            result.SessionId = AppContext.SessionId;
+            result.Debug = Debugger.GetValues();
             context.HttpContext.Response.StatusCode = result.Code;
+            result.Duration = (DateTime.Now - AppContext.Time).TotalSeconds;
         }
+
+        await next();
     }
 }

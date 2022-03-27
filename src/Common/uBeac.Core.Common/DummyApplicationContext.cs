@@ -4,22 +4,11 @@ namespace uBeac
 {
     public class DummyApplicationContext : IApplicationContext
     {
-        public DummyApplicationContext()
-        {
-            var id = Guid.NewGuid().ToString();
-            UserIp = IPAddress.Parse("127.0.1.1");
-            Language = "en-US";
-            SessionId = id;
-            TraceId = id;
-            UserName = string.Empty;
-            Time = DateTime.Now;
-        }
-
-        public virtual string UserName { get; }
-        public virtual IPAddress UserIp { get; }
-        public virtual string Language { get; }
-        public virtual string SessionId { get; }
-        public virtual string TraceId { get; }
-        public virtual DateTime Time { get; }
+        public virtual string TraceId { get; } = Guid.NewGuid().ToString();
+        public virtual string SessionId { get; } = string.Empty;
+        public virtual DateTime Time { get; } = DateTime.Now;
+        public virtual string UserName { get; } = string.Empty;
+        public virtual IPAddress UserIp { get; } = IPAddress.Parse("127.0.1.1");
+        public virtual string Language { get; } = "en-US";
     }
 }
