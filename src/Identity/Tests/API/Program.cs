@@ -14,6 +14,9 @@ builder.Configuration.AddJsonConfig(builder.Environment);
 var emailOptions = builder.Configuration.GetInstance<EmailProviderOptions>("Email");
 var jwtOptions = builder.Configuration.GetInstance<JwtOptions>("Jwt");
 
+// Adding debugger
+builder.Services.AddDebugger();
+
 // Adding swagger
 builder.Services.AddCoreSwaggerWithJWT("Example");
 

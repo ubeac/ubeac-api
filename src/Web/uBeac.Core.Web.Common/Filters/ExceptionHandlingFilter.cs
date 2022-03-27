@@ -3,18 +3,11 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace uBeac.Web;
 
-public class ExceptionHandlingFilter : IAsyncActionFilter
+public class ExceptionHandlingFilter : IExceptionFilter
 {
-    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+    public void OnException(ExceptionContext context)
     {
-        try
-        {
-            await next();
-        }
-        catch (Exception ex)
-        {
-            var result = new Result(ex);
-            context.Result = new ObjectResult(result);
-        }
+        var result = new Result(context.Exception);
+        context.Result = new ObjectResult(result);
     }
 }
