@@ -14,7 +14,7 @@ public static class UserTokenExtensions
         services.TryAddScoped<IUserTokenRepository<TUserKey>>(provider =>
         {
             var dbContext = provider.GetRequiredService<TMongoDbContext>();
-            return new MongoUserTokenRepository<TUserKey>(dbContext);
+            return new MongoUserTokenRepository<TUserKey, TMongoDbContext>(dbContext);
         });
 
         return services;
@@ -26,7 +26,7 @@ public static class UserTokenExtensions
         services.TryAddScoped<IUserTokenRepository>(provider =>
         {
             var dbContext = provider.GetRequiredService<TMongoDbContext>();
-            return new MongoUserTokenRepository(dbContext);
+            return new MongoUserTokenRepository<TMongoDbContext>(dbContext);
         });
 
         return services;

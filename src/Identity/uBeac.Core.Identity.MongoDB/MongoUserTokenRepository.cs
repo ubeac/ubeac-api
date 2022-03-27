@@ -2,17 +2,19 @@
 
 namespace uBeac.Identity.MongoDB;
 
-public class MongoUserTokenRepository<TUserKey> : MongoEntityRepository<TUserKey, UserToken<TUserKey>>, IUserTokenRepository<TUserKey>
+public class MongoUserTokenRepository<TUserKey, TContext> : MongoEntityRepository<TUserKey, UserToken<TUserKey>, TContext>, IUserTokenRepository<TUserKey>
     where TUserKey : IEquatable<TUserKey>
+    where TContext : IMongoDBContext
 {
-    public MongoUserTokenRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext)
+    public MongoUserTokenRepository(TContext mongoDbContext) : base(mongoDbContext)
     {
     }
 }
 
-public class MongoUserTokenRepository : MongoUserTokenRepository<Guid>, IUserTokenRepository
+public class MongoUserTokenRepository<TContext> : MongoUserTokenRepository<Guid, TContext>, IUserTokenRepository
+    where TContext : IMongoDBContext
 {
-    public MongoUserTokenRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext)
+    public MongoUserTokenRepository(TContext mongoDbContext) : base(mongoDbContext)
     {
     }
 }

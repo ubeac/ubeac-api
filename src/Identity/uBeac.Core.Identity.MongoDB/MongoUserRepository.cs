@@ -3,11 +3,12 @@ using uBeac.Repositories.MongoDB;
 
 namespace uBeac.Identity.MongoDB;
 
-public class MongoUserRepository<TUserKey, TUser> : MongoEntityRepository<TUserKey, TUser>, IUserRepository<TUserKey, TUser>
+public class MongoUserRepository<TUserKey, TUser, TContext> : MongoEntityRepository<TUserKey, TUser, TContext>, IUserRepository<TUserKey, TUser>
     where TUserKey : IEquatable<TUserKey>
     where TUser : User<TUserKey>
+    where TContext : IMongoDBContext
 {
-    public MongoUserRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext)
+    public MongoUserRepository(TContext mongoDbContext) : base(mongoDbContext)
     {
         // Create Indexes
         try
@@ -24,10 +25,11 @@ public class MongoUserRepository<TUserKey, TUser> : MongoEntityRepository<TUserK
     }
 }
 
-public class MongoUserRepository<TUser> : MongoUserRepository<Guid, TUser>, IUserRepository<TUser>
+public class MongoUserRepository<TUser, TContext> : MongoUserRepository<Guid, TUser, TContext>, IUserRepository<TUser>
     where TUser : User
+    where TContext : IMongoDBContext
 {
-    public MongoUserRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext)
+    public MongoUserRepository(TContext mongoDbContext) : base(mongoDbContext)
     {
     }
 }

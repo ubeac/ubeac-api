@@ -15,7 +15,7 @@ public static class UnitRoleExtensions
         services.TryAddScoped<IUnitRoleRepository<TUnitRoleKey, TUnitRole>>(provider =>
         {
             var dbContext = provider.GetRequiredService<TMongoDbContext>();
-            return new MongoUnitRoleRepository<TUnitRoleKey, TUnitRole>(dbContext);
+            return new MongoUnitRoleRepository<TUnitRoleKey, TUnitRole, TMongoDbContext>(dbContext);
         });
 
         return services;
@@ -28,7 +28,7 @@ public static class UnitRoleExtensions
         services.TryAddScoped<IUnitRoleRepository<TUnitRole>>(provider =>
         {
             var dbContext = provider.GetRequiredService<TMongoDbContext>();
-            return new MongoUnitRoleRepository<TUnitRole>(dbContext);
+            return new MongoUnitRoleRepository<TUnitRole, TMongoDbContext>(dbContext);
         });
 
         return services;
