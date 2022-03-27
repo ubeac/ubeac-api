@@ -5,7 +5,6 @@ namespace uBeac;
 public interface IApplicationContext
 {
     public string TraceId { get; }
-    public DateTime Time { get; }
     public string UserName { get; }
     public IPAddress UserIp { get; }
     public string Language { get; }

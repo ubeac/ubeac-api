@@ -21,6 +21,7 @@ public class EmailProvider : IEmailProvider
         Logger = logger;
     }
 
+    // todo: to, cc, bcc: array string
     public virtual async Task Send(string receptor, string subject, string body, bool isBodyHtml = false)
     {
         try

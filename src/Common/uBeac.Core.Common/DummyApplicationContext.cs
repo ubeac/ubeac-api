@@ -8,7 +8,7 @@ namespace uBeac
         {
             var id = Guid.NewGuid().ToString();
             UserIp = IPAddress.Parse("127.0.1.1");
-            Language = "en";
+            Language = "en-US";
             SessionId = id;
             TraceId = id;
             UserName = string.Empty;

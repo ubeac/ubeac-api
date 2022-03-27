@@ -68,7 +68,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         identityResult.ThrowIfInvalid();
 
         // Update user properties related to login
-        user.LastLoginAt = AppContext.Time;
+        user.LastLoginAt = DateTime.Now;
         user.LoginsCount++;
         await UserManager.UpdateAsync(user);
 
@@ -127,7 +127,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         idResult.ThrowIfInvalid();
 
         // Update user properties related to password changing
-        user.LastPasswordChangedAt = AppContext.Time;
+        user.LastPasswordChangedAt = DateTime.Now;
         user.LastPasswordChangedBy = AppContext.UserName;
         await UserManager.UpdateAsync(user);
     }
@@ -159,7 +159,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         result.ThrowIfInvalid();
 
         // Update user properties related to password changing
-        user.LastPasswordChangedAt = AppContext.Time;
+        user.LastPasswordChangedAt = DateTime.Now;
         user.LastPasswordChangedBy = AppContext.UserName;
         await UserManager.UpdateAsync(user);
     }
@@ -193,7 +193,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         var newToken = JwtTokenProvider.GenerateToken<TUserKey, TUser>(user);
 
         // Update user properties related to login
-        user.LastLoginAt = AppContext.Time;
+        user.LastLoginAt = DateTime.Now;
         user.LoginsCount++;
         await UserManager.UpdateAsync(user);
 

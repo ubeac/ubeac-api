@@ -85,7 +85,7 @@ namespace uBeac.Services
             // Set audit properties (CreatedAt, CreatedBy, etc.)
             if (entity is IAuditEntity<TKey> audit)
             {
-                audit.CreatedAt = AppContext.Time;
+                audit.CreatedAt = DateTime.Now;
                 audit.CreatedBy = AppContext.UserName;
                 audit.CreatedByIp = AppContext.UserIp.ToString();
             }
@@ -96,7 +96,7 @@ namespace uBeac.Services
             // Set audit properties (LastUpdatedAt, LastUpdatedBy, etc.)
             if (entity is IAuditEntity<TKey> audit)
             {
-                audit.LastUpdatedAt = AppContext.Time;
+                audit.LastUpdatedAt = DateTime.Now;
                 audit.LastUpdatedBy = AppContext.UserName;
                 audit.LastUpdatedByIp = AppContext.UserIp.ToString();
             }
