@@ -12,7 +12,7 @@ public class MongoDBOptions
     }
 }
 
-public class MongoDBOptions<TContext> : MongoDBOptions where T : IMongoDBContext
+public class MongoDBOptions<TContext> : MongoDBOptions where TContext : IMongoDBContext
 {
     public MongoDBOptions(string connectionString, bool dropExistDatabase = false) : base(connectionString, dropExistDatabase)
     {
