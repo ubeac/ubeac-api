@@ -17,10 +17,10 @@ public class LocalAuthenticator<TUserKey, TUser> : IAuthenticator
         => await _tokenService.Validate(accessToken);
 }
 
-public class LocalTokenValidator<TUser> : LocalAuthenticator<Guid, TUser>
+public class LocalAuthenticator<TUser> : LocalAuthenticator<Guid, TUser>
     where TUser : User
 {
-    public LocalTokenValidator(ITokenService<TUser> tokenService) : base(tokenService)
+    public LocalAuthenticator(ITokenService<TUser> tokenService) : base(tokenService)
     {
     }
 }
