@@ -32,7 +32,7 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     }
 
     [HttpPost]
-    public virtual async Task<IResult<TokenResult<TUserKey>>> Login([FromBody] LoginRequest model, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<SignInResult<TUserKey>>> Login([FromBody] LoginRequest model, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -41,12 +41,12 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
         }
         catch (Exception ex)
         {
-            return ex.ToResult<TokenResult<TUserKey>>();
+            return ex.ToResult<SignInResult<TUserKey>>();
         }
     }
 
     [HttpPost]
-    public virtual async Task<IResult<TokenResult<TUserKey>>> RefreshToken([FromBody] RefreshTokenRequest model, CancellationToken cancellationToken = default)
+    public virtual async Task<IResult<SignInResult<TUserKey>>> RefreshToken([FromBody] RefreshTokenRequest model, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -55,7 +55,7 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
         }
         catch (Exception ex)
         {
-            return ex.ToResult<TokenResult<TUserKey>>();
+            return ex.ToResult<SignInResult<TUserKey>>();
         }
     }
 

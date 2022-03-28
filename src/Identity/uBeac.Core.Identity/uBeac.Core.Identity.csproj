@@ -10,15 +10,13 @@
 
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.15.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Common\uBeac.Core.EmailProvider\uBeac.Core.EmailProvider.csproj" />
     <ProjectReference Include="..\..\Service\uBeac.Core.Services\uBeac.Core.Services.csproj" />
-    <ProjectReference Include="..\uBeac.Core.Identity.Auth\uBeac.Core.Identity.Auth.csproj" />
+    <ProjectReference Include="..\uBeac.Core.Identity.Authentication\uBeac.Core.Identity.Authentication.csproj" />
     <ProjectReference Include="..\uBeac.Core.Identity.Common\uBeac.Core.Identity.Common.csproj" />
   </ItemGroup>
 

@@ -15,6 +15,7 @@
     <ProjectReference Include="..\..\..\Common\uBeac.Core.Configuration\uBeac.Core.Configuration.csproj" />
     <ProjectReference Include="..\..\..\Web\uBeac.Core.Web.Common\uBeac.Core.Web.Common.csproj" />
     <ProjectReference Include="..\..\uBeac.Core.Identity.Common\uBeac.Core.Identity.Common.csproj" />
+    <ProjectReference Include="..\..\uBeac.Core.Identity.Jwt\uBeac.Core.Identity.Jwt.csproj" />
     <ProjectReference Include="..\..\uBeac.Core.Identity.MongoDB\uBeac.Core.Identity.MongoDB.csproj" />
     <ProjectReference Include="..\..\uBeac.Core.Identity\uBeac.Core.Identity.csproj" />
   </ItemGroup>

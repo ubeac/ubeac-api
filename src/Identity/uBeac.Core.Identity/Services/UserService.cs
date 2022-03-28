@@ -1,11 +1,6 @@
 ﻿using System.ComponentModel;
-using System.Data.Entity;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 
 namespace uBeac.Identity;
 
@@ -17,19 +12,15 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
     const string REFRESH_TOKEN_NAME = "refreshToken";
 
     protected readonly UserManager<TUser> UserManager;
-    protected readonly IJwtTokenProvider JwtTokenProvider;
-    protected readonly IHttpContextAccessor HttpContextAccessor;
-    protected readonly JwtOptions JwtOptions;
+    protected readonly ITokenService<TUserKey, TUser> TokenService;
     protected readonly IUserTokenRepository<TUserKey> UserTokenRepository;
     protected readonly IEmailProvider EmailProvider;
     protected readonly IApplicationContext AppContext;
 
-    public UserService(UserManager<TUser> userManager, IJwtTokenProvider jwtTokenProvider, IHttpContextAccessor httpContextAccessor, JwtOptions jwtOptions, IUserTokenRepository<TUserKey> userTokenRepository, IEmailProvider emailProvider, IApplicationContext appContext)
+    public UserService(UserManager<TUser> userManager, ITokenService<TUserKey, TUser> tokenService, IUserTokenRepository<TUserKey> userTokenRepository, IEmailProvider emailProvider, IApplicationContext appContext)
     {
         UserManager = userManager;
-        JwtTokenProvider = jwtTokenProvider;
-        HttpContextAccessor = httpContextAccessor;
-        JwtOptions = jwtOptions;
+        TokenService = tokenService;
         UserTokenRepository = userTokenRepository;
         EmailProvider = emailProvider;
         AppContext = appContext;
@@ -52,19 +43,18 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         return user;
     }
 
-    public virtual async Task<TokenResult<TUserKey>> Authenticate(string username, string password, CancellationToken cancellationToken = default)
+    public virtual async Task<SignInResult<TUserKey>> Authenticate(string username, string password, CancellationToken cancellationToken = default)
     {
         var user = await UserManager.FindByNameAsync(username);
 
         // Validate user password
         if (user is null || !await UserManager.CheckPasswordAsync(user, password)) throw new Exception("User doesn't exist or username/password is not valid!");
 
-        // Generate tokens
-        var token = JwtTokenProvider.GenerateToken<TUserKey, TUser>(user);
-        var refreshToken = JwtTokenProvider.GenerateRefreshToken<TUserKey, TUser>(user);
+        // Generate token
+        var token = await TokenService.Generate(user);
 
         // Store refresh token
-        var identityResult = await UserManager.SetAuthenticationTokenAsync(user, LOCAL_LOGIN_PROVIDER, REFRESH_TOKEN_NAME, refreshToken);
+        var identityResult = await UserManager.SetAuthenticationTokenAsync(user, LOCAL_LOGIN_PROVIDER, REFRESH_TOKEN_NAME, token.RefreshToken);
         identityResult.ThrowIfInvalid();
 
         // Update user properties related to login
@@ -72,12 +62,12 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         user.LoginsCount++;
         await UserManager.UpdateAsync(user);
 
-        return new TokenResult<TUserKey>
+        return new SignInResult<TUserKey>
         {
             UserId = user.Id,
             Roles = user.Roles,
-            Token = token.Token,
-            RefreshToken = refreshToken,
+            Token = token.AccessToken,
+            RefreshToken = token.RefreshToken,
             Expiry = token.Expiry
         };
     }
@@ -167,14 +157,6 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         await UserManager.UpdateAsync(user);
     }
 
-    public virtual Task<TUserKey> GetCurrentUserId(CancellationToken cancellationToken = default)
-    {
-        if (HttpContextAccessor.HttpContext == null) return default;
-
-        var userId = UserManager.GetUserId(HttpContextAccessor.HttpContext.User);
-        return string.IsNullOrEmpty(userId) ? default : Task.FromResult(userId.GetTypedKey<TUserKey>());
-    }
-
     public virtual async Task RevokeTokens(TUserKey id, CancellationToken cancellationToken = default)
     {
         var user = await UserManager.FindByIdAsync(id.ToString());
@@ -185,53 +167,34 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
 
     }
 
-    public virtual async Task<TokenResult<TUserKey>> RefreshToken(string refreshToken, string expiredToken, CancellationToken cancellationToken = default)
+    public virtual async Task<SignInResult<TUserKey>> RefreshToken(string refreshToken, string expiredToken, CancellationToken cancellationToken = default)
     {
-        var principal = GetPrincipalFromExpiredToken(expiredToken);
-        var username = principal?.Identity?.Name;
-        var user = await UserManager.FindByNameAsync(username);
+        var user = await UserManager.FindByNameAsync(AppContext.UserName);
         var storedRefreshToken = await UserManager.GetAuthenticationTokenAsync(user, LOCAL_LOGIN_PROVIDER, REFRESH_TOKEN_NAME);
         if (storedRefreshToken != refreshToken) throw new Exception("Token expired!");
 
-        var newToken = JwtTokenProvider.GenerateToken<TUserKey, TUser>(user);
+        var newToken = await TokenService.Generate(user);
 
         // Update user properties related to login
         user.LastLoginAt = DateTime.Now;
         user.LoginsCount++;
         await UserManager.UpdateAsync(user);
 
-        return new TokenResult<TUserKey>
+        return new SignInResult<TUserKey>
         {
             UserId = user.Id,
             Roles = user.Roles,
-            Token = newToken.Token,
+            Token = newToken.AccessToken,
             RefreshToken = refreshToken,
             Expiry = newToken.Expiry
         };
-    }
-
-    private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
-    {
-        var tokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateAudience = true, // You might want to validate the audience and issuer depending on your use case
-            ValidateIssuer = true,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(JwtOptions.Secret)),
-            ValidateLifetime = false, // Here we are saying that we don't care about the token's expiration date
-            ValidAudience = JwtOptions.Audience,
-            ValidIssuer = JwtOptions.Issuer
-        };
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
-        return principal;
     }
 }
 
 public class UserService<TUser> : UserService<Guid, TUser>, IUserService<TUser>
     where TUser : User
 {
-    public UserService(UserManager<TUser> userManager, IJwtTokenProvider jwtTokenProvider, IHttpContextAccessor httpContextAccessor, JwtOptions jwtOptions, IUserTokenRepository userTokenRepository, IEmailProvider emailProvider, IApplicationContext appContext) : base(userManager, jwtTokenProvider, httpContextAccessor, jwtOptions, userTokenRepository, emailProvider, appContext)
+    public UserService(UserManager<TUser> userManager, ITokenService<TUser> tokenService, IUserTokenRepository userTokenRepository, IEmailProvider emailProvider, IApplicationContext appContext) : base(userManager, tokenService, userTokenRepository, emailProvider, appContext)
     {
     }
 }

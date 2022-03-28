@@ -2,18 +2,18 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 
-namespace uBeac.Auth;
+namespace uBeac.Identity;
 
-public class AuthMiddleware
+public class AuthenticationMiddleware
 {
     private readonly RequestDelegate _next;
 
-    public AuthMiddleware(RequestDelegate next)
+    public AuthenticationMiddleware(RequestDelegate next)
     {
         _next = next;
     }
 
-    public async Task Invoke(HttpContext context, IAuthService authService)
+    public async Task Invoke(HttpContext context, IAuthenticator authenticator)
     {
         try
         {
@@ -21,8 +21,8 @@ public class AuthMiddleware
                 authHeader.ToString().StartsWith("Bearer", StringComparison.OrdinalIgnoreCase))
             {
                 var accessToken = authHeader.ToString().Substring("Bearer".Length).Trim();
-                var claims = await authService.ValidateToken(accessToken);
-                var identity = new ClaimsIdentity(claims, "uBeac-Auth");
+                var claims = await authenticator.Authenticate(accessToken);
+                var identity = new ClaimsIdentity(claims, "uBeac-Authentication");
                 context.User = new ClaimsPrincipal(identity);
             }
         }
