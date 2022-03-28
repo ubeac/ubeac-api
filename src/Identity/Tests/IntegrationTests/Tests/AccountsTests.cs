@@ -65,7 +65,7 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.PostAsync(LoginUri, content);
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<TokenResult>();
+        var result = await response.GetApiResult<SignInResult>();
 
         // Assert
         Assert.NotNull(result.Data);
@@ -93,7 +93,7 @@ public class AccountsTests : BaseTestClass, IClassFixture<Factory>
         // Act
         var response = await client.PostAsync(RefreshTokenUri, content);
         response.EnsureSuccessStatusCode();
-        var result = await response.GetApiResult<TokenResult>();
+        var result = await response.GetApiResult<SignInResult>();
 
         // Set Static Values
         _userId = result.Data.UserId;
