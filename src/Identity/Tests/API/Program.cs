@@ -53,8 +53,8 @@ builder.Services.AddUnitService<UnitService<Unit>, Unit>();
 builder.Services.AddUnitTypeService<UnitTypeService<UnitType>, UnitType>();
 builder.Services.AddUnitRoleService<UnitRoleService<UnitRole>, UnitRole>();
 
-// Adding jwt authentication
-builder.Services.AddJwtAuthentication(jwtOptions);
+// Adding jwt provider
+builder.Services.AddJwtProvider(jwtOptions);
 
 // Adding identity core
 builder.Services
