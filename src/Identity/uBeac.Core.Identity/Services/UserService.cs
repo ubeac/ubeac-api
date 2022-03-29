@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace uBeac.Identity;
 
@@ -16,14 +17,16 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
     protected readonly IUserTokenRepository<TUserKey> UserTokenRepository;
     protected readonly IEmailProvider EmailProvider;
     protected readonly IApplicationContext AppContext;
+    protected readonly IHttpContextAccessor Accessor;
 
-    public UserService(UserManager<TUser> userManager, ITokenService<TUserKey, TUser> tokenService, IUserTokenRepository<TUserKey> userTokenRepository, IEmailProvider emailProvider, IApplicationContext appContext)
+    public UserService(UserManager<TUser> userManager, ITokenService<TUserKey, TUser> tokenService, IUserTokenRepository<TUserKey> userTokenRepository, IEmailProvider emailProvider, IApplicationContext appContext, IHttpContextAccessor accessor)
     {
         UserManager = userManager;
         TokenService = tokenService;
         UserTokenRepository = userTokenRepository;
         EmailProvider = emailProvider;
         AppContext = appContext;
+        Accessor = accessor;
     }
 
     public virtual async Task Create(TUser user, string password, CancellationToken cancellationToken = default)
@@ -70,6 +73,14 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
             RefreshToken = token.RefreshToken,
             Expiry = token.Expiry
         };
+    }
+
+    public virtual Task<TUserKey> GetCurrentUserId(CancellationToken cancellationToken = default)
+    {
+        if (Accessor.HttpContext == null) return default;
+
+        var userId = UserManager.GetUserId(Accessor.HttpContext.User);
+        return string.IsNullOrEmpty(userId) ? default : Task.FromResult(userId.GetTypedKey<TUserKey>());
     }
 
     public async Task<IEnumerable<Claim>> GetClaims(TUser user, CancellationToken cancellationToken = default)
@@ -194,7 +205,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
 public class UserService<TUser> : UserService<Guid, TUser>, IUserService<TUser>
     where TUser : User
 {
-    public UserService(UserManager<TUser> userManager, ITokenService<TUser> tokenService, IUserTokenRepository userTokenRepository, IEmailProvider emailProvider, IApplicationContext appContext) : base(userManager, tokenService, userTokenRepository, emailProvider, appContext)
+    public UserService(UserManager<TUser> userManager, ITokenService<TUser> tokenService, IUserTokenRepository userTokenRepository, IEmailProvider emailProvider, IApplicationContext appContext, IHttpContextAccessor accessor) : base(userManager, tokenService, userTokenRepository, emailProvider, appContext, accessor)
     {
     }
 }
