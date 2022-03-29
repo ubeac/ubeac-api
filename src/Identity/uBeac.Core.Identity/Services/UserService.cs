@@ -84,7 +84,21 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
     }
 
     public async Task<IEnumerable<Claim>> GetClaims(TUser user, CancellationToken cancellationToken = default)
-        => await UserManager.GetClaimsAsync(user);
+    {
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new(ClaimTypes.Name, user.NormalizedUserName)
+        };
+        if (!string.IsNullOrWhiteSpace(user.NormalizedEmail)) claims.Add(new Claim(ClaimTypes.Email, user.NormalizedEmail));
+        if (!string.IsNullOrWhiteSpace(user.PhoneNumber)) claims.Add(new Claim(ClaimTypes.Email, user.PhoneNumber));
+
+        var userRoles = await UserManager.GetRolesAsync(user);
+        var userRoleClaims = userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole));
+        claims.AddRange(userRoleClaims);
+
+        return claims;
+    }
 
     public virtual async Task Update(TUser entity, CancellationToken cancellationToken = default)
     {

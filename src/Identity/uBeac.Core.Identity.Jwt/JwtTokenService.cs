@@ -22,14 +22,10 @@ public class JwtTokenService<TUserKey, TUser> : IJwtTokenService<TUserKey, TUser
     where TUser : User<TUserKey>
 {
     protected readonly JwtOptions Options;
-    protected readonly IUserService<TUserKey, TUser> UserService;
-    protected readonly IUserRoleService<TUserKey, TUser> UserRoleService;
 
-    public JwtTokenService(JwtOptions options, IUserService<TUserKey, TUser> userService, IUserRoleService<TUserKey, TUser> userRoleService)
+    public JwtTokenService(JwtOptions options)
     {
         Options = options;
-        UserService = userService;
-        UserRoleService = userRoleService;
     }
 
     public virtual async Task<TokenResult> Generate(TUser user)
@@ -95,35 +91,19 @@ public class JwtTokenService<TUserKey, TUser> : IJwtTokenService<TUserKey, TUser
         return result;
     }
 
-    public virtual async Task<IEnumerable<Claim>> Validate(string accessToken)
+    public virtual async Task<TUserKey> Validate(string accessToken)
     {
-        var principal = GetPrincipal(accessToken);
-
-        var userId = GetUserId(principal);
-        var user = await UserService.GetById(userId);
-        if (user is null) return null;
-
-        var tokenValidationResult = ValidateToken(accessToken);
-        if (tokenValidationResult is false) throw new Exception("Token is not valid.");
-
-        return await GetUserClaims(user);
-    }
-
-    protected virtual async Task<IEnumerable<Claim>> GetUserClaims(TUser user)
-    {
-        var claims = new List<Claim>
+        return await Task.Run(() =>
         {
-            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new(ClaimTypes.Name, user.NormalizedUserName)
-        };
-        if (!string.IsNullOrWhiteSpace(user.NormalizedEmail)) claims.Add(new Claim(ClaimTypes.Email, user.NormalizedEmail));
-        if (!string.IsNullOrWhiteSpace(user.PhoneNumber)) claims.Add(new Claim(ClaimTypes.Email, user.PhoneNumber));
+            var principal = GetPrincipal(accessToken);
+            var tokenValidationResult = ValidateToken(accessToken);
+            var userId = GetUserId(principal);
 
-        var userRoles = await UserRoleService.GetRolesForUser(user.Id);
-        var userRoleClaims = userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole));
-        claims.AddRange(userRoleClaims);
+            if (tokenValidationResult is false || userId is null) 
+                throw new Exception("Token is not valid.");
 
-        return claims;
+            return userId;
+        });
     }
 
     protected virtual ClaimsPrincipal GetPrincipal(string accessToken)
@@ -175,7 +155,7 @@ public class JwtTokenService<TUserKey, TUser> : IJwtTokenService<TUserKey, TUser
 public class JwtTokenService<TUser> : JwtTokenService<Guid, TUser>, IJwtTokenService<TUser>
     where TUser : User
 {
-    public JwtTokenService(JwtOptions options, IUserService<TUser> userService, IUserRoleService<TUser> userRoleService) : base(options, userService, userRoleService)
+    public JwtTokenService(JwtOptions options) : base(options)
     {
     }
 }
