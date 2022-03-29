@@ -95,44 +95,11 @@ public class JwtTokenService<TUserKey, TUser> : IJwtTokenService<TUserKey, TUser
     {
         return await Task.Run(() =>
         {
-            var principal = GetPrincipal(accessToken);
-            var tokenValidationResult = ValidateToken(accessToken);
-            var userId = GetUserId(principal);
-
-            if (tokenValidationResult is false || userId is null) 
-                throw new Exception("Token is not valid.");
-
-            return userId;
-        });
-    }
-
-    protected virtual ClaimsPrincipal GetPrincipal(string accessToken)
-    {
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var jwtToken = tokenHandler.ReadJwtToken(accessToken);
-        if (jwtToken == null) return null;
-        var identity = new ClaimsIdentity(jwtToken.Claims);
-        return new ClaimsPrincipal(identity);
-    }
-
-    protected virtual TUserKey GetUserId(ClaimsPrincipal principal)
-    {
-        var userId = principal.FindFirstValue(JwtRegisteredClaimNames.Sub);
-        return userId.GetTypedKey<TUserKey>();
-    }
-
-    protected virtual bool ValidateToken(string accessToken)
-    {
-        if (accessToken == null) return false;
-
-        var jwtTokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(Options.Secret);
-
-        try
-        {
-            jwtTokenHandler.ValidateToken(accessToken, new TokenValidationParameters
+            var jwtTokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(Options.Secret);
+            var principal = jwtTokenHandler.ValidateToken(accessToken, new TokenValidationParameters
             {
-                ValidateIssuerSigningKey = true, // this will validate the 3rd part of the jwt token using the secret that we added in the appsettings and verify we have generated the jwt token
+                ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(key),
                 ValidateIssuer = true,
                 ValidateAudience = true,
@@ -143,12 +110,42 @@ public class JwtTokenService<TUserKey, TUser> : IJwtTokenService<TUserKey, TUser
                 ValidIssuer = Options.Issuer
             }, out _);
 
-            return true;
-        }
-        catch
+            var userId = GetUserId(principal);
+            if (userId is null) throw new Exception("Token is not valid.");
+            return userId;
+        });
+    }
+
+    public virtual async Task<TUserKey> ValidateExpiredToken(string accessToken)
+    {
+        return await Task.Run(() =>
         {
-            return false;
-        }
+            var jwtTokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(Options.Secret);
+            var principal = jwtTokenHandler.ValidateToken(accessToken, new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                RequireExpirationTime = true,
+                ValidateLifetime = false,
+                SaveSigninToken = true,
+                ValidAudience = Options.Audience,
+                ValidIssuer = Options.Issuer
+            }, out _);
+
+            var userId = GetUserId(principal);
+            if (userId is null) throw new Exception("Token is not valid.");
+            return userId;
+        });
+    }
+
+    protected virtual TUserKey GetUserId(ClaimsPrincipal principal)
+    {
+        var userId = principal.FindFirstValue(ClaimTypes.NameIdentifier) ??
+                     principal.FindFirstValue(JwtRegisteredClaimNames.Sub);
+        return userId.GetTypedKey<TUserKey>();
     }
 }
 

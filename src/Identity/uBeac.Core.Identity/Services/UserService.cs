@@ -194,7 +194,8 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
 
     public virtual async Task<SignInResult<TUserKey>> RefreshToken(string refreshToken, string expiredToken, CancellationToken cancellationToken = default)
     {
-        var user = await UserManager.FindByNameAsync(AppContext.UserName);
+        var userId = await TokenService.ValidateExpiredToken(expiredToken);
+        var user = await UserManager.FindByIdAsync(userId.ToString());
         var storedRefreshToken = await UserManager.GetAuthenticationTokenAsync(user, LOCAL_LOGIN_PROVIDER, REFRESH_TOKEN_NAME);
         if (storedRefreshToken != refreshToken) throw new Exception("Token expired!");
 
