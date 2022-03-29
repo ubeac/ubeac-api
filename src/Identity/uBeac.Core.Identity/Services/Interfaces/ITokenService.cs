@@ -6,6 +6,7 @@ public interface ITokenService<TUserKey, TUser>
 {
     Task<TokenResult> Generate(TUser user);
     Task<TUserKey> Validate(string accessToken);
+    Task<TUserKey> ValidateExpiredToken(string accessToken);
 }
 
 public interface ITokenService<TUser> : ITokenService<Guid, TUser>
