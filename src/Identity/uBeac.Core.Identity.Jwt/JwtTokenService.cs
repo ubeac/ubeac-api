@@ -118,7 +118,7 @@ public class JwtTokenService<TUserKey, TUser> : IJwtTokenService<TUserKey, TUser
     protected virtual TUserKey GetUserId(ClaimsPrincipal principal)
     {
         var userId = principal.FindFirstValue(JwtRegisteredClaimNames.Sub);
-        return (TUserKey)Convert.ChangeType(userId, typeof(TUserKey));
+        return userId.GetTypedKey<TUserKey>();
     }
 
     protected virtual bool ValidateToken(string accessToken)
