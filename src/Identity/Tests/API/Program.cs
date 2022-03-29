@@ -56,6 +56,14 @@ builder.Services.AddUnitRoleService<UnitRoleService<UnitRole>, UnitRole>();
 // Adding jwt provider
 builder.Services.AddJwtService<User>(jwtOptions);
 
+// Adding authentication
+builder.Services.AddAuthentication<LocalAuthenticator<User>>(new AuthenticationOptions
+{
+    Issuer = jwtOptions.Issuer,
+    Audience = jwtOptions.Audience,
+    Secret = jwtOptions.Secret
+});
+
 // Adding identity core
 builder.Services
     .AddIdentityUser<User>(configureOptions: options =>
@@ -90,6 +98,7 @@ app.UseHttpsRedirection();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseAuthentication();
+app.UseMiddleware<AuthenticationMiddleware>(); // This middleware should be called after UseAuthentication
 app.UseAuthorization();
 app.MapControllers();
 app.UseCoreSwagger();
