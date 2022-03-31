@@ -2,6 +2,7 @@
 using System.Net.Mail;
 using System.Text;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace uBeac;
 
@@ -15,9 +16,9 @@ public class EmailProvider : IEmailProvider
     protected readonly EmailProviderOptions Options;
     protected readonly ILogger<EmailProvider> Logger;
 
-    public EmailProvider(EmailProviderOptions options, ILogger<EmailProvider> logger)
+    public EmailProvider(IOptions<EmailProviderOptions> options, ILogger<EmailProvider> logger)
     {
-        Options = options;
+        Options = options.Value;
         Logger = logger;
     }
 
