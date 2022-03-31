@@ -15,6 +15,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Common\uBeac.Core.Common\uBeac.Core.Common.csproj" />
+		<ProjectReference Include="..\..\Common\uBeac.Core.Configuration\uBeac.Core.Configuration.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -23,9 +23,9 @@ public class JwtTokenService<TUserKey, TUser> : IJwtTokenService<TUserKey, TUser
 {
     protected readonly JwtOptions Options;
 
-    public JwtTokenService(JwtOptions options)
+    public JwtTokenService(Microsoft.Extensions.Options.IOptions<JwtOptions> options)
     {
-        Options = options;
+        Options = options.Value;
     }
 
     public virtual async Task<TokenResult> Generate(TUser user)
@@ -152,7 +152,7 @@ public class JwtTokenService<TUserKey, TUser> : IJwtTokenService<TUserKey, TUser
 public class JwtTokenService<TUser> : JwtTokenService<Guid, TUser>, IJwtTokenService<TUser>
     where TUser : User
 {
-    public JwtTokenService(JwtOptions options) : base(options)
+    public JwtTokenService(Microsoft.Extensions.Options.IOptions<JwtOptions> options) : base(options)
     {
     }
 }

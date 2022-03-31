@@ -27,7 +27,6 @@ public class ApplicationContext : IApplicationContext
 
     public virtual string TraceId { get; }
     public virtual string SessionId { get; }
-    public virtual DateTime Time { get; } = DateTime.Now;
     public virtual string UserName { get; }
     public virtual IPAddress UserIp { get; }
     public virtual string Language { get; }

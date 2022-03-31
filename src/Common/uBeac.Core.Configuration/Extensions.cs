@@ -2,7 +2,7 @@
 
 namespace Microsoft.Extensions.Configuration
 {
-    public static class ConfigurationExtension
+    public static class Extensions
     {
         public static IConfigurationBuilder AddJsonConfig(this IConfigurationBuilder configBuilder, IHostEnvironment env, string configFolder = "\\Config\\")
         {

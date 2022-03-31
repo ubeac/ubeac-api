@@ -16,7 +16,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Common\uBeac.Core.EmailProvider\uBeac.Core.EmailProvider.csproj" />
     <ProjectReference Include="..\..\Service\uBeac.Core.Services\uBeac.Core.Services.csproj" />
-    <ProjectReference Include="..\uBeac.Core.Identity.Authentication\uBeac.Core.Identity.Authentication.csproj" />
     <ProjectReference Include="..\uBeac.Core.Identity.Common\uBeac.Core.Identity.Common.csproj" />
   </ItemGroup>
 

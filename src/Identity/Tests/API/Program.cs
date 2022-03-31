@@ -11,10 +11,6 @@ builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 // Adding json config files
 builder.Configuration.AddJsonConfig(builder.Environment);
 
-// Get options from configuration files
-var emailOptions = builder.Configuration.GetInstance<EmailProviderOptions>("Email");
-var jwtOptions = builder.Configuration.GetInstance<JwtOptions>("Jwt");
-
 // Disabling automatic model state validation
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
@@ -35,7 +31,7 @@ builder.Services.AddMongo<MongoDBContext>("DefaultConnection", builder.Environme
 builder.Services.AddScoped<IApplicationContext, ApplicationContext>();
 
 // Adding email provider
-builder.Services.AddEmailProvider(emailOptions);
+builder.Services.AddEmailProvider(builder.Configuration);
 
 // Adding repositories
 builder.Services.AddMongoDBUserRepository<MongoDBContext, User>();
@@ -54,15 +50,10 @@ builder.Services.AddUnitTypeService<UnitTypeService<UnitType>, UnitType>();
 builder.Services.AddUnitRoleService<UnitRoleService<UnitRole>, UnitRole>();
 
 // Adding jwt provider
-builder.Services.AddJwtService<User>(jwtOptions);
+builder.Services.AddJwtService<User>(builder.Configuration);
 
 // Adding authentication
-builder.Services.AddAuthentication<LocalAuthenticator<User>>(new AuthenticationOptions
-{
-    Issuer = jwtOptions.Issuer,
-    Audience = jwtOptions.Audience,
-    Secret = jwtOptions.Secret
-});
+builder.Services.AddJwtAuthentication(builder.Configuration);
 
 // Adding identity core
 builder.Services
@@ -98,7 +89,6 @@ app.UseHttpsRedirection();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseAuthentication();
-app.UseMiddleware<AuthenticationMiddleware>(); // This middleware should be called after UseAuthentication
 app.UseAuthorization();
 app.MapControllers();
 app.UseCoreSwagger();

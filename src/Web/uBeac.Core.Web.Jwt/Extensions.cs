@@ -1,17 +1,16 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using uBeac.Identity;
 
-namespace Microsoft.Extensions.DependencyInjection;
+namespace uBeac.Web;
 
-public static class ServiceExtensions
+public static class Extensions
 {
-    public static IServiceCollection AddAuthentication<TAuthenticator>(this IServiceCollection services, AuthenticationOptions options)
-        where TAuthenticator : class, IAuthenticator
+    public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration config)
     {
-        services.AddSingleton(options);
-        services.AddScoped<IAuthenticator, TAuthenticator>();
+        var options = config.GetValue<AuthenticationOptions>("Jwt");
 
         services.AddAuthentication(configureOptions =>
             {
@@ -25,7 +24,7 @@ public static class ServiceExtensions
                 jwt.SaveToken = true;
                 jwt.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuerSigningKey = true, // this will validate the 3rd part of the jwt token using the secret that we added in the appsettings and verify we have generated the jwt token
+                    ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = true,
                     ValidateAudience = true,
