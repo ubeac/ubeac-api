@@ -10,7 +10,7 @@ public static class Extensions
 {
     public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration config)
     {
-        var options = config.GetValue<AuthenticationOptions>("Jwt");
+        var options = config.GetInstance<AuthenticationOptions>("Jwt");
 
         services.AddAuthentication(configureOptions =>
             {

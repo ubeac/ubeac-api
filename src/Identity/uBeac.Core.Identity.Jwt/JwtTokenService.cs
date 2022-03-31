@@ -87,7 +87,9 @@ public class JwtTokenService<TUserKey, TUser> : IJwtTokenService<TUserKey, TUser
             new(ClaimTypes.NameIdentifier, userId),
             new(ClaimTypes.Name, user.UserName)
         };
-        if (user.Email != null) result.Add(new Claim(ClaimTypes.Email, user.Email));
+        if (!string.IsNullOrWhiteSpace(user.NormalizedEmail)) result.Add(new Claim(ClaimTypes.Email, user.NormalizedEmail));
+        if (!string.IsNullOrWhiteSpace(user.PhoneNumber)) result.Add(new Claim(ClaimTypes.Email, user.PhoneNumber));
+        result.AddRange(user.Roles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));
         return result;
     }
 

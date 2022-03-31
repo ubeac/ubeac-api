@@ -1,4 +1,4 @@
-name: "Deploy uBeac.Core.Identity.Authentication to NuGet"
+name: "Deploy uBeac.Core.Web.Jwt to NuGet"
 
 on:
   push:
@@ -6,8 +6,8 @@ on:
     - 'v*'
 
 env:
-  PROJECT_PATH: 'src/Identity/uBeac.Core.Identity.Authentication/uBeac.Core.Identity.Authentication.csproj'
-  PACKAGE_OUTPUT_DIRECTORY: ${{ github.workspace }}\output\core-identity-auth
+  PROJECT_PATH: 'src/Web/uBeac.Core.Web.Jwt/uBeac.Core.Web.Jwt.csproj'
+  PACKAGE_OUTPUT_DIRECTORY: ${{ github.workspace }}\output\core-web-jwt
   NUGET_SOURCE_URL: 'https://api.nuget.org/v3/index.json'
 
 jobs:
