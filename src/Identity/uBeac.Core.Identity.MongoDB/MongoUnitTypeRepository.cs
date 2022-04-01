@@ -9,7 +9,7 @@ public class MongoUnitTypeRepository<TKey, TUnitType, TContext> : MongoEntityRep
     where TContext : IMongoDBContext
 {
 
-    public MongoUnitTypeRepository(TContext mongoDbContext) : base(mongoDbContext)
+    public MongoUnitTypeRepository(TContext mongoDbContext, IApplicationContext appContext) : base(mongoDbContext, appContext)
     {
         // Create Indexes
         try
@@ -30,7 +30,7 @@ public class MongoUnitTypeRepository<TUnitType, TContext> : MongoUnitTypeReposit
     where TUnitType : UnitType
     where TContext : IMongoDBContext
 {
-    public MongoUnitTypeRepository(TContext mongoDbContext) : base(mongoDbContext)
+    public MongoUnitTypeRepository(TContext mongoDbContext, IApplicationContext appContext) : base(mongoDbContext, appContext)
     {
     }
 }

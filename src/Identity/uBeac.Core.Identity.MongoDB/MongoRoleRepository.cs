@@ -8,7 +8,7 @@ public class MongoRoleRepository<TRoleKey, TRole, TContext> : MongoEntityReposit
    where TRole : Role<TRoleKey>
    where TContext : IMongoDBContext
 {
-    public MongoRoleRepository(TContext mongoDbContext) : base(mongoDbContext)
+    public MongoRoleRepository(TContext mongoDbContext, IApplicationContext appContext) : base(mongoDbContext, appContext)
     {
         // Create Indexes
         try
@@ -29,7 +29,7 @@ public class MongoRoleRepository<TRole, TContext> : MongoRoleRepository<Guid, TR
     where TRole : Role
     where TContext : IMongoDBContext
 {
-    public MongoRoleRepository(TContext mongoDbContext) : base(mongoDbContext)
+    public MongoRoleRepository(TContext mongoDbContext, IApplicationContext appContext) : base(mongoDbContext, appContext)
     {
     }
 }

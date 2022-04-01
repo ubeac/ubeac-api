@@ -11,24 +11,14 @@ public static class UserTokenExtensions
         where TMongoDbContext : class, IMongoDBContext
         where TUserKey : IEquatable<TUserKey>
     {
-        services.TryAddScoped<IUserTokenRepository<TUserKey>>(provider =>
-        {
-            var dbContext = provider.GetRequiredService<TMongoDbContext>();
-            return new MongoUserTokenRepository<TUserKey, TMongoDbContext>(dbContext);
-        });
-
+        services.TryAddScoped<IUserTokenRepository<TUserKey>, MongoUserTokenRepository<TUserKey, TMongoDbContext>>();
         return services;
     }
 
     public static IServiceCollection AddMongoDBUserTokenRepository<TMongoDbContext>(this IServiceCollection services)
         where TMongoDbContext : class, IMongoDBContext
     {
-        services.TryAddScoped<IUserTokenRepository>(provider =>
-        {
-            var dbContext = provider.GetRequiredService<TMongoDbContext>();
-            return new MongoUserTokenRepository<TMongoDbContext>(dbContext);
-        });
-
+        services.TryAddScoped<IUserTokenRepository, MongoUserTokenRepository<TMongoDbContext>>();
         return services;
     }
 }

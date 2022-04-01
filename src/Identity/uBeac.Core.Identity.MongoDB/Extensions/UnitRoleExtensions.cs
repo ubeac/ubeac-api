@@ -12,12 +12,7 @@ public static class UnitRoleExtensions
         where TUnitRoleKey : IEquatable<TUnitRoleKey>
         where TUnitRole : UnitRole<TUnitRoleKey>
     {
-        services.TryAddScoped<IUnitRoleRepository<TUnitRoleKey, TUnitRole>>(provider =>
-        {
-            var dbContext = provider.GetRequiredService<TMongoDbContext>();
-            return new MongoUnitRoleRepository<TUnitRoleKey, TUnitRole, TMongoDbContext>(dbContext);
-        });
-
+        services.TryAddScoped<IUnitRoleRepository<TUnitRoleKey, TUnitRole>, MongoUnitRoleRepository<TUnitRoleKey, TUnitRole, TMongoDbContext>>();
         return services;
     }
 
@@ -25,12 +20,7 @@ public static class UnitRoleExtensions
         where TMongoDbContext : class, IMongoDBContext
         where TUnitRole : UnitRole
     {
-        services.TryAddScoped<IUnitRoleRepository<TUnitRole>>(provider =>
-        {
-            var dbContext = provider.GetRequiredService<TMongoDbContext>();
-            return new MongoUnitRoleRepository<TUnitRole, TMongoDbContext>(dbContext);
-        });
-
+        services.TryAddScoped<IUnitRoleRepository<TUnitRole>, MongoUnitRoleRepository<TUnitRole, TMongoDbContext>>();
         return services;
     }
 }

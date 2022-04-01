@@ -12,12 +12,7 @@ public static class UnitTypeExtensions
         where TUnitTypeKey : IEquatable<TUnitTypeKey>
         where TUnitType : UnitType<TUnitTypeKey>
     {
-        services.TryAddScoped<IUnitTypeRepository<TUnitTypeKey, TUnitType>>(provider =>
-        {
-            var dbContext = provider.GetRequiredService<TMongoDbContext>();
-            return new MongoUnitTypeRepository<TUnitTypeKey, TUnitType, TMongoDbContext>(dbContext);
-        });
-
+        services.TryAddScoped<IUnitTypeRepository<TUnitTypeKey, TUnitType>, MongoUnitTypeRepository<TUnitTypeKey, TUnitType, TMongoDbContext>>();
         return services;
     }
 
@@ -25,12 +20,7 @@ public static class UnitTypeExtensions
         where TMongoDbContext : class, IMongoDBContext
         where TUnitType : UnitType
     {
-        services.TryAddScoped<IUnitTypeRepository<TUnitType>>(provider =>
-        {
-            var dbContext = provider.GetRequiredService<TMongoDbContext>();
-            return new MongoUnitTypeRepository<TUnitType, TMongoDbContext>(dbContext);
-        });
-
+        services.TryAddScoped<IUnitTypeRepository<TUnitType>, MongoUnitTypeRepository<TUnitType, TMongoDbContext>>();
         return services;
     }
 }

@@ -12,12 +12,7 @@ public static class RoleExtensions
         where TRoleKey : IEquatable<TRoleKey>
         where TRole : Role<TRoleKey>
     {
-        services.TryAddScoped<IRoleRepository<TRoleKey, TRole>>(provider =>
-        {
-            var dbContext = provider.GetRequiredService<TMongoDbContext>();
-            return new MongoRoleRepository<TRoleKey, TRole, TMongoDbContext>(dbContext);
-        });
-
+        services.TryAddScoped<IRoleRepository<TRoleKey, TRole>, MongoRoleRepository<TRoleKey, TRole, TMongoDbContext>>();
         return services;
     }
 
@@ -25,12 +20,7 @@ public static class RoleExtensions
         where TMongoDbContext : class, IMongoDBContext
         where TRole : Role
     {
-        services.TryAddScoped<IRoleRepository<TRole>>(provider =>
-        {
-            var dbContext = provider.GetRequiredService<TMongoDbContext>();
-            return new MongoRoleRepository<TRole, TMongoDbContext>(dbContext);
-        });
-
+        services.TryAddScoped<IRoleRepository<TRole>, MongoRoleRepository<TRole, TMongoDbContext>>();
         return services;
     }
 }

@@ -12,12 +12,7 @@ public static class UserExtensions
         where TUserKey : IEquatable<TUserKey>
         where TUser : User<TUserKey>
     {
-        services.TryAddScoped<IUserRepository<TUserKey, TUser>>(provider =>
-        {
-            var dbContext = provider.GetRequiredService<TMongoDbContext>();
-            return new MongoUserRepository<TUserKey, TUser, TMongoDbContext>(dbContext);
-        });
-
+        services.TryAddScoped<IUserRepository<TUserKey, TUser>, MongoUserRepository<TUserKey, TUser, TMongoDbContext>>();
         return services;
     }
 
@@ -25,12 +20,7 @@ public static class UserExtensions
         where TMongoDbContext : class, IMongoDBContext
         where TUser : User
     {
-        services.TryAddScoped<IUserRepository<TUser>>(provider =>
-        {
-            var dbContext = provider.GetRequiredService<TMongoDbContext>();
-            return new MongoUserRepository<TUser, TMongoDbContext>(dbContext);
-        });
-
+        services.TryAddScoped<IUserRepository<TUser>, MongoUserRepository<TUser, TMongoDbContext>>();
         return services;
     }
 }
