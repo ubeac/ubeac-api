@@ -24,7 +24,6 @@ public class ValidationFilter : IAsyncActionFilter
                     result.Errors.Add(new Error { Code = key, Description = key + "," + error.ErrorMessage });
 
             context.Result = new ObjectResult(result);
-            context.HttpContext.Response.StatusCode = result.Code;
         }
     }
 }
