@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace uBeac.Web;
 
-public class ResultFilter : IAsyncActionFilter
+public class ResultFilter : IAsyncAlwaysRunResultFilter
 {
     protected readonly IDebugger Debugger;
     protected readonly IApplicationContext AppContext;
@@ -13,18 +14,20 @@ public class ResultFilter : IAsyncActionFilter
         AppContext = appContext;
     }
 
-    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+    public async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
     {
-        var startDate = DateTime.Now;
+        if (context.Result is null || typeof(ObjectResult) != context.Result.GetType()) return;
 
-        await next();
-
-        if (context.IsIResult())
+        var objectResult = ((ObjectResult)context.Result).Value;
+        if (objectResult is IResult result)
         {
-            var result = context.GetIResult();
             result.TraceId = AppContext.TraceId;
             result.SessionId = AppContext.SessionId;
-            result.Duration = (DateTime.Now - startDate).TotalMilliseconds;
+            result.Debug = Debugger.GetValues();
+            context.HttpContext.Response.StatusCode = result.Code;
+            result.Duration = 0; // TODO: Set duration
         }
+
+        await next();
     }
 }
