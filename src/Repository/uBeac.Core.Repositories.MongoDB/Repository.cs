@@ -13,13 +13,15 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
     protected readonly IMongoCollection<BsonDocument> BsonCollection;
     protected readonly IMongoDatabase MongoDatabase;
     protected readonly TContext MongoDbContext;
+    protected readonly IApplicationContext AppContext;
 
-    public MongoEntityRepository(TContext mongoDbContext)
+    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext appContext)
     {
         MongoDatabase = mongoDbContext.Database;
         Collection = mongoDbContext.Database.GetCollection<TEntity>(GetCollectionName());
         BsonCollection = mongoDbContext.Database.GetCollection<BsonDocument>(GetCollectionName());
         MongoDbContext = mongoDbContext;
+        AppContext = appContext;
     }
 
     protected virtual string GetCollectionName()
@@ -77,6 +79,9 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
     {
         cancellationToken.ThrowIfCancellationRequested();
 
+        // If the entity is extend from IAuditEntity, the audit properties (CreatedAt, CreatedBy, etc.) should be set
+        SetAuditPropsOnCreate(entity);
+
         await Collection.InsertOneAsync(entity, null, cancellationToken);
     }
 
@@ -85,12 +90,18 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
     {
         cancellationToken.ThrowIfCancellationRequested();
 
+        // If the entities is extend from IAuditEntity, the audit properties (CreatedAt, CreatedBy, etc.) should be set
+        foreach (var entity in entities) SetAuditPropsOnCreate(entity);
+
         await Collection.InsertManyAsync(entities, null, cancellationToken);
     }
 
     public virtual async Task<TEntity> Update(TEntity entity, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
+
+        // If the entity is extend from IAuditEntity, the audit properties (LastUpdatedAt, LastUpdatedBy, etc.) should be set
+        SetAuditPropsOnUpdate(entity);
 
         var idFilter = Builders<TEntity>.Filter.Eq(x => x.Id, entity.Id);
         return await Collection.FindOneAndReplaceAsync(idFilter, entity, null, cancellationToken);
@@ -105,6 +116,28 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         return await findResult.ToListAsync(cancellationToken);
     }
 
+    protected virtual void SetAuditPropsOnCreate(TEntity entity)
+    {
+        // Set audit properties (CreatedAt, CreatedBy, etc.)
+        if (entity is IAuditEntity<TKey> audit)
+        {
+            audit.CreatedAt = DateTime.Now;
+            audit.CreatedBy = AppContext.UserName;
+            audit.CreatedByIp = AppContext.UserIp.ToString();
+        }
+    }
+
+    protected virtual void SetAuditPropsOnUpdate(TEntity entity)
+    {
+        // Set audit properties (LastUpdatedAt, LastUpdatedBy, etc.)
+        if (entity is IAuditEntity<TKey> audit)
+        {
+            audit.LastUpdatedAt = DateTime.Now;
+            audit.LastUpdatedBy = AppContext.UserName;
+            audit.LastUpdatedByIp = AppContext.UserIp.ToString();
+        }
+    }
+
     public IQueryable<TEntity> AsQueryable() => Collection.AsQueryable();
 }
 
@@ -112,7 +145,7 @@ public class MongoEntityRepository<TEntity, TContext> : MongoEntityRepository<Gu
     where TEntity : IEntity
     where TContext : IMongoDBContext
 {
-    public MongoEntityRepository(TContext mongoDbContext) : base(mongoDbContext)
+    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext appContext) : base(mongoDbContext, appContext)
     {
     }
 }
