@@ -2,11 +2,11 @@
 
 namespace uBeac.Logging.MongoDB
 {
-    public static class ConfigurationExtensions
+    public static class Extensions
     {
         public static LoggerConfiguration WriteToMongoDB(this LoggerConfiguration loggerConfiguration, string connectionString, MongoDBLogSetting mongoDBLogSetting = default)
         {
-            if (mongoDBLogSetting == null) mongoDBLogSetting = new MongoDBLogSetting();
+            mongoDBLogSetting ??= new MongoDBLogSetting();
 
             loggerConfiguration
                 .WriteTo.Logger(lc => lc.Filter.With(new ErrorLogEvent()).WriteTo.MongoDB(connectionString, collectionName: mongoDBLogSetting.ErrorCollection))

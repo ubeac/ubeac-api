@@ -59,7 +59,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "Identity\Tests\API\A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Identity.Jwt", "Identity\uBeac.Core.Identity.Jwt\uBeac.Core.Identity.Jwt.csproj", "{6BD1B9F9-5A0F-4A43-A657-F8B31896EDE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Web.Jwt", "Web\uBeac.Core.Web.Jwt\uBeac.Core.Web.Jwt.csproj", "{2B7FB004-FE75-4196-A263-C4A768499970}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Web.Jwt", "Web\uBeac.Core.Web.Jwt\uBeac.Core.Web.Jwt.csproj", "{2B7FB004-FE75-4196-A263-C4A768499970}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
