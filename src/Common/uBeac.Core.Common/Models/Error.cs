@@ -4,7 +4,6 @@ public class Error
 {
     public string Code { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
-    public string Trace { get; set; }
 
     public Error()
     {
@@ -14,6 +13,5 @@ public class Error
     {
         Code = "UNKNOWN-ERROR";
         Description = exception.Message;
-        Trace = exception.StackTrace;
     }
 }
