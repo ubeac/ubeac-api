@@ -15,6 +15,11 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
     protected readonly TContext MongoDbContext;
     protected readonly IApplicationContext AppContext;
 
+    protected readonly bool HistoryEnabled;
+    protected readonly IMongoCollection<TEntity> HistoryCollection;
+    protected readonly IMongoCollection<BsonDocument> BsonHistoryCollection;
+    protected readonly IMongoDatabase MongoHistoryDatabase;
+
     public MongoEntityRepository(TContext mongoDbContext, IApplicationContext appContext)
     {
         MongoDatabase = mongoDbContext.Database;
@@ -22,11 +27,24 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         BsonCollection = mongoDbContext.Database.GetCollection<BsonDocument>(GetCollectionName());
         MongoDbContext = mongoDbContext;
         AppContext = appContext;
+
+        if (mongoDbContext.HistoryEnabled)
+        {
+            HistoryEnabled = mongoDbContext.HistoryEnabled;
+            MongoHistoryDatabase = mongoDbContext.HistoryDatabase;
+            HistoryCollection = mongoDbContext.Database.GetCollection<TEntity>(GetHistoryCollectionName());
+            BsonHistoryCollection = mongoDbContext.Database.GetCollection<BsonDocument>(GetHistoryCollectionName());
+        }
     }
 
     protected virtual string GetCollectionName()
     {
         return typeof(TEntity).Name;
+    }
+
+    protected virtual string GetHistoryCollectionName()
+    {
+        return $"{GetCollectionName()}_History";
     }
 
     public virtual async Task<bool> Delete(TKey id, CancellationToken cancellationToken = default)
@@ -83,10 +101,13 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         SetAuditPropsOnCreate(entity);
 
         await Collection.InsertOneAsync(entity, null, cancellationToken);
+
+        // If history is enabled, the entity should be stored in history database / collection
+        // This method should be called after insert in main database / collection
+        await StoreInHistory(entity, cancellationToken);
     }
 
-    public virtual async Task CreateMany(IEnumerable<TEntity> entities,
-        CancellationToken cancellationToken = default)
+    public virtual async Task CreateMany(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -94,6 +115,10 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         foreach (var entity in entities) SetAuditPropsOnCreate(entity);
 
         await Collection.InsertManyAsync(entities, null, cancellationToken);
+
+        // If history is enabled, the entities should be stored in history database / collection
+        // This method should be called after insert in main database / collection
+        await StoreInHistory(entities, cancellationToken);
     }
 
     public virtual async Task<TEntity> Update(TEntity entity, CancellationToken cancellationToken = default)
@@ -104,7 +129,13 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         SetAuditPropsOnUpdate(entity);
 
         var idFilter = Builders<TEntity>.Filter.Eq(x => x.Id, entity.Id);
-        return await Collection.FindOneAndReplaceAsync(idFilter, entity, null, cancellationToken);
+        var result = await Collection.FindOneAndReplaceAsync(idFilter, entity, null, cancellationToken);
+
+        // If history is enabled, the entity result should be stored in history database / collection
+        // This method should be called after update in main database / collection
+        await StoreInHistory(result, cancellationToken);
+
+        return result;
     }
 
     public virtual async Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> filter,
@@ -136,6 +167,16 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
             audit.LastUpdatedBy = AppContext.UserName;
             audit.LastUpdatedByIp = AppContext.UserIp.ToString();
         }
+    }
+
+    protected virtual async Task StoreInHistory(TEntity entity, CancellationToken cancellationToken)
+    {
+        if (HistoryEnabled) await HistoryCollection.InsertOneAsync(entity, null, cancellationToken);
+    }
+
+    protected virtual async Task StoreInHistory(IEnumerable<TEntity> entities, CancellationToken cancellationToken)
+    {
+        if (HistoryEnabled) await HistoryCollection.InsertManyAsync(entities, null, cancellationToken);
     }
 
     public IQueryable<TEntity> AsQueryable() => Collection.AsQueryable();

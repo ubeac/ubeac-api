@@ -24,7 +24,11 @@ builder.Services.AddDebugger();
 builder.Services.AddCoreSwaggerWithJWT("Example");
 
 // Adding mongodb
-builder.Services.AddMongo<MongoDBContext>("DefaultConnection", builder.Environment.IsEnvironment("Testing"))
+builder.Services.AddMongo<MongoDBContext>(
+        connectionString: "DefaultConnection",
+        dropExistDatabase: builder.Environment.IsEnvironment("Testing"),
+        historyEnabled: true,
+        historyConnectionString: "HistoryConnection")
     .AddDefaultBsonSerializers();
 
 // Adding application context

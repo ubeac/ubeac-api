@@ -10,16 +10,18 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class MongoDBServicesExtensions
 {
-    public static IServiceCollection AddMongo<TMongoDbContext>(this IServiceCollection services, string connectionString, bool dropExistDatabase = false)
+    public static IServiceCollection AddMongo<TMongoDbContext>(this IServiceCollection services, string connectionString, bool dropExistDatabase = false, bool historyEnabled = false, string historyConnectionString = null)
        where TMongoDbContext : class, IMongoDBContext
     {
         services.TryAddSingleton(provider =>
         {
             var configuration = provider.GetService<IConfiguration>();
             var connString = configuration.GetConnectionString(connectionString);
+            var historyConnString = historyEnabled ? configuration.GetConnectionString(historyConnectionString) : null;
+
             return typeof(TMongoDbContext) == typeof(MongoDBContext)
-                ? new MongoDBOptions(connString, dropExistDatabase)
-                : new MongoDBOptions<TMongoDbContext>(connString, dropExistDatabase);
+                ? new MongoDBOptions(connString, dropExistDatabase, historyEnabled, historyConnString)
+                : new MongoDBOptions<TMongoDbContext>(connString, dropExistDatabase, historyEnabled, historyConnString);
         });
 
         services.TryAddSingleton<TMongoDbContext>();
