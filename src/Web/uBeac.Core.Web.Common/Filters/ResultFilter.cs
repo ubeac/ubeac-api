@@ -16,7 +16,7 @@ public class ResultFilter : IAsyncActionFilter
 
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
-        var startDate = DateTime.Now;
+        var startTime = DateTime.Now;
 
         var actionContext = await next();
 
@@ -29,9 +29,8 @@ public class ResultFilter : IAsyncActionFilter
             result.TraceId = AppContext.TraceId;
             result.SessionId = AppContext.SessionId;
             result.Debug = Debugger.GetValues();
-            result.Duration = (DateTime.Now - startDate).TotalMilliseconds;
+            result.Duration = (DateTime.Now - startTime).TotalMilliseconds;
             context.HttpContext.Response.StatusCode = result.Code;
         }
-
     }
 }

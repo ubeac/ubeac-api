@@ -7,8 +7,7 @@ namespace uBeac.Web;
 [Produces("application/json")]
 [TypeFilter(typeof(ExceptionHandlingFilter))]
 [TypeFilter(typeof(ResultFilter), Order = 0)]
-[TypeFilter(typeof(ModelStateValidationValidationFilter), Order = 1)]
+[TypeFilter(typeof(ModelStateValidationFilter), Order = 1)]
 public abstract class BaseController
 {
 }
-
