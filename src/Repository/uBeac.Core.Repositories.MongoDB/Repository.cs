@@ -123,7 +123,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         {
             audit.CreatedAt = DateTime.Now;
             audit.CreatedBy = AppContext.UserName;
-            audit.CreatedByIp = AppContext.UserIp.ToString();
+            audit.CreatedByIp = AppContext.UserIp?.ToString();
         }
     }
 
@@ -134,7 +134,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         {
             audit.LastUpdatedAt = DateTime.Now;
             audit.LastUpdatedBy = AppContext.UserName;
-            audit.LastUpdatedByIp = AppContext.UserIp.ToString();
+            audit.LastUpdatedByIp = AppContext.UserIp?.ToString();
         }
     }
 
