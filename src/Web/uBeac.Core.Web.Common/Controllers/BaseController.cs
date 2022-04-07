@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace uBeac.Web
+namespace uBeac.Web;
+
+[Route("API/[controller]/[action]/")]
+[ApiController]
+[Produces("application/json")]
+[TypeFilter(typeof(ExceptionHandlingFilter))]
+[TypeFilter(typeof(ResultFilter), Order = 0)]
+[TypeFilter(typeof(ModelStateValidationFilter), Order = 1)]
+public abstract class BaseController
 {
-    [Route("API/[controller]/[action]/")]
-    [ApiController]
-    [Produces("application/json")]
-    [TypeFilter(typeof(ValidationFilter), Order = 0)]
-    [TypeFilter(typeof(ExceptionHandlingFilter), Order = 1)]
-    [TypeFilter(typeof(ResultFilter), Order = 2)]
-    public abstract class BaseController
-    {
-    }
 }

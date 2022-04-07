@@ -7,7 +7,10 @@ public class ExceptionHandlingFilter : IExceptionFilter
 {
     public void OnException(ExceptionContext context)
     {
-        var result = new Result(context.Exception);
-        context.Result = new ObjectResult(result);
+        if (context.Exception != null)
+        {
+            var result = new Result(context.Exception);
+            context.Result = new ObjectResult(result);
+        }
     }
 }
