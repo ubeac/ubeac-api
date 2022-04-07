@@ -17,7 +17,7 @@ public class AppContextEnricher : ILogEventEnricher
 
     public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
     {
-        var context = Services.BuildServiceProvider().GetRequiredService<IApplicationContext>();
+        var context = Services.BuildServiceProvider().CreateScope().ServiceProvider.GetRequiredService<IApplicationContext>();
         logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty("TraceId", context.TraceId));
         logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty("SessionId", context.SessionId));
         logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty("UserName", context.UserName));
