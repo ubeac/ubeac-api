@@ -14,15 +14,7 @@ public class ApplicationContext : IApplicationContext
         SessionId = TraceId;
         UserIp = httpContext.Connection.RemoteIpAddress;
         Language = httpContext.Request.GetTypedHeaders().AcceptLanguage.FirstOrDefault()?.Value.Value ?? "en-US";
-
-        if (httpContext.User?.Identity != null && httpContext.User?.Claims?.Count() > 0)
-        {
-            UserName = httpContext.User.Identity.Name ?? string.Empty;
-        }
-        else
-        {
-            UserName = string.Empty;
-        }
+        UserName = httpContext.User?.Identity?.Name ?? string.Empty;
     }
 
     public virtual string TraceId { get; }
@@ -31,4 +23,3 @@ public class ApplicationContext : IApplicationContext
     public virtual IPAddress UserIp { get; }
     public virtual string Language { get; }
 }
-
