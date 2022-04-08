@@ -95,7 +95,7 @@ builder.Services
     });
 
 var app = builder.Build();
-app.AddHttpLogging();
+app.UseApiLogging();
 
 app.UseHttpsRedirection();
 app.UseDefaultFiles();
