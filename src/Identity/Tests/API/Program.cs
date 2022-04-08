@@ -17,13 +17,6 @@ var logger = new LoggerConfiguration()
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
 
-// Adding http logging
-builder.Services.AddHttpLogging(options =>
-{
-    options.LoggingFields = HttpLoggingFields.All;
-    options.MediaTypeOptions.AddText("application/json");
-});
-
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -102,7 +95,7 @@ builder.Services
     });
 
 var app = builder.Build();
-app.UseHttpLogging();
+app.AddHttpLogging();
 
 app.UseHttpsRedirection();
 app.UseDefaultFiles();
