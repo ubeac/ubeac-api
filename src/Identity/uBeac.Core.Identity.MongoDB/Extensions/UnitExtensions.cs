@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
 using uBeac.Identity;
 using uBeac.Identity.MongoDB;
+using uBeac.Repositories;
 using uBeac.Repositories.MongoDB;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,7 @@ public static class UnitExtensions
         where TUnit : Unit<TUnitKey>
     {
         services.TryAddScoped<IUnitRepository<TUnitKey, TUnit>, MongoUnitRepository<TUnitKey, TUnit, TMongoDbContext>>();
+        services.TryAddScoped<IEntityHistoryRepository<TUnitKey, TUnit>, MongoEntityHistoryRepository<TUnitKey, TUnit, TMongoDbContext>>();
         return services;
     }
 
@@ -21,6 +23,7 @@ public static class UnitExtensions
         where TUnit : Unit
     {
         services.TryAddScoped<IUnitRepository<TUnit>, MongoUnitRepository<TUnit, TMongoDbContext>>();
+        services.TryAddScoped<IEntityHistoryRepository<TUnit>, MongoEntityHistoryRepository<TUnit, TMongoDbContext>>();
         return services;
     }
 }

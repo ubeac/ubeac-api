@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
 using uBeac.Identity;
 using uBeac.Identity.MongoDB;
+using uBeac.Repositories;
 using uBeac.Repositories.MongoDB;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,7 @@ public static class RoleExtensions
         where TRole : Role<TRoleKey>
     {
         services.TryAddScoped<IRoleRepository<TRoleKey, TRole>, MongoRoleRepository<TRoleKey, TRole, TMongoDbContext>>();
+        services.TryAddScoped<IEntityHistoryRepository<TRoleKey, TRole>, MongoEntityHistoryRepository<TRoleKey, TRole, TMongoDbContext>>();
         return services;
     }
 
@@ -21,6 +23,7 @@ public static class RoleExtensions
         where TRole : Role
     {
         services.TryAddScoped<IRoleRepository<TRole>, MongoRoleRepository<TRole, TMongoDbContext>>();
+        services.TryAddScoped<IEntityHistoryRepository<TRole>, MongoEntityHistoryRepository<TRole, TMongoDbContext>>();
         return services;
     }
 }

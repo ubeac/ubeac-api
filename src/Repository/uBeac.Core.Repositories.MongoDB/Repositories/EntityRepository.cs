@@ -14,27 +14,16 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
     protected readonly IMongoDatabase MongoDatabase;
     protected readonly TContext MongoDbContext;
     protected readonly IApplicationContext AppContext;
+    protected readonly IEntityHistoryRepository<TKey, TEntity> HistoryRepository;
 
-    protected readonly bool HistoryEnabled;
-    protected readonly IMongoCollection<EntityHistory<TKey, TEntity>> HistoryCollection;
-    protected readonly IMongoCollection<BsonDocument> BsonHistoryCollection;
-    protected readonly IMongoDatabase MongoHistoryDatabase;
-
-    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext appContext)
+    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext appContext, IEntityHistoryRepository<TKey, TEntity> historyRepository)
     {
         MongoDatabase = mongoDbContext.Database;
         Collection = mongoDbContext.Database.GetCollection<TEntity>(GetCollectionName());
         BsonCollection = mongoDbContext.Database.GetCollection<BsonDocument>(GetCollectionName());
         MongoDbContext = mongoDbContext;
         AppContext = appContext;
-
-        if (mongoDbContext.HistoryEnabled)
-        {
-            HistoryEnabled = mongoDbContext.HistoryEnabled;
-            MongoHistoryDatabase = mongoDbContext.HistoryDatabase;
-            HistoryCollection = mongoDbContext.Database.GetCollection<EntityHistory<TKey, TEntity>>(GetHistoryCollectionName());
-            BsonHistoryCollection = mongoDbContext.Database.GetCollection<BsonDocument>(GetHistoryCollectionName());
-        }
+        HistoryRepository = historyRepository;
     }
 
     protected virtual string GetCollectionName()
@@ -104,7 +93,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
 
         // If history is enabled, the entity should be stored in history database / collection
         // This method should be called after insert in main database / collection
-        await StoreInHistory(entity, cancellationToken);
+        await HistoryRepository.AddToHistory(entity, cancellationToken);
     }
 
     public virtual async Task CreateMany(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
@@ -129,7 +118,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
 
         // If history is enabled, the entity result should be stored in history database / collection
         // This method should be called after update in main database / collection
-        await StoreInHistory(result, cancellationToken);
+        await HistoryRepository.AddToHistory(entity, cancellationToken);
 
         return result;
     }
@@ -165,31 +154,6 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         }
     }
 
-    protected virtual async Task StoreInHistory(TEntity entity, CancellationToken cancellationToken)
-    {
-        if (HistoryEnabled)
-        {
-            var idFilter = Builders<EntityHistory<TKey, TEntity>>.Filter.Eq(x => x.Id, entity.Id);
-            var cursor = await HistoryCollection.FindAsync(idFilter, null, cancellationToken);
-            var entityHistory = await cursor.SingleOrDefaultAsync(cancellationToken);
-            
-            if (entityHistory != null)
-            {
-                entityHistory.History.Add(entity);
-                await HistoryCollection.FindOneAndReplaceAsync(idFilter, entityHistory, null, cancellationToken);
-            }
-            else
-            {
-                entityHistory = new EntityHistory<TKey, TEntity>
-                {
-                    Id = entity.Id
-                };
-                entityHistory.History.Add(entity);
-                await HistoryCollection.InsertOneAsync(entityHistory, null, cancellationToken);
-            }
-        }
-    }
-
     public IQueryable<TEntity> AsQueryable() => Collection.AsQueryable();
 }
 
@@ -197,7 +161,7 @@ public class MongoEntityRepository<TEntity, TContext> : MongoEntityRepository<Gu
     where TEntity : class, IEntity
     where TContext : IMongoDBContext
 {
-    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext appContext) : base(mongoDbContext, appContext)
+    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext appContext, IEntityHistoryRepository<TEntity> historyRepository) : base(mongoDbContext, appContext, historyRepository)
     {
     }
 }
