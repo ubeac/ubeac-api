@@ -1,5 +1,7 @@
 using System.Reflection;
+using API;
 using Microsoft.AspNetCore.Mvc;
+using uBeac.Repositories;
 using uBeac.Repositories.MongoDB;
 using uBeac.Web;
 
@@ -26,6 +28,9 @@ builder.Services.AddCoreSwaggerWithJWT("Example");
 // Adding mongodb
 builder.Services.AddMongo<MongoDBContext>("DefaultConnection", builder.Environment.IsEnvironment("Testing"))
     .AddDefaultBsonSerializers();
+
+// Adding history
+builder.Services.AddHistory<LoginRequest, MongoHistoryRepository<LoginRequest, MongoDBContext>>();
 
 // Adding application context
 builder.Services.AddScoped<IApplicationContext, ApplicationContext>();
