@@ -22,13 +22,6 @@ namespace uBeac.Services
             return await Repository.Delete(id, cancellationToken);
         }
 
-        public virtual async Task<long> DeleteMany(IEnumerable<TKey> ids, CancellationToken cancellationToken = default)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            return await Repository.DeleteMany(ids, cancellationToken);
-        }
-
         public virtual async Task<IEnumerable<TEntity>> GetAll(CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -54,12 +47,6 @@ namespace uBeac.Services
         {
             cancellationToken.ThrowIfCancellationRequested();
             await Repository.Create(entity, cancellationToken);
-        }
-
-        public virtual async Task CreateMany(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            await Repository.CreateMany(entities, cancellationToken);
         }
 
         public virtual async Task<TEntity> Update(TEntity entity, CancellationToken cancellationToken = default)

@@ -38,15 +38,6 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         return deleteResult.DeletedCount == 1;
     }
 
-    public virtual async Task<long> DeleteMany(IEnumerable<TKey> ids, CancellationToken cancellationToken = default)
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-
-        var idsFilter = Builders<TEntity>.Filter.In(x => x.Id, ids);
-        var deleteResult = await Collection.DeleteManyAsync(idsFilter, cancellationToken);
-        return deleteResult.DeletedCount;
-    }
-
     public virtual async Task<IEnumerable<TEntity>> GetAll(CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -83,17 +74,6 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         SetAuditPropsOnCreate(entity);
 
         await Collection.InsertOneAsync(entity, null, cancellationToken);
-    }
-
-    public virtual async Task CreateMany(IEnumerable<TEntity> entities,
-        CancellationToken cancellationToken = default)
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-
-        // If the entities is extend from IAuditEntity, the audit properties (CreatedAt, CreatedBy, etc.) should be set
-        foreach (var entity in entities) SetAuditPropsOnCreate(entity);
-
-        await Collection.InsertManyAsync(entities, null, cancellationToken);
     }
 
     public virtual async Task<TEntity> Update(TEntity entity, CancellationToken cancellationToken = default)
