@@ -30,7 +30,15 @@ builder.Services.AddMongo<MongoDBContext>("DefaultConnection", builder.Environme
     .AddDefaultBsonSerializers();
 
 // Adding history
-builder.Services.AddHistory<LoginRequest, MongoHistoryRepository<LoginRequest, MongoDBContext>>();
+builder.Services.AddHistory().Using<MongoHistoryRepository<MongoDBContext>>()
+    .ForDefault();
+
+// builder.Services.AddHistory().Using<MongoHistoryRepository<MongoDBContext>>()
+//    .For<User>()
+//    .For<Role>()
+//    .For<Unit>()
+//    .For<UnitType>()
+//    .For<UnitRole>();
 
 // Adding application context
 builder.Services.AddScoped<IApplicationContext, ApplicationContext>();

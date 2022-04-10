@@ -1,14 +1,32 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using uBeac.Repositories;
 
-namespace uBeac.Repositories;
+namespace Microsoft.Extensions.DependencyInjection;
 
-public static class Extensions
+public static class ServiceExtensions
 {
-    public static IServiceCollection AddHistory<TData, THistory>(this IServiceCollection services)
-        where TData : class
-        where THistory : class, IHistoryRepository<TData>
+    public static IHistoryRegistration AddHistory(this IServiceCollection services)
     {
-        services.AddScoped<IHistoryRepository<TData>, THistory>();
-        return services;
+        return new HistoryRegistration(services);
     }
+
+    public static IHistoryRepositoryRegistration Using<TRepository>(this IHistoryRegistration registration)
+        where TRepository : class, IHistoryRepository
+    {
+        registration.Services.AddSingleton<TRepository>();
+        return new HistoryRepositoryRegistration<TRepository>(registration);
+    }
+
+    public static IHistoryRepositoryRegistration For<TData>(this IHistoryRepositoryRegistration registration)
+        where TData : class
+    {
+        var repository = registration.HistoryRegistration.Services.BuildServiceProvider()
+            .GetRequiredService(registration.RepositoryType) as IHistoryRepository;
+
+        History.AddRepository(typeof(TData), repository);
+
+        return registration;
+    }
+
+    public static IServiceCollection ForDefault(this IHistoryRepositoryRegistration registration)
+        => registration.For<object>().HistoryRegistration.Services;
 }

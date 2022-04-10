@@ -1,7 +1,6 @@
 ﻿namespace uBeac.Repositories;
 
-public interface IHistoryRepository<in TData> : IRepository
-    where TData : class
+public interface IHistoryRepository : IRepository
 {
-    Task AddToHistory(TData data, string actionName = "None", CancellationToken cancellationToken = default);
+    Task AddToHistory(object data, string actionName = "None", CancellationToken cancellationToken = default);
 }
