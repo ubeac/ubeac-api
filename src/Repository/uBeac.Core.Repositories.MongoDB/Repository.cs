@@ -36,7 +36,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         var idFilter = Builders<TEntity>.Filter.Eq(doc => doc.Id, id);
         var entity = await Collection.FindOneAndDeleteAsync(idFilter, null, cancellationToken);
 
-        await History.AddToHistory(entity, nameof(Create), cancellationToken);
+        await History.AddToHistory(entity, nameof(Delete), cancellationToken);
 
         return entity != null;
     }
