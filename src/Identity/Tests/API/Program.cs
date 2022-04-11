@@ -1,4 +1,3 @@
-using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using uBeac.Repositories.MongoDB;
 using uBeac.Web;
@@ -6,7 +5,7 @@ using uBeac.Web;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
-builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+builder.Services.AddAutoMapper();
 
 // Adding json config files
 builder.Configuration.AddJsonConfig(builder.Environment);
@@ -28,7 +27,7 @@ builder.Services.AddMongo<MongoDBContext>("DefaultConnection", builder.Environme
     .AddDefaultBsonSerializers();
 
 // Adding application context
-builder.Services.AddScoped<IApplicationContext, ApplicationContext>();
+builder.Services.AddApplicationContext();
 
 // Adding email provider
 builder.Services.AddEmailProvider(builder.Configuration);
