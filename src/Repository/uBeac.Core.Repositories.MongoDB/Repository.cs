@@ -104,6 +104,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
             audit.CreatedAt = DateTime.Now;
             audit.CreatedBy = AppContext.UserName;
             audit.CreatedByIp = AppContext.UserIp?.ToString();
+            audit.LastContext = AppContext.ToModel();
         }
     }
 
@@ -115,6 +116,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
             audit.LastUpdatedAt = DateTime.Now;
             audit.LastUpdatedBy = AppContext.UserName;
             audit.LastUpdatedByIp = AppContext.UserIp?.ToString();
+            audit.LastContext = AppContext.ToModel();
         }
     }
 

@@ -8,6 +8,7 @@ public interface IAuditEntity<TKey> : IEntity<TKey> where TKey : IEquatable<TKey
     string LastUpdatedBy { get; set; } // UserName
     string LastUpdatedByIp { get; set; } // IpAddress
     DateTime? LastUpdatedAt { get; set; }
+    IApplicationContext LastContext { get; set; }
 }
 
 public interface IAuditEntity : IAuditEntity<Guid>, IEntity
@@ -23,6 +24,7 @@ public class AuditEntity<TKey> : IAuditEntity<TKey> where TKey : IEquatable<TKey
     public string LastUpdatedBy { get; set; }
     public string LastUpdatedByIp { get; set; }
     public DateTime? LastUpdatedAt { get; set; }
+    public IApplicationContext LastContext { get; set; }
 }
 
 public class AuditEntity : AuditEntity<Guid>, IAuditEntity
