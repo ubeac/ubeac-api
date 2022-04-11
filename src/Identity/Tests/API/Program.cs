@@ -1,5 +1,3 @@
-using System.Reflection;
-using API;
 using Microsoft.AspNetCore.Mvc;
 using uBeac.Repositories;
 using uBeac.Repositories.MongoDB;
@@ -18,6 +16,9 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
 });
+
+// Adding application context
+builder.Services.AddApplicationContext();
 
 // Adding debugger
 builder.Services.AddDebugger();
@@ -39,9 +40,6 @@ builder.Services.AddHistory().Using<MongoHistoryRepository<MongoDBContext>>()
 //    .For<Unit>()
 //    .For<UnitType>()
 //    .For<UnitRole>();
-
-// Adding application context
-builder.Services.AddApplicationContext();
 
 // Adding email provider
 builder.Services.AddEmailProvider(builder.Configuration);

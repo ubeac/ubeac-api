@@ -11,11 +11,13 @@ public class MongoHistoryRepository<TKey, THistory, TContext> : IHistoryReposito
 {
     protected readonly IMongoDatabase MongoDatabase;
     protected readonly TContext MongoDbContext;
+    protected readonly IApplicationContext AppContext;
 
-    public MongoHistoryRepository(TContext mongoDbContext)
+    public MongoHistoryRepository(TContext mongoDbContext, IApplicationContext appContext)
     {
         MongoDatabase = mongoDbContext.Database;
         MongoDbContext = mongoDbContext;
+        AppContext = appContext;
     }
 
     protected virtual string GetCollectionName(Type dataType) => $"{dataType.Name}.History";
@@ -41,6 +43,7 @@ public class MongoHistoryRepository<TKey, THistory, TContext> : IHistoryReposito
         history.Data = data;
         history.ActionName = actionName;
         history.CreatedAt = DateTime.Now;
+        history.Context = AppContext.ToModel();
 
         await Insert(history, cancellationToken);
     }
@@ -50,7 +53,7 @@ public class MongoHistoryRepository<THistory, TContext> : MongoHistoryRepository
     where THistory : class, IHistoryEntity, new()
     where TContext : IMongoDBContext
 {
-    public MongoHistoryRepository(TContext mongoDbContext) : base(mongoDbContext)
+    public MongoHistoryRepository(TContext mongoDbContext, IApplicationContext appContext) : base(mongoDbContext, appContext)
     {
     }
 }
@@ -58,7 +61,7 @@ public class MongoHistoryRepository<THistory, TContext> : MongoHistoryRepository
 public class MongoHistoryRepository<TContext> : MongoHistoryRepository<HistoryEntity, TContext>
     where TContext : IMongoDBContext
 {
-    public MongoHistoryRepository(TContext mongoDbContext) : base(mongoDbContext)
+    public MongoHistoryRepository(TContext mongoDbContext, IApplicationContext appContext) : base(mongoDbContext, appContext)
     {
     }
 }
