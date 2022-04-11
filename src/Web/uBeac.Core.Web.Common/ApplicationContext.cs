@@ -5,30 +5,16 @@ namespace uBeac.Web;
 
 public class ApplicationContext : IApplicationContext
 {
-    public ApplicationContext(IHttpContextAccessor httpContextAccessor)
+    protected readonly IHttpContextAccessor Accessor;
+
+    public ApplicationContext(IHttpContextAccessor accessor)
     {
-        if (httpContextAccessor.HttpContext == null) return;
-
-        var httpContext = httpContextAccessor.HttpContext;
-        TraceId = httpContext.TraceIdentifier;
-        SessionId = TraceId;
-        UserIp = httpContext.Connection.RemoteIpAddress;
-        Language = httpContext.Request.GetTypedHeaders().AcceptLanguage.FirstOrDefault()?.Value.Value ?? "en-US";
-
-        if (httpContext.User?.Identity != null && httpContext.User?.Claims?.Count() > 0)
-        {
-            UserName = httpContext.User.Identity.Name ?? string.Empty;
-        }
-        else
-        {
-            UserName = string.Empty;
-        }
+        Accessor = accessor;
     }
 
-    public virtual string TraceId { get; }
-    public virtual string SessionId { get; }
-    public virtual string UserName { get; }
-    public virtual IPAddress UserIp { get; }
-    public virtual string Language { get; }
+    public virtual string TraceId => Accessor.HttpContext?.TraceIdentifier;
+    public virtual string SessionId => Accessor.HttpContext?.TraceIdentifier;
+    public virtual string UserName => Accessor.HttpContext?.User?.Identity?.Name;
+    public virtual IPAddress UserIp => Accessor.HttpContext?.Connection?.RemoteIpAddress;
+    public virtual string Language => Accessor.HttpContext?.Request?.GetTypedHeaders().AcceptLanguage.FirstOrDefault()?.Value.Value ?? "en-US";
 }
-
