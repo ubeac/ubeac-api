@@ -1,8 +1,12 @@
 ﻿using System.Diagnostics;
+using System.Text;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
+using Serilog.Core;
+using Serilog.Core.Enrichers;
 
 namespace uBeac.Web;
 
@@ -21,70 +25,82 @@ internal class HttpLoggingMiddleware
 
     public async Task Invoke(HttpContext context)
     {
-        var request = context.Request;
-
         // Don't log if the request was not send to the api endpoints
-        if (request.Path.Value?.ToUpper().StartsWith("/API") == false)
+        if (context.Request.Path.Value?.ToUpper().StartsWith("/API") == false)
         {
             await _next(context);
             return;
         }
 
-        await using var originalRequestBody = request.Body;
-        await using var requestBodyStream = new MemoryStream();
-        await context.Request.Body.CopyToAsync(requestBodyStream);
-
-        requestBodyStream.Seek(0, SeekOrigin.Begin);
-        var requestBody = await new StreamReader(request.Body).ReadToEndAsync();
-        requestBodyStream.Seek(0, SeekOrigin.Begin);
-
-        context.Request.Body = requestBodyStream;
-
-        await using var originalResponseBody = context.Response.Body;
-        await using var responseBodyStream = new MemoryStream();
-        context.Response.Body = responseBodyStream;
-
-        await _next(context);
-
-        context.Request.Body = originalRequestBody;
-
-        var response = context.Response;
-        responseBodyStream.Seek(0, SeekOrigin.Begin);
-        var responseBody = await new StreamReader(responseBodyStream).ReadToEndAsync();
-        responseBodyStream.Seek(0, SeekOrigin.Begin);
-        await responseBodyStream.CopyToAsync(originalResponseBody);
+        var requestBody = await ReadRequestBody(context.Request);
+        var responseBody = await ReadResponseBody(context, _next);
 
         _stopwatch.Stop();
 
-        var log = new HttpLog
+        var log = CreateLogModel(context, requestBody, responseBody);
+
+        WriteLog(log);
+    }
+
+    private async Task<string> ReadRequestBody(HttpRequest request)
+    {
+        request.EnableBuffering();
+
+        using var reader = new StreamReader(request.Body, encoding: Encoding.UTF8,
+            detectEncodingFromByteOrderMarks: false, leaveOpen: true);
+        var requestBody = await reader.ReadToEndAsync();
+        request.Body.Position = 0;
+
+        return requestBody;
+    }
+
+    private async Task<string> ReadResponseBody(HttpContext context, RequestDelegate next)
+    {
+        var originalResponseStream = context.Response.Body;
+
+        await using var memoryStream = new MemoryStream();
+        context.Response.Body = memoryStream;
+
+        await _next(context);
+
+        memoryStream.Position = 0;
+        using var reader = new StreamReader(memoryStream, encoding: Encoding.UTF8);
+        var responseBody = await reader.ReadToEndAsync();
+        memoryStream.Position = 0;
+        await memoryStream.CopyToAsync(originalResponseStream);
+        context.Response.Body = originalResponseStream;
+
+        return responseBody;
+    }
+
+    private HttpLog CreateLogModel(HttpContext context, string requestBody, string responseBody)
+        => new()
         {
-            DisplayUrl = request.GetDisplayUrl(),
-            Protocol = request.Protocol,
-            Method = request.Method,
-            Scheme = request.Scheme,
-            PathBase = request.PathBase,
-            Path = request.Path,
-            QueryString = request.QueryString.Value,
             Duration = _stopwatch.ElapsedMilliseconds,
+            Error = context.Features.Get<IExceptionHandlerFeature>()?.Error,
             Request =
             {
-                ContentType = request.ContentType,
-                ContentLength = request.ContentLength,
-                Headers = request.Headers.Select(_ => new KeyValuePair<string, object>(_.Key, _.Value)),
+                DisplayUrl = context.Request.GetDisplayUrl(),
+                Protocol = context.Request.Protocol,
+                Method = context.Request.Method,
+                Scheme = context.Request.Scheme,
+                PathBase = context.Request.PathBase,
+                Path = context.Request.Path,
+                QueryString = context.Request.QueryString.Value ?? string.Empty,
+                ContentType = context.Request.ContentType ?? string.Empty,
+                ContentLength = context.Request.ContentLength,
+                Headers = context.Request.Headers.Select(_ => new KeyValuePair<string, object>(_.Key, _.Value)),
                 Body = requestBody
             },
             Response =
             {
-                ContentType = response.ContentType,
-                ContentLength = response.ContentLength,
+                ContentType = context.Response.ContentType,
+                ContentLength = context.Response.ContentLength,
                 Body = responseBody,
-                Headers = response.Headers.Select(_ => new KeyValuePair<string, object>(_.Key, _.Value)),
-                StatusCode = response.StatusCode
+                Headers = context.Response.Headers.Select(_ => new KeyValuePair<string, object>(_.Key, _.Value)),
+                StatusCode = context.Response.StatusCode
             }
         };
-
-        WriteLog(log);
-    }
 
     private void WriteLog(HttpLog log)
     {
@@ -95,9 +111,18 @@ internal class HttpLoggingMiddleware
             _ => LogLevel.Information
         };
 
-        using (LogContext.PushProperty("HttpLog", log, true))
+        ILogEventEnricher[] enrichers =
         {
-            _logger.Log(logLevel, $"Request finished {log.DisplayUrl} -- {log.Response.StatusCode} -- {log.Duration}ms");
+            new PropertyEnricher("DurationMilliseconds", log.Duration),
+            new PropertyEnricher("StatusCode", log.Response.StatusCode),
+            new PropertyEnricher("Error", log.Error),
+            new PropertyEnricher("Request", log.Request, true),
+            new PropertyEnricher("Response", log.Response, true)
+        };
+
+        using (LogContext.Push(enrichers))
+        {
+            _logger.Log(logLevel, $"Request finished {log.Request.DisplayUrl} -- {log.Response.StatusCode} -- {log.Duration}ms");
         }
     }
 }
