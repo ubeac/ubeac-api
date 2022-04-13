@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Reflection;
+using AutoMapper;
 using uBeac;
 using uBeac.Web;
 
@@ -6,9 +7,21 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceExtensions
 {
-    public static IServiceCollection AddMappingProfile<T>(this IServiceCollection services) where T : Profile
+    public static IServiceCollection AddApplicationContext<TApplicationContext>(this IServiceCollection services)
+        where TApplicationContext : class, IApplicationContext
     {
-        services.AddAutoMapper(typeof(T));
+        services.AddSingleton<IApplicationContext, TApplicationContext>();
+        return services;
+    }
+
+    public static IServiceCollection AddApplicationContext(this IServiceCollection services)
+    {
+        return AddApplicationContext<ApplicationContext>(services);
+    }
+
+    public static IServiceCollection AddAutoMapper(this IServiceCollection services)
+    {
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
         return services;
     }
 

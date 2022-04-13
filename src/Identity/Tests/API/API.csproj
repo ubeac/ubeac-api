@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\uBeac.Core.Common\uBeac.Core.Common.csproj" />
     <ProjectReference Include="..\..\..\Common\uBeac.Core.Configuration\uBeac.Core.Configuration.csproj" />
+    <ProjectReference Include="..\..\..\Repository\uBeac.Core.Repositories.History.MongoDB\uBeac.Core.Repositories.History.MongoDB.csproj" />
     <ProjectReference Include="..\..\..\Logging\uBeac.Core.Logging.MongoDB\uBeac.Core.Logging.MongoDB.csproj" />
     <ProjectReference Include="..\..\..\Logging\uBeac.Core.Web.Logging\uBeac.Core.Web.Logging.csproj" />
     <ProjectReference Include="..\..\..\Web\uBeac.Core.Web.Common\uBeac.Core.Web.Common.csproj" />
