@@ -113,7 +113,7 @@ public static class RoleExtensions
                 // If role was not inserted before, insert it
                 if (service.Exists(role.Name).Result is false)
                 {
-                    service.Insert(role).Wait();
+                    service.Create(role).Wait();
                 }
             }
             catch (Exception)
