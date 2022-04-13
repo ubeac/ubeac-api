@@ -59,3 +59,20 @@ public class MongoHistoryRepository<TKey, THistory, TContext> : IHistoryReposito
         await Insert(history, cancellationToken);
     }
 }
+
+public class MongoHistoryRepository<THistory, TContext> : MongoHistoryRepository<Guid, THistory, TContext>
+    where THistory : class, IHistoryEntity, new()
+    where TContext : IMongoDBContext
+{
+    public MongoHistoryRepository(TContext mongoDbContext, IApplicationContext appContext) : base(mongoDbContext, appContext)
+    {
+    }
+}
+
+public class MongoHistoryRepository<TContext> : MongoHistoryRepository<HistoryEntity, TContext>
+    where TContext : IMongoDBContext
+{
+    public MongoHistoryRepository(TContext mongoDbContext, IApplicationContext appContext) : base(mongoDbContext, appContext)
+    {
+    }
+}

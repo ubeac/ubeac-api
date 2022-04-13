@@ -1,4 +1,3 @@
-using API;
 using Microsoft.AspNetCore.Mvc;
 using uBeac.Repositories;
 using uBeac.Repositories.MongoDB;
@@ -32,7 +31,7 @@ builder.Services.AddMongo<MongoDBContext>("DefaultConnection", builder.Environme
     .AddDefaultBsonSerializers();
 
 // Adding history
-builder.Services.AddHistory().Using<MongoHistoryRepository<Guid, HistoryEntity,MongoDBContext>>()
+builder.Services.AddHistory().Using<MongoHistoryRepository<MongoDBContext>>()
     .ForDefault();
 
 // builder.Services.AddHistory().Using<MongoHistoryRepository<MongoDBContext>>()
