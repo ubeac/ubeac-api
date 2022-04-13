@@ -2,7 +2,7 @@
 using MongoDB.Driver;
 using uBeac.Repositories.MongoDB;
 
-namespace uBeac.Repositories;
+namespace uBeac.Repositories.History.MongoDB;
 
 public class MongoHistoryRepository<TKey, THistory, TContext> : IHistoryRepository
     where TKey : IEquatable<TKey>
