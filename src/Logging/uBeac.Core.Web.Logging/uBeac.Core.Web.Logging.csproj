@@ -20,7 +20,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Common\uBeac.Core.Common\uBeac.Core.Common.csproj" />
 		<ProjectReference Include="..\..\Logging\uBeac.Core.Logging\uBeac.Core.Logging.csproj" />
 	</ItemGroup>
 
