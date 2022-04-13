@@ -47,7 +47,7 @@ public class RoleService<TKey, TRole> : IRoleService<TKey, TRole>
         return Task.FromResult(RoleManager.Roles.AsEnumerable().Single(r => r.Id.Equals(id)));
     }
 
-    public virtual async Task Insert(TRole role, CancellationToken cancellationToken = default)
+    public virtual async Task Create(TRole role, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
