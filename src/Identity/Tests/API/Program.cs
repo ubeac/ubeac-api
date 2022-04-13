@@ -1,20 +1,45 @@
 using Microsoft.AspNetCore.Mvc;
+using uBeac.Repositories;
+using System.Reflection;
+using Microsoft.AspNetCore.HttpLogging;
+using Microsoft.AspNetCore.Mvc;
+using Serilog;
+using uBeac.Logging.MongoDB;
 using uBeac.Repositories.MongoDB;
 using uBeac.Web;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Adding json config files (IConfiguration)
+builder.Configuration.AddJsonConfig(builder.Environment);
+
+// Adding logging
+var logger = new LoggerConfiguration()
+    .AddApiLogging()
+    .WriteToMongoDB(builder.Configuration.GetConnectionString("LogConnection"))
+    .CreateLogger();
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
+
+// Adding http logging
+builder.Services.AddHttpLogging(options =>
+{
+    options.LoggingFields = HttpLoggingFields.All;
+    options.MediaTypeOptions.AddText("application/json");
+});
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper();
-
-// Adding json config files
-builder.Configuration.AddJsonConfig(builder.Environment);
 
 // Disabling automatic model state validation
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
 });
+
+// Adding application context
+builder.Services.AddApplicationContext();
 
 // Adding debugger
 builder.Services.AddDebugger();
@@ -26,8 +51,15 @@ builder.Services.AddCoreSwaggerWithJWT("Example");
 builder.Services.AddMongo<MongoDBContext>("DefaultConnection", builder.Environment.IsEnvironment("Testing"))
     .AddDefaultBsonSerializers();
 
-// Adding application context
-builder.Services.AddApplicationContext();
+// Adding history
+builder.Services.AddHistory().UsingMongoDb().ForDefault();
+
+// builder.Services.AddHistory().Using<MongoHistoryRepository<MongoDBContext>>()
+//    .For<User>()
+//    .For<Role>()
+//    .For<Unit>()
+//    .For<UnitType>()
+//    .For<UnitRole>();
 
 // Adding email provider
 builder.Services.AddEmailProvider(builder.Configuration);
@@ -84,6 +116,7 @@ builder.Services
     });
 
 var app = builder.Build();
+app.UseHttpLogging();
 app.UseHttpsRedirection();
 app.UseDefaultFiles();
 app.UseStaticFiles();
