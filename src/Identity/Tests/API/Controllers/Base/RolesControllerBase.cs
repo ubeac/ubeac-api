@@ -22,7 +22,7 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     {
         try
         {
-            await RoleService.Insert(role, cancellationToken);
+            await RoleService.Create(role, cancellationToken);
             return role.Id.ToResult();
         }
         catch (Exception ex)
