@@ -34,8 +34,11 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         cancellationToken.ThrowIfCancellationRequested();
 
         var idFilter = Builders<TEntity>.Filter.Eq(doc => doc.Id, id);
-        var deleteResult = await Collection.DeleteOneAsync(idFilter, cancellationToken);
-        return deleteResult.DeletedCount == 1;
+        var entity = await Collection.FindOneAndDeleteAsync(idFilter, null, cancellationToken);
+        
+        await History.AddToHistory(entity, nameof(Delete), cancellationToken);
+
+        return entity != null;
     }
 
     public virtual async Task<IEnumerable<TEntity>> GetAll(CancellationToken cancellationToken = default)
@@ -74,6 +77,8 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         SetAuditPropsOnCreate(entity);
 
         await Collection.InsertOneAsync(entity, null, cancellationToken);
+
+        await History.AddToHistory(entity, nameof(Create), cancellationToken);
     }
 
     public virtual async Task<TEntity> Update(TEntity entity, CancellationToken cancellationToken = default)
@@ -84,7 +89,11 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         SetAuditPropsOnUpdate(entity);
 
         var idFilter = Builders<TEntity>.Filter.Eq(x => x.Id, entity.Id);
-        return await Collection.FindOneAndReplaceAsync(idFilter, entity, null, cancellationToken);
+        entity = await Collection.FindOneAndReplaceAsync(idFilter, entity, null, cancellationToken);
+
+        await History.AddToHistory(entity, nameof(Update), cancellationToken);
+
+        return entity;
     }
 
     public virtual async Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> filter,
