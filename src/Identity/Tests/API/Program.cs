@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using uBeac.Repositories;
-using System.Reflection;
 using Serilog;
 using uBeac.Logging.MongoDB;
 using uBeac.Repositories.MongoDB;
@@ -13,8 +11,8 @@ builder.Configuration.AddJsonConfig(builder.Environment);
 
 // Adding logging
 var logger = new LoggerConfiguration()
-    .AddApiLogging(builder.Services)
-    .WriteToMongoDB(builder.Configuration.GetConnectionString("LogConnection"))
+    .WriteTo.Logger(_ => _.AddDefaultLogging(builder.Services).WriteToMongoDB(builder.Configuration.GetConnectionString("DefaultLogConnection")))
+    .WriteTo.Logger(_ => _.AddHttpLogging(builder.Services).WriteToMongoDB(builder.Configuration.GetConnectionString("HttpLogConnection")))
     .CreateLogger();
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
