@@ -6,8 +6,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class Extensions
     {
-        public static LoggerConfiguration AddApiLogging(this LoggerConfiguration configuration,
-            IServiceCollection services, string seqUrl)
+        public static LoggerConfiguration AddApiLogging(this LoggerConfiguration configuration, IServiceCollection services)
         {
             configuration
                 .MinimumLevel.Override("Microsoft.AspNetCore.Hosting.Diagnostics", LogEventLevel.Warning)
@@ -29,7 +28,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .Enrich.WithEnvironmentUserName()
                 .Enrich.WithCorrelationId()
                 .Enrich.WithAppContext(services)
-                .WriteTo.Seq(seqUrl);
+                .Enrich.WithRemoveRequestProperties();
 
             return configuration;
         }
