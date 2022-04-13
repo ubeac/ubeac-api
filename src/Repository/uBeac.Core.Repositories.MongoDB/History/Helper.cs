@@ -8,17 +8,37 @@ public static class History
 
         var dataType = data.GetType();
 
-        var repository = GetRepository(dataType);
-        await repository.AddToHistory(data, actionName, cancellationToken);
+        var repositories = GetRepositories(dataType);
+        var tasks = repositories.Select(_ => _.AddToHistory(data, actionName, cancellationToken));
+        await Task.WhenAll(tasks);
     }
 
-    internal static List<KeyValuePair<Type, IHistoryRepository>> Repositories { get; } = new();
+    internal static IDictionary<Guid, IList<IHistoryRepository>> Repositories { get; } = new Dictionary<Guid, IList<IHistoryRepository>>();
 
     internal static void AddRepository(Type dataType, IHistoryRepository repository)
     {
-        Repositories.Add(new KeyValuePair<Type, IHistoryRepository>(dataType, repository));
+        var key = GetTypeKey(dataType);
+
+        if (Repositories.ContainsKey(key) is false)
+        {
+            var value = new List<IHistoryRepository>();
+            Repositories.Add(key, value);
+        }
+
+        Repositories[key].Add(repository);
     }
 
-    internal static IHistoryRepository GetRepository(Type dataType)
-        => Repositories.FirstOrDefault(_ => _.Key == dataType).Value ?? Repositories.First().Value;
+    internal static IList<IHistoryRepository> GetRepositories(Type dataType)
+    {
+        var key = GetTypeKey(dataType);
+
+        if (Repositories.ContainsKey(key) is false)
+        {
+            return dataType == typeof(object) ? new List<IHistoryRepository>() : GetRepositories(typeof(object));
+        }
+
+        return Repositories[key];
+    }
+
+    internal static Guid GetTypeKey(Type dataType) => dataType.GUID;
 }
