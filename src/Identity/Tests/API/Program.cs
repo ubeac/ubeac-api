@@ -31,8 +31,7 @@ builder.Services.AddMongo<MongoDBContext>("DefaultConnection", builder.Environme
     .AddDefaultBsonSerializers();
 
 // Adding history
-builder.Services.AddHistory().Using<MongoHistoryRepository<MongoDBContext>>()
-    .ForDefault();
+builder.Services.AddHistory().UsingMongoDb().ForDefault();
 
 // builder.Services.AddHistory().Using<MongoHistoryRepository<MongoDBContext>>()
 //    .For<User>()
