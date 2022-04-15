@@ -35,7 +35,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
 
         var idFilter = Builders<TEntity>.Filter.Eq(doc => doc.Id, id);
         var entity = await Collection.FindOneAndDeleteAsync(idFilter, null, cancellationToken);
-        
+
         await History.AddToHistory(entity, nameof(Delete), cancellationToken);
 
         return entity != null;
@@ -74,7 +74,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         cancellationToken.ThrowIfCancellationRequested();
 
         // If the entity is extend from IAuditEntity, the audit properties (CreatedAt, CreatedBy, etc.) should be set
-        SetAuditPropsOnCreate(entity);
+        if (entity is IAuditEntity<TKey> audit) audit.SetPropertiesOnCreate(AppContext);
 
         await Collection.InsertOneAsync(entity, null, cancellationToken);
 
@@ -86,7 +86,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         cancellationToken.ThrowIfCancellationRequested();
 
         // If the entity is extend from IAuditEntity, the audit properties (LastUpdatedAt, LastUpdatedBy, etc.) should be set
-        SetAuditPropsOnUpdate(entity);
+        if (entity is IAuditEntity<TKey> audit) audit.SetPropertiesOnUpdate(AppContext);
 
         var idFilter = Builders<TEntity>.Filter.Eq(x => x.Id, entity.Id);
         entity = await Collection.FindOneAndReplaceAsync(idFilter, entity, null, cancellationToken);
@@ -103,28 +103,6 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
 
         var findResult = await Collection.FindAsync(filter, cancellationToken: cancellationToken);
         return await findResult.ToListAsync(cancellationToken);
-    }
-
-    protected virtual void SetAuditPropsOnCreate(TEntity entity)
-    {
-        // Set audit properties (CreatedAt, CreatedBy, etc.)
-        if (entity is IAuditEntity<TKey> audit)
-        {
-            audit.CreatedAt = DateTime.Now;
-            audit.CreatedBy = AppContext.UserName;
-            audit.CreatedByIp = AppContext.UserIp?.ToString();
-        }
-    }
-
-    protected virtual void SetAuditPropsOnUpdate(TEntity entity)
-    {
-        // Set audit properties (LastUpdatedAt, LastUpdatedBy, etc.)
-        if (entity is IAuditEntity<TKey> audit)
-        {
-            audit.LastUpdatedAt = DateTime.Now;
-            audit.LastUpdatedBy = AppContext.UserName;
-            audit.LastUpdatedByIp = AppContext.UserIp?.ToString();
-        }
     }
 
     public IQueryable<TEntity> AsQueryable() => Collection.AsQueryable();
