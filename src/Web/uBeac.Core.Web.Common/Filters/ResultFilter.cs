@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -40,6 +41,13 @@ public class ResultFilter : IAsyncActionFilter
             actionContext.Result = new ObjectResult(exceptionResult);
 
             actionContext.HttpContext.Response.StatusCode = exceptionResult.Code;
+
+            var exceptionHandlerFeature = new ExceptionHandlerFeature
+            {
+                Error = actionContext.Exception
+            };
+            context.HttpContext.Features.Set<IExceptionHandlerFeature>(exceptionHandlerFeature);
+            context.HttpContext.Features.Set<IExceptionHandlerPathFeature>(exceptionHandlerFeature);
 
             return;
         }

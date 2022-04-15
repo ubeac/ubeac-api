@@ -12,7 +12,10 @@
 		<PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
 		<PackageReference Include="Serilog.Exceptions" Version="8.1.0" />
 		<PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
-		<PackageReference Include="Serilog.Enrichers.GlobalLogContext" Version="1.1.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Common\uBeac.Core.Common\uBeac.Core.Common.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -1,8 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using uBeac.Repositories;
-using System.Reflection;
-using Microsoft.AspNetCore.HttpLogging;
-using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using uBeac.Logging.MongoDB;
 using uBeac.Repositories.MongoDB;
@@ -15,18 +11,11 @@ builder.Configuration.AddJsonConfig(builder.Environment);
 
 // Adding logging
 var logger = new LoggerConfiguration()
-    .AddApiLogging()
-    .WriteToMongoDB(builder.Configuration.GetConnectionString("LogConnection"))
+    .WriteTo.Logger(_ => _.AddDefaultLogging(builder.Services).WriteToMongoDB(builder.Configuration.GetConnectionString("DefaultLogConnection")))
+    .WriteTo.Logger(_ => _.AddHttpLogging(builder.Services).WriteToMongoDB(builder.Configuration.GetConnectionString("HttpLogConnection")))
     .CreateLogger();
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
-
-// Adding http logging
-builder.Services.AddHttpLogging(options =>
-{
-    options.LoggingFields = HttpLoggingFields.All;
-    options.MediaTypeOptions.AddText("application/json");
-});
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
@@ -116,13 +105,17 @@ builder.Services
     });
 
 var app = builder.Build();
-app.UseHttpLogging();
+app.UseApiLogging();
+
 app.UseHttpsRedirection();
 app.UseDefaultFiles();
 app.UseStaticFiles();
+
+app.MapControllers();
+
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers();
+
 app.UseCoreSwagger();
 app.Run();
 
