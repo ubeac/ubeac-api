@@ -1,6 +1,7 @@
 ﻿using Serilog;
-using Serilog.Events;
 using Serilog.Exceptions;
+using Serilog.Filters;
+using uBeac.Web;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -9,8 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static LoggerConfiguration AddHttpLogging(this LoggerConfiguration configuration, IServiceCollection services)
         {
             configuration
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Fatal)
-                .MinimumLevel.Override("System", LogEventLevel.Fatal)
+                .Filter.ByIncludingOnly(Matching.FromSource<HttpLoggingMiddleware>())
                 .Enrich.FromLogContext()
                 .Enrich.WithExceptionDetails()
                 .Enrich.WithAssemblyName()
@@ -34,8 +34,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static LoggerConfiguration AddDefaultLogging(this LoggerConfiguration configuration, IServiceCollection services)
         {
             configuration
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-                .MinimumLevel.Override("System", LogEventLevel.Information)
+                .Filter.ByExcluding(Matching.FromSource<HttpLoggingMiddleware>())
                 .Enrich.FromLogContext()
                 .Enrich.WithExceptionDetails()
                 .Enrich.WithAssemblyName()

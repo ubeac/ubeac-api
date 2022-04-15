@@ -8,7 +8,6 @@ public class RemoveRequestPropsEnricher : ILogEventEnricher
 {
     public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
     {
-        logEvent.RemovePropertyIfPresent("SourceContext");
         logEvent.RemovePropertyIfPresent("RequestId");
         logEvent.RemovePropertyIfPresent("RequestPath");
     }
