@@ -25,13 +25,6 @@ internal class HttpLoggingMiddleware
 
     public async Task Invoke(HttpContext context)
     {
-        // Don't log if the request was not send to the api endpoints
-        if (context.Request.Path.Value?.ToUpper().StartsWith("/API") == false)
-        {
-            await _next(context);
-            return;
-        }
-
         var requestBody = await ReadRequestBody(context.Request);
         var responseBody = await ReadResponseBody(context, _next);
 
