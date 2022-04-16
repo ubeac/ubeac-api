@@ -24,4 +24,8 @@
     <ProjectReference Include="..\..\uBeac.Core.Identity\uBeac.Core.Identity.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Entities\" />
+  </ItemGroup>
+
 </Project>

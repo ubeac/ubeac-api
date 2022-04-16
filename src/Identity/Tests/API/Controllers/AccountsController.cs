@@ -1,8 +1,8 @@
 ﻿namespace API;
 
-public class AccountsController : AccountsControllerBase<User>
+public class AccountsController : AccountsControllerBase<AppUser>
 {
-    public AccountsController(IUserService<User> userService) : base(userService)
+    public AccountsController(IUserService<AppUser> userService) : base(userService)
     {
     }
 }

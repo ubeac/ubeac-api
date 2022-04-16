@@ -2,9 +2,9 @@
 
 namespace API;
 
-public class UsersController : UsersControllerBase<User>
+public class UsersController : UsersControllerBase<AppUser>
 {
-    public UsersController(IUserService<User> userService, IMapper mapper) : base(userService, mapper)
+    public UsersController(IUserService<AppUser> userService, IMapper mapper) : base(userService, mapper)
     {
     }
 }
