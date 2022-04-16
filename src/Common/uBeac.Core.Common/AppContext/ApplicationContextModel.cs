@@ -8,6 +8,6 @@ public class ApplicationContextModel : IApplicationContext
     public string TraceId { get; set; }
     public string SessionId { get; set; }
     public string UserName { get; set; }
-    public IPAddress UserIp { get; set; }
+    public string UserIp { get; set; }
     public string Language { get; set; }
 }

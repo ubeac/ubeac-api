@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
+using uBeac;
 using uBeac.Repositories;
 using uBeac.Repositories.MongoDB;
 
@@ -37,6 +38,7 @@ public static class MongoDBServicesExtensions
             BsonSerializer.RegisterSerializer(typeof(Guid), new GuidSerializer(GuidRepresentation.Standard));
             BsonSerializer.RegisterSerializer(typeof(decimal), new DecimalSerializer(BsonType.Decimal128));
             BsonSerializer.RegisterSerializer(typeof(decimal?), new NullableSerializer<decimal>(new DecimalSerializer(BsonType.Decimal128)));
+            BsonSerializer.RegisterSerializer(typeof(IApplicationContext), new AppContextSerializer());
         }
         catch (BsonSerializationException)
         {
