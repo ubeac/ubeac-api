@@ -33,26 +33,18 @@ public class MongoHistoryRepository<TKey, THistory, TContext> : IHistoryReposito
         await collection.InsertOneAsync(bsonDocument, new InsertOneOptions(), cancellationToken);
     }
 
-    protected virtual THistory CreateInstance(object data, string actionName)
-    {
-        var history = Activator.CreateInstance<THistory>();
-        history.Data = data;
-        history.ActionName = actionName;
-        history.CreatedAt = DateTime.Now;
-        return history;
-    }
-
-    public async Task AddToHistory(object data, string actionName = "None", CancellationToken cancellationToken = default)
+    public async Task AddToHistory(object data, string actionName = "None", IApplicationContext context = null, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        var history = CreateInstance(data, actionName);
-        await Insert(history, cancellationToken);
-    }
 
-    public async Task AddToHistory<TData>(TData data, string actionName = "None", CancellationToken cancellationToken = default)
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-        var history = CreateInstance(data, actionName);
+        var history = new THistory
+        {
+            Data = data,
+            ActionName = actionName,
+            Context = context,
+            CreatedAt = DateTime.Now
+        };
+
         await Insert(history, cancellationToken);
     }
 }

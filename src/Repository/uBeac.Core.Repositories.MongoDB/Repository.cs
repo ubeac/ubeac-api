@@ -36,7 +36,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         var idFilter = Builders<TEntity>.Filter.Eq(doc => doc.Id, id);
         var entity = await Collection.FindOneAndDeleteAsync(idFilter, null, cancellationToken);
 
-        await History.AddToHistory(entity, nameof(Delete), cancellationToken);
+        await History.AddToHistory(entity, nameof(Delete), AppContext, cancellationToken);
 
         return entity != null;
     }
@@ -78,7 +78,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
 
         await Collection.InsertOneAsync(entity, null, cancellationToken);
 
-        await History.AddToHistory(entity, nameof(Create), cancellationToken);
+        await History.AddToHistory(entity, nameof(Create), AppContext, cancellationToken);
     }
 
     public virtual async Task<TEntity> Update(TEntity entity, CancellationToken cancellationToken = default)
@@ -91,7 +91,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         var idFilter = Builders<TEntity>.Filter.Eq(x => x.Id, entity.Id);
         entity = await Collection.FindOneAndReplaceAsync(idFilter, entity, null, cancellationToken);
 
-        await History.AddToHistory(entity, nameof(Update), cancellationToken);
+        await History.AddToHistory(entity, nameof(Update), AppContext, cancellationToken);
 
         return entity;
     }
