@@ -10,7 +10,7 @@ public static class ServiceExtensions
     public static IServiceCollection AddApplicationContext<TApplicationContext>(this IServiceCollection services)
         where TApplicationContext : class, IApplicationContext
     {
-        services.AddSingleton<IApplicationContext, TApplicationContext>();
+        services.AddScoped<IApplicationContext, TApplicationContext>();
         return services;
     }
 
