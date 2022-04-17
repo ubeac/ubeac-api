@@ -43,7 +43,6 @@ public static class AuditEntityExtensions
         var now = DateTime.Now;
         var userName = appContext.UserName;
         var ip = appContext.UserIp?.ToString();
-        var context = appContext.ToModel();
 
         entity.CreatedAt = now;
         entity.CreatedBy = userName;
@@ -51,7 +50,7 @@ public static class AuditEntityExtensions
         entity.LastUpdatedAt = now;
         entity.LastUpdatedBy = userName;
         entity.LastUpdatedByIp = ip;
-        entity.Context = context;
+        entity.Context = appContext;
     }
 
     public static void SetPropertiesOnUpdate<TKey>(this IAuditEntity<TKey> entity, IApplicationContext appContext) where TKey : IEquatable<TKey>
@@ -59,11 +58,10 @@ public static class AuditEntityExtensions
         var now = DateTime.Now;
         var userName = appContext.UserName;
         var ip = appContext.UserIp?.ToString();
-        var context = appContext.ToModel();
 
         entity.LastUpdatedAt = now;
         entity.LastUpdatedBy = userName;
         entity.LastUpdatedByIp = ip;
-        entity.Context = context;
+        entity.Context = appContext;
     }
 }

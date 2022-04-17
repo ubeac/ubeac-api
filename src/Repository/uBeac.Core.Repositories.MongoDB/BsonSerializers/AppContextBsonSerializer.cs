@@ -5,8 +5,6 @@ namespace uBeac.Repositories.MongoDB;
 
 public class AppContextBsonSerializer : SerializerBase<IApplicationContext>
 {
-    protected readonly Type Type = typeof(ApplicationContextModel);
-
     public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, IApplicationContext value)
     {
         if (value == null)
@@ -15,11 +13,11 @@ public class AppContextBsonSerializer : SerializerBase<IApplicationContext>
             return;
         }
 
-        BsonSerializer.Serialize(context.Writer, Type, value);
+        BsonSerializer.Serialize(context.Writer, GlobalApplicationContext.ApplicationContextType, value);
     }
 
     public override IApplicationContext Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
     {
-        return BsonSerializer.Deserialize(context.Reader, Type) as IApplicationContext;
+        return BsonSerializer.Deserialize(context.Reader, GlobalApplicationContext.ApplicationContextType) as IApplicationContext;
     }
 }
