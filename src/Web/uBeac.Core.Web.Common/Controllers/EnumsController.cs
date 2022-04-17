@@ -10,7 +10,7 @@ public class EnumsController : BaseController
     {
         var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
         var referencedAssemblies = assembly.GetReferencedAssemblies();
-        var enums = referencedAssemblies.GetEnums();
+        var enums = referencedAssemblies.ExposeEnums();
         return enums.ToListResult();
     }
 }

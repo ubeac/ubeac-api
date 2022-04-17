@@ -4,10 +4,14 @@ namespace uBeac;
 
 public static class EnumExtensions
 {
-    public static IEnumerable<EnumModel> GetEnums(this Assembly assembly)
+    public static IEnumerable<EnumModel> ExposeEnums(this Assembly assembly)
     {
-        foreach (var type in assembly.GetTypes().Where(type => type.IsEnum && type.CustomAttributes.Any(attr => attr.AttributeType == typeof(EnumAttribute))))
+        foreach (var type in assembly.GetTypes().Where(type =>
+                     EnumConfiguration.AllowedToExpose.Contains(type) ||
+                     type.IsEnum && type.CustomAttributes.Any(attr => attr.AttributeType == typeof(EnumAttribute))))
         {
+            if (EnumConfiguration.NotAllowedToExpose.Contains(type)) continue;
+
             var enumAttribute = type.GetCustomAttributes<EnumAttribute>().LastOrDefault() ?? new EnumAttribute();
             var enumModel = new EnumModel
             {
@@ -36,6 +40,6 @@ public static class EnumExtensions
         }
     }
 
-    public static IEnumerable<EnumModel> GetEnums(this IEnumerable<AssemblyName> assemblyNames)
-        => assemblyNames.Select(Assembly.Load).SelectMany(assembly => assembly.GetEnums());
+    public static IEnumerable<EnumModel> ExposeEnums(this IEnumerable<AssemblyName> assemblyNames)
+        => assemblyNames.Select(Assembly.Load).SelectMany(assembly => assembly.ExposeEnums());
 }
