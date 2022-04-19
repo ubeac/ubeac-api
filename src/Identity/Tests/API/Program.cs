@@ -55,38 +55,38 @@ builder.Services.AddHistory().UsingMongoDb().ForDefault();
 builder.Services.AddEmailProvider(builder.Configuration);
 
 // Adding repositories
-builder.Services.AddMongoDBUserRepository<MongoDBContext, AppUser>();
+builder.Services.AddMongoDBUserRepository<MongoDBContext, User>();
 builder.Services.AddMongoDBUserTokenRepository<MongoDBContext>();
-builder.Services.AddMongoDBRoleRepository<MongoDBContext, AppRole>();
+builder.Services.AddMongoDBRoleRepository<MongoDBContext, Role>();
 builder.Services.AddMongoDBUnitRepository<MongoDBContext, Unit>();
 builder.Services.AddMongoDBUnitTypeRepository<MongoDBContext, UnitType>();
 builder.Services.AddMongoDBUnitRoleRepository<MongoDBContext, UnitRole>();
 
 // Adding services
-builder.Services.AddUserService<UserService<AppUser>, AppUser>();
-builder.Services.AddRoleService<RoleService<AppRole>, AppRole>();
-builder.Services.AddUserRoleService<UserRoleService<AppUser>, AppUser>();
+builder.Services.AddUserService<UserService<User>, User>();
+builder.Services.AddRoleService<RoleService<Role>, Role>();
+builder.Services.AddUserRoleService<UserRoleService<User>, User>();
 builder.Services.AddUnitService<UnitService<Unit>, Unit>();
 builder.Services.AddUnitTypeService<UnitTypeService<UnitType>, UnitType>();
 builder.Services.AddUnitRoleService<UnitRoleService<UnitRole>, UnitRole>();
 
 // Adding jwt provider
-builder.Services.AddJwtService<AppUser>(builder.Configuration);
+builder.Services.AddJwtService<User>(builder.Configuration);
 
 // Adding authentication
 builder.Services.AddJwtAuthentication(builder.Configuration);
 
 // Adding identity core
 builder.Services
-    .AddIdentityUser<AppUser>(configureOptions: options =>
+    .AddIdentityUser<User>(configureOptions: options =>
     {
-        options.AdminUser = new AppUser("admin");
+        options.AdminUser = new User("admin");
         options.AdminPassword = "1qaz!QAZ";
         options.AdminRole = "ADMIN";
     })
-    .AddIdentityRole<AppRole>(configureOptions: options =>
+    .AddIdentityRole<Role>(configureOptions: options =>
     {
-        options.DefaultValues = new List<AppRole> { new("ADMIN") };
+        options.DefaultValues = new List<Role> { new("ADMIN") };
     })
     .AddIdentityUnit<Unit>(configureOptions: options =>
     {
