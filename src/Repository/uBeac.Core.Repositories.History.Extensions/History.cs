@@ -2,14 +2,14 @@
 
 public static class History
 {
-    public static async Task AddToHistory(object data, string actionName = "None", IApplicationContext context = null, CancellationToken cancellationToken = default)
+    public static async Task Add(object data, string actionName = "None", IApplicationContext context = null, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         var dataType = data.GetType();
 
         var repositories = GetRepositories(dataType);
-        var tasks = repositories.Select(_ => _.AddToHistory(data, actionName, context, cancellationToken));
+        var tasks = repositories.Select(_ => _.Add(data, actionName, context, cancellationToken));
         await Task.WhenAll(tasks);
     }
 

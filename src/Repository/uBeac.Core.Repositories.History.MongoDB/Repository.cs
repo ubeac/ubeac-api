@@ -33,7 +33,7 @@ public class MongoHistoryRepository<TKey, THistory, TContext> : IHistoryReposito
         await collection.InsertOneAsync(bsonDocument, new InsertOneOptions(), cancellationToken);
     }
 
-    public async Task AddToHistory(object data, string actionName = "None", IApplicationContext context = null, CancellationToken cancellationToken = default)
+    public async Task Add(object data, string actionName = "None", IApplicationContext context = null, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
