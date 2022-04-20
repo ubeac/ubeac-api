@@ -5,9 +5,9 @@ using System.Linq.Expressions;
 namespace uBeac.Repositories.MongoDB;
 
 public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<TKey, TEntity>
-        where TKey : IEquatable<TKey>
-        where TEntity : IEntity<TKey>
-        where TContext : IMongoDBContext
+    where TKey : IEquatable<TKey>
+    where TEntity : IEntity<TKey>
+    where TContext : IMongoDBContext
 {
     protected readonly IMongoCollection<TEntity> Collection;
     protected readonly IMongoCollection<BsonDocument> BsonCollection;
@@ -29,6 +29,15 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         return typeof(TEntity).Name;
     }
 
+    protected virtual async Task AddToHistory(TEntity entity, string actionName, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var context = AppContext;
+        if (entity is IAuditEntity<TKey> audit) context = audit.Context;
+        await History.Add(entity, actionName, context, cancellationToken);
+    }
+
     public virtual async Task<bool> Delete(TKey id, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -36,7 +45,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         var idFilter = Builders<TEntity>.Filter.Eq(doc => doc.Id, id);
         var entity = await Collection.FindOneAndDeleteAsync(idFilter, null, cancellationToken);
 
-        await History.AddToHistory(entity, nameof(Delete), AppContext, cancellationToken);
+        await AddToHistory(entity, nameof(Delete), cancellationToken);
 
         return entity != null;
     }
@@ -78,7 +87,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
 
         await Collection.InsertOneAsync(entity, null, cancellationToken);
 
-        await History.AddToHistory(entity, nameof(Create), AppContext, cancellationToken);
+        await AddToHistory(entity, nameof(Create), cancellationToken);
     }
 
     public virtual async Task<TEntity> Update(TEntity entity, CancellationToken cancellationToken = default)
@@ -91,7 +100,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         var idFilter = Builders<TEntity>.Filter.Eq(x => x.Id, entity.Id);
         entity = await Collection.FindOneAndReplaceAsync(idFilter, entity, null, cancellationToken);
 
-        await History.AddToHistory(entity, nameof(Update), AppContext, cancellationToken);
+        await AddToHistory(entity, nameof(Update), cancellationToken);
 
         return entity;
     }

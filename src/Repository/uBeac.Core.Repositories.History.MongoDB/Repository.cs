@@ -18,7 +18,7 @@ public class MongoHistoryRepository<TKey, THistory, TContext> : IHistoryReposito
         MongoDbContext = mongoDbContext;
     }
 
-    protected virtual string GetCollectionName(Type dataType) => $"{dataType.Name}.History";
+    protected virtual string GetCollectionName(Type dataType) => $"{dataType.Name}_History";
 
     protected virtual async Task Insert(THistory history, CancellationToken cancellationToken = default)
     {
@@ -33,7 +33,7 @@ public class MongoHistoryRepository<TKey, THistory, TContext> : IHistoryReposito
         await collection.InsertOneAsync(bsonDocument, new InsertOneOptions(), cancellationToken);
     }
 
-    public async Task AddToHistory(object data, string actionName = "None", IApplicationContext context = null, CancellationToken cancellationToken = default)
+    public async Task Add(object data, string actionName = "None", IApplicationContext context = null, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
