@@ -20,12 +20,6 @@ public static class ServiceExtensions
         return AddApplicationContext<ApplicationContext>(services);
     }
 
-    public static IServiceCollection AddAutoMapper(this IServiceCollection services)
-    {
-        services.AddAutoMapper(Assembly.GetExecutingAssembly());
-        return services;
-    }
-
     public static IServiceCollection AddDebugger<TDebugger>(this IServiceCollection services) where TDebugger : class, IDebugger
     {
         services.AddScoped<IDebugger, TDebugger>();

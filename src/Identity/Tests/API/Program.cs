@@ -1,3 +1,4 @@
+using System.Reflection;
 using API;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -20,7 +21,7 @@ builder.Logging.AddSerilog(logger);
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
-builder.Services.AddAutoMapper();
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 // Disabling automatic model state validation
 builder.Services.Configure<ApiBehaviorOptions>(options =>
