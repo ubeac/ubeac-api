@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-using AutoMapper;
-using uBeac;
+﻿using uBeac;
 using uBeac.Web;
 
 namespace Microsoft.Extensions.DependencyInjection;
