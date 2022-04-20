@@ -18,7 +18,7 @@ public class MongoHistoryRepository<TKey, THistory, TContext> : IHistoryReposito
         MongoDbContext = mongoDbContext;
     }
 
-    protected virtual string GetCollectionName(Type dataType) => $"{dataType.Name}.History";
+    protected virtual string GetCollectionName(Type dataType) => $"{dataType.Name}_History";
 
     protected virtual async Task Insert(THistory history, CancellationToken cancellationToken = default)
     {
