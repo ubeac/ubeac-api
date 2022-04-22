@@ -1,6 +1,6 @@
 ﻿namespace uBeac;
 
-public static class Extensions
+public static class EnumExtensions
 {
     public static ApplicationContextModel ToModel(this IApplicationContext appContext)
         => new()

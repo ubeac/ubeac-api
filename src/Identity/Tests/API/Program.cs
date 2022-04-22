@@ -54,6 +54,9 @@ builder.Services.AddHistory().UsingMongoDb().ForDefault();
 // Adding email provider
 builder.Services.AddEmailProvider(builder.Configuration);
 
+// Adding enum provider
+builder.Services.AddEnumProvider();
+
 // Adding repositories
 builder.Services.AddMongoDBUserRepository<MongoDBContext, AppUser>();
 builder.Services.AddMongoDBUserTokenRepository<MongoDBContext>();

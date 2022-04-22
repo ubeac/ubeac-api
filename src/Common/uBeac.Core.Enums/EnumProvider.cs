@@ -2,16 +2,32 @@
 
 namespace uBeac;
 
-public static class EnumExtensions
+public interface IEnumProvider
 {
-    public static IEnumerable<EnumModel> ExposeEnums(this Assembly assembly)
+    IEnumerable<EnumModel> ExposeEnums();
+}
+
+public class EnumProvider : IEnumProvider
+{
+    private readonly IEnumerable<EnumModel> _enums;
+
+    public EnumProvider(Assembly assembly)
+    {
+        _enums = ExposeEnums(assembly);
+    }
+
+    public EnumProvider(IEnumerable<AssemblyName> assemblyNames)
+    {
+        _enums = ExposeEnums(assemblyNames);
+    }
+
+    public IEnumerable<EnumModel> ExposeEnums() => _enums;
+
+    public static IEnumerable<EnumModel> ExposeEnums(Assembly assembly)
     {
         foreach (var type in assembly.GetTypes().Where(type =>
-                     EnumConfiguration.AllowedToExpose.Contains(type) ||
                      type.IsEnum && type.CustomAttributes.Any(attr => attr.AttributeType == typeof(EnumAttribute))))
         {
-            if (EnumConfiguration.NotAllowedToExpose.Contains(type)) continue;
-
             var enumAttribute = type.GetCustomAttributes<EnumAttribute>().LastOrDefault() ?? new EnumAttribute();
             var enumModel = new EnumModel
             {
@@ -40,6 +56,6 @@ public static class EnumExtensions
         }
     }
 
-    public static IEnumerable<EnumModel> ExposeEnums(this IEnumerable<AssemblyName> assemblyNames)
-        => assemblyNames.Select(Assembly.Load).SelectMany(assembly => assembly.ExposeEnums());
+    public static IEnumerable<EnumModel> ExposeEnums(IEnumerable<AssemblyName> assemblyNames)
+        => assemblyNames.Select(Assembly.Load).SelectMany(ExposeEnums);
 }
