@@ -45,15 +45,13 @@ builder.Services.AddMongo<MongoDBContext>("DefaultConnection", builder.Environme
 // Adding history
 builder.Services.AddHistory().UsingMongoDb().ForDefault();
 
-// builder.Services.AddHistory().Using<MongoHistoryRepository<MongoDBContext>>()
-//    .For<User>()
-//    .For<Role>()
-//    .For<Unit>()
-//    .For<UnitType>()
-//    .For<UnitRole>();
+// Adding template renderer
+builder.Services.AddMustacheTemplateRendering();
 
 // Adding email provider
 builder.Services.AddEmailProvider(builder.Configuration);
+builder.Services.AddMongoEmailTemplateRepository();
+builder.Services.AddEmailTemplateService();
 
 // Adding repositories
 builder.Services.AddMongoDBUserRepository<MongoDBContext, User>();

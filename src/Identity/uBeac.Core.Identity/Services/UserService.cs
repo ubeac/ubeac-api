@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 
@@ -15,16 +14,14 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
     protected readonly UserManager<TUser> UserManager;
     protected readonly ITokenService<TUserKey, TUser> TokenService;
     protected readonly IUserTokenRepository<TUserKey> UserTokenRepository;
-    protected readonly IEmailProvider EmailProvider;
     protected readonly IApplicationContext AppContext;
     protected readonly IHttpContextAccessor Accessor;
 
-    public UserService(UserManager<TUser> userManager, ITokenService<TUserKey, TUser> tokenService, IUserTokenRepository<TUserKey> userTokenRepository, IEmailProvider emailProvider, IApplicationContext appContext, IHttpContextAccessor accessor)
+    public UserService(UserManager<TUser> userManager, ITokenService<TUserKey, TUser> tokenService, IUserTokenRepository<TUserKey> userTokenRepository, IApplicationContext appContext, IHttpContextAccessor accessor)
     {
         UserManager = userManager;
         TokenService = tokenService;
         UserTokenRepository = userTokenRepository;
-        EmailProvider = emailProvider;
         AppContext = appContext;
         Accessor = accessor;
     }
@@ -155,17 +152,9 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         var user = await UserManager.FindByNameAsync(username);
         if (user == null) throw new Exception("User does not exist!");
 
-        var resetPasswordToken = await UserManager.GeneratePasswordResetTokenAsync(user);
-        await SendResetPasswordToken(user, resetPasswordToken);
-    }
-
-    protected virtual async Task SendResetPasswordToken(TUser user, string token)
-    {
-        // Send email in background to prevent in interruptions
-        var backgroundWorker = new BackgroundWorker();
-        backgroundWorker.DoWork += async (_, _) => await EmailProvider.Send(user.Email, ForgotPasswordMessage.Subject, ForgotPasswordMessage.GetBodyWithReplaces(token));
-        backgroundWorker.RunWorkerAsync();
-        await Task.CompletedTask;
+        await UserManager.GeneratePasswordResetTokenAsync(user);
+        
+        // TODO: Send Email
     }
 
     public virtual async Task ResetPassword(string username, string token, string newPassword, CancellationToken cancellationToken = default)
@@ -220,7 +209,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
 public class UserService<TUser> : UserService<Guid, TUser>, IUserService<TUser>
     where TUser : User
 {
-    public UserService(UserManager<TUser> userManager, ITokenService<TUser> tokenService, IUserTokenRepository userTokenRepository, IEmailProvider emailProvider, IApplicationContext appContext, IHttpContextAccessor accessor) : base(userManager, tokenService, userTokenRepository, emailProvider, appContext, accessor)
+    public UserService(UserManager<TUser> userManager, ITokenService<TUser> tokenService, IUserTokenRepository userTokenRepository, IApplicationContext appContext, IHttpContextAccessor accessor) : base(userManager, tokenService, userTokenRepository, appContext, accessor)
     {
     }
 }

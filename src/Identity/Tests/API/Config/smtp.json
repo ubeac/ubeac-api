@@ -1,0 +1,11 @@
+{
+  "Smtp": {
+    "Server": "YourSmtpServer",
+    "SenderName": "YourName",
+    "Port": 587,
+    "SenderEmail": "YourEmail",
+    "Username": "YourUserName",
+    "Password": "YourPassword",
+    "EnableSsl": "true"
+  }
+}
