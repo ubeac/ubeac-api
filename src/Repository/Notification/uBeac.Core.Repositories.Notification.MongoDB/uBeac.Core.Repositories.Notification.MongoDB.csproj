@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\uBeac.Core.Repositories.MongoDB\uBeac.Core.Repositories.MongoDB.csproj" />
-    <ProjectReference Include="..\uBeac.Core.Repositories.Notification.Abstractions\uBeac.Core.Repositories.Notification.Abstractions.csproj" />
+    <ProjectReference Include="..\..\uBeac.Core.Repositories.MongoDB\uBeac.Core.Repositories.MongoDB.csproj" />
+    <ProjectReference Include="..\..\uBeac.Core.Repositories.Notification.Abstractions\uBeac.Core.Repositories.Notification.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>
