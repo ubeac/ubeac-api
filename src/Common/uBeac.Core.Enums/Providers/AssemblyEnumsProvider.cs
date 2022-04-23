@@ -1,29 +1,24 @@
 ﻿using System.Reflection;
 
-namespace uBeac;
+namespace uBeac.Enums;
 
-public interface IEnumProvider
-{
-    IEnumerable<EnumModel> ExposeEnums();
-}
-
-public class EnumProvider : IEnumProvider
+public class AssemblyEnumsProvider : IAssemblyEnumsProvider
 {
     private readonly IEnumerable<EnumModel> _enums;
 
-    public EnumProvider(Assembly assembly)
+    public AssemblyEnumsProvider(Assembly assembly)
     {
-        _enums = ExposeEnums(assembly);
+        _enums = ExposeAssemblyEnums(assembly);
     }
 
-    public EnumProvider(IEnumerable<AssemblyName> assemblyNames)
+    public AssemblyEnumsProvider(IEnumerable<Assembly> assemblies)
     {
-        _enums = ExposeEnums(assemblyNames);
+        _enums = ExposeAssemblyEnums(assemblies);
     }
 
-    public IEnumerable<EnumModel> ExposeEnums() => _enums;
+    public IEnumerable<EnumModel> GetAll() => _enums;
 
-    public static IEnumerable<EnumModel> ExposeEnums(Assembly assembly)
+    public static IEnumerable<EnumModel> ExposeAssemblyEnums(Assembly assembly)
     {
         foreach (var type in assembly.GetTypes().Where(type =>
                      type.IsEnum && type.CustomAttributes.Any(attr => attr.AttributeType == typeof(EnumAttribute))))
@@ -56,6 +51,6 @@ public class EnumProvider : IEnumProvider
         }
     }
 
-    public static IEnumerable<EnumModel> ExposeEnums(IEnumerable<AssemblyName> assemblyNames)
-        => assemblyNames.Select(Assembly.Load).SelectMany(ExposeEnums);
+    public static IEnumerable<EnumModel> ExposeAssemblyEnums(IEnumerable<Assembly> assemblies)
+        => assemblies.SelectMany(ExposeAssemblyEnums);
 }

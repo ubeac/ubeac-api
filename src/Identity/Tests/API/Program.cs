@@ -1,6 +1,7 @@
 using API;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using uBeac.Enums;
 using uBeac.Logging.MongoDB;
 using uBeac.Repositories.MongoDB;
 using uBeac.Web;
@@ -55,7 +56,7 @@ builder.Services.AddHistory().UsingMongoDb().ForDefault();
 builder.Services.AddEmailProvider(builder.Configuration);
 
 // Adding enum provider
-builder.Services.AddEnumProvider();
+builder.Services.AddAssemblyEnumsProvider();
 
 // Adding repositories
 builder.Services.AddMongoDBUserRepository<MongoDBContext, AppUser>();

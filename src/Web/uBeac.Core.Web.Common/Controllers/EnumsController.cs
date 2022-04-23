@@ -1,16 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using uBeac.Enums;
 
 namespace uBeac.Web;
 
 public class EnumsController : BaseController
 {
-    private readonly IEnumProvider _enumProvider;
+    private readonly IAssemblyEnumsProvider _assemblyEnums;
 
-    public EnumsController(IEnumProvider enumProvider)
+    public EnumsController(IAssemblyEnumsProvider assemblyEnums)
     {
-        _enumProvider = enumProvider;
+        _assemblyEnums = assemblyEnums;
     }
 
     [HttpGet]
-    public IListResult<EnumModel> GetAll() => _enumProvider.ExposeEnums().ToListResult();
+    public IListResult<EnumModel> GetAllByAssembly() => _assemblyEnums.GetAll().ToListResult();
 }
