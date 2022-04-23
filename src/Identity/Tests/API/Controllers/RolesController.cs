@@ -1,8 +1,8 @@
 ﻿namespace API;
 
-public class RolesController : RolesControllerBase<AppRole>
+public class RolesController : RolesControllerBase<Role>
 {
-    public RolesController(IRoleService<AppRole> roleService) : base(roleService)
+    public RolesController(IRoleService<Role> roleService) : base(roleService)
     {
     }
 }

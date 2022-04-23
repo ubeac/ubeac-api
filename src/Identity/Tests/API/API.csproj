@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="uBeac.Web.Swagger" Version="0.6.1-alpha" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,10 +23,6 @@
     <ProjectReference Include="..\..\uBeac.Core.Identity.Jwt\uBeac.Core.Identity.Jwt.csproj" />
     <ProjectReference Include="..\..\uBeac.Core.Identity.MongoDB\uBeac.Core.Identity.MongoDB.csproj" />
     <ProjectReference Include="..\..\uBeac.Core.Identity\uBeac.Core.Identity.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Entities\" />
   </ItemGroup>
 
 </Project>
