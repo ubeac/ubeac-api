@@ -67,7 +67,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Repositories.His
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Providers", "Providers", "{5E1DA1D7-2184-4A4A-B518-661D3959356E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Providers.Email", "Providers\Email\uBeac.Providers.Email\uBeac.Providers.Email.csproj", "{AAC43909-113E-4CCB-B951-6D3FF91EA86A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Providers.Email", "Providers\Email\uBeac.Core.Providers.Email\uBeac.Core.Providers.Email.csproj", "{AAC43909-113E-4CCB-B951-6D3FF91EA86A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Email", "Email", "{6EF138DD-379A-4422-AD81-4F74E90AFFB7}"
 EndProject
@@ -85,9 +85,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Services.Notific
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Template", "Template", "{8D576D44-580F-47C2-9C02-B4FF6D0B265D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Providers.Template.Abstractions", "Providers\Template\uBeac.Providers.Template.Abstractions\uBeac.Providers.Template.Abstractions.csproj", "{06ED3CD2-494F-4440-B81C-2145EECFAA09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Providers.Template.Abstractions", "Providers\Template\uBeac.Core.Providers.Template.Abstractions\uBeac.Core.Providers.Template.Abstractions.csproj", "{06ED3CD2-494F-4440-B81C-2145EECFAA09}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Providers.Template.Mustache", "Providers\Template\uBeac.Providers.Template.Mustache\uBeac.Providers.Template.Mustache.csproj", "{4BC1079E-A96C-458D-A38C-6054C0163065}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Providers.Template.Mustache", "Providers\Template\uBeac.Core.Providers.Template.Mustache\uBeac.Core.Providers.Template.Mustache.csproj", "{4BC1079E-A96C-458D-A38C-6054C0163065}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\uBeac.Providers.Template.Abstractions\uBeac.Providers.Template.Abstractions.csproj" />
+    <ProjectReference Include="..\uBeac.Core.Providers.Template.Abstractions\uBeac.Core.Providers.Template.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

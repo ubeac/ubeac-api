@@ -14,8 +14,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\uBeac.Core.Common\uBeac.Core.Common.csproj" />
     <ProjectReference Include="..\..\..\Common\uBeac.Core.Configuration\uBeac.Core.Configuration.csproj" />
-    <ProjectReference Include="..\..\..\Providers\Email\uBeac.Providers.Email\uBeac.Providers.Email.csproj" />
-    <ProjectReference Include="..\..\..\Providers\Template\uBeac.Providers.Template.Mustache\uBeac.Providers.Template.Mustache.csproj" />
+    <ProjectReference Include="..\..\..\Providers\Email\uBeac.Core.Providers.Email\uBeac.Core.Providers.Email.csproj" />
+    <ProjectReference Include="..\..\..\Providers\Template\uBeac.Core.Providers.Template.Mustache\uBeac.Core.Providers.Template.Mustache.csproj" />
     <ProjectReference Include="..\..\..\Repository\Notification\uBeac.Core.Repositories.Notification.MongoDB\uBeac.Core.Repositories.Notification.MongoDB.csproj" />
     <ProjectReference Include="..\..\..\Repository\uBeac.Core.Repositories.History.MongoDB\uBeac.Core.Repositories.History.MongoDB.csproj" />
     <ProjectReference Include="..\..\..\Logging\uBeac.Core.Logging.MongoDB\uBeac.Core.Logging.MongoDB.csproj" />
