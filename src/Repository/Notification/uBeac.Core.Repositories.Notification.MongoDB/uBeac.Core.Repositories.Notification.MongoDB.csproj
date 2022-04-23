@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\uBeac.Core.Repositories.MongoDB\uBeac.Core.Repositories.MongoDB.csproj" />
-    <ProjectReference Include="..\..\uBeac.Core.Repositories.Notification.Abstractions\uBeac.Core.Repositories.Notification.Abstractions.csproj" />
+    <ProjectReference Include="..\uBeac.Core.Repositories.Notification.Abstractions\uBeac.Core.Repositories.Notification.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>
