@@ -20,11 +20,14 @@ internal class HttpLoggingMiddleware
     {
         _next = next;
         _logger = logger;
-        _stopwatch = Stopwatch.StartNew();
+        _stopwatch = new Stopwatch();
     }
 
     public async Task Invoke(HttpContext context)
     {
+        _stopwatch.Reset();
+        _stopwatch.Start();
+
         var requestBody = await ReadRequestBody(context.Request);
         var responseBody = await ReadResponseBody(context, _next);
 
