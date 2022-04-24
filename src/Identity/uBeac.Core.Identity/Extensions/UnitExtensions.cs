@@ -88,11 +88,11 @@ public static class UnitExtensions
         return options;
     }
 
-    private static void InsertDefaultUnits<TUnitKey, TUnit>(this IUnitService<TUnitKey, TUnit> service, IEnumerable<TUnit> values)
+    private static void InsertDefaultUnits<TUnitKey, TUnit>(this IUnitService<TUnitKey, TUnit> service, IEnumerable<TUnit>? values)
         where TUnitKey : IEquatable<TUnitKey>
         where TUnit : Unit<TUnitKey>
     {
-        if (values.Any() is false) return;
+        if (values == null || values.Any() is false) return;
 
         // Insert default values
         foreach (var unit in values)
@@ -100,7 +100,7 @@ public static class UnitExtensions
             try
             {
                 // If unit was not inserted before, insert it
-                if (service.Exists(unit.Code, unit.Type).Result is false)
+                if (service.Exists(unit.Code ?? throw new NullReferenceException(), unit.Type ?? throw new NullReferenceException()).Result is false)
                 {
                     // Set parent id
                     var parent = unit.GetParentUnit();
@@ -117,7 +117,7 @@ public static class UnitExtensions
         }
     }
 
-    private static void InsertDefaultUnits<TUnit>(this IUnitService<TUnit> service, IEnumerable<TUnit> values)
+    private static void InsertDefaultUnits<TUnit>(this IUnitService<TUnit> service, IEnumerable<TUnit>? values)
         where TUnit : Unit
     {
         service.InsertDefaultUnits<Guid, TUnit>(values);

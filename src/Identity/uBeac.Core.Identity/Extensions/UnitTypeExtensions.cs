@@ -88,17 +88,17 @@ public static class UnitTypeExtensions
         return options;
     }
 
-    private static void InsertDefaultUnitTypes<TUnitTypeKey, TUnitType>(this IUnitTypeService<TUnitTypeKey, TUnitType> service, IEnumerable<TUnitType> values)
+    private static void InsertDefaultUnitTypes<TUnitTypeKey, TUnitType>(this IUnitTypeService<TUnitTypeKey, TUnitType> service, IEnumerable<TUnitType>? values)
         where TUnitTypeKey : IEquatable<TUnitTypeKey>
         where TUnitType : UnitType<TUnitTypeKey>
     {
-        if (values.Any() is false) return;
+        if (values == null || values.Any() is false) return;
         foreach (var unitType in values)
         {
             try
             {
                 // If unit type was not inserted before, insert it
-                if (service.Exists(unitType.Code).Result is false)
+                if (service.Exists(unitType.Code ?? throw new NullReferenceException()).Result is false)
                 {
                     service.Create(unitType).Wait();
                 }
@@ -110,7 +110,7 @@ public static class UnitTypeExtensions
         }
     }
 
-    private static void InsertDefaultUnitTypes<TUnitType>(this IUnitTypeService<TUnitType> service, IEnumerable<TUnitType> values)
+    private static void InsertDefaultUnitTypes<TUnitType>(this IUnitTypeService<TUnitType> service, IEnumerable<TUnitType>? values)
         where TUnitType : UnitType
     {
         service.InsertDefaultUnitTypes<Guid, TUnitType>(values);

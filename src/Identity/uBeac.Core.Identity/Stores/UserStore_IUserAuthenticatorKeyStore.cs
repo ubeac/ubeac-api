@@ -4,7 +4,7 @@ namespace uBeac.Identity
 {
     public partial class UserStore<TUser, TUserKey> : IUserAuthenticatorKeyStore<TUser>
     {
-        public Task<string> GetAuthenticatorKeyAsync(TUser user, CancellationToken cancellationToken)
+        public Task<string?> GetAuthenticatorKeyAsync(TUser user, CancellationToken cancellationToken)
         {
             return Task.FromResult(user.AuthenticatorKey);
         }

@@ -101,11 +101,11 @@ public static class RoleExtensions
         return options;
     }
 
-    private static void InsertDefaultRoles<TRoleKey, TRole>(this IRoleService<TRoleKey, TRole> service, IEnumerable<TRole> values)
+    private static void InsertDefaultRoles<TRoleKey, TRole>(this IRoleService<TRoleKey, TRole> service, IEnumerable<TRole>? values)
         where TRoleKey : IEquatable<TRoleKey>
         where TRole : Role<TRoleKey>
     {
-        if (values.Any() is false) return;
+        if (values == null || values.Any() is false) return;
         foreach (var role in values)
         {
             try
@@ -123,7 +123,7 @@ public static class RoleExtensions
         }
     }
 
-    private static void InsertDefaultRoles<TRole>(this IRoleService<TRole> service, IEnumerable<TRole> values)
+    private static void InsertDefaultRoles<TRole>(this IRoleService<TRole> service, IEnumerable<TRole>? values)
         where TRole : Role
     {
         service.InsertDefaultRoles<Guid, TRole>(values);

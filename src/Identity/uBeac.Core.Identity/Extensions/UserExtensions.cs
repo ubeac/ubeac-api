@@ -43,7 +43,9 @@ public static class UserExtensions
             var scope = builder.Services.BuildServiceProvider().CreateScope();
             var userService = scope.ServiceProvider.GetRequiredService<IUserService<TUserKey, TUser>>();
             var userRoleService = scope.ServiceProvider.GetRequiredService<IUserRoleService<TUserKey, TUser>>();
-            userService.InsertAdminUserAndAssignRole(userRoleService, options.AdminRole, options.AdminUser, options.AdminPassword);
+
+            if (options.AdminRole != null && options.AdminUser != null && options.AdminPassword != null)
+                userService.InsertAdminUserAndAssignRole(userRoleService, options.AdminRole, options.AdminUser, options.AdminPassword);
         }
 
         return builder;
@@ -69,7 +71,9 @@ public static class UserExtensions
             var scope = builder.Services.BuildServiceProvider().CreateScope();
             var userService = scope.ServiceProvider.GetRequiredService<IUserService<TUser>>();
             var userRoleService = scope.ServiceProvider.GetRequiredService<IUserRoleService<TUser>>();
-            userService.InsertAdminUserAndAssignRole(userRoleService, options.AdminRole, options.AdminUser, options.AdminPassword);
+
+            if (options.AdminRole != null && options.AdminUser != null && options.AdminPassword != null)
+                userService.InsertAdminUserAndAssignRole(userRoleService, options.AdminRole, options.AdminUser, options.AdminPassword);
         }
 
         return builder;
