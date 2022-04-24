@@ -22,7 +22,7 @@ public static class UserExtensions
         return services;
     }
 
-    public static IdentityBuilder AddIdentityUser<TUserKey, TUser>(this IServiceCollection services, Action<IdentityOptions> configureIdentityOptions = default, Action<UserOptions<TUserKey, TUser>> configureOptions = default)
+    public static IdentityBuilder AddIdentityUser<TUserKey, TUser>(this IServiceCollection services, Action<IdentityOptions>? configureIdentityOptions = default, Action<UserOptions<TUserKey, TUser>>? configureOptions = default)
         where TUserKey : IEquatable<TUserKey>
         where TUser : User<TUserKey>
     {
@@ -49,7 +49,7 @@ public static class UserExtensions
         return builder;
     }
 
-    public static IdentityBuilder AddIdentityUser<TUser>(this IServiceCollection services, Action<IdentityOptions> configureIdentityOptions = default, Action<UserOptions<TUser>> configureOptions = default)
+    public static IdentityBuilder AddIdentityUser<TUser>(this IServiceCollection services, Action<IdentityOptions>? configureIdentityOptions = default, Action<UserOptions<TUser>>? configureOptions = default)
            where TUser : User
     {
         // Configure AspNetIdentity
@@ -142,15 +142,13 @@ public static class UserExtensions
         where TUserKey : IEquatable<TUserKey>
         where TUser : User<TUserKey>
     {
-        if (user is null || password is null) return;
-
         // If user was not inserted before, insert it
         try
         {
             if (userService.ExistsUserName(user.UserName).Result is false)
             {
                 userService.Create(user, password).Wait();
-                if (role is not null) userRoleService.AddRoles(user.Id, new List<string> { role }).Wait();
+                userRoleService.AddRoles(user.Id, new List<string> { role }).Wait();
             }
         }
         catch (Exception)

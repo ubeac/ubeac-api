@@ -43,7 +43,7 @@ namespace uBeac.Identity
 
         public Task<string> GetRoleIdAsync(TRole role, CancellationToken cancellationToken)
         {
-            return Task.FromResult(role.Id.ToString());
+            return Task.FromResult(role.Id?.ToString() ?? throw new NullReferenceException());
         }
 
         public Task<string> GetRoleNameAsync(TRole role, CancellationToken cancellationToken)
@@ -72,7 +72,7 @@ namespace uBeac.Identity
         {
             cancellationToken.ThrowIfCancellationRequested();
             var id = roleId.GetTypedKey<TRoleKey>();
-            return await _repository.GetById(id, cancellationToken);
+            return await _repository.GetById(id ?? throw new NullReferenceException(), cancellationToken);
         }
 
         public async Task<TRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
@@ -81,7 +81,7 @@ namespace uBeac.Identity
 
             var results = await _repository.Find(x => x.NormalizedName == normalizedRoleName, cancellationToken);
 
-            return results.FirstOrDefault();
+            return results.First();
         }
 
         public async Task<IList<Claim>> GetClaimsAsync(TRole role, CancellationToken cancellationToken = default)

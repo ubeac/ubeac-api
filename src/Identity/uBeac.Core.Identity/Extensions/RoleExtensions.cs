@@ -22,7 +22,7 @@ public static class RoleExtensions
         return services;
     }
 
-    public static IdentityBuilder AddIdentityRole<TRoleKey, TRole>(this IdentityBuilder builder, Action<RoleOptions<TRoleKey, TRole>> configureOptions = default)
+    public static IdentityBuilder AddIdentityRole<TRoleKey, TRole>(this IdentityBuilder builder, Action<RoleOptions<TRoleKey, TRole>>? configureOptions = default)
             where TRoleKey : IEquatable<TRoleKey>
             where TRole : Role<TRoleKey>
     {
@@ -46,7 +46,7 @@ public static class RoleExtensions
         return builder;
     }
 
-    public static IdentityBuilder AddIdentityRole<TRole>(this IdentityBuilder builder, Action<RoleOptions<TRole>> configureOptions = default)
+    public static IdentityBuilder AddIdentityRole<TRole>(this IdentityBuilder builder, Action<RoleOptions<TRole>>? configureOptions = default)
         where TRole : Role
     {
 
@@ -105,7 +105,7 @@ public static class RoleExtensions
         where TRoleKey : IEquatable<TRoleKey>
         where TRole : Role<TRoleKey>
     {
-        if (values is null || values.Any() is false) return;
+        if (values.Any() is false) return;
         foreach (var role in values)
         {
             try

@@ -22,7 +22,7 @@ public static class UnitExtensions
         return services;
     }
 
-    public static IdentityBuilder AddIdentityUnit<TUnitKey, TUnit>(this IdentityBuilder builder, Action<UnitOptions<TUnitKey, TUnit>> configureOptions = default)
+    public static IdentityBuilder AddIdentityUnit<TUnitKey, TUnit>(this IdentityBuilder builder, Action<UnitOptions<TUnitKey, TUnit>>? configureOptions = default)
             where TUnitKey : IEquatable<TUnitKey>
             where TUnit : Unit<TUnitKey>
     {
@@ -40,7 +40,7 @@ public static class UnitExtensions
         return builder;
     }
 
-    public static IdentityBuilder AddIdentityUnit<TUnit>(this IdentityBuilder builder, Action<UnitOptions<TUnit>> configureOptions = default)
+    public static IdentityBuilder AddIdentityUnit<TUnit>(this IdentityBuilder builder, Action<UnitOptions<TUnit>>? configureOptions = default)
         where TUnit : Unit
     {
         if (configureOptions is not null)
@@ -92,7 +92,7 @@ public static class UnitExtensions
         where TUnitKey : IEquatable<TUnitKey>
         where TUnit : Unit<TUnitKey>
     {
-        if (values is null || values.Any() is false) return;
+        if (values.Any() is false) return;
 
         // Insert default values
         foreach (var unit in values)

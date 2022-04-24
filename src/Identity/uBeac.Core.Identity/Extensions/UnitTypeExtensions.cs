@@ -22,7 +22,7 @@ public static class UnitTypeExtensions
         return services;
     }
 
-    public static IdentityBuilder AddIdentityUnitType<TUnitTypeKey, TUnitType>(this IdentityBuilder builder, Action<UnitTypeOptions<TUnitTypeKey, TUnitType>> configureOptions = default)
+    public static IdentityBuilder AddIdentityUnitType<TUnitTypeKey, TUnitType>(this IdentityBuilder builder, Action<UnitTypeOptions<TUnitTypeKey, TUnitType>>? configureOptions = default)
         where TUnitTypeKey : IEquatable<TUnitTypeKey>
         where TUnitType : UnitType<TUnitTypeKey>
     {
@@ -40,7 +40,7 @@ public static class UnitTypeExtensions
         return builder;
     }
 
-    public static IdentityBuilder AddIdentityUnitType<TUnitType>(this IdentityBuilder builder, Action<UnitTypeOptions<TUnitType>> configureOptions = default)
+    public static IdentityBuilder AddIdentityUnitType<TUnitType>(this IdentityBuilder builder, Action<UnitTypeOptions<TUnitType>>? configureOptions = default)
         where TUnitType : UnitType
     {
         if (configureOptions is not null)
@@ -92,7 +92,7 @@ public static class UnitTypeExtensions
         where TUnitTypeKey : IEquatable<TUnitTypeKey>
         where TUnitType : UnitType<TUnitTypeKey>
     {
-        if (values is null || values.Any() is false) return;
+        if (values.Any() is false) return;
         foreach (var unitType in values)
         {
             try

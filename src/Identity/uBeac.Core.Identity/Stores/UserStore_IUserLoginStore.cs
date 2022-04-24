@@ -33,7 +33,7 @@ namespace uBeac.Identity
             cancellationToken.ThrowIfCancellationRequested();
             var users = await _repository.Find(user => user.Logins.Any(x => x.LoginProvider == loginProvider && x.ProviderKey == providerKey), cancellationToken);
 
-            return users?.FirstOrDefault();
+            return users?.First() ?? throw new NullReferenceException();
         }
 
         public async Task<IdentityResult> CreateAsync(TUser user, CancellationToken cancellationToken)
@@ -53,14 +53,14 @@ namespace uBeac.Identity
         public async Task<TUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            return await _repository.GetById(userId.GetTypedKey<TUserKey>(), cancellationToken);
+            return await _repository.GetById(userId.GetTypedKey<TUserKey>() ?? throw new NullReferenceException(), cancellationToken);
         }
 
         public async Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            return (await _repository.Find(x => x.NormalizedUserName == normalizedUserName, cancellationToken: cancellationToken)).SingleOrDefault();
+            return (await _repository.Find(x => x.NormalizedUserName == normalizedUserName, cancellationToken: cancellationToken)).Single();
         }
 
         public async Task<IdentityResult> UpdateAsync(TUser user, CancellationToken cancellationToken)
@@ -79,7 +79,7 @@ namespace uBeac.Identity
 
         public Task<string> GetUserIdAsync(TUser user, CancellationToken cancellationToken)
         {
-            return Task.FromResult(user.Id.ToString());
+            return Task.FromResult(user.Id?.ToString() ?? throw new NullReferenceException());
         }
 
         public Task<string> GetUserNameAsync(TUser user, CancellationToken cancellationToken)

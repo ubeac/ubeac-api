@@ -75,7 +75,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         };
     }
 
-    public virtual Task<TUserKey> GetCurrentUserId(CancellationToken cancellationToken = default)
+    public virtual Task<TUserKey?>? GetCurrentUserId(CancellationToken cancellationToken = default)
     {
         if (Accessor.HttpContext == null) return default;
 
@@ -87,7 +87,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
     {
         var claims = new List<Claim>
         {
-            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new(ClaimTypes.NameIdentifier, user.Id?.ToString() ?? throw new NullReferenceException()),
             new(ClaimTypes.Name, user.NormalizedUserName)
         };
         if (!string.IsNullOrWhiteSpace(user.NormalizedEmail)) claims.Add(new Claim(ClaimTypes.Email, user.NormalizedEmail));
@@ -135,9 +135,9 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
 
     public virtual async Task ChangePassword(ChangePassword<TUserKey> changePassword, CancellationToken cancellationToken = default)
     {
-        var user = await GetById(changePassword.UserId, cancellationToken);
+        var user = await GetById(changePassword.UserId ?? throw new NullReferenceException(), cancellationToken);
 
-        if (changePassword.UserId == null || user == null || !await UserManager.CheckPasswordAsync(user, changePassword.CurrentPassword))
+        if (changePassword.UserId == null || !await UserManager.CheckPasswordAsync(user, changePassword.CurrentPassword))
             throw new Exception("User doesn't exist or username/password is not valid!");
 
         var idResult = await UserManager.ChangePasswordAsync(user, changePassword.CurrentPassword, changePassword.NewPassword);

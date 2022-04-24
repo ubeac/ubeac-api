@@ -78,7 +78,7 @@ public class JwtTokenService<TUserKey, TUser> : IJwtTokenService<TUserKey, TUser
 
     protected virtual List<Claim> GetJwtClaims(TUser user)
     {
-        var userId = user.Id.ToString();
+        var userId = user.Id.ToString() ?? throw new NullReferenceException();
         var result = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
@@ -143,7 +143,7 @@ public class JwtTokenService<TUserKey, TUser> : IJwtTokenService<TUserKey, TUser
         });
     }
 
-    protected virtual TUserKey GetUserId(ClaimsPrincipal principal)
+    protected virtual TUserKey? GetUserId(ClaimsPrincipal principal)
     {
         var userId = principal.FindFirstValue(ClaimTypes.NameIdentifier) ??
                      principal.FindFirstValue(JwtRegisteredClaimNames.Sub);

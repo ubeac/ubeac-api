@@ -18,7 +18,7 @@ namespace uBeac.Identity
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            return (await _repository.Find(x => x.NormalizedEmail == normalizedEmail, cancellationToken)).SingleOrDefault();
+            return (await _repository.Find(x => x.NormalizedEmail == normalizedEmail, cancellationToken)).Single();
         }
 
         public Task<string> GetNormalizedEmailAsync(TUser user, CancellationToken cancellationToken)
