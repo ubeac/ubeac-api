@@ -2,16 +2,20 @@
 
 public class Error
 {
-    public string Code { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
+    public string Code { get; set; }
+    public string Description { get; set; }
 
-    public Error()
+    public Error(string code, string description)
+    {
+        Code = code;
+        Description = description;
+    }
+
+    public Error(string code, Exception exception) : this(code, exception.Message)
     {
     }
 
-    public Error(Exception exception)
+    public Error(Exception exception) : this("UNKNOWN-ERROR", exception)
     {
-        Code = "UNKNOWN-ERROR";
-        Description = exception.Message;
     }
 }

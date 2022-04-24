@@ -36,7 +36,7 @@ public class ModelStateValidationFilter : IAsyncActionFilter
 
             foreach (var key in context.ModelState.Keys)
                 foreach (var error in context.ModelState[key].Errors)
-                    apiResult.Errors.Add(new Error { Code = key, Description = key + " - " + error.ErrorMessage });
+                    apiResult.Errors.Add(new Error(key, key + " - " + error.ErrorMessage));
 
             context.Result = new ObjectResult(apiResult);
             context.HttpContext.Response.StatusCode = apiResult.Code;

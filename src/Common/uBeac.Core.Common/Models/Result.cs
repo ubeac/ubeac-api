@@ -4,23 +4,23 @@ public interface IResult
 {
     List<Error> Errors { get; }
     List<object> Debug { get; set; }
-    string TraceId { get; set; }
-    string SessionId { get; set; }
+    string? TraceId { get; set; }
+    string? SessionId { get; set; }
     double Duration { get; set; }
     int Code { get; set; }
 }
 
 public interface IResult<TData> : IResult
 {
-    TData Data { get; set; }
+    TData? Data { get; set; }
 }
 
 public class Result : IResult
 {
     public List<Error> Errors { get; } = new List<Error>();
     public List<object> Debug { get; set; } = new List<object>();
-    public string TraceId { get; set; }
-    public string SessionId { get; set; }
+    public string? TraceId { get; set; }
+    public string? SessionId { get; set; }
     public double Duration { get; set; } = 0;
     public int Code { get; set; } = 200;
 
@@ -37,7 +37,7 @@ public class Result : IResult
 
 public class Result<TData> : Result, IResult<TData>
 {
-    public TData Data { get; set; }
+    public TData? Data { get; set; }
 
     public Result(TData data)
     {
@@ -50,6 +50,5 @@ public class Result<TData> : Result, IResult<TData>
 
     public Result()
     {
-
     }
 }
