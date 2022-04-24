@@ -1,4 +1,5 @@
-﻿using uBeac.Repositories;
+﻿using uBeac;
+using uBeac.Repositories;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
