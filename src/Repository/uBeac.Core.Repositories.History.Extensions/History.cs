@@ -1,4 +1,6 @@
-﻿namespace uBeac.Repositories;
+﻿using uBeac.Repositories;
+
+namespace uBeac;
 
 public static class History
 {
