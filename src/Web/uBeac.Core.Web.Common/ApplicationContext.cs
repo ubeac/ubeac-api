@@ -11,7 +11,7 @@ public class ApplicationContext : IApplicationContext
     {
         Accessor = accessor;
 
-        TraceId = Accessor.HttpContext?.TraceIdentifier;
+        TraceId = Accessor.HttpContext?.TraceIdentifier ?? Guid.NewGuid().ToString();
         SessionId = Accessor.HttpContext?.TraceIdentifier;
         UserName = Accessor.HttpContext?.User?.Identity?.Name;
         UserIp = Accessor.HttpContext?.Connection?.RemoteIpAddress;
@@ -19,8 +19,8 @@ public class ApplicationContext : IApplicationContext
     }
 
     public string TraceId { get; set; }
-    public string SessionId { get; set; }
-    public string UserName { get; set; }
-    public IPAddress UserIp { get; set; }
+    public string? SessionId { get; set; }
+    public string? UserName { get; set; }
+    public IPAddress? UserIp { get; set; }
     public string Language { get; set; }
 }
