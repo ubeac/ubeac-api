@@ -4,7 +4,7 @@ namespace uBeac;
 
 public static class History
 {
-    public static async Task Add(object data, string actionName = "None", IApplicationContext context = null, CancellationToken cancellationToken = default)
+    public static async Task Add(object data, string actionName = "None", IApplicationContext? context = null, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

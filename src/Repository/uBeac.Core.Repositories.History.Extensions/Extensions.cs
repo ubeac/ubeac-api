@@ -1,4 +1,5 @@
-﻿using uBeac.Repositories;
+﻿using uBeac;
+using uBeac.Repositories;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -19,8 +20,8 @@ public static class HistoryExtensions
     public static IHistoryRepositoryRegistration For<TData>(this IHistoryRepositoryRegistration registration)
         where TData : class
     {
-        var repository = registration.HistoryRegistration.Services.BuildServiceProvider()
-            .GetRequiredService(registration.RepositoryType) as IHistoryRepository;
+        if (registration.HistoryRegistration.Services.BuildServiceProvider().GetRequiredService(registration.RepositoryType)
+            is not IHistoryRepository repository) throw new NullReferenceException();
 
         History.AddRepository(typeof(TData), repository);
 

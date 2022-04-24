@@ -17,7 +17,5 @@ public class AppContextBsonSerializer : SerializerBase<IApplicationContext>
     }
 
     public override IApplicationContext Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
-    {
-        return BsonSerializer.Deserialize(context.Reader, GlobalApplicationContext.ApplicationContextType) as IApplicationContext;
-    }
+        => BsonSerializer.Deserialize(context.Reader, GlobalApplicationContext.ApplicationContextType) as IApplicationContext;
 }

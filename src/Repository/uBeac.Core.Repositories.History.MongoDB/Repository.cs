@@ -24,6 +24,8 @@ public class MongoHistoryRepository<TKey, THistory, TContext> : IHistoryReposito
     {
         cancellationToken.ThrowIfCancellationRequested();
 
+        if (history.Data == null) throw new NullReferenceException();
+
         var dataType = history.Data.GetType();
 
         var collectionName = GetCollectionName(dataType);
@@ -33,7 +35,7 @@ public class MongoHistoryRepository<TKey, THistory, TContext> : IHistoryReposito
         await collection.InsertOneAsync(bsonDocument, new InsertOneOptions(), cancellationToken);
     }
 
-    public async Task Add(object data, string actionName = "None", IApplicationContext context = null, CancellationToken cancellationToken = default)
+    public async Task Add(object data, string actionName = "None", IApplicationContext? context = null, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
