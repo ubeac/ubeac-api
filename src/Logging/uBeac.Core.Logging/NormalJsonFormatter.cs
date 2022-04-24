@@ -9,7 +9,7 @@ public class NormalJsonFormatter : ITextFormatter
 {
     readonly JsonValueFormatter _valueFormatter;
 
-    public NormalJsonFormatter(JsonValueFormatter valueFormatter = null)
+    public NormalJsonFormatter(JsonValueFormatter? valueFormatter = null)
     {
         _valueFormatter = valueFormatter ?? new JsonValueFormatter(typeTagName: "$type");
     }

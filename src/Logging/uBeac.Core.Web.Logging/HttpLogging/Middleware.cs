@@ -35,7 +35,7 @@ internal class HttpLoggingMiddleware
         WriteLog(log);
     }
 
-    private async Task<string> ReadRequestBody(HttpRequest request)
+    private static async Task<string> ReadRequestBody(HttpRequest request)
     {
         request.EnableBuffering();
 
@@ -47,14 +47,14 @@ internal class HttpLoggingMiddleware
         return requestBody;
     }
 
-    private async Task<string> ReadResponseBody(HttpContext context, RequestDelegate next)
+    private static async Task<string> ReadResponseBody(HttpContext context, RequestDelegate next)
     {
         var originalResponseStream = context.Response.Body;
 
         await using var memoryStream = new MemoryStream();
         context.Response.Body = memoryStream;
 
-        await _next(context);
+        await next(context);
 
         memoryStream.Position = 0;
         using var reader = new StreamReader(memoryStream, encoding: Encoding.UTF8);
@@ -67,33 +67,9 @@ internal class HttpLoggingMiddleware
     }
 
     private HttpLog CreateLogModel(HttpContext context, string requestBody, string responseBody)
-        => new()
-        {
-            Duration = _stopwatch.ElapsedMilliseconds,
-            Error = context.Features.Get<IExceptionHandlerFeature>()?.Error,
-            Request =
-            {
-                DisplayUrl = context.Request.GetDisplayUrl(),
-                Protocol = context.Request.Protocol,
-                Method = context.Request.Method,
-                Scheme = context.Request.Scheme,
-                PathBase = context.Request.PathBase,
-                Path = context.Request.Path,
-                QueryString = context.Request.QueryString.Value ?? string.Empty,
-                ContentType = context.Request.ContentType ?? string.Empty,
-                ContentLength = context.Request.ContentLength,
-                Headers = context.Request.Headers.Select(_ => new KeyValuePair<string, object>(_.Key, _.Value)),
-                Body = requestBody
-            },
-            Response =
-            {
-                ContentType = context.Response.ContentType,
-                ContentLength = context.Response.ContentLength,
-                Body = responseBody,
-                Headers = context.Response.Headers.Select(_ => new KeyValuePair<string, object>(_.Key, _.Value)),
-                StatusCode = context.Response.StatusCode
-            }
-        };
+        => new(_stopwatch.ElapsedMilliseconds, new HttpLog.HttpRequest(context.Request, requestBody),
+            new HttpLog.HttpResponse(context.Response, responseBody),
+            context.Features.Get<IExceptionHandlerFeature>()?.Error);
 
     private void WriteLog(HttpLog log)
     {

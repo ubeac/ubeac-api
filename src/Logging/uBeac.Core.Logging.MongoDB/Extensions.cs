@@ -5,7 +5,7 @@ namespace uBeac.Logging.MongoDB
 {
     public static class Extensions
     {
-        public static LoggerConfiguration WriteToMongoDB(this LoggerConfiguration loggerConfiguration, string connectionString, MongoDBLogSetting mongoDBLogSetting = null)
+        public static LoggerConfiguration WriteToMongoDB(this LoggerConfiguration loggerConfiguration, string connectionString, MongoDBLogSetting? mongoDBLogSetting = null)
         {
             mongoDBLogSetting ??= new MongoDBLogSetting();
             var jsonFormatter = new NormalJsonFormatter();
