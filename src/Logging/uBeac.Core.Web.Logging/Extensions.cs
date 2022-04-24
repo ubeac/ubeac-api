@@ -30,28 +30,5 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return configuration;
         }
-
-        public static LoggerConfiguration AddDefaultLogging(this LoggerConfiguration configuration, IServiceCollection services)
-        {
-            configuration
-                .Filter.ByExcluding(Matching.FromSource<HttpLoggingMiddleware>())
-                .Enrich.FromLogContext()
-                .Enrich.WithExceptionDetails()
-                .Enrich.WithAssemblyName()
-                .Enrich.WithAssemblyVersion()
-                .Enrich.WithAssemblyInformationalVersion()
-                .Enrich.WithProcessId()
-                .Enrich.WithProcessName()
-                .Enrich.WithThreadId()
-                .Enrich.WithThreadName()
-                .Enrich.WithMemoryUsage()
-                .Enrich.WithMachineName()
-                .Enrich.WithEnvironmentName()
-                .Enrich.WithEnvironmentUserName()
-                .Enrich.WithCorrelationId()
-                .Enrich.WithAppContext(services);
-
-            return configuration;
-        }
     }
 }

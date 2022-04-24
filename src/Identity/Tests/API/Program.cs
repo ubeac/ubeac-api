@@ -13,7 +13,7 @@ builder.Configuration.AddJsonConfig(builder.Environment);
 
 // Adding logging
 var logger = new LoggerConfiguration()
-    .WriteTo.Logger(_ => _.AddDefaultLogging(builder.Services).WriteToMongoDB(builder.Configuration.GetConnectionString("DefaultLogConnection")))
+    .WriteTo.Console()
     .WriteTo.Logger(_ => _.AddHttpLogging(builder.Services).WriteToMongoDB(builder.Configuration.GetConnectionString("HttpLogConnection")))
     .CreateLogger();
 builder.Logging.ClearProviders();
