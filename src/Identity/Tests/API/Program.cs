@@ -3,16 +3,15 @@ using Microsoft.AspNetCore.Mvc;
 using uBeac.Logging.MongoDB;
 using uBeac.Repositories.MongoDB;
 using uBeac.Web;
+using uBeac.Web.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Adding json config files (IConfiguration)
 builder.Configuration.AddJsonConfig(builder.Environment);
 
-// Adding logging
-builder.Logging.AddHttpLogging()
-    .WriteToMongoDb(builder.Configuration.GetValue<MongoDbLogOptions>("HttpLogging"))
-    .UsingSerilog();
+// Adding http logging
+builder.Services.AddMongoHttpLogging();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
@@ -102,18 +101,19 @@ builder.Services
     });
 
 var app = builder.Build();
-app.UseHttpRequestLogging();
-
 app.UseHttpsRedirection();
 app.UseDefaultFiles();
 app.UseStaticFiles();
-
-app.MapControllers();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseCoreSwagger();
+
+app.UseHttpLoggingMiddleware();
+
+app.MapControllers();
+
 app.Run();
 
 // For access test projects

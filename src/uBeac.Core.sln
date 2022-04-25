@@ -61,11 +61,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Identity.Jwt", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Web.Jwt", "Web\uBeac.Core.Web.Jwt\uBeac.Core.Web.Jwt.csproj", "{2B7FB004-FE75-4196-A263-C4A768499970}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Repositories.History.Abstractions", "Repository\uBeac.Core.Repositories.History.Abstractions\uBeac.Core.Repositories.History.Abstractions.csproj", "{96DBDDB5-59A7-4011-ABD0-DB27E3B2C05F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Repositories.History.Abstractions", "Repository\uBeac.Core.Repositories.History.Abstractions\uBeac.Core.Repositories.History.Abstractions.csproj", "{96DBDDB5-59A7-4011-ABD0-DB27E3B2C05F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Repositories.History.Extensions", "Repository\uBeac.Core.Repositories.History.Extensions\uBeac.Core.Repositories.History.Extensions.csproj", "{AAA5B1BE-4216-4ADB-9FB3-B03D35CF8D03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Repositories.History.Extensions", "Repository\uBeac.Core.Repositories.History.Extensions\uBeac.Core.Repositories.History.Extensions.csproj", "{AAA5B1BE-4216-4ADB-9FB3-B03D35CF8D03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Repositories.History.MongoDB", "Repository\uBeac.Core.Repositories.History.MongoDB\uBeac.Core.Repositories.History.MongoDB.csproj", "{CA77313D-6D97-4F91-9818-B729FA0359D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Repositories.History.MongoDB", "Repository\uBeac.Core.Repositories.History.MongoDB\uBeac.Core.Repositories.History.MongoDB.csproj", "{CA77313D-6D97-4F91-9818-B729FA0359D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Web.Logging.MongoDB", "Logging\uBeac.Core.Web.Logging.MongoDB\uBeac.Core.Web.Logging.MongoDB.csproj", "{2D538398-EAC9-4A18-8459-74CA9E499F4E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -169,6 +171,10 @@ Global
 		{CA77313D-6D97-4F91-9818-B729FA0359D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA77313D-6D97-4F91-9818-B729FA0359D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA77313D-6D97-4F91-9818-B729FA0359D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D538398-EAC9-4A18-8459-74CA9E499F4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D538398-EAC9-4A18-8459-74CA9E499F4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D538398-EAC9-4A18-8459-74CA9E499F4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D538398-EAC9-4A18-8459-74CA9E499F4E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -199,6 +205,7 @@ Global
 		{96DBDDB5-59A7-4011-ABD0-DB27E3B2C05F} = {2939E5A7-F1C3-4853-9F35-31EB64C08036}
 		{AAA5B1BE-4216-4ADB-9FB3-B03D35CF8D03} = {2939E5A7-F1C3-4853-9F35-31EB64C08036}
 		{CA77313D-6D97-4F91-9818-B729FA0359D2} = {2939E5A7-F1C3-4853-9F35-31EB64C08036}
+		{2D538398-EAC9-4A18-8459-74CA9E499F4E} = {117FC7BE-0153-4819-9A27-0FDA22132FA1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {247F9BF0-18BB-4A57-BB3E-2870DDAEF0D1}

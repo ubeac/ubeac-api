@@ -1,43 +1,27 @@
-﻿using Microsoft.Extensions.Logging;
-using Serilog;
-using Serilog.Exceptions;
-using Serilog.Filters;
-using uBeac.Core.Logging;
-using uBeac.Web;
+﻿using Microsoft.AspNetCore.Builder;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace uBeac.Web.Logging;
+
+public static class Extensions
 {
-    public static class Extensions
+    public static IApplicationBuilder UseHttpLoggingMiddleware<TKey, THttpLog>(this IApplicationBuilder app)
+        where TKey : IEquatable<TKey>
+        where THttpLog : HttpLog<TKey>, new()
     {
-        public static ILoggingRegistration AddHttpLogging(this ILoggingBuilder logging)
-        {
-            var configuration = new LoggerConfiguration()
-                .Filter.ByIncludingOnly(Matching.FromSource<HttpLoggingMiddleware>())
-                .Enrich.FromLogContext()
-                .Enrich.WithExceptionDetails()
-                .Enrich.WithAssemblyName()
-                .Enrich.WithAssemblyVersion()
-                .Enrich.WithAssemblyInformationalVersion()
-                .Enrich.WithProcessId()
-                .Enrich.WithProcessName()
-                .Enrich.WithThreadId()
-                .Enrich.WithThreadName()
-                .Enrich.WithMemoryUsage()
-                .Enrich.WithMachineName()
-                .Enrich.WithEnvironmentName()
-                .Enrich.WithEnvironmentUserName()
-                .Enrich.WithCorrelationId()
-                .Enrich.WithAppContext(logging.Services)
-                .Enrich.WithRemoveRequestProperties();
+        app.UseMiddleware<HttpLoggingMiddleware<TKey, THttpLog>>();
+        return app;
+    }
 
-            return new LoggingRegistration(logging, configuration);
-        }
+    public static IApplicationBuilder UseHttpLoggingMiddleware<THttpLog>(this IApplicationBuilder app)
+        where THttpLog : HttpLog, new()
+    {
+        app.UseMiddleware<HttpLoggingMiddleware<THttpLog>>();
+        return app;
+    }
 
-        public static ILoggingRegistration UsingSerilog(this ILoggingRegistration logging)
-        {
-            var logger = logging.Configuration.CreateLogger();
-            logging.Builder.AddSerilog(logger);
-            return logging;
-        }
+    public static IApplicationBuilder UseHttpLoggingMiddleware(this IApplicationBuilder app)
+    {
+        app.UseMiddleware<HttpLoggingMiddleware>();
+        return app;
     }
 }
