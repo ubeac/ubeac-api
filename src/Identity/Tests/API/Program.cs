@@ -1,7 +1,5 @@
 using System.Reflection;
-using API;
 using Microsoft.AspNetCore.Mvc;
-using Serilog;
 using uBeac.Logging.MongoDB;
 using uBeac.Repositories.MongoDB;
 using uBeac.Web;
