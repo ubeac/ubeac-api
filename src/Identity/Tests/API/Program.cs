@@ -14,7 +14,7 @@ builder.Configuration.AddJsonConfig(builder.Environment);
 // Adding logging
 var logger = new LoggerConfiguration()
     .WriteTo.Console()
-    .WriteTo.Logger(_ => _.AddHttpLogging(builder.Services).WriteToMongoDB(builder.Configuration.GetConnectionString("HttpLogConnection")))
+    .WriteTo.Logger(_ => _.AddHttpLogging(builder.Services).WriteToMongoDb(builder.Configuration.GetConnectionString("HttpLogConnection"), builder.Configuration.GetSection("HttpLog").Get<MongoDbLogOptions>()))
     .CreateLogger();
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
