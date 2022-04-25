@@ -12,12 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonConfig(builder.Environment);
 
 // Adding logging
-var logger = new LoggerConfiguration()
-    .WriteTo.Console()
-    .WriteTo.Logger(_ => _.AddHttpLogging(builder.Services).WriteToMongoDb(builder.Configuration.GetConnectionString("HttpLogConnection"), builder.Configuration.GetSection("HttpLog").Get<MongoDbLogOptions>()))
-    .CreateLogger();
-builder.Logging.ClearProviders();
-builder.Logging.AddSerilog(logger);
+builder.Logging.AddHttpLogging()
+    .WriteToMongoDb(builder.Configuration.GetValue<MongoDbLogOptions>("HttpLogging"))
+    .UsingSerilog();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
@@ -107,7 +104,7 @@ builder.Services
     });
 
 var app = builder.Build();
-app.UseApiLogging();
+app.UseHttpRequestLogging();
 
 app.UseHttpsRedirection();
 app.UseDefaultFiles();

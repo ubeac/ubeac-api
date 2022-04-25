@@ -1,0 +1,11 @@
+{
+  "HttpLogging": {
+    "ConnectionString": "mongodb://localhost:27017/uBeac-Identity-Template-Http-Logging",
+    "InformationCollection": "Http2xx",
+    "WarningCollection": "Http4xx",
+    "ErrorCollection": "Http5xx",
+    "DebugCollection": "Debug",
+    "VerboseCollection": "Verbose",
+    "FatalCollection": "Fatal"
+  }
+}

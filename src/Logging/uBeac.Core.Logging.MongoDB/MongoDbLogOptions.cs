@@ -2,6 +2,7 @@
 {
     public class MongoDbLogOptions
     {
+        public string ConnectionString { get; set; }
         public string DebugCollection { get; set; }
         public string ErrorCollection { get; set; }
         public string VerboseCollection { get; set; }
