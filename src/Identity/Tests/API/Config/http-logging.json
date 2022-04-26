@@ -1,11 +1,10 @@
 {
   "HttpLogging": {
-    "ConnectionString": "mongodb://localhost:27017/uBeac-Identity-Template-Http-Logging",
-    "InformationCollection": "Http2xx",
-    "WarningCollection": "Http4xx",
-    "ErrorCollection": "Http5xx",
-    "DebugCollection": "Debug",
-    "VerboseCollection": "Verbose",
-    "FatalCollection": "Fatal"
+    "HttpLog2xxConnectionString": "mongodb://localhost:27017/uBeac-Identity-Template-Http-Logging",
+    "HttpLog2xxCollectionName": "HttpLog-2xx",
+    "HttpLog4xxConnectionString": "mongodb://localhost:27017/uBeac-Identity-Template-Http-Logging",
+    "HttpLog4xxCollectionName": "HttpLog-4xx",
+    "HttpLog5xxConnectionString": "mongodb://localhost:27017/uBeac-Identity-Template-Http-Logging",
+    "HttpLog5xxCollectionName": "HttpLog-5xx"
   }
 }

@@ -5,34 +5,29 @@ using Microsoft.AspNetCore.Http;
 
 namespace uBeac.Web.Logging;
 
-internal class HttpLoggingMiddleware<TKey, THttpLog>
-    where TKey : IEquatable<TKey>
-    where THttpLog : HttpLog<TKey>, new()
+internal sealed class HttpLoggingMiddleware
 {
-    protected readonly RequestDelegate Next;
-    protected readonly Stopwatch Stopwatch;
+    private readonly RequestDelegate _next;
 
     public HttpLoggingMiddleware(RequestDelegate next)
     {
-        Next = next;
-        Stopwatch = new Stopwatch();
+        _next = next;
     }
 
-    public virtual async Task Invoke(HttpContext context, IHttpLogRepository<TKey, THttpLog> repository, IApplicationContext appContext)
+    public async Task Invoke(HttpContext context, IHttpLogRepository repository, IApplicationContext appContext)
     {
-        Stopwatch.Reset();
-        Stopwatch.Start();
+        var stopwatch = Stopwatch.StartNew();
 
         var requestBody = await ReadRequestBody(context.Request);
         var responseBody = await ReadResponseBody(context);
 
-        Stopwatch.Stop();
+        stopwatch.Stop();
 
-        var logModel = CreateLogModel(context, appContext, requestBody, responseBody);
+        var logModel = CreateLogModel(context, appContext, requestBody, responseBody, stopwatch.ElapsedMilliseconds);
         await Log(logModel, repository);
     }
 
-    protected async Task<string> ReadRequestBody(HttpRequest request)
+    private async Task<string> ReadRequestBody(HttpRequest request)
     {
         request.EnableBuffering();
 
@@ -43,14 +38,14 @@ internal class HttpLoggingMiddleware<TKey, THttpLog>
         return requestBody;
     }
 
-    protected async Task<string> ReadResponseBody(HttpContext context)
+    private async Task<string> ReadResponseBody(HttpContext context)
     {
         var originalResponseStream = context.Response.Body;
 
         await using var memoryStream = new MemoryStream();
         context.Response.Body = memoryStream;
 
-        await Next(context);
+        await _next(context); // TODO: This line should moves to Invoke() method
 
         memoryStream.Position = 0;
         using var reader = new StreamReader(memoryStream, encoding: Encoding.UTF8);
@@ -62,34 +57,19 @@ internal class HttpLoggingMiddleware<TKey, THttpLog>
         return responseBody;
     }
 
-    protected THttpLog CreateLogModel(HttpContext context, IApplicationContext appContext, string requestBody, string responseBody)
+    private static HttpLog CreateLogModel(HttpContext context, IApplicationContext appContext, string requestBody, string responseBody, long duration)
         => new()
         {
             Request = new HttpRequestLog(context.Request, requestBody),
             Response = new HttpResponseLog(context.Response, responseBody),
             StatusCode = context.Response.StatusCode,
-            Duration = Stopwatch.ElapsedMilliseconds,
+            Duration = duration,
             Context = appContext,
             Exception = context.Features.Get<IExceptionHandlerFeature>()?.Error
         };
 
-    protected async Task Log(THttpLog log, IHttpLogRepository<TKey, THttpLog> repository)
+    private static async Task Log(HttpLog log, IHttpLogRepository repository)
     {
         await repository.Create(log);
-    }
-}
-
-internal class HttpLoggingMiddleware<THttpLog> : HttpLoggingMiddleware<Guid, THttpLog>
-    where THttpLog : HttpLog, new()
-{
-    public HttpLoggingMiddleware(RequestDelegate next) : base(next)
-    {
-    }
-}
-
-internal class HttpLoggingMiddleware : HttpLoggingMiddleware<HttpLog>
-{
-    public HttpLoggingMiddleware(RequestDelegate next) : base(next)
-    {
     }
 }

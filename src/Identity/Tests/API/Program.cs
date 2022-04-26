@@ -4,14 +4,18 @@ using uBeac.Logging.MongoDB;
 using uBeac.Repositories.MongoDB;
 using uBeac.Web;
 using uBeac.Web.Logging;
+using uBeac.Web.Logging.MongoDB;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Adding json config files (IConfiguration)
 builder.Configuration.AddJsonConfig(builder.Environment);
 
+// Adding bson serializers
+builder.Services.AddDefaultBsonSerializers();
+
 // Adding http logging
-builder.Services.AddMongoHttpLogging();
+builder.Services.AddMongoDbHttpLogging(builder.Configuration.GetInstance<MongoDbHttpLogOptions>("HttpLogging"));
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
@@ -33,8 +37,7 @@ builder.Services.AddDebugger();
 builder.Services.AddCoreSwaggerWithJWT("Example");
 
 // Adding mongodb
-builder.Services.AddMongo<MongoDBContext>("DefaultConnection", builder.Environment.IsEnvironment("Testing"))
-    .AddDefaultBsonSerializers();
+builder.Services.AddMongo<MongoDBContext>("DefaultConnection", builder.Environment.IsEnvironment("Testing"));
 
 // Adding history
 builder.Services.AddHistory().UsingMongoDb().ForDefault();

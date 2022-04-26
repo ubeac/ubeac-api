@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http.Extensions;
 
 namespace uBeac.Web.Logging;
 
-public class HttpLog<TKey> : Entity<TKey> where TKey : IEquatable<TKey>
+public sealed class HttpLog : Entity
 {
     public HttpLog()
     {
@@ -50,10 +50,6 @@ public class HttpLog<TKey> : Entity<TKey> where TKey : IEquatable<TKey>
     public IApplicationContext Context { get; set; }
 
     public Exception Exception { get; set; }
-}
-
-public class HttpLog : HttpLog<Guid>, IEntity
-{
 }
 
 public class HttpRequestLog
