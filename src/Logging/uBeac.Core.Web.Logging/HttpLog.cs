@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections;
+using System.Diagnostics;
 using System.Reflection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -49,7 +50,7 @@ public sealed class HttpLog : Entity
 
     public IApplicationContext Context { get; set; }
 
-    public Exception Exception { get; set; }
+    public ExceptionModel Exception { get; set; }
 }
 
 public class HttpRequestLog
@@ -100,6 +101,28 @@ public class HttpResponseLog
     public long? ContentLength { get; set; }
     public string Body { get; set; }
     public IDictionary<string, string> Headers { get; set; }
+}
+
+public class ExceptionModel
+{
+    public ExceptionModel() { }
+
+    public ExceptionModel(Exception exception)
+    {
+        Data = exception.Data;
+        HelpLink = exception.HelpLink;
+        HResult = exception.HResult;
+        Message = exception.Message;
+        Source = exception.Source;
+        StackTrace = exception.StackTrace;
+    }
+
+    public IDictionary Data { get; set; }
+    public string HelpLink { get; set; }
+    public int HResult { get; set; }
+    public string Message { get; set; }
+    public string Source { get; set; }
+    public string StackTrace { get; set; }
 }
 
 internal static class HeaderDictionaryExtensions

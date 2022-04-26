@@ -19,12 +19,32 @@ internal sealed class HttpLoggingMiddleware
         var stopwatch = Stopwatch.StartNew();
 
         var requestBody = await ReadRequestBody(context.Request);
-        var responseBody = await ReadResponseBody(context);
 
-        stopwatch.Stop();
+        var originalResponseStream = context.Response.Body;
+        await using var responseMemoryStream = new MemoryStream();
+        context.Response.Body = responseMemoryStream;
 
-        var logModel = CreateLogModel(context, appContext, requestBody, responseBody, stopwatch.ElapsedMilliseconds);
-        await Log(logModel, repository);
+        Exception exception = null;
+
+        try
+        {
+            await _next(context);
+        }
+        catch (Exception ex)
+        {
+            exception = ex;
+            throw;
+        }
+        finally
+        {
+            var responseBody = await ReadResponseBody(context, originalResponseStream, responseMemoryStream);
+
+            stopwatch.Stop();
+
+            var logModel = CreateLogModel(context, appContext, requestBody, responseBody, stopwatch.ElapsedMilliseconds);
+            if (exception != null && logModel.Exception == null) logModel.Exception = new ExceptionModel(exception);
+            await Log(logModel, repository);
+        }
     }
 
     private async Task<string> ReadRequestBody(HttpRequest request)
@@ -38,15 +58,8 @@ internal sealed class HttpLoggingMiddleware
         return requestBody;
     }
 
-    private async Task<string> ReadResponseBody(HttpContext context)
+    private async Task<string> ReadResponseBody(HttpContext context, Stream originalResponseStream, Stream memoryStream)
     {
-        var originalResponseStream = context.Response.Body;
-
-        await using var memoryStream = new MemoryStream();
-        context.Response.Body = memoryStream;
-
-        await _next(context); // TODO: This line should moves to Invoke() method
-
         memoryStream.Position = 0;
         using var reader = new StreamReader(memoryStream, encoding: Encoding.UTF8);
         var responseBody = await reader.ReadToEndAsync();
@@ -58,15 +71,19 @@ internal sealed class HttpLoggingMiddleware
     }
 
     private static HttpLog CreateLogModel(HttpContext context, IApplicationContext appContext, string requestBody, string responseBody, long duration)
-        => new()
+    {
+        var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+
+        return new HttpLog
         {
             Request = new HttpRequestLog(context.Request, requestBody),
             Response = new HttpResponseLog(context.Response, responseBody),
             StatusCode = context.Response.StatusCode,
             Duration = duration,
             Context = appContext,
-            Exception = context.Features.Get<IExceptionHandlerFeature>()?.Error
+            Exception = exception == null ? null : new ExceptionModel(exception)
         };
+    }
 
     private static async Task Log(HttpLog log, IHttpLogRepository repository)
     {
