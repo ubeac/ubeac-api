@@ -41,7 +41,7 @@ internal sealed class HttpLoggingMiddleware
 
             stopwatch.Stop();
 
-            var logModel = CreateLogModel(context, appContext, requestBody, responseBody, stopwatch.ElapsedMilliseconds, exception);
+            var logModel = CreateLogModel(context, appContext, requestBody, responseBody, stopwatch.ElapsedMilliseconds, exception != null ? 500 : null, exception);
             await Log(logModel, repository);
         }
     }
@@ -69,7 +69,7 @@ internal sealed class HttpLoggingMiddleware
         return responseBody;
     }
 
-    private static HttpLog CreateLogModel(HttpContext context, IApplicationContext appContext, string requestBody, string responseBody, long duration, Exception exception = null)
+    private static HttpLog CreateLogModel(HttpContext context, IApplicationContext appContext, string requestBody, string responseBody, long duration, int? statusCode = null, Exception exception = null)
     {
         exception ??= context.Features.Get<IExceptionHandlerFeature>()?.Error;
 
@@ -77,7 +77,7 @@ internal sealed class HttpLoggingMiddleware
         {
             Request = new HttpRequestLog(context.Request, requestBody),
             Response = new HttpResponseLog(context.Response, responseBody),
-            StatusCode = context.Response.StatusCode,
+            StatusCode = statusCode ?? context.Response.StatusCode,
             Duration = duration,
             Context = appContext,
             Exception = exception == null ? null : new ExceptionModel(exception)
