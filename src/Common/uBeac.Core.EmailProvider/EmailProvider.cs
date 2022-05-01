@@ -29,7 +29,8 @@ public class EmailProvider : IEmailProvider
         {
             var smtpClient = new SmtpClient(Options.SmtpHost, Options.SmtpPort)
             {
-                Credentials = new NetworkCredential(Options.UserName, Options.Password)
+                Credentials = new NetworkCredential(Options.UserName, Options.Password),
+                EnableSsl = Options.EnableSsl
             };
             var mailMessage = new MailMessage
             {

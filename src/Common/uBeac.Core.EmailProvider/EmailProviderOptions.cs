@@ -8,4 +8,5 @@ public class EmailProviderOptions
     public virtual int SmtpPort { get; set; }
     public virtual string UserName { get; set; }
     public virtual string Password { get; set; }
+    public virtual bool EnableSsl { get; set; }
 }
