@@ -42,7 +42,7 @@ public static class AuditEntityExtensions
     {
         var now = DateTime.Now;
         var userName = appContext.UserName;
-        var ip = appContext.UserIp?.ToString();
+        var ip = appContext.UserIp;
 
         entity.CreatedAt = now;
         entity.CreatedBy = userName;
@@ -57,7 +57,7 @@ public static class AuditEntityExtensions
     {
         var now = DateTime.Now;
         var userName = appContext.UserName;
-        var ip = appContext.UserIp?.ToString();
+        var ip = appContext.UserIp;
 
         entity.LastUpdatedAt = now;
         entity.LastUpdatedBy = userName;
