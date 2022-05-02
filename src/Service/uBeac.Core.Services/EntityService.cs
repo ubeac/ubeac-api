@@ -19,7 +19,7 @@ namespace uBeac.Services
         {
             cancellationToken.ThrowIfCancellationRequested();
             
-            return await Repository.Delete(id, cancellationToken);
+            return await Repository.Delete(id, cancellationToken: cancellationToken);
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetAll(CancellationToken cancellationToken = default)
@@ -46,13 +46,13 @@ namespace uBeac.Services
         public virtual async Task Create(TEntity entity, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await Repository.Create(entity, cancellationToken);
+            await Repository.Create(entity, cancellationToken: cancellationToken);
         }
 
         public virtual async Task<TEntity> Update(TEntity entity, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            return await Repository.Update(entity, cancellationToken);
+            return await Repository.Update(entity, cancellationToken: cancellationToken);
         }
     }
 
