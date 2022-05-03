@@ -4,9 +4,7 @@ using uBeac.Repositories.MongoDB;
 
 namespace uBeac.Repositories.History.MongoDB;
 
-public class MongoHistoryRepository<TKey, THistory, TContext> : IHistoryRepository
-    where TKey : IEquatable<TKey>
-    where THistory : class, IHistoryEntity<TKey>, new()
+public class MongoHistoryRepository<TContext> : IHistoryRepository
     where TContext : IMongoDBContext
 {
     protected readonly IMongoDatabase MongoDatabase;
@@ -20,7 +18,7 @@ public class MongoHistoryRepository<TKey, THistory, TContext> : IHistoryReposito
 
     protected virtual string GetCollectionName(Type dataType) => $"{dataType.Name}_History";
 
-    protected virtual async Task Insert(THistory history, CancellationToken cancellationToken = default)
+    protected virtual async Task Insert<TData>(HistoryEntity<TData> history, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -33,13 +31,14 @@ public class MongoHistoryRepository<TKey, THistory, TContext> : IHistoryReposito
         await collection.InsertOneAsync(bsonDocument, new InsertOneOptions(), cancellationToken);
     }
 
-    public async Task Add(object data, string actionName = "None", IApplicationContext context = null, CancellationToken cancellationToken = default)
+    public virtual async Task Add<TData>(TData data, string dataId = null, string actionName = "None", IApplicationContext context = null, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var history = new THistory
+        var history = new HistoryEntity
         {
             Data = data,
+            DataId = dataId,
             ActionName = actionName,
             Context = context,
             CreatedAt = DateTime.Now
@@ -47,21 +46,24 @@ public class MongoHistoryRepository<TKey, THistory, TContext> : IHistoryReposito
 
         await Insert(history, cancellationToken);
     }
-}
 
-public class MongoHistoryRepository<THistory, TContext> : MongoHistoryRepository<Guid, THistory, TContext>
-    where THistory : class, IHistoryEntity, new()
-    where TContext : IMongoDBContext
-{
-    public MongoHistoryRepository(TContext mongoDbContext) : base(mongoDbContext)
+    public async Task<IEnumerable<HistoryEntity<TData>>> GetAll<TData>(string dataId, CancellationToken cancellationToken = default)
     {
+        var collectionName = GetCollectionName(typeof(TData));
+        var collection = MongoDatabase.GetCollection<HistoryEntity<TData>>(collectionName);
+
+        var dataIdFilter = Builders<HistoryEntity<TData>>.Filter.Eq(_ => _.DataId, dataId);
+        var findResult = await collection.FindAsync(dataIdFilter, null, cancellationToken);
+        return await findResult.ToListAsync(cancellationToken);
     }
-}
 
-public class MongoHistoryRepository<TContext> : MongoHistoryRepository<HistoryEntity, TContext>
-    where TContext : IMongoDBContext
-{
-    public MongoHistoryRepository(TContext mongoDbContext) : base(mongoDbContext)
+    public async Task<IEnumerable<HistoryEntity>> GetAll(Type dataType, string dataId, CancellationToken cancellationToken = default)
     {
+        var collectionName = GetCollectionName(dataType);
+        var collection = MongoDatabase.GetCollection<HistoryEntity>(collectionName);
+
+        var dataIdFilter = Builders<HistoryEntity>.Filter.Eq(_ => _.DataId, dataId);
+        var findResult = await collection.FindAsync(dataIdFilter, null, cancellationToken);
+        return await findResult.ToListAsync(cancellationToken);
     }
 }

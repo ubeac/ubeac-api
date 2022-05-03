@@ -35,7 +35,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
 
         var context = AppContext;
         if (entity is IAuditEntity<TKey> audit) context = audit.Context;
-        await History.Add(entity, actionName, context, cancellationToken);
+        await History.Add(entity, entity.Id.ToString(), actionName, context, cancellationToken);
     }
 
     public virtual async Task<bool> Delete(TKey id, CancellationToken cancellationToken = default)
