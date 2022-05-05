@@ -8,7 +8,6 @@ public static class ServiceExtensions
     public static IServiceCollection AddApplicationContext<TApplicationContext>(this IServiceCollection services)
         where TApplicationContext : class, IApplicationContext
     {
-        //GlobalApplicationContext.ApplicationContextType = typeof(TApplicationContext);
         services.AddScoped<IApplicationContext, TApplicationContext>();
         return services;
     }
