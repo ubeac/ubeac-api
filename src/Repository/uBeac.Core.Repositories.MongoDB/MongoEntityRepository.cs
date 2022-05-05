@@ -66,7 +66,9 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         cancellationToken.ThrowIfCancellationRequested();
 
         var idFilter = Builders<TEntity>.Filter.Eq(x => x.Id, id);
+
         var findResult = await Collection.FindAsync(idFilter, null, cancellationToken);
+
         return await findResult.SingleOrDefaultAsync(cancellationToken);
     }
 
@@ -76,7 +78,9 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         cancellationToken.ThrowIfCancellationRequested();
 
         var idsFilter = Builders<TEntity>.Filter.In(x => x.Id, ids);
+
         var findResult = await Collection.FindAsync(idsFilter, null, cancellationToken);
+
         return await findResult.ToListAsync(cancellationToken);
     }
 
@@ -100,6 +104,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         if (entity is IAuditEntity<TKey> audit) SetPropertiesOnUpdate(audit, ApplicationContext);
 
         var idFilter = Builders<TEntity>.Filter.Eq(x => x.Id, entity.Id);
+
         entity = await Collection.FindOneAndReplaceAsync(idFilter, entity, null, cancellationToken);
 
         await AddToHistory(entity, options?.ActionName ?? nameof(Update), cancellationToken);
@@ -107,8 +112,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         return entity;
     }
 
-    public virtual async Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> filter,
-        CancellationToken cancellationToken = default)
+    public virtual async Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> filter, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -150,7 +154,7 @@ public class MongoEntityRepository<TEntity, TContext> : MongoEntityRepository<Gu
     where TEntity : IEntity
     where TContext : IMongoDBContext
 {
-    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext appContext) : base(mongoDbContext, appContext)
+    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext applicationContext) : base(mongoDbContext, applicationContext)
     {
     }
 }

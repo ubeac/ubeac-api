@@ -8,7 +8,7 @@ public class UnitService<TKey, TUnit> : EntityService<TKey, TUnit>, IUnitService
 {
     protected readonly IUnitRepository<TKey, TUnit> UnitRepository;
 
-    public UnitService(IUnitRepository<TKey, TUnit> repository, IApplicationContext appContext) : base(repository, appContext)
+    public UnitService(IUnitRepository<TKey, TUnit> repository) : base(repository)
     {
         UnitRepository = repository;
     }
@@ -23,7 +23,7 @@ public class UnitService<TKey, TUnit> : EntityService<TKey, TUnit>, IUnitService
 public class UnitService<TUnit> : UnitService<Guid, TUnit>, IUnitService<TUnit>
     where TUnit : Unit
 {
-    public UnitService(IUnitRepository<TUnit> repository, IApplicationContext appContext) : base(repository, appContext)
+    public UnitService(IUnitRepository<TUnit> repository) : base(repository)
     {
     }
 }

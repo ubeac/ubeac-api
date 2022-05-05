@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonConfig(builder.Environment);
 
 // Adding bson serializers
-builder.Services.AddDefaultBsonSerializers();
+//builder.Services.AddDefaultBsonSerializers();
 
 // Adding http logging
 builder.Services.AddMongoDbHttpLogging(builder.Configuration.GetInstance<MongoDbHttpLogOptions>("HttpLogging"));
@@ -37,7 +37,7 @@ builder.Services.AddDebugger();
 builder.Services.AddCoreSwaggerWithJWT("Example");
 
 // Adding mongodb
-builder.Services.AddMongo<MongoDBContext>("DefaultConnection", builder.Environment.IsEnvironment("Testing"));
+builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
 
 // Adding history
 builder.Services.AddHistory().UsingMongoDb().ForDefault();
