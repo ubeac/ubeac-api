@@ -1,6 +1,6 @@
-﻿namespace uBeac;
+﻿//namespace uBeac;
 
-public static class GlobalApplicationContext
-{
-    public static Type ApplicationContextType { get; set; }
-}
+//public static class GlobalApplicationContext
+//{
+//    public static Type ApplicationContextType { get; set; }
+//}

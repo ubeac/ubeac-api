@@ -13,15 +13,15 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
     protected readonly IMongoCollection<BsonDocument> BsonCollection;
     protected readonly IMongoDatabase MongoDatabase;
     protected readonly TContext MongoDbContext;
-    protected readonly IApplicationContext AppContext;
+    protected readonly IApplicationContext ApplicationContext;
 
-    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext appContext)
+    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext applicationContext)
     {
         MongoDatabase = mongoDbContext.Database;
         Collection = mongoDbContext.Database.GetCollection<TEntity>(GetCollectionName());
         BsonCollection = mongoDbContext.Database.GetCollection<BsonDocument>(GetCollectionName());
         MongoDbContext = mongoDbContext;
-        AppContext = appContext;
+        ApplicationContext = applicationContext;
     }
 
     protected virtual string GetCollectionName()
@@ -33,8 +33,10 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var context = AppContext;
+        var context = ApplicationContext;
+
         if (entity is IAuditEntity<TKey> audit) context = audit.Context;
+
         await History.Add(entity, actionName, context, cancellationToken);
     }
 
@@ -83,7 +85,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         cancellationToken.ThrowIfCancellationRequested();
 
         // If the entity is extend from IAuditEntity, the audit properties (CreatedAt, CreatedBy, etc.) should be set
-        if (entity is IAuditEntity<TKey> audit) audit.SetPropertiesOnCreate(AppContext);
+        if (entity is IAuditEntity<TKey> audit) SetPropertiesOnCreate(audit, ApplicationContext);
 
         await Collection.InsertOneAsync(entity, null, cancellationToken);
 
@@ -95,7 +97,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         cancellationToken.ThrowIfCancellationRequested();
 
         // If the entity is extend from IAuditEntity, the audit properties (LastUpdatedAt, LastUpdatedBy, etc.) should be set
-        if (entity is IAuditEntity<TKey> audit) audit.SetPropertiesOnUpdate(AppContext);
+        if (entity is IAuditEntity<TKey> audit) SetPropertiesOnUpdate(audit, ApplicationContext);
 
         var idFilter = Builders<TEntity>.Filter.Eq(x => x.Id, entity.Id);
         entity = await Collection.FindOneAndReplaceAsync(idFilter, entity, null, cancellationToken);
@@ -115,6 +117,33 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
     }
 
     public IQueryable<TEntity> AsQueryable() => Collection.AsQueryable();
+
+    private void SetPropertiesOnCreate(IAuditEntity<TKey> entity, IApplicationContext appContext)
+    {
+        var now = DateTime.Now;
+        var userName = appContext.UserName;
+        var ip = appContext.UserIp;
+
+        entity.CreatedAt = now;
+        entity.CreatedBy = userName;
+        entity.CreatedByIp = ip;
+        entity.LastUpdatedAt = now;
+        entity.LastUpdatedBy = userName;
+        entity.LastUpdatedByIp = ip;
+        entity.Context = appContext;
+    }
+
+    private void SetPropertiesOnUpdate(IAuditEntity<TKey> entity, IApplicationContext appContext)
+    {
+        var now = DateTime.Now;
+        var userName = appContext.UserName;
+        var ip = appContext.UserIp;
+
+        entity.LastUpdatedAt = now;
+        entity.LastUpdatedBy = userName;
+        entity.LastUpdatedByIp = ip;
+        entity.Context = appContext;
+    }
 }
 
 public class MongoEntityRepository<TEntity, TContext> : MongoEntityRepository<Guid, TEntity, TContext>, IEntityRepository<TEntity>
