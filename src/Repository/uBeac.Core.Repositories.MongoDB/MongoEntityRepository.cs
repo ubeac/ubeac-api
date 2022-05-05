@@ -40,16 +40,20 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         await History.Add(entity, actionName, context, cancellationToken);
     }
 
-    public virtual async Task<bool> Delete(TKey id, DeleteEntityOptions? options = null, CancellationToken cancellationToken = default)
+    public virtual async Task Delete(TKey id, string actionName, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         var idFilter = Builders<TEntity>.Filter.Eq(doc => doc.Id, id);
+
         var entity = await Collection.FindOneAndDeleteAsync(idFilter, null, cancellationToken);
 
-        await AddToHistory(entity, options?.ActionName ?? nameof(Delete), cancellationToken);
+        await AddToHistory(entity, actionName, cancellationToken);
+    }
 
-        return entity != null;
+    public virtual async Task Delete(TKey id, CancellationToken cancellationToken = default)
+    {
+        await Delete(id, nameof(Delete), cancellationToken);
     }
 
     public virtual async Task<IEnumerable<TEntity>> GetAll(CancellationToken cancellationToken = default)
@@ -72,8 +76,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         return await findResult.SingleOrDefaultAsync(cancellationToken);
     }
 
-    public virtual async Task<IEnumerable<TEntity>> GetByIds(IEnumerable<TKey> ids,
-        CancellationToken cancellationToken = default)
+    public virtual async Task<IEnumerable<TEntity>> GetByIds(IEnumerable<TKey> ids, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -84,7 +87,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         return await findResult.ToListAsync(cancellationToken);
     }
 
-    public virtual async Task Create(TEntity entity, CreateEntityOptions? options = null, CancellationToken cancellationToken = default)
+    public virtual async Task Create(TEntity entity, string actionName = null, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -93,10 +96,15 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
 
         await Collection.InsertOneAsync(entity, null, cancellationToken);
 
-        await AddToHistory(entity, options?.ActionName ?? nameof(Create), cancellationToken);
+        await AddToHistory(entity, actionName, cancellationToken);
     }
 
-    public virtual async Task<TEntity> Update(TEntity entity, UpdateEntityOptions? options = null, CancellationToken cancellationToken = default)
+    public virtual async Task Create(TEntity entity, CancellationToken cancellationToken = default)
+    {
+        await Create(entity, nameof(Create), cancellationToken);
+    }
+
+    public virtual async Task Update(TEntity entity, string actionName, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -107,9 +115,12 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
 
         entity = await Collection.FindOneAndReplaceAsync(idFilter, entity, null, cancellationToken);
 
-        await AddToHistory(entity, options?.ActionName ?? nameof(Update), cancellationToken);
+        await AddToHistory(entity, actionName, cancellationToken);
+    }
 
-        return entity;
+    public virtual async Task Update(TEntity entity, CancellationToken cancellationToken = default)
+    {
+        await Update(entity, nameof(Update), cancellationToken);
     }
 
     public virtual async Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> filter, CancellationToken cancellationToken = default)
