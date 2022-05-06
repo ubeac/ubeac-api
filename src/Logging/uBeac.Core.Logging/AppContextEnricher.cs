@@ -21,7 +21,7 @@ public class AppContextEnricher : ILogEventEnricher
         logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty("TraceId", context.TraceId));
         logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty("SessionId", context.SessionId));
         logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty("UserName", context.UserName));
-        logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty("UserIp", context.UserIp?.ToString()));
+        logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty("UserIp", context.UserIp));
         logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty("Language", context.Language));
     }
 }

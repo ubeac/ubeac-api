@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System.Net;
 
 namespace uBeac.Web;
 
@@ -14,13 +13,13 @@ public class ApplicationContext : IApplicationContext
         TraceId = Accessor.HttpContext?.TraceIdentifier;
         SessionId = Accessor.HttpContext?.TraceIdentifier;
         UserName = Accessor.HttpContext?.User?.Identity?.Name;
-        UserIp = Accessor.HttpContext?.Connection?.RemoteIpAddress;
+        UserIp = Accessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
         Language = Accessor.HttpContext?.Request?.GetTypedHeaders().AcceptLanguage.FirstOrDefault()?.Value.Value ?? "en-US";
     }
 
     public string TraceId { get; set; }
     public string SessionId { get; set; }
     public string UserName { get; set; }
-    public IPAddress UserIp { get; set; }
+    public string UserIp { get; set; }
     public string Language { get; set; }
 }

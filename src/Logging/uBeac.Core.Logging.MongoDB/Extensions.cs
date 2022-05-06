@@ -1,35 +1,35 @@
 ﻿using Serilog;
 using Serilog.Formatting.Json;
+using uBeac.Core.Logging;
 
 namespace uBeac.Logging.MongoDB
 {
     public static class Extensions
     {
-        public static LoggerConfiguration WriteToMongoDB(this LoggerConfiguration loggerConfiguration, string connectionString, MongoDBLogSetting mongoDBLogSetting = null)
+        public static ILoggingRegistration WriteToMongoDb(this ILoggingRegistration logging, MongoDbLogOptions options)
         {
-            mongoDBLogSetting ??= new MongoDBLogSetting();
             var jsonFormatter = new NormalJsonFormatter();
 
-            loggerConfiguration
+            logging.Configuration
                 .WriteTo.Logger(lc => lc.Filter.With(new ErrorLogEvent())
-                    .WriteTo.MongoDB(mongoDBJsonFormatter: jsonFormatter, databaseUrl: connectionString, collectionName: mongoDBLogSetting.ErrorCollection))
+                    .WriteTo.MongoDB(mongoDBJsonFormatter: jsonFormatter, databaseUrl: options.ConnectionString, collectionName: options.ErrorCollection))
 
                 .WriteTo.Logger(lc => lc.Filter.With(new FatalLogEvent())
-                    .WriteTo.MongoDB(mongoDBJsonFormatter: jsonFormatter, databaseUrl: connectionString, collectionName: mongoDBLogSetting.FatalCollection))
+                    .WriteTo.MongoDB(mongoDBJsonFormatter: jsonFormatter, databaseUrl: options.ConnectionString, collectionName: options.FatalCollection))
 
                 .WriteTo.Logger(lc => lc.Filter.With(new InformationLogEvent())
-                    .WriteTo.MongoDB(mongoDBJsonFormatter: jsonFormatter, databaseUrl: connectionString, collectionName: mongoDBLogSetting.InformationCollection))
+                    .WriteTo.MongoDB(mongoDBJsonFormatter: jsonFormatter, databaseUrl: options.ConnectionString, collectionName: options.InformationCollection))
 
                 .WriteTo.Logger(lc => lc.Filter.With(new DebugLogEvent())
-                    .WriteTo.MongoDB(mongoDBJsonFormatter: jsonFormatter, databaseUrl: connectionString, collectionName: mongoDBLogSetting.DebugCollection))
+                    .WriteTo.MongoDB(mongoDBJsonFormatter: jsonFormatter, databaseUrl: options.ConnectionString, collectionName: options.DebugCollection))
 
                 .WriteTo.Logger(lc => lc.Filter.With(new VerboseLogEvent())
-                    .WriteTo.MongoDB(mongoDBJsonFormatter: jsonFormatter, databaseUrl: connectionString, collectionName: mongoDBLogSetting.VerboseCollection))
+                    .WriteTo.MongoDB(mongoDBJsonFormatter: jsonFormatter, databaseUrl: options.ConnectionString, collectionName: options.VerboseCollection))
 
                 .WriteTo.Logger(lc => lc.Filter.With(new WarningLogEvent())
-                    .WriteTo.MongoDB(mongoDBJsonFormatter: jsonFormatter, databaseUrl: connectionString, collectionName: mongoDBLogSetting.WarningCollection));
+                    .WriteTo.MongoDB(mongoDBJsonFormatter: jsonFormatter, databaseUrl: options.ConnectionString, collectionName: options.WarningCollection));
 
-            return loggerConfiguration;
+            return logging;
         }
     }
 
