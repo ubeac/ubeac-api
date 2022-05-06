@@ -17,57 +17,29 @@ public abstract class UnitTypesControllerBase<TKey, TUnitType> : BaseController
     [HttpPost]
     public virtual async Task<IResult<TKey>> Create([FromBody] TUnitType unitType, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            await UnitTypeService.Create(unitType, cancellationToken);
-            return unitType.Id.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<TKey>();
-        }
+        await UnitTypeService.Create(unitType, cancellationToken);
+        return unitType.Id.ToResult();
     }
 
     [HttpPost]
     public virtual async Task<IResult<bool>> Update([FromBody] TUnitType unitType, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            await UnitTypeService.Update(unitType, cancellationToken);
-            return true.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<bool>();
-        }
+        await UnitTypeService.Update(unitType, cancellationToken);
+        return true.ToResult();
     }
 
     [HttpPost]
     public virtual async Task<IResult<bool>> Delete([FromBody] IdRequest<TKey> request, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            await UnitTypeService.Delete(request.Id, cancellationToken);
-            return true.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<bool>();
-        }
+        await UnitTypeService.Delete(request.Id, cancellationToken);
+        return true.ToResult();
     }
 
     [HttpGet]
     public virtual async Task<IListResult<TUnitType>> GetAll(CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var unitTypes = await UnitTypeService.GetAll(cancellationToken);
-            return unitTypes.ToListResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToListResult<TUnitType>();
-        }
+        var unitTypes = await UnitTypeService.GetAll(cancellationToken);
+        return unitTypes.ToListResult();
     }
 }
 
