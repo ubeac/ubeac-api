@@ -4,19 +4,26 @@ namespace uBeac.Web;
 
 public class Debugger : IDebugger
 {
+    private readonly HttpContext _context;
     private const string ITEMS_KEY = "internalDebug";
-    private readonly List<object> items;
 
     public Debugger(IHttpContextAccessor accessor)
     {
-        items = new List<object>();
-        accessor.HttpContext.Items[ITEMS_KEY] = items;
+        _context = accessor.HttpContext;
     }
 
     public void Add(object value)
     {
-        items.Add(value);
+        if (!_context.Items.ContainsKey(ITEMS_KEY)) _context.Items.Add(ITEMS_KEY, new List<object>());
+
+        var debugList = _context.Items[ITEMS_KEY] as List<object>;
+        debugList!.Add(value);
     }
 
-    public List<object> GetValues() => items;
+    public List<object> GetValues()
+    {
+        if (!_context.Items.ContainsKey(ITEMS_KEY)) return new List<object>();
+
+        return _context.Items[ITEMS_KEY] as List<object>;
+    }
 }
