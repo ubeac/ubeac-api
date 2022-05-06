@@ -39,14 +39,14 @@ namespace uBeac.Identity
         public async Task<IdentityResult> CreateAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await _repository.Create(user, cancellationToken);
+            await _repository.Create(user, cancellationToken: cancellationToken);
             return IdentityResult.Success;
         }
 
         public async Task<IdentityResult> DeleteAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await _repository.Delete(user.Id, cancellationToken);
+            await _repository.Delete(user.Id, cancellationToken: cancellationToken);
             return IdentityResult.Success;
         }
 
@@ -67,7 +67,7 @@ namespace uBeac.Identity
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            await _repository.Update(user, cancellationToken);
+            await _repository.Update(user, cancellationToken: cancellationToken);
 
             return IdentityResult.Success;
         }

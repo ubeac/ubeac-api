@@ -14,10 +14,16 @@ public class Debugger : IDebugger
 
     public void Add(object value)
     {
-        _context.Items[ITEMS_KEY] ??= new List<object>();
+        if (!_context.Items.ContainsKey(ITEMS_KEY)) _context.Items.Add(ITEMS_KEY, new List<object>());
+
         var debugList = _context.Items[ITEMS_KEY] as List<object>;
         debugList!.Add(value);
     }
 
-    public List<object> GetValues() => _context.Items[ITEMS_KEY] as List<object> ?? new List<object>();
+    public List<object> GetValues()
+    {
+        if (!_context.Items.ContainsKey(ITEMS_KEY)) return new List<object>();
+
+        return _context.Items[ITEMS_KEY] as List<object>;
+    }
 }

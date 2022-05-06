@@ -8,7 +8,7 @@ namespace uBeac;
 
 public interface IEmailProvider
 {
-    Task Send(string receptor, string subject, string body, bool isBodyHtml = false);
+    Task Send(string recipients, string subject, string body, string ccs = null, string bccs = null, CancellationToken cancellationToken = default);
 }
 
 public class EmailProvider : IEmailProvider
@@ -22,30 +22,34 @@ public class EmailProvider : IEmailProvider
         Logger = logger;
     }
 
-    // todo: to, cc, bcc: array string
-    public virtual async Task Send(string receptor, string subject, string body, bool isBodyHtml = false)
+    public virtual async Task Send(string recipients, string subject, string body, string ccs = null, string bccs = null, CancellationToken cancellationToken = default)
     {
-        try
+        if (string.IsNullOrEmpty(recipients))
+            throw new ArgumentNullException(nameof(recipients));
+
+        var smtpClient = new SmtpClient(Options.SmtpHost, Options.SmtpPort)
         {
-            var smtpClient = new SmtpClient(Options.SmtpHost, Options.SmtpPort)
-            {
-                Credentials = new NetworkCredential(Options.UserName, Options.Password),
-                EnableSsl = Options.EnableSsl
-            };
-            var mailMessage = new MailMessage
-            {
-                From = new MailAddress(Options.MailAddress, Options.DisplayName, Encoding.UTF8),
-                To = { new MailAddress(receptor) },
-                Subject = subject,
-                Body = body,
-                BodyEncoding = Encoding.UTF8,
-                IsBodyHtml = isBodyHtml
-            };
-            await smtpClient.SendMailAsync(mailMessage);
-        }
-        catch (Exception e)
+            Credentials = new NetworkCredential(Options.UserName, Options.Password),
+            EnableSsl = Options.EnableSsl
+        };
+        var mailMessage = new MailMessage
         {
-            Logger.LogError(e, e.Message);
-        }
+            From = new MailAddress(Options.MailAddress, Options.DisplayName, Encoding.UTF8),
+            Subject = subject,
+            Body = body,
+            BodyEncoding = Encoding.UTF8,
+            IsBodyHtml = true
+        };
+
+        mailMessage.To.Add(recipients);
+
+        if (!string.IsNullOrEmpty(ccs))
+            mailMessage.CC.Add(ccs);
+
+        if (!string.IsNullOrEmpty(bccs))
+            mailMessage.Bcc.Add(bccs);
+
+        await smtpClient.SendMailAsync(mailMessage, cancellationToken);
+
     }
 }

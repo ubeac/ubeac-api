@@ -1,23 +1,21 @@
 using System.Reflection;
-using API;
 using Microsoft.AspNetCore.Mvc;
-using Serilog;
 using uBeac.Logging.MongoDB;
 using uBeac.Repositories.MongoDB;
 using uBeac.Web;
+using uBeac.Web.Logging;
+using uBeac.Web.Logging.MongoDB;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Adding json config files (IConfiguration)
 builder.Configuration.AddJsonConfig(builder.Environment);
 
-// Adding logging
-var logger = new LoggerConfiguration()
-    .WriteTo.Logger(_ => _.AddDefaultLogging(builder.Services).WriteToMongoDB(builder.Configuration.GetConnectionString("DefaultLogConnection")))
-    .WriteTo.Logger(_ => _.AddHttpLogging(builder.Services).WriteToMongoDB(builder.Configuration.GetConnectionString("HttpLogConnection")))
-    .CreateLogger();
-builder.Logging.ClearProviders();
-builder.Logging.AddSerilog(logger);
+// Adding bson serializers
+//builder.Services.AddDefaultBsonSerializers();
+
+// Adding http logging
+builder.Services.AddMongoDbHttpLogging(builder.Configuration.GetInstance<MongoDbHttpLogOptions>("HttpLogging"));
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
@@ -39,8 +37,7 @@ builder.Services.AddDebugger();
 builder.Services.AddCoreSwaggerWithJWT("Example");
 
 // Adding mongodb
-builder.Services.AddMongo<MongoDBContext>("DefaultConnection", builder.Environment.IsEnvironment("Testing"))
-    .AddDefaultBsonSerializers();
+builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
 
 // Adding history
 builder.Services.AddHistory().UsingMongoDb().ForDefault();
@@ -107,18 +104,19 @@ builder.Services
     });
 
 var app = builder.Build();
-app.UseApiLogging();
-
 app.UseHttpsRedirection();
 app.UseDefaultFiles();
 app.UseStaticFiles();
-
-app.MapControllers();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseCoreSwagger();
+
+app.UseHttpLoggingMiddleware();
+
+app.MapControllers();
+
 app.Run();
 
 // For access test projects
