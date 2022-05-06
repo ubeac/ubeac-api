@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace uBeac;
+﻿namespace uBeac;
 
 public interface IApplicationContext
 {

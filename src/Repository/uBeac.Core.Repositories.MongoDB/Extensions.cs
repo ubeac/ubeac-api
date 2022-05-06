@@ -11,7 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class MongoDBServicesExtensions
 {
-    public static IServiceCollection AddMongo<TMongoDbContext>(this IServiceCollection services, string connectionString, bool dropExistDatabase = false)
+    public static IServiceCollection AddMongo<TMongoDbContext>(this IServiceCollection services, string connectionString)
        where TMongoDbContext : class, IMongoDBContext
     {
         services.AddSingleton(provider =>
@@ -19,8 +19,8 @@ public static class MongoDBServicesExtensions
             var configuration = provider.GetService<IConfiguration>();
             var connString = configuration.GetConnectionString(connectionString);
             return typeof(TMongoDbContext) == typeof(MongoDBContext)
-                ? new MongoDBOptions(connString, dropExistDatabase)
-                : new MongoDBOptions<TMongoDbContext>(connString, dropExistDatabase);
+                ? new MongoDBOptions(connString)
+                : new MongoDBOptions<TMongoDbContext>(connString);
         });
 
         services.TryAddSingleton<TMongoDbContext>();

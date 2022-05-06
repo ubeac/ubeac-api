@@ -21,16 +21,6 @@ public class MongoDBContext : IMongoDBContext
     {
         var mongoUrl = new MongoUrl(options.ConnectionString);
         var client = new MongoClient(mongoUrl);
-
-        try
-        {
-            if (options.DropExistDatabase) client.DropDatabase(mongoUrl.DatabaseName);
-        }
-        catch
-        {
-            // ignored
-        }
-
         Database = client.GetDatabase(mongoUrl.DatabaseName);
     }
 
