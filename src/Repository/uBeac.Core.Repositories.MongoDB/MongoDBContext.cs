@@ -28,17 +28,11 @@ public class MongoDBContext : IMongoDBContext
     {
         BsonDefaults.GuidRepresentationMode = options.GuidRepresentationMode;
 
-        try
-        {
-            if (options.Serializers?.Any() == true)
-                foreach (var (type, serializer) in options.Serializers)
-                    if (BsonSerializer.LookupSerializer(type) == null)
-                        BsonSerializer.RegisterSerializer(type, serializer);
-        }
-        catch
-        {
-            // ignored
-        }
+        if (options.Serializers?.Any() != true) return;
+
+        foreach (var (type, serializer) in options.Serializers)
+            try { BsonSerializer.RegisterSerializer(type, serializer); }
+            catch { /* Ignore if the serializer was already registered  */ }
     }
 
     public IMongoDatabase Database { get; private set; }
