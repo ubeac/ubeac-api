@@ -71,7 +71,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Web.Logging.Mong
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{C2A82CB2-0B59-47BF-9DAC-4D4E02DA8FA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Web.Common.UnitTests", "Web\UnitTests\uBeac.Core.Web.Common.UnitTests\uBeac.Core.Web.Common.UnitTests.csproj", "{20FF5E41-2928-427F-B1DF-78519C4CC174}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Web.Common.UnitTests", "Web\UnitTests\uBeac.Core.Web.Common.UnitTests\uBeac.Core.Web.Common.UnitTests.csproj", "{20FF5E41-2928-427F-B1DF-78519C4CC174}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{B9000723-B110-4CE2-98DB-4E3840A37BD9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Repositories.MongoDB.UnitTests", "Repository\UnitTests\uBeac.Core.Repositories.MongoDB.UnitTests\uBeac.Core.Repositories.MongoDB.UnitTests.csproj", "{CE1397E1-D2A7-4A8A-9801-05C9BEDE0BA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -183,6 +187,10 @@ Global
 		{20FF5E41-2928-427F-B1DF-78519C4CC174}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20FF5E41-2928-427F-B1DF-78519C4CC174}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20FF5E41-2928-427F-B1DF-78519C4CC174}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE1397E1-D2A7-4A8A-9801-05C9BEDE0BA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE1397E1-D2A7-4A8A-9801-05C9BEDE0BA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE1397E1-D2A7-4A8A-9801-05C9BEDE0BA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE1397E1-D2A7-4A8A-9801-05C9BEDE0BA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -216,6 +224,8 @@ Global
 		{2D538398-EAC9-4A18-8459-74CA9E499F4E} = {117FC7BE-0153-4819-9A27-0FDA22132FA1}
 		{C2A82CB2-0B59-47BF-9DAC-4D4E02DA8FA7} = {37B6F062-3F0A-47F0-A418-FFFDA49D6D17}
 		{20FF5E41-2928-427F-B1DF-78519C4CC174} = {C2A82CB2-0B59-47BF-9DAC-4D4E02DA8FA7}
+		{B9000723-B110-4CE2-98DB-4E3840A37BD9} = {2939E5A7-F1C3-4853-9F35-31EB64C08036}
+		{CE1397E1-D2A7-4A8A-9801-05C9BEDE0BA9} = {B9000723-B110-4CE2-98DB-4E3840A37BD9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {247F9BF0-18BB-4A57-BB3E-2870DDAEF0D1}

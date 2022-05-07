@@ -48,7 +48,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
 
         var entity = await Collection.FindOneAndDeleteAsync(idFilter, null, cancellationToken);
 
-        await AddToHistory(entity, actionName, cancellationToken);
+        if (entity != null) await AddToHistory(entity, actionName, cancellationToken);
     }
 
     public virtual async Task Delete(TKey id, CancellationToken cancellationToken = default)
@@ -115,7 +115,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
 
         entity = await Collection.FindOneAndReplaceAsync(idFilter, entity, null, cancellationToken);
 
-        await AddToHistory(entity, actionName, cancellationToken);
+        if (entity != null) await AddToHistory(entity, actionName, cancellationToken);
     }
 
     public virtual async Task Update(TEntity entity, CancellationToken cancellationToken = default)
