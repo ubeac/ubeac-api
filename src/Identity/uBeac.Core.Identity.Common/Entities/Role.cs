@@ -12,7 +12,7 @@ public class Role<TRoleKey> : IdentityRole<TRoleKey>, IAuditEntity<TRoleKey> whe
     public virtual DateTime CreatedAt { get; set; }
     public virtual string LastUpdatedBy { get; set; }
     public virtual string LastUpdatedByIp { get; set; }
-    public virtual DateTime? LastUpdatedAt { get; set; }
+    public virtual DateTime LastUpdatedAt { get; set; }
     public virtual IApplicationContext Context { get; set; }
 
     public Role()
