@@ -7,11 +7,9 @@ namespace uBeac.Repositories.MongoDB;
 public partial class MongoEntityRepositoryTests
 {
     [Fact]
-    public async Task Should_Fetch_Entities_When_Called_GetAll()
+    public async Task Should_Fetch_Entities_When_Call_GetAll()
     {
-        var repository = new MongoEntityRepository<TestEntity, IMongoDBContext>(_mongoDbContextMock.Object, _applicationContextMock.Object);
-
-        var result = await repository.GetAll(_validToken);
+        var result = await _entityRepository.GetAll(_validToken);
 
         Assert.NotNull(result);
         Assert.NotEmpty(result);
@@ -19,10 +17,8 @@ public partial class MongoEntityRepositoryTests
     }
 
     [Fact]
-    public async Task Should_Throw_Exception_When_Called_GetAll_Method_With_CanceledToken()
+    public async Task Should_Throw_Exception_When_Call_GetAll_Method_With_CanceledToken()
     {
-        var repository = new MongoEntityRepository<TestEntity, IMongoDBContext>(_mongoDbContextMock.Object, _applicationContextMock.Object);
-
-        await Assert.ThrowsAsync<OperationCanceledException>(async () => await repository.GetAll(_canceledToken));
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await _entityRepository.GetAll(_canceledToken));
     }
 }

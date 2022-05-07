@@ -6,11 +6,9 @@ namespace uBeac.Repositories.MongoDB;
 public partial class MongoEntityRepositoryTests
 {
     [Fact]
-    public async Task Should_Fetch_Entity_When_Called_GetById()
+    public async Task Should_Fetch_Entity_When_Call_GetById()
     {
-        var repository = new MongoEntityRepository<TestEntity, IMongoDBContext>(_mongoDbContextMock.Object, _applicationContextMock.Object);
-
-        var result = await repository.GetById(_testId, _validToken);
+        var result = await _entityRepository.GetById(_testId, _validToken);
 
         Assert.NotNull(result);
         Assert.Equal(_testId, result.Id);

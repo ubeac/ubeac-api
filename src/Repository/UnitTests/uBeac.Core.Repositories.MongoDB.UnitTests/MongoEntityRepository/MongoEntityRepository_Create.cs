@@ -10,41 +10,33 @@ namespace uBeac.Repositories.MongoDB;
 public partial class MongoEntityRepositoryTests
 {
     [Fact]
-    public async Task Should_Insert_When_Called_Create_Method()
+    public async Task Should_Insert_When_Call_Create_Method()
     {
-        var repository = new MongoEntityRepository<TestEntity, IMongoDBContext>(_mongoDbContextMock.Object, _applicationContextMock.Object);
-
-        await repository.Create(_testEntity, _validToken);
+        await _entityRepository.Create(_testEntity, _validToken);
 
         _mongoCollectionMock.Verify(mongoCollection => mongoCollection.InsertOneAsync(_testEntity, It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
-    public async Task Should_Insert_When_Called_Create_Method_With_ActionName()
+    public async Task Should_Insert_When_Call_Create_Method_With_ActionName()
     {
-        var repository = new MongoEntityRepository<TestEntity, IMongoDBContext>(_mongoDbContextMock.Object, _applicationContextMock.Object);
-
-        await repository.Create(_testEntity, _testActionName, _validToken);
+        await _entityRepository.Create(_testEntity, _testActionName, _validToken);
 
         _mongoCollectionMock.Verify(mongoCollection => mongoCollection.InsertOneAsync(_testEntity, It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
-    public async Task Should_Throw_Exception_And_Cancel_When_Called_Create_Method_With_CanceledToken()
+    public async Task Should_Throw_Exception_And_Cancel_When_Call_Create_Method_With_CanceledToken()
     {
-        var repository = new MongoEntityRepository<TestEntity, IMongoDBContext>(_mongoDbContextMock.Object, _applicationContextMock.Object);
-
-        await Assert.ThrowsAsync<OperationCanceledException>(async () => await repository.Create(_testEntity, _canceledToken));
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await _entityRepository.Create(_testEntity, _canceledToken));
 
         _mongoCollectionMock.Verify(mongoCollection => mongoCollection.InsertOneAsync(_testEntity, It.IsAny<InsertOneOptions>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Fact]
-    public async Task Should_Set_Audit_Properties_When_Called_Create_Method()
+    public async Task Should_Set_Audit_Properties_When_Call_Create_Method()
     {
-        var repository = new MongoEntityRepository<TestEntity, IMongoDBContext>(_mongoDbContextMock.Object, _applicationContextMock.Object);
-
-        await repository.Create(_testEntity, _testActionName, _validToken);
+        await _entityRepository.Create(_testEntity, _testActionName, _validToken);
 
         var today = DateTime.Today;
         var applicationContext = _applicationContextMock.Object;

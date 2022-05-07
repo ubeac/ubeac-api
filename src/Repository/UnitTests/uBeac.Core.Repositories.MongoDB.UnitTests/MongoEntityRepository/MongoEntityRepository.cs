@@ -13,6 +13,7 @@ public partial class MongoEntityRepositoryTests
     private readonly IEnumerable<Guid> _testIds;
     private readonly TestEntity _testEntity;
     private readonly IEnumerable<TestEntity> _testEntities;
+
     private readonly string _testActionName;
 
     private readonly CancellationToken _validToken;
@@ -21,6 +22,8 @@ public partial class MongoEntityRepositoryTests
     private readonly Mock<IMongoCollection<TestEntity>> _mongoCollectionMock;
     private readonly Mock<IMongoDBContext> _mongoDbContextMock;
     private readonly Mock<IApplicationContext> _applicationContextMock;
+
+    private readonly MongoEntityRepository<TestEntity, IMongoDBContext> _entityRepository;
 
     public MongoEntityRepositoryTests()
     {
@@ -50,6 +53,8 @@ public partial class MongoEntityRepositoryTests
         _applicationContextMock = new Mock<IApplicationContext>();
         _applicationContextMock.Setup(applicationContext => applicationContext.UserName).Returns("TestUserName");
         _applicationContextMock.Setup(applicationContext => applicationContext.UserIp).Returns("127.0.0.1");
+
+        _entityRepository = new MongoEntityRepository<TestEntity, IMongoDBContext>(_mongoDbContextMock.Object, _applicationContextMock.Object);
     }
 }
 
