@@ -15,6 +15,8 @@ public class HttpLoggingMongoDbRepository : IHttpLoggingRepository
 
     public async Task Create(HttpLog log, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         var collectionName = GetCollectionName(log.StatusCode);
 
         var database = GetDatabase(log.StatusCode);
@@ -23,14 +25,14 @@ public class HttpLoggingMongoDbRepository : IHttpLoggingRepository
         await collection.InsertOneAsync(log, new InsertOneOptions(), cancellationToken);
     }
 
-    public IMongoDatabase GetDatabase(int statusCode) => statusCode switch
+    private IMongoDatabase GetDatabase(int statusCode) => statusCode switch
     {
         < 500 and >= 400 => Context.HttpLog4xxDatabase,
         >= 500 => Context.HttpLog5xxDatabase,
         _ => Context.HttpLog2xxDatabase
     };
 
-    public string GetCollectionName(int statusCode) => statusCode switch
+    private string GetCollectionName(int statusCode) => statusCode switch
     {
         < 500 and >= 400 => Options.HttpLog4xxCollectionName,
         >= 500 => Options.HttpLog5xxCollectionName,
