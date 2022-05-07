@@ -2,5 +2,5 @@
 
 public interface IHistoryRepository : IRepository
 {
-    Task Add(object data, string actionName = "None", IApplicationContext context = null, CancellationToken cancellationToken = default);
+    Task Add<T>(T data, string actionName, CancellationToken cancellationToken = default);
 }

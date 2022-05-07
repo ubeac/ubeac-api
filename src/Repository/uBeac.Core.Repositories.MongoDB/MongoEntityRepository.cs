@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Linq.Expressions;
+using uBeac.Repositories.History;
 
 namespace uBeac.Repositories.MongoDB;
 
@@ -14,14 +15,16 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
     protected readonly IMongoDatabase MongoDatabase;
     protected readonly TContext MongoDbContext;
     protected readonly IApplicationContext ApplicationContext;
+    protected readonly HistoryFactory HistoryFactory;
 
-    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext applicationContext)
+    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext applicationContext, HistoryFactory historyFactory)
     {
         MongoDatabase = mongoDbContext.Database;
         Collection = mongoDbContext.Database.GetCollection<TEntity>(GetCollectionName());
         BsonCollection = mongoDbContext.Database.GetCollection<BsonDocument>(GetCollectionName());
         MongoDbContext = mongoDbContext;
         ApplicationContext = applicationContext;
+        HistoryFactory = historyFactory;
     }
 
     protected virtual string GetCollectionName()
@@ -37,7 +40,16 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
 
         if (entity is IAuditEntity<TKey> audit) context = audit.Context;
 
-        await History.Add(entity, actionName, context, cancellationToken);
+        var historyRepositories = HistoryFactory.GetRepositories<TEntity>();
+
+        var historyTasks = new List<Task>();
+        foreach (var repository in historyRepositories)
+        {
+            await repository.Add(entity, actionName, cancellationToken);
+        }
+            
+
+        // await Task.WhenAll(historyTasks);
     }
 
     public virtual async Task Delete(TKey id, string actionName, CancellationToken cancellationToken = default)
@@ -165,7 +177,7 @@ public class MongoEntityRepository<TEntity, TContext> : MongoEntityRepository<Gu
     where TEntity : IEntity
     where TContext : IMongoDBContext
 {
-    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext applicationContext) : base(mongoDbContext, applicationContext)
+    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext applicationContext, HistoryFactory historyFactory) : base(mongoDbContext, applicationContext, historyFactory)
     {
     }
 }
