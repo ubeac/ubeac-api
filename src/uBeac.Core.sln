@@ -71,7 +71,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Web.Logging.Mong
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{C2A82CB2-0B59-47BF-9DAC-4D4E02DA8FA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Web.Common.UnitTests", "Web\UnitTests\uBeac.Core.Web.Common.UnitTests\uBeac.Core.Web.Common.UnitTests.csproj", "{20FF5E41-2928-427F-B1DF-78519C4CC174}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Web.Common.UnitTests", "Web\UnitTests\uBeac.Core.Web.Common.UnitTests\uBeac.Core.Web.Common.UnitTests.csproj", "{20FF5E41-2928-427F-B1DF-78519C4CC174}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{D8B9F01F-FD43-4F99-8FFC-E312C982F88E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Services.UnitTests", "Service\UnitTests\uBeac.Core.Services.UnitTests\uBeac.Core.Services.UnitTests.csproj", "{1086CAD8-EE87-4ECE-B90F-07B5AE102274}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -183,6 +187,10 @@ Global
 		{20FF5E41-2928-427F-B1DF-78519C4CC174}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20FF5E41-2928-427F-B1DF-78519C4CC174}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20FF5E41-2928-427F-B1DF-78519C4CC174}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1086CAD8-EE87-4ECE-B90F-07B5AE102274}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1086CAD8-EE87-4ECE-B90F-07B5AE102274}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1086CAD8-EE87-4ECE-B90F-07B5AE102274}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1086CAD8-EE87-4ECE-B90F-07B5AE102274}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -216,6 +224,8 @@ Global
 		{2D538398-EAC9-4A18-8459-74CA9E499F4E} = {117FC7BE-0153-4819-9A27-0FDA22132FA1}
 		{C2A82CB2-0B59-47BF-9DAC-4D4E02DA8FA7} = {37B6F062-3F0A-47F0-A418-FFFDA49D6D17}
 		{20FF5E41-2928-427F-B1DF-78519C4CC174} = {C2A82CB2-0B59-47BF-9DAC-4D4E02DA8FA7}
+		{D8B9F01F-FD43-4F99-8FFC-E312C982F88E} = {4CC61732-C373-4DA4-B832-CEEB1A284EF2}
+		{1086CAD8-EE87-4ECE-B90F-07B5AE102274} = {D8B9F01F-FD43-4F99-8FFC-E312C982F88E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {247F9BF0-18BB-4A57-BB3E-2870DDAEF0D1}
