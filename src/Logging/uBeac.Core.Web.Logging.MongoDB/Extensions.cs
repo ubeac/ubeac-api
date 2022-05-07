@@ -5,10 +5,14 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class Extensions
 {
-    public static IServiceCollection AddMongoDbHttpLogging(this IServiceCollection services, MongoDbHttpLogOptions options)
+    public static IServiceCollection AddMongoDbHttpLogging(this IServiceCollection services, HttpLoggingMongoDbOptions options)
     {
         services.AddSingleton(options);
-        services.AddScoped<IHttpLogRepository, MongoDbHttpLogRepository>();
+
+        services.AddSingleton<IHttpLoggingMongoDbContext, HttpLoggingMongoDbContext>();
+
+        services.AddScoped<IHttpLoggingRepository, HttpLoggingMongoDbRepository>();
+
         return services;
     }
 }
