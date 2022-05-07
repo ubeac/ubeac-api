@@ -11,9 +11,7 @@ public partial class EntityServiceTests
     [Fact]
     public async Task Should_Create_Entity_When_Call_Create_Method()
     {
-        var entityService = new EntityService<TestEntity>(_entityRepositoryMock.Object);
-
-        await entityService.Create(_testEntity, _validToken);
+        await _entityService.Create(_testEntity, _validToken);
 
         _entityRepositoryMock.Verify(entityRepository => entityRepository.Create(_testEntity, _validToken), Times.Once);
     }
@@ -21,9 +19,7 @@ public partial class EntityServiceTests
     [Fact]
     public async Task Should_Throw_Exception_And_Cancel_When_Call_Create_Method_With_CanceledToken()
     {
-        var entityService = new EntityService<TestEntity>(_entityRepositoryMock.Object);
-
-        await Assert.ThrowsAsync<OperationCanceledException>(async () => await entityService.Create(_testEntity, _canceledToken));
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await _entityService.Create(_testEntity, _canceledToken));
 
         _entityRepositoryMock.Verify(entityRepository => entityRepository.Create(_testEntity, It.IsAny<CancellationToken>()), Times.Never);
     }

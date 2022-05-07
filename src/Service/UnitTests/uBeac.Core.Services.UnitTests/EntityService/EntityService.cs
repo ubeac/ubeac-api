@@ -18,6 +18,8 @@ public partial class EntityServiceTests
 
     private readonly Mock<IEntityRepository<TestEntity>> _entityRepositoryMock;
 
+    private readonly IEntityService<TestEntity> _entityService;
+
     public EntityServiceTests()
     {
         _testEntity = new TestEntity { Id = _testId, FirstName = "Test FirstName", LastName = "Test LastName" };
@@ -32,6 +34,8 @@ public partial class EntityServiceTests
         _entityRepositoryMock.Setup(entityRepository => entityRepository.GetAll(It.IsAny<CancellationToken>())).ReturnsAsync(_testEntities);
         _entityRepositoryMock.Setup(entityRepository => entityRepository.GetById(_testId, It.IsAny<CancellationToken>())).ReturnsAsync(_testEntity);
         _entityRepositoryMock.Setup(entityRepository => entityRepository.GetByIds(_testIds, It.IsAny<CancellationToken>())).ReturnsAsync(_testEntities);
+
+        _entityService = new EntityService<TestEntity>(_entityRepositoryMock.Object);
     }
 }
 

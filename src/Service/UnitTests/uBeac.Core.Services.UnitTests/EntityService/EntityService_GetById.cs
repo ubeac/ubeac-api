@@ -11,9 +11,7 @@ public partial class EntityServiceTests
     [Fact]
     public async Task Should_Fetch_Entity_From_Repository_When_Call_GetById_Method()
     {
-        var entityService = new EntityService<TestEntity>(_entityRepositoryMock.Object);
-
-        var result = await entityService.GetById(_testId, _validToken);
+        var result = await _entityService.GetById(_testId, _validToken);
 
         Assert.NotNull(result);
         Assert.Equal(_testEntity, result);
@@ -22,9 +20,7 @@ public partial class EntityServiceTests
     [Fact]
     public async Task Should_Throw_Exception_And_Cancel_When_Call_GetById_Method_With_CanceledToken()
     {
-        var entityService = new EntityService<TestEntity>(_entityRepositoryMock.Object);
-
-        await Assert.ThrowsAsync<OperationCanceledException>(async () => await entityService.GetById(_testId, _canceledToken));
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await _entityService.GetById(_testId, _canceledToken));
 
         _entityRepositoryMock.Verify(entityRepository => entityRepository.GetById(_testId, It.IsAny<CancellationToken>()), Times.Never);
     }
