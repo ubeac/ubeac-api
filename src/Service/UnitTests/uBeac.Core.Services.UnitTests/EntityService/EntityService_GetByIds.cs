@@ -9,9 +9,9 @@ namespace uBeac.Services;
 public partial class EntityServiceTests
 {
     [Fact]
-    public async Task Should_Fetch_Entities_From_Repository_When_Call_GetByIds_Method()
+    public async Task GetByIds_EntitiesShouldFetchesFromGetByIdsMethodOfRepository()
     {
-        var result = await _entityService.GetByIds(_testIds, _validToken);
+        var result = await _entityService.GetByIds(_testEntityIds, _validToken);
 
         Assert.NotNull(result);
         Assert.NotEmpty(result);
@@ -19,10 +19,10 @@ public partial class EntityServiceTests
     }
 
     [Fact]
-    public async Task Should_Throw_Exception_And_Cancel_When_Call_GetByIds_Method_With_CanceledToken()
+    public async Task GetByIds_CanceledToken_ShouldThrowsExceptionAndCancelsCallingGetByIdsMethodOfRepository()
     {
-        await Assert.ThrowsAsync<OperationCanceledException>(async () => await _entityService.GetByIds(_testIds, _canceledToken));
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await _entityService.GetByIds(_testEntityIds, _canceledToken));
 
-        _entityRepositoryMock.Verify(entityRepository => entityRepository.GetByIds(_testIds, It.IsAny<CancellationToken>()), Times.Never);
+        _entityRepositoryMock.Verify(entityRepository => entityRepository.GetByIds(_testEntityIds, It.IsAny<CancellationToken>()), Times.Never);
     }
 }

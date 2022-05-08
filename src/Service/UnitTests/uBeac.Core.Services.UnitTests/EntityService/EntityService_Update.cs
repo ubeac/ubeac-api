@@ -9,7 +9,7 @@ namespace uBeac.Services;
 public partial class EntityServiceTests
 {
     [Fact]
-    public async Task Should_Update_Entity_When_Call_Update_Method()
+    public async Task Update_ShouldCallsUpdateMethodOfRepository()
     {
         await _entityService.Update(_testEntity, _validToken);
 
@@ -17,7 +17,7 @@ public partial class EntityServiceTests
     }
 
     [Fact]
-    public async Task Should_Throw_Exception_And_Cancel_When_Call_Update_Method_With_CanceledToken()
+    public async Task Update_CanceledToken_ShouldThrowsExceptionAndCancelsCallingUpdateMethodOfRepository()
     {
         await Assert.ThrowsAsync<OperationCanceledException>(async () => await _entityService.Update(_testEntity, _canceledToken));
 

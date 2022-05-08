@@ -9,7 +9,7 @@ namespace uBeac.Services;
 public partial class EntityServiceTests
 {
     [Fact]
-    public async Task Should_Fetch_Entities_From_Repository_When_Call_GetAll_Method()
+    public async Task GetAll_EntitiesShouldFetchesFromGetAllMethodOfRepository()
     {
         var result = await _entityService.GetAll(_validToken);
 
@@ -19,7 +19,7 @@ public partial class EntityServiceTests
     }
 
     [Fact]
-    public async Task Should_Throw_Exception_And_Cancel_When_Call_GetAll_Method_With_CanceledToken()
+    public async Task GetAll_CanceledToken_ShouldThrowsExceptionAndCancelsCallingGetAllMethodOfRepository()
     {
         await Assert.ThrowsAsync<OperationCanceledException>(async () => await _entityService.GetAll(_canceledToken));
 
