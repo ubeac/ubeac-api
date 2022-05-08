@@ -10,25 +10,25 @@ namespace uBeac.Repositories.MongoDB;
 public partial class MongoEntityRepositoryTests
 {
     [Fact]
-    public async Task Should_Delete_When_Call_Delete_Method()
+    public async Task Delete_ShouldCallsFindOneAndDeleteMethodOfMongoCollection()
     {
-        await _entityRepository.Delete(_testId, _validToken);
+        await _entityRepository.Delete(_testEntityId, _validToken);
 
-        _mongoCollectionMock.Verify(mongoCollection => mongoCollection.FindOneAndDeleteAsync(It.IsAny<FilterDefinition<TestEntity>>(), It.IsAny<FindOneAndDeleteOptions<TestEntity>>(), It.IsAny<CancellationToken>()), Times.Once);
+        _mongoCollectionMock.Verify(mongoCollection => mongoCollection.FindOneAndDeleteAsync(It.IsAny<FilterDefinition<TestEntity>>(), It.IsAny<FindOneAndDeleteOptions<TestEntity>>(), _validToken), Times.Once);
     }
 
     [Fact]
-    public async Task Should_Delete_When_Call_Delete_Method_WithActionName()
+    public async Task Delete_ActionName_ShouldCallsFindOneAndDeleteMethodOfMongoCollection()
     {
-        await _entityRepository.Delete(_testId, _testActionName, _validToken);
+        await _entityRepository.Delete(_testEntityId, _testActionName, _validToken);
 
-        _mongoCollectionMock.Verify(mongoCollection => mongoCollection.FindOneAndDeleteAsync(It.IsAny<FilterDefinition<TestEntity>>(), It.IsAny<FindOneAndDeleteOptions<TestEntity>>(), It.IsAny<CancellationToken>()), Times.Once);
+        _mongoCollectionMock.Verify(mongoCollection => mongoCollection.FindOneAndDeleteAsync(It.IsAny<FilterDefinition<TestEntity>>(), It.IsAny<FindOneAndDeleteOptions<TestEntity>>(), _validToken), Times.Once);
     }
 
     [Fact]
-    public async Task Should_Throw_Exception_And_Cancel_When_Call_Delete_Method_With_CanceledToken()
+    public async Task Delete_CanceledToken_ShouldThrowsExceptionAndCancelsCallingFindOneAndDeleteMethodOfMongoCollection()
     {
-        await Assert.ThrowsAsync<OperationCanceledException>(async () => await _entityRepository.Delete(_testId, _canceledToken));
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await _entityRepository.Delete(_testEntityId, _canceledToken));
 
         _mongoCollectionMock.Verify(mongoCollection => mongoCollection.FindOneAndDeleteAsync(It.IsAny<FilterDefinition<TestEntity>>(), It.IsAny<FindOneAndDeleteOptions<TestEntity>>(), It.IsAny<CancellationToken>()), Times.Never);
     }

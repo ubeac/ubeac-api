@@ -10,23 +10,23 @@ namespace uBeac.Repositories.MongoDB;
 public partial class MongoEntityRepositoryTests
 {
     [Fact]
-    public async Task Should_Replace_When_Call_Update_Method()
+    public async Task Update_ShouldCallsFindOneAndReplaceMethodOfMongoCollection()
     {
         await _entityRepository.Update(_testEntity, _validToken);
 
-        _mongoCollectionMock.Verify(mongoCollection => mongoCollection.FindOneAndReplaceAsync(It.IsAny<FilterDefinition<TestEntity>>(), _testEntity, It.IsAny<FindOneAndReplaceOptions<TestEntity>>(), It.IsAny<CancellationToken>()), Times.Once);
+        _mongoCollectionMock.Verify(mongoCollection => mongoCollection.FindOneAndReplaceAsync(It.IsAny<FilterDefinition<TestEntity>>(), _testEntity, It.IsAny<FindOneAndReplaceOptions<TestEntity>>(), _validToken), Times.Once);
     }
 
     [Fact]
-    public async Task Should_Replace_When_Call_Update_Method_With_ActionName()
+    public async Task Update_ActionName_ShouldCallsFindOneAndReplaceMethodOfMongoCollection()
     {
         await _entityRepository.Update(_testEntity, _testActionName, _validToken);
 
-        _mongoCollectionMock.Verify(mongoCollection => mongoCollection.FindOneAndReplaceAsync(It.IsAny<FilterDefinition<TestEntity>>(), _testEntity, It.IsAny<FindOneAndReplaceOptions<TestEntity>>(), It.IsAny<CancellationToken>()), Times.Once);
+        _mongoCollectionMock.Verify(mongoCollection => mongoCollection.FindOneAndReplaceAsync(It.IsAny<FilterDefinition<TestEntity>>(), _testEntity, It.IsAny<FindOneAndReplaceOptions<TestEntity>>(), _validToken), Times.Once);
     }
 
     [Fact]
-    public async Task Should_Throw_Exception_And_Cancel_When_Call_Update_Method_With_CanceledToken()
+    public async Task Update_CanceledToken_ShouldThrowsExceptionAndCancelsCallingFindOneAndReplaceMethodOfCollection()
     {
         await Assert.ThrowsAsync<OperationCanceledException>(async () => await _entityRepository.Update(_testEntity, _canceledToken));
 
@@ -34,7 +34,7 @@ public partial class MongoEntityRepositoryTests
     }
 
     [Fact]
-    public async Task Should_Set_Audit_Properties_When_Call_Update_Method()
+    public async Task Update_AuditEntityPropertiesShouldNotBeNull()
     {
         await _entityRepository.Update(_testEntity, _testActionName, _validToken);
 

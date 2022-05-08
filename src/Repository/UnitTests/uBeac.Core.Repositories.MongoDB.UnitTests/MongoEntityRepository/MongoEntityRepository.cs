@@ -11,8 +11,9 @@ namespace uBeac.Repositories.MongoDB;
 
 public partial class MongoEntityRepositoryTests
 {
-    private readonly Guid _testId;
-    private readonly IEnumerable<Guid> _testIds;
+    private readonly Guid _testEntityId;
+    private readonly IEnumerable<Guid> _testEntityIds;
+
     private readonly TestEntity _testEntity;
     private readonly IEnumerable<TestEntity> _testEntities;
 
@@ -22,17 +23,18 @@ public partial class MongoEntityRepositoryTests
     private readonly CancellationToken _canceledToken;
 
     private readonly Mock<IMongoCollection<TestEntity>> _mongoCollectionMock;
-    private readonly Mock<IMongoDBContext> _mongoDbContextMock;
     private readonly Mock<IApplicationContext> _applicationContextMock;
 
     private readonly MongoEntityRepository<TestEntity, IMongoDBContext> _entityRepository;
 
     public MongoEntityRepositoryTests()
     {
-        _testId = Guid.NewGuid();
-        _testIds = new List<Guid> { _testId };
-        _testEntity = new TestEntity { Id = _testId, FirstName = "Test FirstName", LastName = "Test Lastname" };
+        _testEntityId = Guid.NewGuid();
+        _testEntityIds = new List<Guid> { _testEntityId };
+
+        _testEntity = new TestEntity { Id = _testEntityId, FirstName = "Test FirstName", LastName = "Test Lastname" };
         _testEntities = new List<TestEntity> { _testEntity };
+
         _testActionName = "Test ActionName";
 
         _validToken = CancellationToken.None;
@@ -49,8 +51,8 @@ public partial class MongoEntityRepositoryTests
         var mongoDatabaseMock = new Mock<IMongoDatabase>();
         mongoDatabaseMock.Setup(mongoDatabase => mongoDatabase.GetCollection<TestEntity>(It.IsAny<string>(), null)).Returns(_mongoCollectionMock.Object);
 
-        _mongoDbContextMock = new Mock<IMongoDBContext>();
-        _mongoDbContextMock.Setup(context => context.Database).Returns(mongoDatabaseMock.Object);
+        var mongoDbContextMock = new Mock<IMongoDBContext>();
+        mongoDbContextMock.Setup(context => context.Database).Returns(mongoDatabaseMock.Object);
 
         _applicationContextMock = new Mock<IApplicationContext>();
         _applicationContextMock.Setup(applicationContext => applicationContext.UserName).Returns("TestUserName");
@@ -61,7 +63,7 @@ public partial class MongoEntityRepositoryTests
 
         var historyFactoryMock = new Mock<HistoryFactory>(serviceProviderMock.Object);
 
-        _entityRepository = new MongoEntityRepository<TestEntity, IMongoDBContext>(_mongoDbContextMock.Object, _applicationContextMock.Object, historyFactoryMock.Object);
+        _entityRepository = new MongoEntityRepository<TestEntity, IMongoDBContext>(mongoDbContextMock.Object, _applicationContextMock.Object, historyFactoryMock.Object);
     }
 }
 
