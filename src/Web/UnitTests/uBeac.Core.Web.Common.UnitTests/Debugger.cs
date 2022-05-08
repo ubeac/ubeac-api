@@ -12,7 +12,7 @@ public class DebuggerTests
     private const string ItemsKey = "internalDebug";
 
     private readonly Dictionary<object, object> _httpContextItems;
-    private readonly Mock<IHttpContextAccessor> _httpContextAccessorMock;
+    private readonly Debugger _debugger;
 
     public DebuggerTests()
     {
@@ -21,20 +21,22 @@ public class DebuggerTests
         var httpContextMock = new Mock<HttpContext>();
         httpContextMock.Setup(httpContext => httpContext.Items).Returns(_httpContextItems);
 
-        _httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-        _httpContextAccessorMock.Setup(httpContextAccessor => httpContextAccessor.HttpContext).Returns(httpContextMock.Object);
+        var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
+        httpContextAccessorMock.Setup(httpContextAccessor => httpContextAccessor.HttpContext).Returns(httpContextMock.Object);
+
+        _debugger = new Debugger(httpContextAccessorMock.Object);
     }
 
     [Theory]
     [ClassData(typeof(TestData))]
     public void Add_ValueShouldBeAddedToHttpContextItems(object expectedValue)
     {
-        var debugger = new Debugger(_httpContextAccessorMock.Object);
+        ClearValues();
 
-        debugger.Add(expectedValue);
+        _debugger.Add(expectedValue);
 
-        var values = _httpContextItems?.FirstOrDefault().Value as List<object>;
-        var actualValue = values?.FirstOrDefault();
+        var values = GetValues();
+        var actualValue = values.FirstOrDefault();
 
         Assert.NotNull(_httpContextItems);
         Assert.NotEmpty(_httpContextItems);
@@ -50,19 +52,20 @@ public class DebuggerTests
     [ClassData(typeof(TestData))]
     public void GetValues_ValuesShouldFetchedFromHttpContextItems(object expectedValue)
     {
-        var debugger = new Debugger(_httpContextAccessorMock.Object);
+        ClearValues();
+        AddValue(expectedValue);
 
-        var items = (List<object>)_httpContextItems[ItemsKey];
-        items.Clear();
-        items.Add(expectedValue);
-
-        var values = debugger.GetValues();
+        var values = _debugger.GetValues();
         var actualValue = values.FirstOrDefault();
 
         Assert.NotNull(values);
         Assert.NotEmpty(values);
         Assert.Equal(expectedValue, actualValue);
     }
+
+    private List<object> GetValues() => (List<object>)_httpContextItems[ItemsKey];
+    private void AddValue(object value) => GetValues().Add(value);
+    private void ClearValues() => GetValues().Clear();
 
     private class TestData : IEnumerable<object[]>
     {
