@@ -11,47 +11,58 @@ public class DebuggerTests
 {
     private const string ItemsKey = "internalDebug";
 
-    [Theory]
-    [ClassData(typeof(TestData))]
-    public void Value_Should_Be_Added_To_HttpContext_Items(object value)
+    private readonly Dictionary<object, object> _httpContextItems;
+
+    private readonly Debugger _debugger;
+
+    public DebuggerTests()
     {
-        var httpContextItems = new Dictionary<object, object>();
+        _httpContextItems = new Dictionary<object, object>();
 
         var httpContextMock = new Mock<HttpContext>();
-        httpContextMock.Setup(httpContext => httpContext.Items).Returns(httpContextItems);
+        httpContextMock.Setup(httpContext => httpContext.Items).Returns(_httpContextItems);
 
         var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
         httpContextAccessorMock.Setup(httpContextAccessor => httpContextAccessor.HttpContext).Returns(httpContextMock.Object);
 
-        var debugger = new Debugger(httpContextAccessorMock.Object);
-        debugger.Add(value);
-
-        var values = httpContextItems.First().Value as List<object>;
-
-        Assert.NotNull(httpContextItems);
-        Assert.NotEmpty(httpContextItems);
-        
-        Assert.NotNull(values);
-        Assert.NotEmpty(values);
+        _debugger = new Debugger(httpContextAccessorMock.Object);
     }
 
     [Theory]
     [ClassData(typeof(TestData))]
-    public void Values_Should_Fetched_From_HttpContext_Items(object value)
+    public void Add_ValueShouldBeAddedToHttpContextItems(object expectedValue)
     {
-        var httpContextItems = new Dictionary<object, object> { { ItemsKey, new List<object> { value } } };
+        _httpContextItems.Clear();
 
-        var httpContextMock = new Mock<HttpContext>();
-        httpContextMock.Setup(httpContext => httpContext.Items).Returns(httpContextItems);
+        _debugger.Add(expectedValue);
 
-        var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-        httpContextAccessorMock.Setup(httpContextAccessor => httpContextAccessor.HttpContext).Returns(httpContextMock.Object);
+        var values = _httpContextItems?.FirstOrDefault().Value as List<object>;
+        var actualValue = values?.FirstOrDefault();
 
-        var debugger = new Debugger(httpContextAccessorMock.Object);
-        var values = debugger.GetValues();
+        Assert.NotNull(_httpContextItems);
+        Assert.NotEmpty(_httpContextItems);
+        
+        Assert.NotNull(values);
+        Assert.NotEmpty(values);
+        
+        Assert.NotNull(actualValue);
+        Assert.Equal(expectedValue, actualValue);
+    }
+
+    [Theory]
+    [ClassData(typeof(TestData))]
+    public void GetValues_ValuesShouldFetchedFromHttpContextItems(object expectedValue)
+    {
+        _httpContextItems.Clear();
+
+        _httpContextItems.Add(ItemsKey, new List<object> { expectedValue });
+
+        var values = _debugger.GetValues();
+        var actualValue = values.FirstOrDefault();
 
         Assert.NotNull(values);
         Assert.NotEmpty(values);
+        Assert.Equal(expectedValue, actualValue);
     }
 
     private class TestData : IEnumerable<object[]>
