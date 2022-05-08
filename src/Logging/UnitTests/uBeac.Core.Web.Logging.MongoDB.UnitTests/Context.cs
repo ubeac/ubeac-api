@@ -1,22 +1,19 @@
-﻿using System;
-using Xunit;
+﻿using Xunit;
 
 namespace uBeac.Web.Logging.MongoDB;
 
 public class HttpLoggingMongoDbContextTests
 {
+    private const string ConnectionString = "mongodb://localhost:27017/test-db";
+
     [Fact]
-    public void Databases_Should_Not_Be_Null_When_Construction_With_Different_Connection_Strings()
+    public void Constructor_MultipleConnectionStrings_DatabasesShouldNotBeNull()
     {
-        // Different connection strings
         var options = new HttpLoggingMongoDbOptions
         {
-            HttpLog2xxConnectionString = $"mongodb://localhost:27017/test-db{new Random().Next()}",
-            HttpLog2xxCollectionName = "Http2xx",
-            HttpLog4xxConnectionString = $"mongodb://localhost:27017/test-db{new Random().Next()}",
-            HttpLog4xxCollectionName = "Http4xx",
-            HttpLog5xxConnectionString = $"mongodb://localhost:27017/test-db{new Random().Next()}",
-            HttpLog5xxCollectionName = "Http5xx"
+            HttpLog2xxConnectionString = $"{ConnectionString}-2xx",
+            HttpLog4xxConnectionString = $"{ConnectionString}-4xx",
+            HttpLog5xxConnectionString = $"{ConnectionString}-5xx",
         };
 
         var context = new HttpLoggingMongoDbContext(options);
@@ -28,15 +25,13 @@ public class HttpLoggingMongoDbContextTests
     }
 
     [Fact]
-    public void Databases_Should_Not_Be_Null_When_Construction_With_Same_Connection_Strings()
+    public void Constructor_OneConnectionString_DatabasesShouldNotBeNull()
     {
-        // Same connection strings
-        var connectionString = $"mongodb://localhost:27017/test-db{new Random().Next()}";
         var options = new HttpLoggingMongoDbOptions
         {
-            HttpLog2xxConnectionString = connectionString,
-            HttpLog4xxConnectionString = connectionString,
-            HttpLog5xxConnectionString = connectionString
+            HttpLog2xxConnectionString = ConnectionString,
+            HttpLog4xxConnectionString = ConnectionString,
+            HttpLog5xxConnectionString = ConnectionString
         };
 
         var context = new HttpLoggingMongoDbContext(options);
