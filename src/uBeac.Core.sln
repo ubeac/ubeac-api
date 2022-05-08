@@ -53,8 +53,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.EmailProvider", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7F87C7E3-C767-4674-B562-DA287DB4F128}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationTests", "Identity\Tests\IntegrationTests\IntegrationTests.csproj", "{3ED0375A-8364-4282-A6F4-C46ADC90332F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "Identity\Tests\API\API.csproj", "{FAAE32CA-48F3-4F26-BF22-39DDDDF57770}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Identity.Jwt", "Identity\uBeac.Core.Identity.Jwt\uBeac.Core.Identity.Jwt.csproj", "{6BD1B9F9-5A0F-4A43-A657-F8B31896EDE0}"
@@ -75,15 +73,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Web.Common.UnitT
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{147AD850-6B4D-4FC4-98FC-E3552BD2D9DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Web.Logging.MongoDB.UnitTests", "Logging\UnitTests\uBeac.Core.Web.Logging.MongoDB.UnitTests\uBeac.Core.Web.Logging.MongoDB.UnitTests.csproj", "{FCB4073A-EE78-4064-B525-4E11C97E3E69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Web.Logging.MongoDB.UnitTests", "Logging\UnitTests\uBeac.Core.Web.Logging.MongoDB.UnitTests\uBeac.Core.Web.Logging.MongoDB.UnitTests.csproj", "{FCB4073A-EE78-4064-B525-4E11C97E3E69}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{B9000723-B110-4CE2-98DB-4E3840A37BD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Repositories.MongoDB.UnitTests", "Repository\UnitTests\uBeac.Core.Repositories.MongoDB.UnitTests\uBeac.Core.Repositories.MongoDB.UnitTests.csproj", "{CE1397E1-D2A7-4A8A-9801-05C9BEDE0BA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Repositories.MongoDB.UnitTests", "Repository\UnitTests\uBeac.Core.Repositories.MongoDB.UnitTests\uBeac.Core.Repositories.MongoDB.UnitTests.csproj", "{CE1397E1-D2A7-4A8A-9801-05C9BEDE0BA9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{D8B9F01F-FD43-4F99-8FFC-E312C982F88E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Services.UnitTests", "Service\UnitTests\uBeac.Core.Services.UnitTests\uBeac.Core.Services.UnitTests.csproj", "{1086CAD8-EE87-4ECE-B90F-07B5AE102274}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Services.UnitTests", "Service\UnitTests\uBeac.Core.Services.UnitTests\uBeac.Core.Services.UnitTests.csproj", "{1086CAD8-EE87-4ECE-B90F-07B5AE102274}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -159,10 +157,6 @@ Global
 		{3D9D0F87-1A8A-4D2E-8F1A-CF398CD8D2FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D9D0F87-1A8A-4D2E-8F1A-CF398CD8D2FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D9D0F87-1A8A-4D2E-8F1A-CF398CD8D2FA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3ED0375A-8364-4282-A6F4-C46ADC90332F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3ED0375A-8364-4282-A6F4-C46ADC90332F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3ED0375A-8364-4282-A6F4-C46ADC90332F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3ED0375A-8364-4282-A6F4-C46ADC90332F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FAAE32CA-48F3-4F26-BF22-39DDDDF57770}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FAAE32CA-48F3-4F26-BF22-39DDDDF57770}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAAE32CA-48F3-4F26-BF22-39DDDDF57770}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -230,7 +224,6 @@ Global
 		{D46D669F-61A9-4F54-8C54-F8CEF9A6C80A} = {117FC7BE-0153-4819-9A27-0FDA22132FA1}
 		{3D9D0F87-1A8A-4D2E-8F1A-CF398CD8D2FA} = {D910F4C0-CDE2-422F-A476-CDB87D8008A6}
 		{7F87C7E3-C767-4674-B562-DA287DB4F128} = {EA4A3C91-FB93-49E8-8DF9-8CE86C150F71}
-		{3ED0375A-8364-4282-A6F4-C46ADC90332F} = {7F87C7E3-C767-4674-B562-DA287DB4F128}
 		{FAAE32CA-48F3-4F26-BF22-39DDDDF57770} = {7F87C7E3-C767-4674-B562-DA287DB4F128}
 		{6BD1B9F9-5A0F-4A43-A657-F8B31896EDE0} = {EA4A3C91-FB93-49E8-8DF9-8CE86C150F71}
 		{2B7FB004-FE75-4196-A263-C4A768499970} = {37B6F062-3F0A-47F0-A418-FFFDA49D6D17}
