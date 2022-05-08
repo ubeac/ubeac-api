@@ -1,6 +1,6 @@
 ﻿namespace uBeac.Web.Logging;
 
-public interface IHttpLogRepository
+public interface IHttpLoggingRepository
 {
     Task Create(HttpLog log, CancellationToken cancellationToken = default);
 }

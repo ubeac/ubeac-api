@@ -14,7 +14,7 @@ internal sealed class HttpLoggingMiddleware
         _next = next;
     }
 
-    public async Task Invoke(HttpContext context, IHttpLogRepository repository, IApplicationContext appContext)
+    public async Task Invoke(HttpContext context, IHttpLoggingRepository repository, IApplicationContext appContext)
     {
         var stopwatch = Stopwatch.StartNew();
 
@@ -84,7 +84,7 @@ internal sealed class HttpLoggingMiddleware
         };
     }
 
-    private static async Task Log(HttpLog log, IHttpLogRepository repository)
+    private static async Task Log(HttpLog log, IHttpLoggingRepository repository)
     {
         await repository.Create(log);
     }
