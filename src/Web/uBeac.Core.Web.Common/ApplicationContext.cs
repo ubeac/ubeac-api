@@ -5,8 +5,8 @@ namespace uBeac.Web;
 public class ApplicationContext : IApplicationContext
 {
     protected readonly IHttpContextAccessor Accessor;
-    protected const string SidHeaderKey = "SID";
-    protected const string UidHeaderKey = "UID";
+    protected const string SidHeaderKey = "sid";
+    protected const string UidHeaderKey = "uid";
 
     public ApplicationContext(IHttpContextAccessor accessor)
     {
