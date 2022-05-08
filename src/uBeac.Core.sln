@@ -77,6 +77,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Web.Logging.MongoDB.UnitTests", "Logging\UnitTests\uBeac.Core.Web.Logging.MongoDB.UnitTests\uBeac.Core.Web.Logging.MongoDB.UnitTests.csproj", "{FCB4073A-EE78-4064-B525-4E11C97E3E69}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{B9000723-B110-4CE2-98DB-4E3840A37BD9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Repositories.MongoDB.UnitTests", "Repository\UnitTests\uBeac.Core.Repositories.MongoDB.UnitTests\uBeac.Core.Repositories.MongoDB.UnitTests.csproj", "{CE1397E1-D2A7-4A8A-9801-05C9BEDE0BA9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{D8B9F01F-FD43-4F99-8FFC-E312C982F88E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Services.UnitTests", "Service\UnitTests\uBeac.Core.Services.UnitTests\uBeac.Core.Services.UnitTests.csproj", "{1086CAD8-EE87-4ECE-B90F-07B5AE102274}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -191,6 +199,14 @@ Global
 		{FCB4073A-EE78-4064-B525-4E11C97E3E69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCB4073A-EE78-4064-B525-4E11C97E3E69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCB4073A-EE78-4064-B525-4E11C97E3E69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE1397E1-D2A7-4A8A-9801-05C9BEDE0BA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE1397E1-D2A7-4A8A-9801-05C9BEDE0BA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE1397E1-D2A7-4A8A-9801-05C9BEDE0BA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE1397E1-D2A7-4A8A-9801-05C9BEDE0BA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1086CAD8-EE87-4ECE-B90F-07B5AE102274}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1086CAD8-EE87-4ECE-B90F-07B5AE102274}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1086CAD8-EE87-4ECE-B90F-07B5AE102274}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1086CAD8-EE87-4ECE-B90F-07B5AE102274}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -226,6 +242,10 @@ Global
 		{20FF5E41-2928-427F-B1DF-78519C4CC174} = {C2A82CB2-0B59-47BF-9DAC-4D4E02DA8FA7}
 		{147AD850-6B4D-4FC4-98FC-E3552BD2D9DB} = {117FC7BE-0153-4819-9A27-0FDA22132FA1}
 		{FCB4073A-EE78-4064-B525-4E11C97E3E69} = {147AD850-6B4D-4FC4-98FC-E3552BD2D9DB}
+		{B9000723-B110-4CE2-98DB-4E3840A37BD9} = {2939E5A7-F1C3-4853-9F35-31EB64C08036}
+		{CE1397E1-D2A7-4A8A-9801-05C9BEDE0BA9} = {B9000723-B110-4CE2-98DB-4E3840A37BD9}
+		{D8B9F01F-FD43-4F99-8FFC-E312C982F88E} = {4CC61732-C373-4DA4-B832-CEEB1A284EF2}
+		{1086CAD8-EE87-4ECE-B90F-07B5AE102274} = {D8B9F01F-FD43-4F99-8FFC-E312C982F88E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {247F9BF0-18BB-4A57-BB3E-2870DDAEF0D1}
