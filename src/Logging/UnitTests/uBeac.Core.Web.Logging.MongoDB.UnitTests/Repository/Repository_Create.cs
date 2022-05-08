@@ -10,7 +10,7 @@ namespace uBeac.Web.Logging.MongoDB;
 public partial class HttpLoggingMongoDbRepositoryTests
 {
     [Fact]
-    public async Task Should_Throw_Exception_And_Cancel_When_Call_Create_Method_With_CanceledToken()
+    public async Task Create_CanceledToken_ShouldThrowsExceptionAndCancelCallingInsertOneMethodOfMongoCollection()
     {
         await Assert.ThrowsAsync<OperationCanceledException>(async () => await _repository.Create(_testLog, _canceledToken));
 
@@ -21,7 +21,7 @@ public partial class HttpLoggingMongoDbRepositoryTests
 
     [Theory]
     [ClassData(typeof(StatusCode2xxTestData))]
-    public async Task HttpLog2xx_Should_Insert_To_Database_And_Collection_2xx(int statusCode)
+    public async Task Create_ShouldCallsInsertOneMethodOfMongoCollection2xx(int statusCode)
     {
         _testLog.StatusCode = statusCode;
 
@@ -34,7 +34,7 @@ public partial class HttpLoggingMongoDbRepositoryTests
 
     [Theory]
     [ClassData(typeof(StatusCode4xxTestData))]
-    public async Task HttpLog4xx_Should_Insert_To_Database_And_Collection_4xx(int statusCode)
+    public async Task Create_ShouldCallsInsertOneMethodOfMongoCollection4xx(int statusCode)
     {
         _testLog.StatusCode = statusCode;
 
@@ -47,7 +47,7 @@ public partial class HttpLoggingMongoDbRepositoryTests
 
     [Theory]
     [ClassData(typeof(StatusCode5xxTestData))]
-    public async Task HttpLog5xx_Should_Insert_To_Database_And_Collection_5xx(int statusCode)
+    public async Task Create_ShouldCallsInsertOneMethodOfMongoCollection5xx(int statusCode)
     {
         _testLog.StatusCode = statusCode;
 
