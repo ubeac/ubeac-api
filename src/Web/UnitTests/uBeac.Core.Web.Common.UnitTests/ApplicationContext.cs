@@ -15,13 +15,15 @@ public class ApplicationContextTests
     private const string UserIp = "127.0.0.1";
     private const string Language = "fa-IR";
 
+    private const string AcceptLanguageHeader = "Accept-Language";
+
     private readonly ApplicationContext _applicationContext;
 
     public ApplicationContextTests()
     {
         var requestHeaders = new HeaderDictionary
         {
-            { "Accept-Language", Language }
+            { AcceptLanguageHeader, Language }
         };
 
         var httpRequestMock = new Mock<HttpRequest>();
