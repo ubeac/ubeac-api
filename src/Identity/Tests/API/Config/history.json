@@ -1,0 +1,6 @@
+{
+  "History": {
+    "ConnectionString": "mongodb://localhost:27017/User_History",
+    "CollectionSuffix": "_History"
+  }
+}

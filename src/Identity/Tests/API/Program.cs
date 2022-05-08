@@ -1,6 +1,6 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
-using uBeac.Logging.MongoDB;
+using uBeac.Repositories.History.MongoDB;
 using uBeac.Repositories.MongoDB;
 using uBeac.Web;
 using uBeac.Web.Logging;
@@ -40,14 +40,9 @@ builder.Services.AddCoreSwaggerWithJWT("Example");
 builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
 
 // Adding history
-builder.Services.AddHistory().UsingMongoDb().ForDefault();
+builder.Services.AddHistory<MongoDBHistoryRepository>().For<User>().Register();
+builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("History"));
 
-// builder.Services.AddHistory().Using<MongoHistoryRepository<MongoDBContext>>()
-//    .For<User>()
-//    .For<Role>()
-//    .For<Unit>()
-//    .For<UnitType>()
-//    .For<UnitRole>();
 
 // Adding email provider
 builder.Services.AddEmailProvider(builder.Configuration);

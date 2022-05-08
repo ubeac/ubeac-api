@@ -14,7 +14,7 @@ public static class MongoDBServicesExtensions
     public static IServiceCollection AddMongo<TMongoDbContext>(this IServiceCollection services, string connectionString)
        where TMongoDbContext : class, IMongoDBContext
     {
-        services.AddSingleton(provider =>
+        services.AddScoped(provider =>
         {
             var configuration = provider.GetService<IConfiguration>();
             var connString = configuration.GetConnectionString(connectionString);
@@ -23,10 +23,10 @@ public static class MongoDBServicesExtensions
                 : new MongoDBOptions<TMongoDbContext>(connString);
         });
 
-        services.TryAddSingleton<TMongoDbContext>();
-        services.TryAddSingleton<IMongoDBContext, TMongoDbContext>();
+        services.TryAddScoped<TMongoDbContext>();
+        services.TryAddScoped<IMongoDBContext, TMongoDbContext>();
 
-        services.AddSingleton(provider =>
+        services.TryAddScoped(provider =>
         {
             var appContextType = provider.CreateScope().ServiceProvider.GetRequiredService<IApplicationContext>().GetType();
 
