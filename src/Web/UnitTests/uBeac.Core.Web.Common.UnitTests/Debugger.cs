@@ -12,8 +12,7 @@ public class DebuggerTests
     private const string ItemsKey = "internalDebug";
 
     private readonly Dictionary<object, object> _httpContextItems;
-
-    private readonly Debugger _debugger;
+    private readonly Mock<IHttpContextAccessor> _httpContextAccessorMock;
 
     public DebuggerTests()
     {
@@ -22,29 +21,27 @@ public class DebuggerTests
         var httpContextMock = new Mock<HttpContext>();
         httpContextMock.Setup(httpContext => httpContext.Items).Returns(_httpContextItems);
 
-        var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-        httpContextAccessorMock.Setup(httpContextAccessor => httpContextAccessor.HttpContext).Returns(httpContextMock.Object);
-
-        _debugger = new Debugger(httpContextAccessorMock.Object);
+        _httpContextAccessorMock = new Mock<IHttpContextAccessor>();
+        _httpContextAccessorMock.Setup(httpContextAccessor => httpContextAccessor.HttpContext).Returns(httpContextMock.Object);
     }
 
     [Theory]
     [ClassData(typeof(TestData))]
     public void Add_ValueShouldBeAddedToHttpContextItems(object expectedValue)
     {
-        _httpContextItems.Clear();
+        var debugger = new Debugger(_httpContextAccessorMock.Object);
 
-        _debugger.Add(expectedValue);
+        debugger.Add(expectedValue);
 
         var values = _httpContextItems?.FirstOrDefault().Value as List<object>;
         var actualValue = values?.FirstOrDefault();
 
         Assert.NotNull(_httpContextItems);
         Assert.NotEmpty(_httpContextItems);
-        
+
         Assert.NotNull(values);
         Assert.NotEmpty(values);
-        
+
         Assert.NotNull(actualValue);
         Assert.Equal(expectedValue, actualValue);
     }
@@ -53,11 +50,13 @@ public class DebuggerTests
     [ClassData(typeof(TestData))]
     public void GetValues_ValuesShouldFetchedFromHttpContextItems(object expectedValue)
     {
-        _httpContextItems.Clear();
+        var debugger = new Debugger(_httpContextAccessorMock.Object);
 
-        _httpContextItems.Add(ItemsKey, new List<object> { expectedValue });
+        var items = (List<object>)_httpContextItems[ItemsKey];
+        items.Clear();
+        items.Add(expectedValue);
 
-        var values = _debugger.GetValues();
+        var values = debugger.GetValues();
         var actualValue = values.FirstOrDefault();
 
         Assert.NotNull(values);

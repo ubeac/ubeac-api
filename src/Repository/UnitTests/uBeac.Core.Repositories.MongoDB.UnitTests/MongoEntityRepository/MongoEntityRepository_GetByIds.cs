@@ -19,8 +19,6 @@ public partial class MongoEntityRepositoryTests
     [Fact]
     public async Task Should_Throw_Exception_When_Call_GetByIds_Method_With_CanceledToken()
     {
-        var repository = new MongoEntityRepository<TestEntity, IMongoDBContext>(_mongoDbContextMock.Object, _applicationContextMock.Object);
-
-        await Assert.ThrowsAsync<OperationCanceledException>(async () => await repository.GetByIds(_testIds, _canceledToken));
+        await Assert.ThrowsAsync<OperationCanceledException>(async () => await _entityRepository.GetByIds(_testIds, _canceledToken));
     }
 }

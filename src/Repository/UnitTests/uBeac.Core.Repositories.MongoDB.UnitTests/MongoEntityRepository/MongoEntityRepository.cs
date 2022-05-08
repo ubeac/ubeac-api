@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using Moq;
+using uBeac.Repositories.History;
 
 namespace uBeac.Repositories.MongoDB;
 
@@ -54,7 +56,12 @@ public partial class MongoEntityRepositoryTests
         _applicationContextMock.Setup(applicationContext => applicationContext.UserName).Returns("TestUserName");
         _applicationContextMock.Setup(applicationContext => applicationContext.UserIp).Returns("127.0.0.1");
 
-        _entityRepository = new MongoEntityRepository<TestEntity, IMongoDBContext>(_mongoDbContextMock.Object, _applicationContextMock.Object);
+        var serviceProviderMock = new Mock<IServiceProvider>();
+        serviceProviderMock.Setup(serviceProvider => serviceProvider.GetService(typeof(RegisteredTypesForHistory))).Returns(new RegisteredTypesForHistory());
+
+        var historyFactoryMock = new Mock<HistoryFactory>(serviceProviderMock.Object);
+
+        _entityRepository = new MongoEntityRepository<TestEntity, IMongoDBContext>(_mongoDbContextMock.Object, _applicationContextMock.Object, historyFactoryMock.Object);
     }
 }
 
