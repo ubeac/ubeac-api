@@ -36,10 +36,6 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var context = ApplicationContext;
-
-        if (entity is IAuditEntity<TKey> audit) context = audit.Context;
-
         var historyRepositories = HistoryFactory.GetRepositories<TEntity>();
 
         var historyTasks = new List<Task>();
@@ -47,7 +43,6 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         {
             await repository.Add(entity, actionName, cancellationToken);
         }
-            
 
         // await Task.WhenAll(historyTasks);
     }
@@ -149,27 +144,20 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
     {
         var now = DateTime.Now;
         var userName = appContext.UserName;
-        var ip = appContext.UserIp;
 
         entity.CreatedAt = now;
         entity.CreatedBy = userName;
-        entity.CreatedByIp = ip;
         entity.LastUpdatedAt = now;
         entity.LastUpdatedBy = userName;
-        entity.LastUpdatedByIp = ip;
-        entity.Context = appContext;
     }
 
     private void SetPropertiesOnUpdate(IAuditEntity<TKey> entity, IApplicationContext appContext)
     {
         var now = DateTime.Now;
         var userName = appContext.UserName;
-        var ip = appContext.UserIp;
 
         entity.LastUpdatedAt = now;
         entity.LastUpdatedBy = userName;
-        entity.LastUpdatedByIp = ip;
-        entity.Context = appContext;
     }
 }
 
