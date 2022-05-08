@@ -38,9 +38,6 @@ public class DebuggerTests
         var values = GetValues();
         var actualValue = values.FirstOrDefault();
 
-        Assert.NotNull(_httpContextItems);
-        Assert.NotEmpty(_httpContextItems);
-
         Assert.NotNull(values);
         Assert.NotEmpty(values);
 
@@ -60,6 +57,8 @@ public class DebuggerTests
 
         Assert.NotNull(values);
         Assert.NotEmpty(values);
+
+        Assert.NotNull(actualValue);
         Assert.Equal(expectedValue, actualValue);
     }
 
