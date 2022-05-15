@@ -83,6 +83,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Services.UnitTests", "Service\UnitTests\uBeac.Core.Services.UnitTests\uBeac.Core.Services.UnitTests.csproj", "{1086CAD8-EE87-4ECE-B90F-07B5AE102274}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{0B1B4096-F759-4B6F-A730-B41B2FDD584F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Common.UnitTests", "Common\UnitTests\uBeac.Core.Common.UnitTests\uBeac.Core.Common.UnitTests.csproj", "{C2960BA8-30B2-499E-B447-94E674FC98DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -201,6 +205,10 @@ Global
 		{1086CAD8-EE87-4ECE-B90F-07B5AE102274}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1086CAD8-EE87-4ECE-B90F-07B5AE102274}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1086CAD8-EE87-4ECE-B90F-07B5AE102274}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2960BA8-30B2-499E-B447-94E674FC98DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2960BA8-30B2-499E-B447-94E674FC98DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2960BA8-30B2-499E-B447-94E674FC98DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2960BA8-30B2-499E-B447-94E674FC98DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -239,6 +247,8 @@ Global
 		{CE1397E1-D2A7-4A8A-9801-05C9BEDE0BA9} = {B9000723-B110-4CE2-98DB-4E3840A37BD9}
 		{D8B9F01F-FD43-4F99-8FFC-E312C982F88E} = {4CC61732-C373-4DA4-B832-CEEB1A284EF2}
 		{1086CAD8-EE87-4ECE-B90F-07B5AE102274} = {D8B9F01F-FD43-4F99-8FFC-E312C982F88E}
+		{0B1B4096-F759-4B6F-A730-B41B2FDD584F} = {D910F4C0-CDE2-422F-A476-CDB87D8008A6}
+		{C2960BA8-30B2-499E-B447-94E674FC98DA} = {0B1B4096-F759-4B6F-A730-B41B2FDD584F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {247F9BF0-18BB-4A57-BB3E-2870DDAEF0D1}
