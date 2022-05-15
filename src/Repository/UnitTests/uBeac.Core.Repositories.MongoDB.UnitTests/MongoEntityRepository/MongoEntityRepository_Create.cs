@@ -41,14 +41,10 @@ public partial class MongoEntityRepositoryTests
         var today = DateTime.Today;
         var applicationContext = _applicationContextMock.Object;
         var userName = applicationContext.UserName;
-        var userIp = applicationContext.UserIp;
 
         Assert.Equal(today, _testEntity.CreatedAt.Date);
         Assert.Equal(userName, _testEntity.CreatedBy);
-        Assert.Equal(userIp, _testEntity.CreatedByIp);
         Assert.Equal(today, _testEntity.LastUpdatedAt.Date);
         Assert.Equal(userName, _testEntity.LastUpdatedBy);
-        Assert.Equal(userIp, _testEntity.LastUpdatedByIp);
-        Assert.Equal(applicationContext, _testEntity.Context);
     }
 }
