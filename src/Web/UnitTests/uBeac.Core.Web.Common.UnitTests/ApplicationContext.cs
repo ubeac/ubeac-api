@@ -10,12 +10,15 @@ namespace uBeac.Web;
 public class ApplicationContextTests
 {
     private const string TraceId = "ThisIsTestTraceId";
-    private const string SessionId = TraceId;
+    private const string UniqueId = "ThisIsTestUniqueId";
+    private const string SessionId = "ThisIsTestSessionId";
     private const string UserName = "ThisIsTestUserName";
     private const string UserIp = "127.0.0.1";
     private const string Language = "fa-IR";
 
     private const string AcceptLanguageHeader = "Accept-Language";
+    private const string SessionIdHeader = "SID";
+    private const string UniqueIdHeader = "UID";
 
     private readonly ApplicationContext _applicationContext;
 
@@ -23,7 +26,9 @@ public class ApplicationContextTests
     {
         var requestHeaders = new HeaderDictionary
         {
-            { AcceptLanguageHeader, Language }
+            { AcceptLanguageHeader, Language },
+            { SessionIdHeader, SessionId },
+            { UniqueIdHeader, UniqueId }
         };
 
         var httpRequestMock = new Mock<HttpRequest>();
@@ -54,6 +59,7 @@ public class ApplicationContextTests
     public void Constructor_PropertiesShouldNotBeNull()
     {
         Assert.NotNull( _applicationContext.TraceId);
+        Assert.NotNull(_applicationContext.UniqueId);
         Assert.NotNull(_applicationContext.SessionId);
         Assert.NotNull(_applicationContext.UserName);
         Assert.NotNull(_applicationContext.UserIp);
@@ -64,6 +70,7 @@ public class ApplicationContextTests
     public void Constructor_PropertiesShouldEqualsWithInputs()
     {
         Assert.Equal(TraceId, _applicationContext.TraceId);
+        Assert.Equal(UniqueId, _applicationContext.UniqueId);
         Assert.Equal(SessionId, _applicationContext.SessionId);
         Assert.Equal(UserName, _applicationContext.UserName);
         Assert.Equal(UserIp, _applicationContext.UserIp);
