@@ -8,12 +8,10 @@ public class Role<TRoleKey> : IdentityRole<TRoleKey>, IAuditEntity<TRoleKey> whe
     public virtual List<IdentityRoleClaim<TRoleKey>> Claims { get; set; } = new();
 
     public virtual string CreatedBy { get; set; }
-    public virtual string CreatedByIp { get; set; }
     public virtual DateTime CreatedAt { get; set; }
+
     public virtual string LastUpdatedBy { get; set; }
-    public virtual string LastUpdatedByIp { get; set; }
     public virtual DateTime LastUpdatedAt { get; set; }
-    public virtual IApplicationContext Context { get; set; }
 
     public Role()
     {

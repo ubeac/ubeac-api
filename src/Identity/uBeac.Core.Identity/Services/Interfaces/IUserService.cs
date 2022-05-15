@@ -11,6 +11,7 @@ public interface IUserService<TKey, TUser> : IService
     Task<TUser> Register(string username, string email, string password, CancellationToken cancellationToken = default);
     Task<SignInResult<TKey>> Authenticate(string username, string password, CancellationToken cancellationToken = default);
     Task<TKey> GetCurrentUserId(CancellationToken cancellationToken = default);
+    Task ChangePassword(TUser user, string newPassword, CancellationToken cancellationToken = default);
     Task ChangePassword(ChangePassword<TKey> changePassword, CancellationToken cancellationToken = default);
     Task ForgotPassword(string username, CancellationToken cancellationToken = default);
     Task ResetPassword(string username, string token, string newPassword, CancellationToken cancellationToken = default);

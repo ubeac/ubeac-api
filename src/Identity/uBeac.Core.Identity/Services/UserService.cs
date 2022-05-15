@@ -83,6 +83,14 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         return string.IsNullOrEmpty(userId) ? default : Task.FromResult(userId.GetTypedKey<TUserKey>());
     }
 
+    public async Task ChangePassword(TUser user, string newPassword, CancellationToken cancellationToken = default)
+    {
+        var token = await UserManager.GeneratePasswordResetTokenAsync(user);
+        var result = await UserManager.ResetPasswordAsync(user, token, newPassword);
+
+        result.ThrowIfInvalid();
+    }
+
     public async Task<IEnumerable<Claim>> GetClaims(TUser user, CancellationToken cancellationToken = default)
     {
         var claims = new List<Claim>
