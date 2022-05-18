@@ -7,7 +7,15 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 		<Description>Easily implement logging with MongoDB in your .NET projects!</Description>
+		<PackageIcon>ubeac-logo.jpg</PackageIcon>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Include="..\..\..\ubeac-logo.jpg">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Serilog.Sinks.MongoDB" Version="5.1.1" />
