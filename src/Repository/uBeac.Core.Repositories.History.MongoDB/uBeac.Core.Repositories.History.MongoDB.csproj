@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<PackageId>uBeac.Repositories.History.MongoDB</PackageId>
@@ -8,6 +8,7 @@
 		<Nullable>disable</Nullable>
 		<PackageIcon>ubeac-logo.jpg</PackageIcon>
 		<Description>Easily implement history management with MongoDB in your .NET projects!</Description>
+		<PackageProjectUrl>https://github.com/ubeac/ubeac-api</PackageProjectUrl>
 	</PropertyGroup>
 
 	<ItemGroup>

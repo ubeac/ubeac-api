@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	
+
 	<PropertyGroup>
 		<PackageId>uBeac.Configuration</PackageId>
 		<Authors>uBeac</Authors>
@@ -8,13 +8,14 @@
 		<Nullable>enable</Nullable>
 		<Description>An attractive solution for your JSON configuration files!</Description>
 		<PackageIcon>ubeac-logo.jpg</PackageIcon>
+		<PackageProjectUrl>https://github.com/ubeac/ubeac-api</PackageProjectUrl>
 	</PropertyGroup>
-	
+
 	<ItemGroup>
-	  <None Include="..\..\..\ubeac-logo.jpg">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
+		<None Include="..\..\..\ubeac-logo.jpg">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 	</ItemGroup>
 
 	<ItemGroup>

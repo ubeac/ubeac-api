@@ -8,6 +8,7 @@
 		<Nullable>enable</Nullable>
 		<PackageIcon>ubeac-logo.jpg</PackageIcon>
 		<Description>Contains abstractions for your repository layer!</Description>
+		<PackageProjectUrl>https://github.com/ubeac/ubeac-api</PackageProjectUrl>
 	</PropertyGroup>
 
 	<ItemGroup>

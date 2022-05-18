@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<PackageId>uBeac.Logging.MongoDB</PackageId>
@@ -8,13 +8,14 @@
 		<Nullable>disable</Nullable>
 		<Description>Easily implement logging with MongoDB in your .NET projects!</Description>
 		<PackageIcon>ubeac-logo.jpg</PackageIcon>
+		<PackageProjectUrl>https://github.com/ubeac/ubeac-api</PackageProjectUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Include="..\..\..\ubeac-logo.jpg">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
+		<None Include="..\..\..\ubeac-logo.jpg">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 	</ItemGroup>
 
 	<ItemGroup>

@@ -8,6 +8,7 @@
 		<Nullable>disable</Nullable>
 		<PackageIcon>ubeac-logo.jpg</PackageIcon>
 		<Description>Repository implementation in MongoDB</Description>
+		<PackageProjectUrl>https://github.com/ubeac/ubeac-api</PackageProjectUrl>
 	</PropertyGroup>
 
 	<ItemGroup>

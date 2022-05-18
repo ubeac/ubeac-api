@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<PackageId>uBeac.Web.Swagger</PackageId>
@@ -8,6 +8,7 @@
 		<Nullable>enable</Nullable>
 		<PackageIcon>ubeac-logo.jpg</PackageIcon>
 		<Description>Contains common configs of Swagger for your web projects!</Description>
+		<PackageProjectUrl>https://github.com/ubeac/ubeac-api</PackageProjectUrl>
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -8,6 +8,7 @@
 		<Nullable>disable</Nullable>
 		<Description>Easily implement logging in your .NET projects!</Description>
 		<PackageIcon>ubeac-logo.jpg</PackageIcon>
+		<PackageProjectUrl>https://github.com/ubeac/ubeac-api</PackageProjectUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
