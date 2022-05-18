@@ -7,6 +7,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<PackageIcon>ubeac-logo.jpg</PackageIcon>
+		<Description>Easily implement identity with MongoDB in your .NET projects!</Description>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -14,15 +15,15 @@
 		<ProjectReference Include="..\uBeac.Core.Identity.Common\uBeac.Core.Identity.Common.csproj" />
 	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Extensions\" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Include="..\..\..\ubeac-logo.jpg">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\..\ubeac-logo.jpg">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 
 </Project>

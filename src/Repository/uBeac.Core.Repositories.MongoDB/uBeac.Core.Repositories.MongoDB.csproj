@@ -7,13 +7,14 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 		<PackageIcon>ubeac-logo.jpg</PackageIcon>
+		<Description>Repository implementation in MongoDB</Description>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Include="..\..\..\ubeac-logo.jpg">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
+		<None Include="..\..\..\ubeac-logo.jpg">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 	</ItemGroup>
 
 	<ItemGroup>

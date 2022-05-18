@@ -6,6 +6,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
+		<Description>Easily implement logging with MongoDB in your .NET projects!</Description>
 	</PropertyGroup>
 
 	<ItemGroup>

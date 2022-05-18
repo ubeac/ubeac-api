@@ -6,7 +6,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
-		<Description>HTTP request/response logging in MongoDB!</Description>
+		<Description>Easily implement HTTP request/response logging with MongoDB in your .NET projects!</Description>
 	</PropertyGroup>
 
 	<ItemGroup>
