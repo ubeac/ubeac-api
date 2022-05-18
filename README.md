@@ -1,5 +1,6 @@
-<!-- Header | Start -->
 <div align="center">
+  
+  <!-- Header | Start -->
   <img src="./ubeac-logo.jpg" title="uBeac Logo">
   <h3>uBeac .NET Core Packages</h3>
 
@@ -11,5 +12,12 @@
   <p>Develop your .NET projects easier and faster than ever with uBeac packages ❗</p>
   <p>We make the world more beautiful for programmers 😀♥️</p>
   <hr>
-</div> 
 <!-- Header | End -->
+
+<!-- Stats | Start -->
+  <h3>Activity / Stats</h3>
+  
+  ![uBeac GitHub Activity](https://repobeats.axiom.co/api/embed/7da8cef096a443c088598274e14d8297c0abb6ab.svg "uBeac GitHub Activity")
+<!-- Status | End -->
+  
+</div> 
