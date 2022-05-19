@@ -18,12 +18,12 @@
   <h3>Packages</h3>
   <div align="left">
  
-   - [Common](https://github.com/ubeac/ubeac-api/tree/main/src/Common): uBeac.Common packages contains useful modules and extensions in .NET projects!
-   - [Identity](https://github.com/ubeac/ubeac-api/tree/main/src/Identity): Using uBeac.Identity packages easily implement identity management (authentication / authorization) in your .NET projects!
-   - [Logging](https://github.com/ubeac/ubeac-api/tree/main/src/Logging): Using uBeac.Logging packages easily implement logging in your .NET projects!
-   - [Repository](https://github.com/ubeac/ubeac-api/tree/main/src/Repository): Using uBeac.Repository packages easily implement repository layers in your .NET projects!
-   - [Service](https://github.com/ubeac/ubeac-api/tree/main/src/Service): Using uBeac.Service packages easily implement service layers in your .NET projects!
-   - [Web](https://github.com/ubeac/ubeac-api/tree/main/src/Web): uBeac.Web packages contains useful modules and extensions in ASP.NET Core projects!
+   - [Common](https://github.com/ubeac/ubeac-api/tree/main/src/Common): uBeac.Common packages contains useful modules and extensions in .NET projects
+   - [Identity](https://github.com/ubeac/ubeac-api/tree/main/src/Identity): Using uBeac.Identity packages easily implement identity management (authentication / authorization) in your .NET projects
+   - [Logging](https://github.com/ubeac/ubeac-api/tree/main/src/Logging): Using uBeac.Logging packages easily implement logging in your .NET projects
+   - [Repository](https://github.com/ubeac/ubeac-api/tree/main/src/Repository): Using uBeac.Repository packages easily implement repository layers in your .NET projects
+   - [Service](https://github.com/ubeac/ubeac-api/tree/main/src/Service): Using uBeac.Service packages easily implement service layers in your .NET projects
+   - [Web](https://github.com/ubeac/ubeac-api/tree/main/src/Web): uBeac.Web packages contains useful modules and extensions in ASP.NET Core projects
 
   </div>
   <hr>
