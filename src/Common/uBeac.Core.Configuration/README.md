@@ -23,3 +23,10 @@ Just put the following code in Program.cs:
 builder.Configuration.AddJsonConfig(builder.Environment, "YourConfigFolderName");
 ```
 > ``"YourConfigFolderName"`` is the name of the folder in which your JSON files are located. Default is ``"Config"``.
+
+For example:
+- Config
+  - connection-strings.json
+  - authentication.json
+  - smtp.json
+> In this example, folder name is ``Config`` which contains JSON files
