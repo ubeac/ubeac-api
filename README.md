@@ -17,7 +17,9 @@
   <!-- Packages | Start -->
   <h3>Packages</h3>
   <div align="left">
- 
+    Each of our packages is based on a real need in the world of software development.
+    Some of our packages have no dependency on other packages except packages that are an implementation of an abstraction (For example, in repository packages we have an abstraction and several implementations, one of which is MongoDB, So you can use implementations and speed up your development or implement them yourself if needed.)
+    
    - [Common](https://github.com/ubeac/ubeac-api/tree/main/src/Common): uBeac.Common packages contains useful modules and extensions in .NET projects
    - [Identity](https://github.com/ubeac/ubeac-api/tree/main/src/Identity): Using uBeac.Identity packages easily implement identity management (authentication / authorization) in your .NET projects
    - [Logging](https://github.com/ubeac/ubeac-api/tree/main/src/Logging): Using uBeac.Logging packages easily implement logging in your .NET projects
