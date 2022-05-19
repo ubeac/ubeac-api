@@ -29,4 +29,6 @@ For example:
   - connection-strings.json
   - authentication.json
   - smtp.json
-> In this example, folder name is ``Config`` which contains JSON files
+> In this example, folder name is ``Config`` which contains JSON files.
+
+> The ``Config`` folder must be at the root of the project.
