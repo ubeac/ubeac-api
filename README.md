@@ -20,12 +20,12 @@
     Each of our packages is based on a real need in the world of software development.
     Some of our packages have no dependency on other packages except packages that are an implementation of an abstraction (For example, in repository packages we have an abstraction and several implementations, one of which is MongoDB, So you can use implementations and speed up your development or implement them yourself if needed.)
     
-   - [Common](https://github.com/ubeac/ubeac-api/tree/main/src/Common): uBeac.Common packages contains useful modules and extensions in .NET projects
-   - [Identity](https://github.com/ubeac/ubeac-api/tree/main/src/Identity): Using uBeac.Identity packages easily implement identity management (authentication / authorization) in your .NET projects
-   - [Logging](https://github.com/ubeac/ubeac-api/tree/main/src/Logging): Using uBeac.Logging packages easily implement logging in your .NET projects
-   - [Repository](https://github.com/ubeac/ubeac-api/tree/main/src/Repository): Using uBeac.Repository packages easily implement repository layers in your .NET projects
-   - [Service](https://github.com/ubeac/ubeac-api/tree/main/src/Service): Using uBeac.Service packages easily implement service layers in your .NET projects
-   - [Web](https://github.com/ubeac/ubeac-api/tree/main/src/Web): uBeac.Web packages contains useful modules and extensions in ASP.NET Core projects
+   - [Common](/src/Common): uBeac.Common packages contains useful modules and extensions in .NET projects
+   - [Identity](/src/Identity): Using uBeac.Identity packages easily implement identity management (authentication / authorization) in your .NET projects
+   - [Logging](/src/Logging): Using uBeac.Logging packages easily implement logging in your .NET projects
+   - [Repository](/src/Repository): Using uBeac.Repository packages easily implement repository layers in your .NET projects
+   - [Service](/src/Service): Using uBeac.Service packages easily implement service layers in your .NET projects
+   - [Web](/src/Web): uBeac.Web packages contains useful modules and extensions in ASP.NET Core projects
 
   </div>
   <hr>
