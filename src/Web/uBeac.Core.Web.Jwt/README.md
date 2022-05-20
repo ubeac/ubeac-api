@@ -4,7 +4,7 @@
 ### Start
 Install the package with NuGet:
 ```
-dotnet add package uBeac.Web.JWT
+dotnet add package uBeac.Web.Jwt
 ```
 
 <hr>
