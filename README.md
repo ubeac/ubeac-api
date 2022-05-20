@@ -44,7 +44,6 @@
     *Contains useful modules and extensions in ASP.NET Core*
     
   </div>
-  <hr>
   <!-- Packages | End -->
   
 </div> 
