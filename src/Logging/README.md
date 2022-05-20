@@ -1,5 +1,9 @@
-## Logging Packages
+## Logging
 As you know, logging is one of the most important topics in software development. Therefore, implementing it correctly can help you a lot in the debugging process. At uBeac we have logging packages implemented based on real-world scenarios. You can easily implement an advanced logging system using uBeac packages.
 
-- [uBeac.Web.Logging](uBeac.Core.Web.Logging): Using this package you can implement HTTP request/response logging.
-- [uBeac.Web.Logging.MongoDB](uBeac.Core.Web.Logging.MongoDB): Using this package you can store HTTP request/response logs in MongoDB.
+<hr>
+
+- [uBeac.Web.Logging](uBeac.Core.Web.Logging)
+  *Provides HTTP request/response logging middleware.*
+- [uBeac.Web.Logging.MongoDB](uBeac.Core.Web.Logging.MongoDB)
+  *Provides MongoDB repository for storing HTTP request/response logs.*
