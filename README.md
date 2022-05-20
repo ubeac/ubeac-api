@@ -41,7 +41,7 @@
    - [Service](/src/Service)
     *Simple and practical service pattern implementation.*
    - [Web](/src/Web)
-    *Contains useful modules and extensions in ASP.NET Core*
+    *Contains useful modules and extensions in ASP.NET Core.*
     
   </div>
   <!-- Packages | End -->
