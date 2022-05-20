@@ -47,10 +47,4 @@
   <hr>
   <!-- Packages | End -->
   
-  <!-- Stats | Start -->
-  <h3>Activity / Stats</h3>
-  
-  ![uBeac GitHub Activity](https://repobeats.axiom.co/api/embed/7da8cef096a443c088598274e14d8297c0abb6ab.svg "uBeac GitHub Activity")
-  <!-- Status | End -->
-  
 </div> 
