@@ -31,4 +31,4 @@ And register it in dependency container:
 builder.Services.AddScoped<IHttpLoggingRepository, HttpLoggingRepository>();
 ```
 Or you can use the following packages:
-- [uBeac.Web.Logging.MongoDB](./uBeac.Core.Web.Logging.MongoDB): For storing in MongoDB
+- [uBeac.Web.Logging.MongoDB](../uBeac.Core.Web.Logging.MongoDB): For storing in MongoDB
