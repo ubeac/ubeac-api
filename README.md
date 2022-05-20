@@ -16,27 +16,33 @@
   <hr>
   <!-- Header | End -->
   
+  <!-- About us | Start -->
   <h3>Let us know more</h3>
   <div align="left">
     We try to speed up the development of .NET projects by providing different packages and get the things we need done in the shortest possible time.
     Our way of thinking is that each module, if implemented properly, can be used in most projects in most different ways, so we write once and use it everywhere.
-    
+    Each of our packages is based on a real need in the world of software development.
   </div>
   <hr>
+  <!-- About us | End --
   
   <!-- Packages | Start -->
-  <h3>Packages</h3>
-  <div align="left">
-    Each of our packages is based on a real need in the world of software development.
-    Some of our packages have no dependency on other packages except packages that are an implementation of an abstraction (For example, in repository packages we have an abstraction and several implementations, one of which is MongoDB, So you can use implementations and speed up your development or implement them yourself if needed.)
+  <h3>What packages do we have?</h3>
+  <div align="left">    
     
-   - [Common](/src/Common): uBeac.Common packages contains useful modules and extensions in .NET projects
-   - [Identity](/src/Identity): Using uBeac.Identity packages easily implement identity management (authentication / authorization) in your .NET projects
-   - [Logging](/src/Logging): Using uBeac.Logging packages easily implement logging in your .NET projects
-   - [Repository](/src/Repository): Using uBeac.Repository packages easily implement repository layers in your .NET projects
-   - [Service](/src/Service): Using uBeac.Service packages easily implement service layers in your .NET projects
-   - [Web](/src/Web): uBeac.Web packages contains useful modules and extensions in ASP.NET Core projects
-
+   - [Common](/src/Common)
+    *Contains useful modules and extensions.*
+   - [Identity](/src/Identity)
+    *Simple and practical identity management implementation.*
+   - [Logging](/src/Logging)
+    *Simple and practical logging implementation.*
+   - [Repository](/src/Repository)
+    *Simple and practical repository pattern implementation.*
+   - [Service](/src/Service)
+    *Simple and practical service pattern implementation.*
+   - [Web](/src/Web)
+    *Contains useful modules and extensions in ASP.NET Core*
+    
   </div>
   <hr>
   <!-- Packages | End -->
