@@ -33,13 +33,13 @@
    - [Common](/src/Common)
     *Contains useful modules and extensions.*
    - [Identity](/src/Identity)
-    *Simple and practical identity management implementation.*
+    *Easy-to-use identity management implementation based-on real-world scenarios.*
    - [Logging](/src/Logging)
-    *Simple and practical logging implementation.*
+    *Easy-to-use logging implementation based-on real-world scenarios.*
    - [Repository](/src/Repository)
-    *Simple and practical repository pattern implementation.*
+    *Easy-to-use repository pattern implementation based-on real-world scenarios.*
    - [Service](/src/Service)
-    *Simple and practical service pattern implementation.*
+    *Easy-to-use service pattern implementation based-on real-world scenarios.*
    - [Web](/src/Web)
     *Contains useful modules and extensions in ASP.NET Core.*
     
