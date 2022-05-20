@@ -16,6 +16,14 @@
   <hr>
   <!-- Header | End -->
   
+  <h3>Let us know more</h3>
+  <div align="left">
+    We try to speed up the development of .NET projects by providing different packages and get the things we need done in the shortest possible time.
+    Our way of thinking is that each module, if implemented properly, can be used in most projects in most different ways, so we write once and use it everywhere.
+    
+  </div>
+  <hr>
+  
   <!-- Packages | Start -->
   <h3>Packages</h3>
   <div align="left">
