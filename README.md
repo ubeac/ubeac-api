@@ -17,7 +17,7 @@
   <!-- Header | End -->
   
   <!-- About us | Start -->
-  <h3>Let us know more</h3>
+  <h3>Let us know</h3>
   <div align="left">
     We try to speed up the development of .NET projects by providing different packages and get the things we need done in the shortest possible time.
     Our way of thinking is that each module, if implemented properly, can be used in most projects in most different ways, so we write once and use it everywhere.
@@ -27,7 +27,7 @@
   <!-- About us | End --
   
   <!-- Packages | Start -->
-  <h3>What packages do we have?</h3>
+  <h3>Get started</h3>
   <div align="left">    
     
    - [Common](/src/Common)
