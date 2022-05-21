@@ -52,8 +52,9 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
 
     public virtual async Task<SignInResult<TUserKey>> Authenticate(string username, string password, CancellationToken cancellationToken = default)
     {
-        var user = await UserManager.FindByNameAsync(username);
+        cancellationToken.ThrowIfCancellationRequested();
 
+        var user = await UserManager.FindByNameAsync(username);
         // Validate user password
         if (user is null || !await UserManager.CheckPasswordAsync(user, password)) throw new Exception("User doesn't exist or username/password is not valid!");
 
@@ -81,6 +82,8 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
 
     public virtual Task<TUserKey> GetCurrentUserId(CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+        
         if (Accessor.HttpContext == null) return default;
 
         var userId = UserManager.GetUserId(Accessor.HttpContext.User);
@@ -89,6 +92,8 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
 
     public async Task ChangePassword(TUser user, string newPassword, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         var token = await UserManager.GeneratePasswordResetTokenAsync(user);
         var result = await UserManager.ResetPasswordAsync(user, token, newPassword);
 
