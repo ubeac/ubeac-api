@@ -11,6 +11,7 @@ namespace uBeac.Identity;
 public partial class UserServiceTests
 {
     private readonly Guid _testUserId;
+    private readonly Guid _incorrectTestUserId;
     private readonly string _testUserName;
     private readonly string _incorrectTestUserName;
     private readonly string _testPassword;
@@ -34,12 +35,14 @@ public partial class UserServiceTests
     private readonly Mock<ITokenService<User>> _tokenServiceMock;
     private readonly Mock<IUserTokenRepository> _userTokenRepositoryMock;
     private readonly Mock<IHttpContextAccessor> _httpContextAccessorMock;
+    private readonly Mock<IApplicationContext> _applicationContextMock;
 
     private readonly IUserService<User> _userService;
 
     public UserServiceTests()
     {
         _testUserId = Guid.NewGuid();
+        _incorrectTestUserId = Guid.NewGuid();
         _testUserName = "TestUserName";
         _incorrectTestUserName = "IncorrectTestUserName";
         _testUser = new User(_testUserName) { Id = _testUserId, Roles = new List<string> { "USER" } };
@@ -64,8 +67,12 @@ public partial class UserServiceTests
         var userStoreMock = new Mock<IUserStore<User>>();
 
         _userManagerMock = new Mock<UserManager<User>>(userStoreMock.Object, null, null, null, null, null, null, null, null);
+        _userManagerMock.Setup(userManager => userManager.FindByIdAsync(_testUserId.ToString())).ReturnsAsync(_testUser);
+        _userManagerMock.Setup(userManager => userManager.FindByIdAsync(_negativeTestUserId.ToString())).ReturnsAsync(_negativeTestUser);
+        _userManagerMock.Setup(userManager => userManager.FindByIdAsync(_incorrectTestUserId.ToString())).ReturnsAsync(() => null);
         _userManagerMock.Setup(userManager => userManager.FindByNameAsync(_testUserName)).ReturnsAsync(_testUser);
         _userManagerMock.Setup(userManager => userManager.FindByNameAsync(_negativeTestUserName)).ReturnsAsync(_negativeTestUser);
+        _userManagerMock.Setup(userManager => userManager.FindByNameAsync(_incorrectTestUserName)).ReturnsAsync(() => null);
         _userManagerMock.Setup(userManager => userManager.GetUserId(_testClaimsPrincipal)).Returns(_testUserId.ToString);
         _userManagerMock.Setup(userManager => userManager.GetUserId(null)).Returns(() => null);
         _userManagerMock.Setup(userManager => userManager.CreateAsync(It.Is<User>(user => user.UserName == _testUserName), _testPassword)).ReturnsAsync(IdentityResult.Success);
@@ -81,6 +88,10 @@ public partial class UserServiceTests
         _userManagerMock.Setup(userManager => userManager.GeneratePasswordResetTokenAsync(_negativeTestUser)).ReturnsAsync(_testResetPasswordToken);
         _userManagerMock.Setup(userManager => userManager.ResetPasswordAsync(_testUser, _testResetPasswordToken, _testPassword)).ReturnsAsync(IdentityResult.Success);
         _userManagerMock.Setup(userManager => userManager.ResetPasswordAsync(_negativeTestUser, _testResetPasswordToken, _testPassword)).ReturnsAsync(IdentityResult.Failed());
+        _userManagerMock.Setup(userManager => userManager.DeleteAsync(_testUser)).ReturnsAsync(IdentityResult.Success);
+        _userManagerMock.Setup(userManager => userManager.DeleteAsync(_negativeTestUser)).ReturnsAsync(IdentityResult.Failed());
+        _userManagerMock.Setup(userManager => userManager.ResetAuthenticatorKeyAsync(_testUser)).ReturnsAsync(IdentityResult.Success);
+        _userManagerMock.Setup(userManager => userManager.ResetAuthenticatorKeyAsync(_negativeTestUser)).ReturnsAsync(IdentityResult.Failed());
 
         _tokenServiceMock = new Mock<ITokenService<User>>();
         _tokenServiceMock.Setup(tokenService => tokenService.Generate(_testUser)).ReturnsAsync(_testTokenResult);
@@ -89,10 +100,10 @@ public partial class UserServiceTests
         _userTokenRepositoryMock = new Mock<IUserTokenRepository>();
 
         var emailProviderMock = new Mock<IEmailProvider>();
-        var appContextMock = new Mock<IApplicationContext>();
+        _applicationContextMock = new Mock<IApplicationContext>();
 
         _httpContextAccessorMock = new Mock<IHttpContextAccessor>();
 
-        _userService = new UserService<User>(_userManagerMock.Object, _tokenServiceMock.Object, _userTokenRepositoryMock.Object, emailProviderMock.Object, appContextMock.Object, _httpContextAccessorMock.Object);
+        _userService = new UserService<User>(_userManagerMock.Object, _tokenServiceMock.Object, _userTokenRepositoryMock.Object, emailProviderMock.Object, _applicationContextMock.Object, _httpContextAccessorMock.Object);
     }
 }

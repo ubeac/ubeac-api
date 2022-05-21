@@ -108,7 +108,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
             new(ClaimTypes.Name, user.NormalizedUserName)
         };
         if (!string.IsNullOrWhiteSpace(user.NormalizedEmail)) claims.Add(new Claim(ClaimTypes.Email, user.NormalizedEmail));
-        if (!string.IsNullOrWhiteSpace(user.PhoneNumber)) claims.Add(new Claim(ClaimTypes.Email, user.PhoneNumber));
+        if (!string.IsNullOrWhiteSpace(user.PhoneNumber)) claims.Add(new Claim(ClaimTypes.MobilePhone, user.PhoneNumber));
 
         var userRoles = await UserManager.GetRolesAsync(user);
         var userRoleClaims = userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole));
@@ -119,17 +119,22 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
 
     public virtual async Task Update(TUser entity, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         await UserManager.UpdateAsync(entity);
     }
 
     public async Task<bool> ExistsUserName(string userName, CancellationToken cancellationToken = default)
     {
-        userName = userName.ToUpperInvariant();
+        cancellationToken.ThrowIfCancellationRequested();
+
         return await UserManager.FindByNameAsync(userName) != null;
     }
 
     public virtual async Task<bool> Delete(TUserKey id, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         var user = await UserManager.FindByIdAsync(id.ToString());
         if (user is null) throw new Exception("User doesn't exist!");
 
@@ -147,6 +152,8 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
 
     public virtual Task<TUser> GetById(TUserKey id, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         return UserManager.FindByIdAsync(id.ToString());
     }
 
@@ -169,6 +176,8 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
 
     public virtual async Task ForgotPassword(string username, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         var user = await UserManager.FindByNameAsync(username);
         if (user == null) throw new Exception("User does not exist!");
 
@@ -187,6 +196,8 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
 
     public virtual async Task ResetPassword(string username, string token, string newPassword, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         var user = await UserManager.FindByNameAsync(username);
         if (user == null) throw new Exception("User does not exist!");
 
@@ -201,12 +212,13 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
 
     public virtual async Task RevokeTokens(TUserKey id, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         var user = await UserManager.FindByIdAsync(id.ToString());
-        if (user == null) return;
+        if (user == null) throw new Exception("User does not exist!");
 
         var identityResult = await UserManager.ResetAuthenticatorKeyAsync(user);
         identityResult.ThrowIfInvalid();
-
     }
 
     public virtual async Task<SignInResult<TUserKey>> RefreshToken(string refreshToken, string expiredToken, CancellationToken cancellationToken = default)
