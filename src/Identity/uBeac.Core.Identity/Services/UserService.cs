@@ -31,18 +31,22 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
 
     public virtual async Task Create(TUser user, string password, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         var identityResult = await UserManager.CreateAsync(user, password);
         identityResult.ThrowIfInvalid();
     }
 
     public virtual async Task<TUser> Register(string username, string email, string password, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         var user = Activator.CreateInstance<TUser>();
         user.UserName = username;
         user.Email = email;
         user.EmailConfirmed = false;
         user.PhoneNumberConfirmed = false;
         await Create(user, password, cancellationToken);
+
         return user;
     }
 
