@@ -19,7 +19,7 @@ public partial class RoleServiceTests
     [Fact]
     public async Task Create_IfIdentityResultIsFailed_ThrowsException()
     {
-        await Assert.ThrowsAsync<Exception>(async () => await _roleService.Create(_spuriosTestRole, _validToken));
+        await Assert.ThrowsAsync<Exception>(async () => await _roleService.Create(_negativeTestRole, _validToken));
     }
 
     [Fact]

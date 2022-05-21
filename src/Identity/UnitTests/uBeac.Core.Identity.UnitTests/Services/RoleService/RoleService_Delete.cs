@@ -27,7 +27,7 @@ public partial class RoleServiceTests
     [Fact]
     public async Task Delete_IfIdentityResultIsFailed_ThrowsException()
     {
-        await Assert.ThrowsAsync<Exception>(async () => await _roleService.Delete(_spuriousTestRoleId, _validToken));
+        await Assert.ThrowsAsync<Exception>(async () => await _roleService.Delete(_negativeTestRoleId, _validToken));
     }
 
     [Fact]

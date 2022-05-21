@@ -18,7 +18,7 @@ public partial class UserServiceTests
     [Fact]
     public async Task Create_IfIdentityResultIsFailed_ThrowsException()
     {
-        await Assert.ThrowsAsync<Exception>(async () => await _userService.Create(_spuriosTestUser, _testPassword, _validToken));
+        await Assert.ThrowsAsync<Exception>(async () => await _userService.Create(_negativeTestUser, _testPassword, _validToken));
     }
 
     [Fact]

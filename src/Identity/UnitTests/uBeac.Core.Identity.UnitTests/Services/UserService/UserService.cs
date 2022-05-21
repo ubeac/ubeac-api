@@ -10,13 +10,15 @@ public partial class UserServiceTests
 {
     private readonly Guid _testUserId;
     private readonly string _testUserName;
-    private readonly User _testUser;
     private readonly string _testPassword;
+    private readonly User _testUser;
 
-    private readonly User _spuriosTestUser;
+    private readonly Guid _negativeTestUserId;
+    private readonly string _negativeTestUserName;
+    private readonly User _negativeTestUser;
 
     private readonly CancellationToken _validToken = CancellationToken.None;
-    private readonly CancellationToken _canceledToken = new CancellationToken(true);
+    private readonly CancellationToken _canceledToken = new(true);
 
     private readonly Mock<UserManager<User>> _userManagerMock;
     private readonly Mock<ITokenService<User>> _tokenServiceMock;
@@ -31,13 +33,17 @@ public partial class UserServiceTests
         _testUser = new User(_testUserName) { Id = _testUserId };
         _testPassword = "1qaz!QAZ";
 
-        _spuriosTestUser = new User("UserName") { Id = Guid.NewGuid() };
+        _negativeTestUserId = Guid.NewGuid();
+        _negativeTestUserName = "NegativeTestUserName";
+        _negativeTestUser = new User(_negativeTestUserName) { Id = _negativeTestUserId };
 
         var userStoreMock = new Mock<IUserStore<User>>();
 
         _userManagerMock = new Mock<UserManager<User>>(userStoreMock.Object, null, null, null, null, null, null, null, null);
+        _userManagerMock.Setup(userManager => userManager.CreateAsync(It.Is<User>(user => user.UserName == _testUserName), _testPassword)).ReturnsAsync(IdentityResult.Success);
         _userManagerMock.Setup(userManager => userManager.CreateAsync(_testUser, _testPassword)).ReturnsAsync(IdentityResult.Success);
-        _userManagerMock.Setup(userManager => userManager.CreateAsync(_spuriosTestUser, _testPassword)).ReturnsAsync(IdentityResult.Failed());
+        _userManagerMock.Setup(userManager => userManager.CreateAsync(_negativeTestUser, _testPassword)).ReturnsAsync(IdentityResult.Failed());
+        _userManagerMock.Setup(userManager => userManager.CreateAsync(It.Is<User>(user => user.UserName == _negativeTestUserName), _testPassword)).ReturnsAsync(IdentityResult.Failed());
 
         _tokenServiceMock = new Mock<ITokenService<User>>();
 

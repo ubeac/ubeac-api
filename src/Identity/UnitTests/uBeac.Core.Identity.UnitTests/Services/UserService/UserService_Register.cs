@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Moq;
 using Xunit;
 
@@ -11,19 +10,15 @@ public partial class UserServiceTests
     [Fact]
     public async Task Register_ShouldCallsCreateMethodOfUserManager()
     {
-        _userManagerMock.Setup(userManager => userManager.CreateAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
-
         await _userService.Register(_testUserName, null, _testPassword, _validToken);
 
-        _userManagerMock.Verify(userManager => userManager.CreateAsync(It.IsAny<User>(), It.IsAny<string>()), Times.Once);
+        _userManagerMock.Verify(userManager => userManager.CreateAsync(It.Is<User>(user => user.UserName == _testUserName), _testPassword), Times.Once);
     }
 
     [Fact]
     public async Task Register_IfIdentityResultIsFailed_ThrowsException()
     {
-        _userManagerMock.Setup(userManager => userManager.CreateAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Failed());
-
-        await Assert.ThrowsAsync<Exception>(async () => await _userService.Register(_testUserName, null, _testPassword, _validToken));
+        await Assert.ThrowsAsync<Exception>(async () => await _userService.Register(_negativeTestUserName, null, _testPassword, _validToken));
     }
 
     [Fact]
@@ -31,6 +26,6 @@ public partial class UserServiceTests
     {
         await Assert.ThrowsAsync<OperationCanceledException>(async () => await _userService.Register(_testUserName, null, _testPassword, _canceledToken));
 
-        _userManagerMock.Verify(userManager => userManager.CreateAsync(It.IsAny<User>(), It.IsAny<string>()), Times.Never);
+        _userManagerMock.Verify(userManager => userManager.CreateAsync(It.Is<User>(user => user.UserName == _testUserName), It.IsAny<string>()), Times.Never);
     }
 }

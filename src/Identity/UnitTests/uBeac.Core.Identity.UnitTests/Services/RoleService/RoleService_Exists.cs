@@ -25,7 +25,7 @@ public partial class RoleServiceTests
     [Fact]
     public async Task Exists_ReturnsFalse()
     {
-        var result = await _roleService.Exists(_spuriousTestRoleName, _validToken);
+        var result = await _roleService.Exists(_negativeTestRoleName, _validToken);
 
         Assert.False(result);
     }
