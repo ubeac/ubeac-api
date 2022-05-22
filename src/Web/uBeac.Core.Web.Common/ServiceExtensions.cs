@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using uBeac;
 using uBeac.Web;
 
@@ -36,6 +37,21 @@ public static class ServiceExtensions
         services.AddCors(options =>
         {
             options.AddPolicy(corsPolicy.Name, corsPolicy);
+        });
+
+        return services;
+    }
+
+    public static IServiceCollection AddHttpsPolicy(this IServiceCollection services, IConfigurationSection configurationSection)
+    {
+        var hsts = configurationSection.Get<HstsOptions>();
+
+        services.AddHsts(options =>
+        {
+            options.Preload = hsts.Preload;
+            options.IncludeSubDomains = hsts.IncludeSubDomains;
+            options.MaxAge = TimeSpan.FromDays(hsts.MaxAge);
+            foreach (var host in hsts.ExcludedHosts) options.ExcludedHosts.Add(host);
         });
 
         return services;
