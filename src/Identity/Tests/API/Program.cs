@@ -43,6 +43,9 @@ builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
 builder.Services.AddHistory<MongoDBHistoryRepository>().For<User>().Register();
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("History"));
 
+// Adding CORS
+var corsPolicyOptions = builder.Configuration.GetSection("CorsPolicy");
+builder.Services.AddCorsPolicy(corsPolicyOptions);
 
 // Adding email provider
 builder.Services.AddEmailProvider(builder.Configuration);
@@ -99,6 +102,9 @@ builder.Services
     });
 
 var app = builder.Build();
+
+app.UseCorsPolicy(corsPolicyOptions);
+
 app.UseHttpsRedirection();
 app.UseDefaultFiles();
 app.UseStaticFiles();
