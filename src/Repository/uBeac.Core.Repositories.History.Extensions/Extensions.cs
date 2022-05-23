@@ -6,10 +6,11 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class HistoryExtensions
 {
-    public static HistoryBuilder AddHistory<THistoryRepository>(this IServiceCollection services) where THistoryRepository : class, IHistoryRepository
+    public static IHistoryBuilder AddHistory<THistoryRepository>(this IServiceCollection services) where THistoryRepository : class, IHistoryRepository
     {
-        services.TryAddScoped<HistoryFactory>();
+        services.TryAddScoped<IHistoryManager, HistoryManager>();
         services.TryAddScoped<THistoryRepository>();
+
         return new HistoryBuilder(services, typeof(THistoryRepository));
     }
 }

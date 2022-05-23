@@ -9,7 +9,7 @@ public class MongoUserRepository<TUserKey, TUser, TContext> : MongoEntityReposit
     where TUser : User<TUserKey>
     where TContext : IMongoDBContext
 {
-    public MongoUserRepository(TContext mongoDbContext, IApplicationContext appContext, HistoryFactory historyFactory) : base(mongoDbContext, appContext, historyFactory)
+    public MongoUserRepository(TContext mongoDbContext, IApplicationContext appContext, IHistoryManager historyManager) : base(mongoDbContext, appContext, historyManager)
     {
         // Create Indexes
         try
@@ -30,7 +30,7 @@ public class MongoUserRepository<TUser, TContext> : MongoUserRepository<Guid, TU
     where TUser : User
     where TContext : IMongoDBContext
 {
-    public MongoUserRepository(TContext mongoDbContext, IApplicationContext appContext, HistoryFactory historyFactory) : base(mongoDbContext, appContext, historyFactory)
+    public MongoUserRepository(TContext mongoDbContext, IApplicationContext appContext, IHistoryManager historyManager) : base(mongoDbContext, appContext, historyManager)
     {
     }
 }

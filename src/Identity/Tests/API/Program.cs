@@ -43,7 +43,6 @@ builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
 builder.Services.AddHistory<MongoDBHistoryRepository>().For<User>().Register();
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("History"));
 
-
 // Adding email provider
 builder.Services.AddEmailProvider(builder.Configuration);
 

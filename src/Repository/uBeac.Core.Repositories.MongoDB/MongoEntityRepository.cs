@@ -15,16 +15,16 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
     protected readonly IMongoDatabase MongoDatabase;
     protected readonly TContext MongoDbContext;
     protected readonly IApplicationContext ApplicationContext;
-    protected readonly HistoryFactory HistoryFactory;
+    protected readonly IHistoryManager HistoryManager;
 
-    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext applicationContext, HistoryFactory historyFactory)
+    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext applicationContext, IHistoryManager historyManager)
     {
         MongoDatabase = mongoDbContext.Database;
         Collection = mongoDbContext.Database.GetCollection<TEntity>(GetCollectionName());
         BsonCollection = mongoDbContext.Database.GetCollection<BsonDocument>(GetCollectionName());
         MongoDbContext = mongoDbContext;
         ApplicationContext = applicationContext;
-        HistoryFactory = historyFactory;
+        HistoryManager = historyManager;
     }
 
     protected virtual string GetCollectionName()
@@ -35,16 +35,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
     protected virtual async Task AddToHistory(TEntity entity, string actionName, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
-
-        var historyRepositories = HistoryFactory.GetRepositories<TEntity>();
-
-        var historyTasks = new List<Task>();
-        foreach (var repository in historyRepositories)
-        {
-            await repository.Add(entity, actionName, cancellationToken);
-        }
-
-        // await Task.WhenAll(historyTasks);
+        await HistoryManager.Write(entity, actionName, cancellationToken);
     }
 
     public virtual async Task Delete(TKey id, string actionName, CancellationToken cancellationToken = default)
@@ -165,7 +156,7 @@ public class MongoEntityRepository<TEntity, TContext> : MongoEntityRepository<Gu
     where TEntity : IEntity
     where TContext : IMongoDBContext
 {
-    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext applicationContext, HistoryFactory historyFactory) : base(mongoDbContext, applicationContext, historyFactory)
+    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext applicationContext, IHistoryManager historyManager) : base(mongoDbContext, applicationContext, historyManager)
     {
     }
 }

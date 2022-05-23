@@ -1,48 +1,49 @@
-﻿namespace Microsoft.Extensions.DependencyInjection;
+﻿using uBeac.Repositories;
 
-public class HistoryBuilder
+namespace Microsoft.Extensions.DependencyInjection;
+
+public interface IHistoryBuilder
 {
-    private readonly IServiceCollection _services;
-    // the key is IEntityHistoryRepository
-    private readonly List<Type> _registeredTypesForHistory;
-    private readonly Type _historyRepositoryType;
+    IHistoryBuilder For<T>();
+    void Register();
+}
 
-    public HistoryBuilder(IServiceCollection services, Type historyRepositoryType)
+public class HistoryBuilder : IHistoryBuilder
+{
+    protected readonly IServiceCollection Services;
+
+    protected readonly Type RepositoryType;
+    protected readonly List<Type> DataTypes;
+
+    public HistoryBuilder(IServiceCollection services, Type repositoryType)
     {
-        _services = services;
-        _registeredTypesForHistory = new List<Type>();
-        _historyRepositoryType = historyRepositoryType;
+        Services = services;
+        DataTypes = new List<Type>();
+        RepositoryType = repositoryType;
     }
 
-    public HistoryBuilder For<T>()
+    public IHistoryBuilder For<T>()
     {
-        _registeredTypesForHistory.Add(typeof(T));
+        DataTypes.Add(typeof(T));
         return this;
     }
 
     public void Register()
     {
-        var registeredTypesForHistory = GetRegisteredTypesForHistory();
-        foreach (var type in _registeredTypesForHistory)
-        {
-            if (!registeredTypesForHistory.ContainsKey(type))
-                registeredTypesForHistory.Add(type, new List<Type>());
-            registeredTypesForHistory[type].Add(_historyRepositoryType);
-        }
+        var typesDictionary = GetTypesDictionary();
+        foreach (var dataType in DataTypes) typesDictionary.AddRepositoryType(dataType, RepositoryType);
     }
 
-    private RegisteredTypesForHistory GetRegisteredTypesForHistory()
+    private IHistoryTypesDictionary GetTypesDictionary()
     {
-        foreach (var item in _services)
+        if (Services.SingleOrDefault(service => service.ServiceType == typeof(IHistoryTypesDictionary))?.ImplementationInstance is IHistoryTypesDictionary registration)
         {
-            if (item.ServiceType == typeof(RegisteredTypesForHistory))
-                return (RegisteredTypesForHistory)item.ImplementationInstance;
+            return registration;
         }
 
-        var newRegistration = new RegisteredTypesForHistory();
-        _services.AddSingleton(newRegistration);
+        var newRegistration = new HistoryTypesDictionary();
+        Services.AddSingleton<IHistoryTypesDictionary>(newRegistration);
 
         return newRegistration;
     }
-
 }
