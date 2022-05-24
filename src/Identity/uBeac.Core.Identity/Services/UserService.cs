@@ -83,7 +83,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
     public virtual Task<TUserKey> GetCurrentUserId(CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        
+
         if (Accessor.HttpContext == null) return default;
 
         var userId = UserManager.GetUserId(Accessor.HttpContext.User);
@@ -157,15 +157,14 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         return UserManager.FindByIdAsync(id.ToString());
     }
 
-    public virtual async Task ChangePassword(ChangePassword<TUserKey> changePassword, CancellationToken cancellationToken = default)
+    public virtual async Task ChangePassword(TUser user, string currentPassword, string newPassword, CancellationToken cancellationToken = default)
     {
-        var user = await GetById(changePassword.UserId, cancellationToken);
+        cancellationToken.ThrowIfCancellationRequested();
 
-        if (changePassword.UserId == null || user == null || !await UserManager.CheckPasswordAsync(user, changePassword.CurrentPassword))
+        if (user == null || !await UserManager.CheckPasswordAsync(user, currentPassword))
             throw new Exception("User doesn't exist or username/password is not valid!");
 
-        var idResult = await UserManager.ChangePasswordAsync(user, changePassword.CurrentPassword, changePassword.NewPassword);
-
+        var idResult = await UserManager.ChangePasswordAsync(user, currentPassword, newPassword);
         idResult.ThrowIfInvalid();
 
         // Update user properties related to password changing

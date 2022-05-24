@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using uBeac.Web;
 
@@ -62,12 +58,8 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
     {
         try
         {
-            await UserService.ChangePassword(new ChangePassword<TUserKey>
-            {
-                UserId = request.UserId,
-                CurrentPassword = request.CurrentPassword,
-                NewPassword = request.NewPassword
-            }, cancellationToken);
+            var user = await UserService.GetById(request.UserId, cancellationToken);
+            await UserService.ChangePassword(user, request.CurrentPassword, request.NewPassword, cancellationToken);
             return true.ToResult();
         }
         catch (Exception ex)

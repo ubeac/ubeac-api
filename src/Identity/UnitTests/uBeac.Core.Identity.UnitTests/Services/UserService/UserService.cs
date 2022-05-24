@@ -92,6 +92,8 @@ public partial class UserServiceTests
         _userManagerMock.Setup(userManager => userManager.DeleteAsync(_negativeTestUser)).ReturnsAsync(IdentityResult.Failed());
         _userManagerMock.Setup(userManager => userManager.ResetAuthenticatorKeyAsync(_testUser)).ReturnsAsync(IdentityResult.Success);
         _userManagerMock.Setup(userManager => userManager.ResetAuthenticatorKeyAsync(_negativeTestUser)).ReturnsAsync(IdentityResult.Failed());
+        _userManagerMock.Setup(userManager => userManager.ChangePasswordAsync(_testUser, _testPassword, _testPassword)).ReturnsAsync(IdentityResult.Success);
+        _userManagerMock.Setup(userManager => userManager.ChangePasswordAsync(_negativeTestUser, _testPassword, _testPassword)).ReturnsAsync(IdentityResult.Failed());
 
         _tokenServiceMock = new Mock<ITokenService<User>>();
         _tokenServiceMock.Setup(tokenService => tokenService.Generate(_testUser)).ReturnsAsync(_testTokenResult);
