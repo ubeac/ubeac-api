@@ -1,5 +1,7 @@
 using System.Reflection;
+using API;
 using Microsoft.AspNetCore.Mvc;
+using uBeac.Interception;
 using uBeac.Repositories.History.MongoDB;
 using uBeac.Repositories.MongoDB;
 using uBeac.Web;
@@ -62,6 +64,9 @@ builder.Services.AddUserRoleService<UserRoleService<User>, User>();
 builder.Services.AddUnitService<UnitService<Unit>, Unit>();
 builder.Services.AddUnitTypeService<UnitTypeService<UnitType>, UnitType>();
 builder.Services.AddUnitRoleService<UnitRoleService<UnitRole>, UnitRole>();
+
+builder.Services.AddScoped<IInterceptor<IUserService<User>>, AccountsControllerInterceptor>();
+builder.Services.Intercept<IUserService<User>>();
 
 // Adding jwt provider
 builder.Services.AddJwtService<User>(builder.Configuration);

@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\uBeac.Core.Common\uBeac.Core.Common.csproj" />
     <ProjectReference Include="..\..\..\Common\uBeac.Core.Configuration\uBeac.Core.Configuration.csproj" />
+    <ProjectReference Include="..\..\..\Interception\uBeac.Core.Interception\uBeac.Core.Interception.csproj" />
     <ProjectReference Include="..\..\..\Logging\uBeac.Core.Web.Logging.MongoDB\uBeac.Core.Web.Logging.MongoDB.csproj" />
     <ProjectReference Include="..\..\..\Repository\uBeac.Core.Repositories.History.MongoDB\uBeac.Core.Repositories.History.MongoDB.csproj" />
     <ProjectReference Include="..\..\..\Logging\uBeac.Core.Logging.MongoDB\uBeac.Core.Logging.MongoDB.csproj" />
