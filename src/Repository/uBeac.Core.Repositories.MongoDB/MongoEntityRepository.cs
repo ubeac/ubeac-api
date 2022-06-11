@@ -68,8 +68,8 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         cancellationToken.ThrowIfCancellationRequested();
 
         var filter = Builders<TEntity>.Filter.Empty;
-        var findResult = await Collection.FindAsync(filter, null, cancellationToken);
-        return await findResult.ToListAsync(cancellationToken);
+
+        return (await Collection.FindAsync(filter, null, cancellationToken)).ToEnumerable();        
     }
 
     public virtual async Task<TEntity> GetById(TKey id, CancellationToken cancellationToken = default)
