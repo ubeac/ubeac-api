@@ -1,25 +1,30 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<PackageId>uBeac.Repositories.EntityFramework</PackageId>
+		<Authors>uBeac</Authors>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+		<PackageIcon>ubeac-logo.jpg</PackageIcon>
+		<Description>Repository implementation in EntityFramework</Description>
+		<PackageProjectUrl>https://github.com/ubeac/ubeac-api</PackageProjectUrl>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\..\..\ubeac-logo.jpg" Link="ubeac-logo.jpg">
-      <PackagePath>\</PackagePath>
-      <Pack>True</Pack>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\..\ubeac-logo.jpg">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\uBeac.Core.Repositories.Abstractions\uBeac.Core.Repositories.Abstractions.csproj" />
-    <ProjectReference Include="..\uBeac.Core.Repositories.History.Extensions\uBeac.Core.Repositories.History.Extensions.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\uBeac.Core.Repositories.Abstractions\uBeac.Core.Repositories.Abstractions.csproj" />
+		<ProjectReference Include="..\uBeac.Core.Repositories.History.Extensions\uBeac.Core.Repositories.History.Extensions.csproj" />
+	</ItemGroup>
 
 </Project>

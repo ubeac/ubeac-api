@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<PackageId>uBeac.Repositories.EntityFramework.SQLServer</PackageId>
+		<PackageId>uBeac.Repositories.EntityFramework.InMemory</PackageId>
 		<Authors>uBeac</Authors>
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 		<PackageIcon>ubeac-logo.jpg</PackageIcon>
-		<Description>Repository implementation in EntityFramework SQLServer database</Description>
+		<Description>Repository implementation in EntityFramework in-memory database</Description>
 		<PackageProjectUrl>https://github.com/ubeac/ubeac-api</PackageProjectUrl>
 	</PropertyGroup>
 
@@ -19,14 +19,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="..\..\..\ubeac-logo.jpg" Link="ubeac-logo.jpg">
-			<PackagePath>\</PackagePath>
-			<Pack>True</Pack>
-		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.5" />
 	</ItemGroup>
 
 	<ItemGroup>

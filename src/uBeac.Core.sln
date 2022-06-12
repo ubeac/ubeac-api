@@ -69,13 +69,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Repositories.His
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Web.Logging.MongoDB", "Logging\uBeac.Core.Web.Logging.MongoDB\uBeac.Core.Web.Logging.MongoDB.csproj", "{2D538398-EAC9-4A18-8459-74CA9E499F4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Repositories.EntityFramework", "Repository\uBeac.Core.Repositories.EntityFramework\uBeac.Core.Repositories.EntityFramework.csproj", "{907A1743-ACDA-43FF-894E-619219E82D6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Repositories.EntityFramework", "Repository\uBeac.Core.Repositories.EntityFramework\uBeac.Core.Repositories.EntityFramework.csproj", "{907A1743-ACDA-43FF-894E-619219E82D6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Repositories.EntityFramework.SQLServer", "Repository\uBeac.Core.Repositories.EntityFramework.SQLServer\uBeac.Core.Repositories.EntityFramework.SQLServer.csproj", "{41B6FE08-5A14-49A5-8538-A564C81BE3AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Repositories.EntityFramework.SQLServer", "Repository\uBeac.Core.Repositories.EntityFramework.SQLServer\uBeac.Core.Repositories.EntityFramework.SQLServer.csproj", "{41B6FE08-5A14-49A5-8538-A564C81BE3AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Repositories.EntityFramework.Sqlite", "Repository\uBeac.Core.Repositories.EntityFramework.Sqlite\uBeac.Core.Repositories.EntityFramework.Sqlite.csproj", "{D01B9825-15EF-43C6-B425-90DBA5BE8AF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Repositories.EntityFramework.SQLite", "Repository\uBeac.Core.Repositories.EntityFramework.SQLite\uBeac.Core.Repositories.EntityFramework.SQLite.csproj", "{D01B9825-15EF-43C6-B425-90DBA5BE8AF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Repositories.EntityFramework.InMemoryDB", "Repository\uBeac.Core.Repositories.EntityFramework.InMemoryDB\uBeac.Core.Repositories.EntityFramework.InMemoryDB.csproj", "{5DD6BE78-8DAD-482A-B831-DDF297BB4391}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Repositories.EntityFramework.InMemory", "Repository\uBeac.Core.Repositories.EntityFramework.InMemory\uBeac.Core.Repositories.EntityFramework.InMemory.csproj", "{5DD6BE78-8DAD-482A-B831-DDF297BB4391}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
