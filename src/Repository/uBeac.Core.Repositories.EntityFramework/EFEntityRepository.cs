@@ -142,3 +142,12 @@ public class EFEntityRepository<TKey, TEntity, TContext> : IEntityRepository<TKe
         entity.LastUpdatedBy = userName;
     }
 }
+
+public class EFEntityRepository<TEntity, TContext> : EFEntityRepository<Guid, TEntity, TContext>, IEntityRepository<TEntity>
+    where TEntity : class, IEntity
+    where TContext : EFDbContext
+{
+    public EFEntityRepository(TContext dbContext, IApplicationContext applicationContext, HistoryFactory historyFactory) : base(dbContext, applicationContext, historyFactory)
+    {
+    }
+}

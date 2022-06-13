@@ -4,9 +4,10 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class InMemoryExtensions
 {
-    public static IServiceCollection AddInMemoryDatabase<T>(this IServiceCollection services) where T : DbContext
+    public static IServiceCollection AddInMemoryDatabase<T>(this IServiceCollection services, string databaseName) where T : DbContext
     {
-        services.AddDbContext<T>(opts => opts.UseInMemoryDatabase(databaseName: typeof(T).Name));
+        services.AddEntityFrameworkInMemoryDatabase();
+        services.AddDbContext<T>(options => options.UseInMemoryDatabase(databaseName));
         return services;
     }
 }

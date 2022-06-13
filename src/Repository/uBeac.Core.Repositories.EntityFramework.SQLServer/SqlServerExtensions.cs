@@ -1,16 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using uBeac.Repositories.EntityFramework;
 
-namespace uBeac.Core.Repositories.EntityFramework.SQLServer
+namespace Microsoft.Extensions.DependencyInjection;
+
+public static class SqlServerExtensions
 {
-    public static class SqlServerExtensions
+    public static IServiceCollection AddSqlServerDatabase<T>(this IServiceCollection services, string connectionString) where T : EFDbContext
     {
-        public static IServiceCollection AddSqlServerDatabase<T>(this IServiceCollection services) where T : DbContext
-        {
-            services.AddEntityFrameworkSqlServer();
-            services.AddDbContext<T>((serviceProvider, options) => options.UseSqlServer(typeof(T).Name));
-
-            return services;
-        }
+        services.AddEntityFrameworkSqlServer();
+        services.AddDbContext<T>(options => options.UseSqlServer(connectionString));
+        return services;
     }
 }
