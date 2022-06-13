@@ -7,7 +7,7 @@ namespace uBeac.Repositories.EntityFramework;
 public class EFEntityRepository<TKey, TEntity, TContext> : IEntityRepository<TKey, TEntity>
     where TKey : IEquatable<TKey>
     where TEntity : class, IEntity<TKey>
-    where TContext : DbContext
+    where TContext : EFDbContext
 {
     protected readonly TContext DbContext;
     protected readonly IApplicationContext ApplicationContext;
