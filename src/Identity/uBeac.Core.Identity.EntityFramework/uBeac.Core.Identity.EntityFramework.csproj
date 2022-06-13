@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<PackageId>uBeac.Identity.EntityFramework</PackageId>
+		<Authors>uBeac</Authors>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<PackageIcon>ubeac-logo.jpg</PackageIcon>
+		<Description>Easily implement identity with EntityFramework in your .NET projects!</Description>
+		<PackageProjectUrl>https://github.com/ubeac/ubeac-api</PackageProjectUrl>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Repository\uBeac.Core.Repositories.EntityFramework\uBeac.Core.Repositories.EntityFramework.csproj" />
+		<ProjectReference Include="..\uBeac.Core.Identity\uBeac.Core.Identity.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Extensions\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\..\ubeac-logo.jpg" Link="ubeac-logo.jpg">
+			<PackagePath>\</PackagePath>
+			<Pack>True</Pack>
+		</None>
+	</ItemGroup>
+
+</Project>
