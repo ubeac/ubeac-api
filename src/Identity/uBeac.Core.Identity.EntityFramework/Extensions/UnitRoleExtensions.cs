@@ -1,4 +1,5 @@
-﻿using uBeac.Identity;
+﻿using Microsoft.EntityFrameworkCore;
+using uBeac.Identity;
 using uBeac.Identity.EntityFramework;
 using uBeac.Repositories.EntityFramework;
 
@@ -7,7 +8,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class UniTUnitRoleExtensions
 {
     public static IServiceCollection AddEFUnitRoleRepository<TContext, TUnitRoleKey, TUnitRole>(this IServiceCollection services)
-        where TContext : EFDbContext
+        where TContext : DbContext
         where TUnitRoleKey : IEquatable<TUnitRoleKey>
         where TUnitRole : UnitRole<TUnitRoleKey>
     {
@@ -16,7 +17,7 @@ public static class UniTUnitRoleExtensions
     }
 
     public static IServiceCollection AddEFUnitRoleRepository<TContext, TUnitRole>(this IServiceCollection services)
-        where TContext : EFDbContext
+        where TContext : DbContext
         where TUnitRole : UnitRole
     {
         services.AddScoped<IUnitRoleRepository<TUnitRole>, EFUnitRoleRepository<TUnitRole, TContext>>();

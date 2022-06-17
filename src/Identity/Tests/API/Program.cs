@@ -1,5 +1,7 @@
 using System.Reflection;
+using API;
 using Microsoft.AspNetCore.Mvc;
+using uBeac.Repositories.EntityFramework;
 using uBeac.Repositories.History.MongoDB;
 using uBeac.Repositories.MongoDB;
 using uBeac.Web;
@@ -39,21 +41,29 @@ builder.Services.AddCoreSwaggerWithJWT("Example");
 // Adding mongodb
 builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
 
+// Adding sql server
+builder.Services.AddSqlServerDatabase<EFIdentityDbContext>(builder.Configuration.GetConnectionString("SqlServer"));
+
 // Adding history
 builder.Services.AddHistory<MongoDBHistoryRepository>().For<User>().Register();
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("History"));
-
 
 // Adding email provider
 builder.Services.AddEmailProvider(builder.Configuration);
 
 // Adding repositories
-builder.Services.AddMongoDBUserRepository<MongoDBContext, User>();
-builder.Services.AddMongoDBUserTokenRepository<MongoDBContext>();
-builder.Services.AddMongoDBRoleRepository<MongoDBContext, Role>();
-builder.Services.AddMongoDBUnitRepository<MongoDBContext, Unit>();
-builder.Services.AddMongoDBUnitTypeRepository<MongoDBContext, UnitType>();
-builder.Services.AddMongoDBUnitRoleRepository<MongoDBContext, UnitRole>();
+// builder.Services.AddMongoDBUserRepository<MongoDBContext, User>();
+builder.Services.AddEFUserRepository<EFIdentityDbContext, User>();
+// builder.Services.AddMongoDBUserTokenRepository<MongoDBContext>();
+builder.Services.AddEFUserTokenRepository<EFIdentityDbContext>();
+// builder.Services.AddMongoDBRoleRepository<MongoDBContext, Role>();
+builder.Services.AddEFRoleRepository<EFIdentityDbContext, Role>();
+// builder.Services.AddMongoDBUnitRepository<MongoDBContext, Unit>();
+builder.Services.AddEFUnitRepository<EFIdentityDbContext, Unit>();
+// builder.Services.AddMongoDBUnitTypeRepository<MongoDBContext, UnitType>();
+builder.Services.AddEFUnitTypeRepository<EFIdentityDbContext, UnitType>();
+// builder.Services.AddMongoDBUnitRoleRepository<MongoDBContext, UnitRole>();
+builder.Services.AddEFUnitRoleRepository<EFIdentityDbContext, UnitRole>();
 
 // Adding services
 builder.Services.AddUserService<UserService<User>, User>();

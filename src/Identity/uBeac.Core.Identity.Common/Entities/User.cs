@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
 namespace uBeac.Identity;
 
@@ -18,11 +19,11 @@ public class User<TUserKey> : IdentityUser<TUserKey>, IAuditEntity<TUserKey>
     public virtual DateTime LastUpdatedAt { get; set; }
 
     public virtual string AuthenticatorKey { get; set; }
-    public virtual List<IdentityUserClaim<TUserKey>> Claims { get; set; } = new();
-    public virtual List<IdentityUserLogin<TUserKey>> Logins { get; set; } = new();
-    public virtual List<IdentityUserToken<TUserKey>> Tokens { get; set; } = new();
-    public virtual List<TwoFactorRecoveryCode> RecoveryCodes { get; set; } = new();
-    public virtual List<string> Roles { get; set; } = new();
+    [NotMapped] public virtual List<IdentityUserClaim<TUserKey>> Claims { get; set; } = new();
+    [NotMapped] public virtual List<IdentityUserLogin<TUserKey>> Logins { get; set; } = new();
+    [NotMapped] public virtual List<IdentityUserToken<TUserKey>> Tokens { get; set; } = new();
+    [NotMapped] public virtual List<TwoFactorRecoveryCode> RecoveryCodes { get; set; } = new();
+    [NotMapped] public virtual List<string> Roles { get; set; } = new();
 
     public User()
     {

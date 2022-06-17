@@ -5,7 +5,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class SqlServerExtensions
 {
-    public static IServiceCollection AddSqlServerDatabase<T>(this IServiceCollection services, string connectionString) where T : EFDbContext
+    public static IServiceCollection AddSqlServerDatabase<T>(this IServiceCollection services, string connectionString) where T : DbContext
     {
         services.AddEntityFrameworkSqlServer();
         services.AddDbContext<T>(options => options.UseSqlServer(connectionString));

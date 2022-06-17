@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="uBeac.Web.Swagger" Version="0.6.1-alpha" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
   </ItemGroup>
@@ -15,11 +20,13 @@
     <ProjectReference Include="..\..\..\Common\uBeac.Core.Common\uBeac.Core.Common.csproj" />
     <ProjectReference Include="..\..\..\Common\uBeac.Core.Configuration\uBeac.Core.Configuration.csproj" />
     <ProjectReference Include="..\..\..\Logging\uBeac.Core.Web.Logging.MongoDB\uBeac.Core.Web.Logging.MongoDB.csproj" />
+    <ProjectReference Include="..\..\..\Repository\uBeac.Core.Repositories.EntityFramework.SQLServer\uBeac.Core.Repositories.EntityFramework.SQLServer.csproj" />
     <ProjectReference Include="..\..\..\Repository\uBeac.Core.Repositories.History.MongoDB\uBeac.Core.Repositories.History.MongoDB.csproj" />
     <ProjectReference Include="..\..\..\Logging\uBeac.Core.Logging.MongoDB\uBeac.Core.Logging.MongoDB.csproj" />
     <ProjectReference Include="..\..\..\Web\uBeac.Core.Web.Common\uBeac.Core.Web.Common.csproj" />
     <ProjectReference Include="..\..\..\Web\uBeac.Core.Web.Jwt\uBeac.Core.Web.Jwt.csproj" />
     <ProjectReference Include="..\..\uBeac.Core.Identity.Common\uBeac.Core.Identity.Common.csproj" />
+    <ProjectReference Include="..\..\uBeac.Core.Identity.EntityFramework\uBeac.Core.Identity.EntityFramework.csproj" />
     <ProjectReference Include="..\..\uBeac.Core.Identity.Jwt\uBeac.Core.Identity.Jwt.csproj" />
     <ProjectReference Include="..\..\uBeac.Core.Identity.MongoDB\uBeac.Core.Identity.MongoDB.csproj" />
     <ProjectReference Include="..\..\uBeac.Core.Identity\uBeac.Core.Identity.csproj" />
