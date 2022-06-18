@@ -11,4 +11,9 @@ public static class Extensions
         services.AddScoped<IHttpLogRepository, MongoDbHttpLogRepository>();
         return services;
     }
+
+    public static IServiceCollection AddMongoDbHttpLogging(this IServiceCollection services, Func<MongoDbHttpLogOptions> options)
+    {
+        return AddMongoDbHttpLogging(services, options());
+    }
 }
