@@ -13,7 +13,7 @@ public class MongoDbHttpLogRepository : IHttpLogRepository
 
     public async Task Create(HttpLog log, CancellationToken cancellationToken = default)
     {
-        var connectionString = Options.GetConnectionString(log.StatusCode);
+        var connectionString = Options.ConnectionString;
         var collectionName = Options.GetCollectionName(log.StatusCode);
 
         var database = GetDatabase(connectionString);
