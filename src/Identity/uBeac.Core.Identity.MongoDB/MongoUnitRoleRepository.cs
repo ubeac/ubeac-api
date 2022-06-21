@@ -8,7 +8,7 @@ public class MongoUnitRoleRepository<TKey, TUnitRole, TContext> : MongoEntityRep
     where TUnitRole : UnitRole<TKey>
     where TContext : IMongoDBContext
 {
-    public MongoUnitRoleRepository(TContext mongoDbContext, IApplicationContext appContext, HistoryFactory historyFactory) : base(mongoDbContext, appContext, historyFactory)
+    public MongoUnitRoleRepository(TContext mongoDbContext, IApplicationContext appContext, IHistoryManager historyManager) : base(mongoDbContext, appContext, historyManager)
     {
     }
 }
@@ -17,7 +17,7 @@ public class MongoUnitRoleRepository<TUnitRole, TContext> : MongoUnitRoleReposit
     where TUnitRole : UnitRole
     where TContext : IMongoDBContext
 {
-    public MongoUnitRoleRepository(TContext mongoDbContext, IApplicationContext appContext, HistoryFactory historyFactory) : base(mongoDbContext, appContext, historyFactory)
+    public MongoUnitRoleRepository(TContext mongoDbContext, IApplicationContext appContext, IHistoryManager historyManager) : base(mongoDbContext, appContext, historyManager)
     {
     }
 }

@@ -1,35 +1,39 @@
-﻿using Microsoft.Extensions.Options;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Driver;
+using uBeac.Repositories.MongoDB;
 
 namespace uBeac.Repositories.History.MongoDB;
 
-public class MongoDBHistoryRepository<TKey, THistory> : IHistoryRepository
+public interface IMongoDBHistoryRepository : IHistoryRepository
+{
+}
+
+public class MongoDBHistoryRepository<TKey, THistory, TContext> : IMongoDBHistoryRepository
     where TKey : IEquatable<TKey>
     where THistory : class, IHistoryEntity<TKey>, new()
+    where TContext : IMongoDBContext
 {
-    protected readonly IMongoDatabase Database;
-    protected readonly MongoDBSettings _mongoDbSettings;
-    private readonly IApplicationContext _applicationContext;
+    protected readonly IApplicationContext ApplicationContext;
+    protected readonly TContext MongoDbContext;
+    protected readonly IMongoDatabase MongoDatabase;
+    protected readonly IHistoryDefaults Defaults;
 
-    public MongoDBHistoryRepository(IOptions<MongoDBSettings> mongoDbOptions, IApplicationContext applicationContext)
+    public MongoDBHistoryRepository(TContext mongoDbContext, IApplicationContext applicationContext, IHistoryDefaults defaults)
     {
-        _mongoDbSettings = mongoDbOptions.Value;
-        _applicationContext = applicationContext;
-
-        var mongoUrl = new MongoUrl(_mongoDbSettings.ConnectionString);
-        var client = new MongoClient(mongoUrl);
-        Database = client.GetDatabase(mongoUrl.DatabaseName);
+        MongoDbContext = mongoDbContext;
+        MongoDatabase = MongoDbContext.Database;
+        ApplicationContext = applicationContext;
+        Defaults = defaults;
     }
 
-    protected virtual string GetCollectionName(Type dataType) => dataType.Name + _mongoDbSettings.CollectionSuffix;
+    protected virtual string GetCollectionName(Type dataType) => dataType.Name + Defaults.Suffix;
 
     protected virtual async Task Insert(THistory history, CancellationToken cancellationToken = default)
     {
         var dataType = history.Data.GetType();
 
         var collectionName = GetCollectionName(dataType);
-        var collection = Database.GetCollection<BsonDocument>(collectionName);
+        var collection = MongoDatabase.GetCollection<BsonDocument>(collectionName);
 
         var bsonDocument = history.ToBsonDocument();
         await collection.InsertOneAsync(bsonDocument, new InsertOneOptions(), cancellationToken);
@@ -41,7 +45,7 @@ public class MongoDBHistoryRepository<TKey, THistory> : IHistoryRepository
         {
             Data = data,
             ActionName = actionName,
-            Context = _applicationContext,
+            Context = ApplicationContext,
             CreatedAt = DateTime.Now
         };
 
@@ -49,17 +53,26 @@ public class MongoDBHistoryRepository<TKey, THistory> : IHistoryRepository
     }
 }
 
-public class MongoDBHistoryRepository<THistory> : MongoDBHistoryRepository<Guid, THistory>
+public class MongoDBHistoryRepository<THistory, TContext> : MongoDBHistoryRepository<Guid, THistory, TContext>
     where THistory : class, IHistoryEntity, new()
+    where TContext : IMongoDBContext
 {
-    public MongoDBHistoryRepository(IOptions<MongoDBSettings> mongoDbOptions, IApplicationContext applicationContext) : base(mongoDbOptions, applicationContext)
+    public MongoDBHistoryRepository(TContext mongoDbContext, IApplicationContext applicationContext, IHistoryDefaults defaults) : base(mongoDbContext, applicationContext, defaults)
     {
     }
 }
 
-public class MongoDBHistoryRepository : MongoDBHistoryRepository<HistoryEntity>
+public class MongoDBHistoryRepository<TContext> : MongoDBHistoryRepository<HistoryEntity, TContext>
+    where TContext : IMongoDBContext
 {
-    public MongoDBHistoryRepository(IOptions<MongoDBSettings> mongoDbOptions, IApplicationContext applicationContext) : base(mongoDbOptions, applicationContext)
+    public MongoDBHistoryRepository(TContext mongoDbContext, IApplicationContext applicationContext, IHistoryDefaults defaults) : base(mongoDbContext, applicationContext, defaults)
+    {
+    }
+}
+
+public class MongoDBHistoryRepository : MongoDBHistoryRepository<HistoryMongoDBContext>
+{
+    public MongoDBHistoryRepository(HistoryMongoDBContext mongoDbContext, IApplicationContext applicationContext, IHistoryDefaults defaults) : base(mongoDbContext, applicationContext, defaults)
     {
     }
 }

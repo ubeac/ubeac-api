@@ -10,7 +10,7 @@ public class MongoUnitTypeRepository<TKey, TUnitType, TContext> : MongoEntityRep
     where TContext : IMongoDBContext
 {
 
-    public MongoUnitTypeRepository(TContext mongoDbContext, IApplicationContext appContext, HistoryFactory historyFactory) : base(mongoDbContext, appContext, historyFactory)
+    public MongoUnitTypeRepository(TContext mongoDbContext, IApplicationContext appContext, IHistoryManager historyManager) : base(mongoDbContext, appContext, historyManager)
     {
         // Create Indexes
         try
@@ -31,7 +31,7 @@ public class MongoUnitTypeRepository<TUnitType, TContext> : MongoUnitTypeReposit
     where TUnitType : UnitType
     where TContext : IMongoDBContext
 {
-    public MongoUnitTypeRepository(TContext mongoDbContext, IApplicationContext appContext, HistoryFactory historyFactory) : base(mongoDbContext, appContext, historyFactory)
+    public MongoUnitTypeRepository(TContext mongoDbContext, IApplicationContext appContext, IHistoryManager historyManager) : base(mongoDbContext, appContext, historyManager)
     {
     }
 }
