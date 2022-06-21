@@ -1,22 +1,32 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-	  <PackageId>uBeac.Identity</PackageId>
-	  <Authors>uBeac</Authors>
-	  <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>disable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<PackageId>uBeac.Identity</PackageId>
+		<Authors>uBeac</Authors>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+		<PackageIcon>ubeac-logo.jpg</PackageIcon>
+		<Description>Easily implement identity in your .NET projects!</Description>
+		<PackageProjectUrl>https://github.com/ubeac/ubeac-api</PackageProjectUrl>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="EntityFramework" Version="6.4.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\..\ubeac-logo.jpg">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Common\uBeac.Core.EmailProvider\uBeac.Core.EmailProvider.csproj" />
-    <ProjectReference Include="..\..\Service\uBeac.Core.Services\uBeac.Core.Services.csproj" />
-    <ProjectReference Include="..\uBeac.Core.Identity.Common\uBeac.Core.Identity.Common.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="EntityFramework" Version="6.4.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Common\uBeac.Core.EmailProvider\uBeac.Core.EmailProvider.csproj" />
+		<ProjectReference Include="..\..\Service\uBeac.Core.Services\uBeac.Core.Services.csproj" />
+		<ProjectReference Include="..\uBeac.Core.Identity.Common\uBeac.Core.Identity.Common.csproj" />
+	</ItemGroup>
 
 </Project>
