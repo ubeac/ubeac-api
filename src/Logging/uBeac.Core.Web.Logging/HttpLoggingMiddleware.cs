@@ -2,6 +2,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Net.Http.Headers;
 
 namespace uBeac.Web.Logging;
 
@@ -80,7 +81,8 @@ internal sealed class HttpLoggingMiddleware
             StatusCode = statusCode ?? context.Response.StatusCode,
             Duration = duration,
             Context = appContext,
-            Exception = exception == null ? null : new ExceptionModel(exception)
+            Exception = exception == null ? null : new ExceptionModel(exception),
+            UserAgent = context.Request.Headers[HeaderNames.UserAgent].ToString()
         };
     }
 
