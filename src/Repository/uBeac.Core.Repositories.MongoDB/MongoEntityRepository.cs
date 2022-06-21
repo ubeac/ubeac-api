@@ -1,7 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Linq.Expressions;
-using uBeac.Repositories.History;
 
 namespace uBeac.Repositories.MongoDB;
 
@@ -15,27 +14,19 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
     protected readonly IMongoDatabase MongoDatabase;
     protected readonly TContext MongoDbContext;
     protected readonly IApplicationContext ApplicationContext;
-    protected readonly IHistoryManager HistoryManager;
 
-    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext applicationContext, IHistoryManager historyManager)
+    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext applicationContext)
     {
         MongoDatabase = mongoDbContext.Database;
         Collection = mongoDbContext.Database.GetCollection<TEntity>(GetCollectionName());
         BsonCollection = mongoDbContext.Database.GetCollection<BsonDocument>(GetCollectionName());
         MongoDbContext = mongoDbContext;
         ApplicationContext = applicationContext;
-        HistoryManager = historyManager;
     }
 
     protected virtual string GetCollectionName()
     {
         return typeof(TEntity).Name;
-    }
-
-    protected virtual async Task AddToHistory(TEntity entity, string actionName, CancellationToken cancellationToken = default)
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-        await HistoryManager.Write(entity, actionName, cancellationToken);
     }
 
     public virtual async Task Delete(TKey id, string actionName, CancellationToken cancellationToken = default)
@@ -44,9 +35,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
 
         var idFilter = Builders<TEntity>.Filter.Eq(doc => doc.Id, id);
 
-        var entity = await Collection.FindOneAndDeleteAsync(idFilter, null, cancellationToken);
-
-        await AddToHistory(entity, actionName, cancellationToken);
+        await Collection.FindOneAndDeleteAsync(idFilter, null, cancellationToken);
     }
 
     public virtual async Task Delete(TKey id, CancellationToken cancellationToken = default)
@@ -93,8 +82,6 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         if (entity is IAuditEntity<TKey> audit) SetPropertiesOnCreate(audit, ApplicationContext);
 
         await Collection.InsertOneAsync(entity, null, cancellationToken);
-
-        await AddToHistory(entity, actionName, cancellationToken);
     }
 
     public virtual async Task Create(TEntity entity, CancellationToken cancellationToken = default)
@@ -112,8 +99,6 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         var idFilter = Builders<TEntity>.Filter.Eq(x => x.Id, entity.Id);
 
         entity = await Collection.FindOneAndReplaceAsync(idFilter, entity, null, cancellationToken);
-
-        await AddToHistory(entity, actionName, cancellationToken);
     }
 
     public virtual async Task Update(TEntity entity, CancellationToken cancellationToken = default)
@@ -156,7 +141,7 @@ public class MongoEntityRepository<TEntity, TContext> : MongoEntityRepository<Gu
     where TEntity : IEntity
     where TContext : IMongoDBContext
 {
-    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext applicationContext, IHistoryManager historyManager) : base(mongoDbContext, applicationContext, historyManager)
+    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext applicationContext) : base(mongoDbContext, applicationContext)
     {
     }
 }
