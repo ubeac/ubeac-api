@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using uBeac.Web;
 
 namespace API;
@@ -20,57 +17,30 @@ public abstract class RolesControllerBase<TRoleKey, TRole> : BaseController
     [HttpPost]
     public virtual async Task<IResult<TRoleKey>> Create([FromBody] TRole role, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            await RoleService.Create(role, cancellationToken);
-            return role.Id.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<TRoleKey>();
-        }
+        await RoleService.Create(role, cancellationToken);
+        return role.Id.ToResult();
     }
 
     [HttpPost]
     public virtual async Task<IResult<bool>> Update([FromBody] TRole role, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            await RoleService.Update(role, cancellationToken);
-            return true.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<bool>();
-        }
+        await RoleService.Update(role, cancellationToken);
+        return true.ToResult();
     }
 
     [HttpPost]
     public virtual async Task<IResult<bool>> Delete([FromBody] IdRequest<TRoleKey> request, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            await RoleService.Delete(request.Id, cancellationToken);
-            return true.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<bool>();
-        }
+        await RoleService.Delete(request.Id, cancellationToken);
+        return true.ToResult();
     }
 
     [HttpGet]
     public virtual async Task<IListResult<TRole>> GetAll(CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var roles = await RoleService.GetAll(cancellationToken);
-            return roles.ToListResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToListResult<TRole>();
-        }
+        var roles = await RoleService.GetAll(cancellationToken);
+        return roles.ToListResult();
+
     }
 }
 
