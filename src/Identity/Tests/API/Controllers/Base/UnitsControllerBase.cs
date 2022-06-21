@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using uBeac.Web;
 
 namespace API;
@@ -20,57 +17,29 @@ public abstract class UnitsController<TKey, TUnit> : BaseController
     [HttpPost]
     public virtual async Task<IResult<TKey>> Create([FromBody] TUnit unit, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            await UnitService.Create(unit, cancellationToken);
-            return unit.Id.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<TKey>();
-        }
+        await UnitService.Create(unit, cancellationToken);
+        return unit.Id.ToResult();
     }
 
     [HttpPost]
     public virtual async Task<IResult<bool>> Update([FromBody] TUnit unit, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            await UnitService.Update(unit, cancellationToken);
-            return true.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<bool>();
-        }
+        await UnitService.Update(unit, cancellationToken);
+        return true.ToResult();
     }
 
     [HttpPost]
     public virtual async Task<IResult<bool>> Delete([FromBody] IdRequest<TKey> request, CancellationToken cancellationToken = default)
     {
-        try
-        {
-            await UnitService.Delete(request.Id, cancellationToken);
-            return true.ToResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToResult<bool>();
-        }
+        await UnitService.Delete(request.Id, cancellationToken);
+        return true.ToResult();
     }
 
     [HttpGet]
     public virtual async Task<IListResult<TUnit>> GetAll(CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var units = await UnitService.GetAll(cancellationToken);
-            return units.ToListResult();
-        }
-        catch (Exception ex)
-        {
-            return ex.ToListResult<TUnit>();
-        }
+        var units = await UnitService.GetAll(cancellationToken);
+        return units.ToListResult();
     }
 }
 

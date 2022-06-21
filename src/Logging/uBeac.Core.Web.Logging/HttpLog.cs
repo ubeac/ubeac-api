@@ -25,7 +25,7 @@ public sealed class HttpLog : Entity
         MemoryUsage = process.PrivateMemorySize64;
         MachineName = Environment.MachineName;
         EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
-        EnvironmentUserName = Environment.UserName;
+        EnvironmentUserName = Environment.UserName;        
     }
 
     public DateTime Time { get; set; }
@@ -47,6 +47,7 @@ public sealed class HttpLog : Entity
     public string MachineName { get; set; }
     public string EnvironmentName { get; set; }
     public string EnvironmentUserName { get; set; }
+    public string UserAgent { get; set; }
 
     public IApplicationContext Context { get; set; }
 

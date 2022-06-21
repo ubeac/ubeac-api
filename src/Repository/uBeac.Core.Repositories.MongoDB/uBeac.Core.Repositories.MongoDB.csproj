@@ -25,6 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\Common\uBeac.Core.MongoDB\uBeac.Core.MongoDB.csproj" />
 		<ProjectReference Include="..\uBeac.Core.Repositories.Abstractions\uBeac.Core.Repositories.Abstractions.csproj" />
 		<ProjectReference Include="..\uBeac.Core.Repositories.History.Extensions\uBeac.Core.Repositories.History.Extensions.csproj" />
 	</ItemGroup>

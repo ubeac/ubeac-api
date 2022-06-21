@@ -2,26 +2,15 @@
 
 public class MongoDbHttpLogOptions
 {
-    public string HttpLog2xxConnectionString { get; set; }
-    public string HttpLog2xxCollectionName { get; set; }
-
-    public string HttpLog4xxConnectionString { get; set; }
-    public string HttpLog4xxCollectionName { get; set; }
-
-    public string HttpLog5xxConnectionString { get; set; }
-    public string HttpLog5xxCollectionName { get; set; }
-
-    public string GetConnectionString(int statusCode) => statusCode switch
-    {
-        < 500 and >= 400 => HttpLog4xxConnectionString,
-        >= 500 => HttpLog5xxConnectionString,
-        _ => HttpLog2xxConnectionString
-    };
+    public string ConnectionString { get; set; }
+    public string Status200CollectionName { get; set; }
+    public string Status400CollectionName { get; set; }
+    public string Status500CollectionName { get; set; }
 
     public string GetCollectionName(int statusCode) => statusCode switch
     {
-        < 500 and >= 400 => HttpLog4xxCollectionName,
-        >= 500 => HttpLog5xxCollectionName,
-        _ => HttpLog2xxCollectionName
+        < 500 and >= 400 => Status400CollectionName,
+        >= 500 => Status500CollectionName,
+        _ => Status200CollectionName
     };
 }

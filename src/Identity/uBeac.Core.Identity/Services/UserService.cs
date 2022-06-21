@@ -51,7 +51,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         var user = await UserManager.FindByNameAsync(username);
 
         // Validate user password
-        if (user is null || !await UserManager.CheckPasswordAsync(user, password)) throw new Exception("User doesn't exist or username/password is not valid!");
+        if (user is null || !user.Enabled || !await UserManager.CheckPasswordAsync(user, password)) throw new Exception("User doesn't exist or username/password is not valid!");
 
         // Generate token
         var token = await TokenService.Generate(user);
@@ -204,6 +204,8 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
     {
         var userId = await TokenService.ValidateExpiredToken(expiredToken);
         var user = await UserManager.FindByIdAsync(userId.ToString());
+        if (!user.Enabled) throw new Exception("User is disabled!");
+
         var storedRefreshToken = await UserManager.GetAuthenticationTokenAsync(user, LOCAL_LOGIN_PROVIDER, REFRESH_TOKEN_NAME);
         if (storedRefreshToken != refreshToken) throw new Exception("Token expired!");
 

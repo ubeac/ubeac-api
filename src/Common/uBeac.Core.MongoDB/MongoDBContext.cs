@@ -9,15 +9,15 @@ public interface IMongoDBContext
     IMongoDatabase Database { get; }
 }
 
-public class MongoDBContext : IMongoDBContext
+public abstract class BaseMongoDBContext<TContext> : IMongoDBContext where TContext : class, IMongoDBContext
 {
-    public MongoDBContext(MongoDBOptions dbOptions, BsonSerializationOptions bsonSerializationOptions)
+    protected BaseMongoDBContext(MongoDBOptions<TContext> dbOptions, BsonSerializationOptions bsonSerializationOptions)
     {
         ConfigureBsonSerialization(bsonSerializationOptions);
         ConfigureDatabase(dbOptions);
     }
 
-    private void ConfigureDatabase(MongoDBOptions options)
+    private void ConfigureDatabase(MongoDBOptions<TContext> options)
     {
         var mongoUrl = new MongoUrl(options.ConnectionString);
         var client = new MongoClient(mongoUrl);
@@ -38,3 +38,9 @@ public class MongoDBContext : IMongoDBContext
     public IMongoDatabase Database { get; private set; }
 }
 
+public class MongoDBContext : BaseMongoDBContext<MongoDBContext>
+{
+    public MongoDBContext(MongoDBOptions<MongoDBContext> dbOptions, BsonSerializationOptions bsonSerializationOptions) : base(dbOptions, bsonSerializationOptions)
+    {
+    }
+}
