@@ -69,8 +69,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Repositories.His
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Web.Logging.MongoDB", "Logging\uBeac.Core.Web.Logging.MongoDB\uBeac.Core.Web.Logging.MongoDB.csproj", "{2D538398-EAC9-4A18-8459-74CA9E499F4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.MongoDB", "Common\uBeac.Core.MongoDB\uBeac.Core.MongoDB.csproj", "{1F2BBB35-C4B1-427D-87B2-DB4AA8BAB68C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -177,10 +175,6 @@ Global
 		{2D538398-EAC9-4A18-8459-74CA9E499F4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D538398-EAC9-4A18-8459-74CA9E499F4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D538398-EAC9-4A18-8459-74CA9E499F4E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1F2BBB35-C4B1-427D-87B2-DB4AA8BAB68C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1F2BBB35-C4B1-427D-87B2-DB4AA8BAB68C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1F2BBB35-C4B1-427D-87B2-DB4AA8BAB68C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1F2BBB35-C4B1-427D-87B2-DB4AA8BAB68C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -212,7 +206,6 @@ Global
 		{AAA5B1BE-4216-4ADB-9FB3-B03D35CF8D03} = {2939E5A7-F1C3-4853-9F35-31EB64C08036}
 		{CA77313D-6D97-4F91-9818-B729FA0359D2} = {2939E5A7-F1C3-4853-9F35-31EB64C08036}
 		{2D538398-EAC9-4A18-8459-74CA9E499F4E} = {117FC7BE-0153-4819-9A27-0FDA22132FA1}
-		{1F2BBB35-C4B1-427D-87B2-DB4AA8BAB68C} = {D910F4C0-CDE2-422F-A476-CDB87D8008A6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {247F9BF0-18BB-4A57-BB3E-2870DDAEF0D1}
