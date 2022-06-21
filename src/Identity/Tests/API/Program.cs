@@ -45,8 +45,9 @@ builder.Services.AddCoreSwaggerWithJWT("Example");
 builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
 
 // Adding history
-builder.Services.AddHistory<MongoDBHistoryRepository>().For<User>().Register();
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("History"));
+builder.Services.AddMongo<HistoryMongoDBContext>("HistoryConnection");
+builder.Services.AddHistory<MongoDBHistoryRepository>().For<User>();
 
 // Adding CORS
 var corsPolicyOptions = builder.Configuration.GetSection("CorsPolicy");

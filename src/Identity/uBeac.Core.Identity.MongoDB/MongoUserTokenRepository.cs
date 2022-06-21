@@ -7,7 +7,7 @@ public class MongoUserTokenRepository<TUserKey, TContext> : MongoEntityRepositor
     where TUserKey : IEquatable<TUserKey>
     where TContext : IMongoDBContext
 {
-    public MongoUserTokenRepository(TContext mongoDbContext, IApplicationContext appContext, HistoryFactory historyFactory) : base(mongoDbContext, appContext, historyFactory)
+    public MongoUserTokenRepository(TContext mongoDbContext, IApplicationContext appContext, IHistoryManager historyManager) : base(mongoDbContext, appContext, historyManager)
     {
     }
 }
@@ -15,7 +15,7 @@ public class MongoUserTokenRepository<TUserKey, TContext> : MongoEntityRepositor
 public class MongoUserTokenRepository<TContext> : MongoUserTokenRepository<Guid, TContext>, IUserTokenRepository
     where TContext : IMongoDBContext
 {
-    public MongoUserTokenRepository(TContext mongoDbContext, IApplicationContext appContext, HistoryFactory historyFactory) : base(mongoDbContext, appContext, historyFactory)
+    public MongoUserTokenRepository(TContext mongoDbContext, IApplicationContext appContext, IHistoryManager historyManager) : base(mongoDbContext, appContext, historyManager)
     {
     }
 }
