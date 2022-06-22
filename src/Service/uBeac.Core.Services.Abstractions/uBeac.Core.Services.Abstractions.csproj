@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<PackageId>uBeac.Services.Abstractions</PackageId>
@@ -6,7 +6,17 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<PackageIcon>ubeac-logo.jpg</PackageIcon>
+		<Description>Contains abstractions for your service layer!</Description>
+		<PackageProjectUrl>https://github.com/ubeac/ubeac-api</PackageProjectUrl>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\..\..\ubeac-logo.jpg">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Common\uBeac.Core.Common\uBeac.Core.Common.csproj" />
