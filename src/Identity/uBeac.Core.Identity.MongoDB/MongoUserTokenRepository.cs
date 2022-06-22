@@ -1,5 +1,4 @@
-﻿using uBeac.Repositories.History;
-using uBeac.Repositories.MongoDB;
+﻿using uBeac.Repositories.MongoDB;
 
 namespace uBeac.Identity.MongoDB;
 
@@ -7,7 +6,7 @@ public class MongoUserTokenRepository<TUserKey, TContext> : MongoEntityRepositor
     where TUserKey : IEquatable<TUserKey>
     where TContext : IMongoDBContext
 {
-    public MongoUserTokenRepository(TContext mongoDbContext, IApplicationContext appContext, IHistoryManager historyManager) : base(mongoDbContext, appContext, historyManager)
+    public MongoUserTokenRepository(TContext mongoDbContext, IApplicationContext appContext) : base(mongoDbContext, appContext)
     {
     }
 }
@@ -15,7 +14,7 @@ public class MongoUserTokenRepository<TUserKey, TContext> : MongoEntityRepositor
 public class MongoUserTokenRepository<TContext> : MongoUserTokenRepository<Guid, TContext>, IUserTokenRepository
     where TContext : IMongoDBContext
 {
-    public MongoUserTokenRepository(TContext mongoDbContext, IApplicationContext appContext, IHistoryManager historyManager) : base(mongoDbContext, appContext, historyManager)
+    public MongoUserTokenRepository(TContext mongoDbContext, IApplicationContext appContext) : base(mongoDbContext, appContext)
     {
     }
 }
