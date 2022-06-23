@@ -15,4 +15,13 @@ public static class ServiceCollectionExtensions
         services.AddDecorator<TRepositoryInterface, TRepositoryImplementation, EntityRepositoryHistoryDecorator<TEntityKey, TEntity>>();
         return services;
     }
+
+    public static IServiceCollection EnableHistory<TEntity, TRepositoryInterface, TRepositoryImplementation>(this IServiceCollection services)
+        where TEntity : IEntity
+        where TRepositoryInterface : IEntityRepository<TEntity>
+        where TRepositoryImplementation : class, TRepositoryInterface
+    {
+        services.AddDecorator<TRepositoryInterface, TRepositoryImplementation, EntityRepositoryHistoryDecorator<TEntity>>();
+        return services;
+    }
 }
