@@ -47,6 +47,7 @@ builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
 // Adding history
 builder.Services.AddMongo<HistoryMongoDBContext>("HistoryConnection");
 builder.Services.AddHistory<MongoDBHistoryRepository>().For<User>();
+builder.Services.EnableHistory<Guid, User, IUserRepository<User>, MongoUserRepository<User, MongoDBContext>>();
 
 // Adding CORS
 var corsPolicyOptions = builder.Configuration.GetSection("CorsPolicy");
