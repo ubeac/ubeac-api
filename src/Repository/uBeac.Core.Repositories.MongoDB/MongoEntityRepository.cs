@@ -98,7 +98,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
 
         var idFilter = Builders<TEntity>.Filter.Eq(x => x.Id, entity.Id);
 
-        entity = await Collection.FindOneAndReplaceAsync(idFilter, entity, null, cancellationToken);
+        await Collection.FindOneAndReplaceAsync(idFilter, entity, null, cancellationToken);
     }
 
     public virtual async Task Update(TEntity entity, CancellationToken cancellationToken = default)
