@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<PackageId>uBeac.Repositories.History.Extensions</PackageId>
+		<PackageId>uBeac.Repositories.History</PackageId>
 		<Authors>uBeac</Authors>
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
@@ -19,12 +19,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\uBeac.Core.Repositories.History.Abstractions\uBeac.Core.Repositories.History.Abstractions.csproj" />
-		<ProjectReference Include="..\uBeac.Core.Repositories.History\uBeac.Core.Repositories.History.csproj" />
 	</ItemGroup>
 
 </Project>
