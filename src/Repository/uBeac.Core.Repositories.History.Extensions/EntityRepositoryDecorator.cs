@@ -7,9 +7,9 @@ public class EntityRepositoryHistoryDecorator<TKey, TEntity> : IEntityRepository
     where TEntity : IEntity<TKey>
 {
     protected readonly IEntityRepository<TKey, TEntity> Repository;
-    protected readonly IHistoryManager History;
+    protected readonly IEntityHistoryRepository<TKey, TEntity> History;
 
-    public EntityRepositoryHistoryDecorator(IEntityRepository<TKey, TEntity> repository, IHistoryManager history)
+    public EntityRepositoryHistoryDecorator(IEntityRepository<TKey, TEntity> repository, IEntityHistoryRepository<TKey, TEntity> history)
     {
         Repository = repository;
         History = history;
@@ -18,37 +18,37 @@ public class EntityRepositoryHistoryDecorator<TKey, TEntity> : IEntityRepository
     public async Task Create(TEntity entity, string actionName, CancellationToken cancellationToken = default)
     {
         await Repository.Create(entity, actionName, cancellationToken);
-        await History.Write(entity, actionName, cancellationToken);
+        await History.Create(entity, actionName, cancellationToken);
     }
 
     public async Task Create(TEntity entity, CancellationToken cancellationToken = default)
     {
         await Repository.Create(entity, cancellationToken);
-        await History.Write(entity, nameof(Create), cancellationToken);
+        await History.Create(entity, nameof(Create), cancellationToken);
     }
 
     public async Task Update(TEntity entity, string actionName, CancellationToken cancellationToken = default)
     {
         await Repository.Update(entity, actionName, cancellationToken);
-        await History.Write(entity, actionName, cancellationToken);
+        await History.Create(entity, actionName, cancellationToken);
     }
 
     public async Task Update(TEntity entity, CancellationToken cancellationToken = default)
     {
         await Repository.Update(entity, cancellationToken);
-        await History.Write(entity, nameof(Update), cancellationToken);
+        await History.Create(entity, nameof(Update), cancellationToken);
     }
 
-    public async Task Delete(TKey id, string actionName, CancellationToken cancellationToken = default)
+    public async Task Delete(TEntity entity, string actionName, CancellationToken cancellationToken = default)
     {
-        await Repository.Delete(id, actionName, cancellationToken);
-        await History.Write(id, actionName, cancellationToken);
+        await Repository.Delete(entity, actionName, cancellationToken);
+        await History.Create(entity, actionName, cancellationToken);
     }
 
-    public async Task Delete(TKey id, CancellationToken cancellationToken = default)
+    public async Task Delete(TEntity entity, CancellationToken cancellationToken = default)
     {
-        await Repository.Delete(id, cancellationToken);
-        await History.Write(id, nameof(Delete), cancellationToken);
+        await Repository.Delete(entity, cancellationToken);
+        await History.Create(entity, nameof(Delete), cancellationToken);
     }
 
     public async Task<IEnumerable<TEntity>> GetAll(CancellationToken cancellationToken = default)
@@ -69,7 +69,7 @@ public class EntityRepositoryHistoryDecorator<TKey, TEntity> : IEntityRepository
 public class EntityRepositoryHistoryDecorator<TEntity> : EntityRepositoryHistoryDecorator<Guid, TEntity>
     where TEntity : IEntity
 {
-    public EntityRepositoryHistoryDecorator(IEntityRepository<Guid, TEntity> repository, IHistoryManager history) : base(repository, history)
+    public EntityRepositoryHistoryDecorator(IEntityRepository<TEntity> repository, IEntityHistoryRepository<TEntity> history) : base(repository, history)
     {
     }
 }

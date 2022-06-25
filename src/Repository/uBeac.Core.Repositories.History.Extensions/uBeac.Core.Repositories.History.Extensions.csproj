@@ -25,7 +25,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\Extensions\uBeac.Core.Extensions.Decoration\uBeac.Core.Extensions.Decoration.csproj" />
 		<ProjectReference Include="..\uBeac.Core.Repositories.History.Abstractions\uBeac.Core.Repositories.History.Abstractions.csproj" />
-		<ProjectReference Include="..\uBeac.Core.Repositories.History\uBeac.Core.Repositories.History.csproj" />
 	</ItemGroup>
 
 </Project>

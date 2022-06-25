@@ -37,7 +37,7 @@ namespace uBeac.Identity
         public async Task<IdentityResult> DeleteAsync(TRole role, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await _repository.Delete(role.Id, cancellationToken: cancellationToken);
+            await _repository.Delete(role, cancellationToken: cancellationToken);
             return IdentityResult.Success;
         }
 

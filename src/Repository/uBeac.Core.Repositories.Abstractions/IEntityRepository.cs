@@ -14,8 +14,8 @@ public interface IEntityRepository<TKey, TEntity> : IRepository
     Task Create(TEntity entity, CancellationToken cancellationToken = default);
     Task Update(TEntity entity, string actionName, CancellationToken cancellationToken = default);
     Task Update(TEntity entity, CancellationToken cancellationToken = default);
-    Task Delete(TKey id, string actionName, CancellationToken cancellationToken = default);
-    Task Delete(TKey id, CancellationToken cancellationToken = default);
+    Task Delete(TEntity entity, string actionName, CancellationToken cancellationToken = default);
+    Task Delete(TEntity entity, CancellationToken cancellationToken = default);
     Task<IEnumerable<TEntity>> GetAll(CancellationToken cancellationToken = default);
     Task<TEntity> GetById(TKey id, CancellationToken cancellationToken = default);
     Task<IEnumerable<TEntity>> GetByIds(IEnumerable<TKey> ids, CancellationToken cancellationToken = default);

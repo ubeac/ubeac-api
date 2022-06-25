@@ -17,7 +17,8 @@ namespace uBeac.Services
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            await Repository.Delete(id, cancellationToken: cancellationToken);
+            var entity = await GetById(id, cancellationToken);
+            await Repository.Delete(entity, cancellationToken);
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetAll(CancellationToken cancellationToken = default)

@@ -73,8 +73,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Extensions.Decor
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{2F5363BE-E1D5-4DBE-AE32-6DA09088489D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Repositories.History", "Repository\uBeac.Core.Repositories.History\uBeac.Core.Repositories.History.csproj", "{1CF5CFF5-2CFD-4697-9BDA-BA66A11582B5}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -185,10 +183,6 @@ Global
 		{466C7AF5-342A-468B-917E-5C132FE18AF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{466C7AF5-342A-468B-917E-5C132FE18AF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{466C7AF5-342A-468B-917E-5C132FE18AF4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1CF5CFF5-2CFD-4697-9BDA-BA66A11582B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1CF5CFF5-2CFD-4697-9BDA-BA66A11582B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1CF5CFF5-2CFD-4697-9BDA-BA66A11582B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1CF5CFF5-2CFD-4697-9BDA-BA66A11582B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -221,7 +215,6 @@ Global
 		{CA77313D-6D97-4F91-9818-B729FA0359D2} = {2939E5A7-F1C3-4853-9F35-31EB64C08036}
 		{2D538398-EAC9-4A18-8459-74CA9E499F4E} = {117FC7BE-0153-4819-9A27-0FDA22132FA1}
 		{466C7AF5-342A-468B-917E-5C132FE18AF4} = {2F5363BE-E1D5-4DBE-AE32-6DA09088489D}
-		{1CF5CFF5-2CFD-4697-9BDA-BA66A11582B5} = {2939E5A7-F1C3-4853-9F35-31EB64C08036}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {247F9BF0-18BB-4A57-BB3E-2870DDAEF0D1}

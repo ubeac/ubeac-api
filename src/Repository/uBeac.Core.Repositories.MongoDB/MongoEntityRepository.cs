@@ -29,18 +29,18 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         return typeof(TEntity).Name;
     }
 
-    public virtual async Task Delete(TKey id, string actionName, CancellationToken cancellationToken = default)
+    public virtual async Task Delete(TEntity entity, string actionName, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var idFilter = Builders<TEntity>.Filter.Eq(doc => doc.Id, id);
+        var idFilter = Builders<TEntity>.Filter.Eq(doc => doc.Id, entity.Id);
 
-        await Collection.FindOneAndDeleteAsync(idFilter, null, cancellationToken);
+        await Collection.DeleteOneAsync(idFilter, null, cancellationToken);
     }
 
-    public virtual async Task Delete(TKey id, CancellationToken cancellationToken = default)
+    public virtual async Task Delete(TEntity entity, CancellationToken cancellationToken = default)
     {
-        await Delete(id, nameof(Delete), cancellationToken);
+        await Delete(entity, nameof(Delete), cancellationToken);
     }
 
     public virtual async Task<IEnumerable<TEntity>> GetAll(CancellationToken cancellationToken = default)

@@ -16,9 +16,9 @@ public class MongoDBHistoryRepository<TKey, THistory, TContext> : IMongoDBHistor
     protected readonly IApplicationContext ApplicationContext;
     protected readonly TContext MongoDbContext;
     protected readonly IMongoDatabase MongoDatabase;
-    protected readonly IHistoryDefaults Defaults;
+    protected readonly HistoryDefaults Defaults;
 
-    public MongoDBHistoryRepository(TContext mongoDbContext, IApplicationContext applicationContext, IHistoryDefaults defaults)
+    public MongoDBHistoryRepository(TContext mongoDbContext, IApplicationContext applicationContext, HistoryDefaults defaults)
     {
         MongoDbContext = mongoDbContext;
         MongoDatabase = MongoDbContext.Database;
@@ -57,7 +57,7 @@ public class MongoDBHistoryRepository<THistory, TContext> : MongoDBHistoryReposi
     where THistory : class, IHistoryEntity, new()
     where TContext : IMongoDBContext
 {
-    public MongoDBHistoryRepository(TContext mongoDbContext, IApplicationContext applicationContext, IHistoryDefaults defaults) : base(mongoDbContext, applicationContext, defaults)
+    public MongoDBHistoryRepository(TContext mongoDbContext, IApplicationContext applicationContext, HistoryDefaults defaults) : base(mongoDbContext, applicationContext, defaults)
     {
     }
 }
@@ -65,14 +65,14 @@ public class MongoDBHistoryRepository<THistory, TContext> : MongoDBHistoryReposi
 public class MongoDBHistoryRepository<TContext> : MongoDBHistoryRepository<HistoryEntity, TContext>
     where TContext : IMongoDBContext
 {
-    public MongoDBHistoryRepository(TContext mongoDbContext, IApplicationContext applicationContext, IHistoryDefaults defaults) : base(mongoDbContext, applicationContext, defaults)
+    public MongoDBHistoryRepository(TContext mongoDbContext, IApplicationContext applicationContext, HistoryDefaults defaults) : base(mongoDbContext, applicationContext, defaults)
     {
     }
 }
 
 public class MongoDBHistoryRepository : MongoDBHistoryRepository<HistoryMongoDBContext>
 {
-    public MongoDBHistoryRepository(HistoryMongoDBContext mongoDbContext, IApplicationContext applicationContext, IHistoryDefaults defaults) : base(mongoDbContext, applicationContext, defaults)
+    public MongoDBHistoryRepository(HistoryMongoDBContext mongoDbContext, IApplicationContext applicationContext, HistoryDefaults defaults) : base(mongoDbContext, applicationContext, defaults)
     {
     }
 }

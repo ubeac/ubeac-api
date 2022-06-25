@@ -46,7 +46,7 @@ namespace uBeac.Identity
         public async Task<IdentityResult> DeleteAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await _repository.Delete(user.Id, cancellationToken: cancellationToken);
+            await _repository.Delete(user, cancellationToken: cancellationToken);
             return IdentityResult.Success;
         }
 
