@@ -9,6 +9,8 @@ public class LocalStorageFileProvider : IFileProvider
         Options = options;
     }
 
+    public string Name => nameof(LocalStorageFileProvider);
+
     public async Task Create(FileStream fileStream, string fileName, CancellationToken cancellationToken = default)
     {
         var path = GetFinalPath(fileName);
