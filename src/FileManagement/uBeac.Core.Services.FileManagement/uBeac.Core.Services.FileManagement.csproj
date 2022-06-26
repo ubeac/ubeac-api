@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\uBeac.Core.Providers.FileManagement.Abstractions\uBeac.Core.Providers.FileManagement.Abstractions.csproj" />
+    <ProjectReference Include="..\uBeac.Core.Repositories.FileManagement.Abstractions\uBeac.Core.Repositories.FileManagement.Abstractions.csproj" />
+    <ProjectReference Include="..\uBeac.Core.Services.FileManagement.Abstractions\uBeac.Core.Services.FileManagement.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>
