@@ -3,7 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\uBeac.Core.Providers.FileManagement.Abstractions\uBeac.Core.Providers.FileManagement.Abstractions.csproj" />
+  </ItemGroup>
 
 </Project>
