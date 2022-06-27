@@ -1,6 +1,6 @@
-﻿namespace uBeac.Providers.FileManagement.LocalStorage;
+﻿namespace uBeac.FileManagement.LocalStorage;
 
-public class LocalStorageOptions
+public class FileManagementLocalStorageOptions
 {
     public string DirectoryPath { get; set; }
 }

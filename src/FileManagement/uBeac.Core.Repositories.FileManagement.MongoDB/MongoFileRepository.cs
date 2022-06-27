@@ -1,6 +1,6 @@
 ﻿using uBeac.Repositories.MongoDB;
 
-namespace uBeac.Repositories.FileManagement.MongoDB;
+namespace uBeac.FileManagement.MongoDB;
 
 public class MongoFileRepository<TKey, TEntity, TContext> : MongoEntityRepository<TKey, TEntity, TContext>, IFileRepository<TKey, TEntity>
     where TKey : IEquatable<TKey>

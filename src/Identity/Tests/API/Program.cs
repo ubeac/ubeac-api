@@ -1,5 +1,6 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
+using uBeac.FileManagement.LocalStorage;
 using uBeac.Repositories.History.MongoDB;
 using uBeac.Repositories.MongoDB;
 using uBeac.Web;
@@ -10,9 +11,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Adding json config files (IConfiguration)
 builder.Configuration.AddJsonConfig(builder.Environment);
-
-// Adding bson serializers
-//builder.Services.AddDefaultBsonSerializers();
 
 // Adding http logging
 builder.Services.AddMongoDbHttpLogging(() =>
@@ -26,10 +24,28 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
+builder.Services.AddFileManagement(options =>
+{
+    options.AddCategory("Avatars")
+        .SetValidExtensions(new[] { ".png", ".jpg", ".jpeg", ".bmp" })
+        .StoreInfoInMongoDb()
+        .StoreFilesInLocalStorage(builder.Configuration.GetInstance<FileManagementLocalStorageOptions>("Avatars"));
+
+    options.AddCategory("Documents")
+        .SetValidExtensions(new[] { ".docx", ".pdf" })
+        .StoreInfoInMongoDb()
+        .StoreFilesInLocalStorage(builder.Configuration.GetInstance<FileManagementLocalStorageOptions>("Documents"));
+});
+
 // Disabling automatic model state validation
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ds", policy => policy.AllowAnyHeader().Build());
 });
 
 // Adding application context

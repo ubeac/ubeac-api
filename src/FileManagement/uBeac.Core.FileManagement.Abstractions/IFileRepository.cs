@@ -1,4 +1,6 @@
-﻿namespace uBeac.Repositories.FileManagement;
+﻿using uBeac.Repositories;
+
+namespace uBeac.FileManagement;
 
 public interface IFileRepository<TKey, TEntity> : IEntityRepository<TKey, TEntity>
     where TKey : IEquatable<TKey>

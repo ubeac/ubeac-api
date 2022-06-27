@@ -1,21 +1,22 @@
-﻿namespace uBeac.Providers.FileManagement.LocalStorage;
+﻿namespace uBeac.FileManagement.LocalStorage;
 
 public class LocalStorageFileProvider : IFileProvider
 {
-    protected readonly LocalStorageOptions Options;
+    protected readonly FileManagementLocalStorageOptions Options;
 
-    public LocalStorageFileProvider(LocalStorageOptions options)
+    public LocalStorageFileProvider(FileManagementLocalStorageOptions options)
     {
         Options = options;
     }
 
     public string Name => nameof(LocalStorageFileProvider);
 
-    public async Task Create(FileStream fileStream, string fileName, CancellationToken cancellationToken = default)
+    public async Task<CreateFileResult> Create(FileStream fileStream, string fileName, CancellationToken cancellationToken = default)
     {
         var path = GetFinalPath(fileName);
         await using var createStream = new FileStream(path, FileMode.Create, FileAccess.Write);
         await fileStream.CopyToAsync(createStream, cancellationToken);
+        return new CreateFileResult { FilePath = path };
     }
 
     public async Task<FileStream> Get(string fileName, CancellationToken cancellationToken = default)
