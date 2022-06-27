@@ -49,7 +49,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
 
         var filter = Builders<TEntity>.Filter.Empty;
         var findResult = await Collection.FindAsync(filter, null, cancellationToken);
-        return await findResult.ToListAsync(cancellationToken);
+        return findResult.ToEnumerable(cancellationToken);
     }
 
     public virtual async Task<TEntity> GetById(TKey id, CancellationToken cancellationToken = default)
@@ -71,7 +71,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
 
         var findResult = await Collection.FindAsync(idsFilter, null, cancellationToken);
 
-        return await findResult.ToListAsync(cancellationToken);
+        return findResult.ToEnumerable(cancellationToken);
     }
 
     public virtual async Task Create(TEntity entity, string actionName = null, CancellationToken cancellationToken = default)
