@@ -47,7 +47,6 @@ public sealed class HttpLog : Entity
     public string MachineName { get; set; }
     public string EnvironmentName { get; set; }
     public string EnvironmentUserName { get; set; }
-    public string UserAgent { get; set; }
 
     public IApplicationContext Context { get; set; }
 
