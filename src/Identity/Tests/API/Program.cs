@@ -43,11 +43,6 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     options.SuppressModelStateInvalidFilter = true;
 });
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("ds", policy => policy.AllowAnyHeader().Build());
-});
-
 // Adding application context
 builder.Services.AddApplicationContext();
 
