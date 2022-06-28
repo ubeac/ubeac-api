@@ -3,28 +3,34 @@
 public class LocalStorageFileProvider : IFileProvider
 {
     protected readonly FileManagementLocalStorageOptions Options;
+    protected readonly string DirPath;
 
     public LocalStorageFileProvider(FileManagementLocalStorageOptions options)
     {
         Options = options;
+
+        DirPath = Path.Combine(Directory.GetCurrentDirectory(), Options.DirectoryPath);
+        if (!Directory.Exists(DirPath)) Directory.CreateDirectory(DirPath);
     }
 
     public string Name => nameof(LocalStorageFileProvider);
 
-    public async Task<CreateFileResult> Create(FileStream fileStream, string fileName, CancellationToken cancellationToken = default)
+    public async Task Create(FileStream fileStream, string fileName, CancellationToken cancellationToken = default)
     {
-        var path = GetFinalPath(fileName);
+        var path = GetFilePath(fileName);
+
         await using var createStream = new FileStream(path, FileMode.Create, FileAccess.Write);
         await fileStream.CopyToAsync(createStream, cancellationToken);
-        return new CreateFileResult { FilePath = path };
+
     }
 
     public async Task<FileStream> Get(string fileName, CancellationToken cancellationToken = default)
     {
-        var path = GetFinalPath(fileName);
+        var path = GetFilePath(fileName);
+
         await using var readStream = new FileStream(path, FileMode.Open, FileAccess.Read);
         return readStream;
     }
 
-    protected string GetFinalPath(string fileName) => Path.Combine(Options.DirectoryPath, fileName);
+    protected string GetFilePath(string fileName) => Path.Combine(DirPath, fileName);
 }

@@ -22,19 +22,18 @@ public class FileService<TKey, TEntity> : IFileService<TKey, TEntity>
         var fileName = Path.GetRandomFileName();
         var fileExtension = Path.GetExtension(fileStream.Name);
 
-        var createResult = await Provider.Create(fileStream, fileName, cancellationToken);
+        await Provider.Create(fileStream, fileName, cancellationToken);
 
-        var entity = CreateInstance(fileStream, fileName, fileExtension, createResult.FilePath, category);
+        var entity = CreateInstance(fileStream, fileName, fileExtension, category);
         await Repository.Create(entity, cancellationToken);
     }
 
-    protected virtual TEntity CreateInstance(FileStream fileStream, string fileName, string fileExtension, string filePath, string category)
+    protected virtual TEntity CreateInstance(FileStream fileStream, string fileName, string fileExtension, string category)
     {
         var entity = Activator.CreateInstance<TEntity>();
         entity.Name = fileName;
         entity.Extension = fileExtension;
         entity.Provider = Provider.Name;
-        entity.Path = filePath;
         entity.Category = category;
         return entity;
     }
