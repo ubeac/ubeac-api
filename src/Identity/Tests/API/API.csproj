@@ -14,7 +14,7 @@
     <ProjectReference Include="..\..\..\Common\uBeac.Core.Common\uBeac.Core.Common.csproj" />
     <ProjectReference Include="..\..\..\Common\uBeac.Core.Configuration\uBeac.Core.Configuration.csproj" />
     <ProjectReference Include="..\..\..\FileManagement\uBeac.Core.FileManagement\uBeac.Core.FileManagement.csproj" />
-    <ProjectReference Include="..\..\..\FileManagement\uBeac.Core.Providers.FileManagement.LocalStorage\uBeac.Core.FileManagement.Providers.LocalStorage.csproj" />
+    <ProjectReference Include="..\..\..\FileManagement\uBeac.Core.Providers.FileManagement.LocalStorage\uBeac.Core.FileManagement.Providers.LocalDisk.csproj" />
     <ProjectReference Include="..\..\..\FileManagement\uBeac.Core.Repositories.FileManagement.MongoDB\uBeac.Core.FileManagement.Repositories.MongoDB.csproj" />
     <ProjectReference Include="..\..\..\Logging\uBeac.Core.Web.Logging.MongoDB\uBeac.Core.Web.Logging.MongoDB.csproj" />
     <ProjectReference Include="..\..\..\Repository\uBeac.Core.Repositories.History.Extensions\uBeac.Core.Repositories.History.Extensions.csproj" />

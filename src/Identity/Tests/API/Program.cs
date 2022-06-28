@@ -29,12 +29,12 @@ builder.Services.AddFileManagement(options =>
     options.AddCategory("Avatars")
         .SetValidExtensions(new[] { ".png", ".jpg", ".jpeg", ".bmp" })
         .StoreInfoInMongoDb()
-        .StoreFilesInLocalStorage(builder.Configuration.GetInstance<FileManagementLocalStorageOptions>("Avatars"));
+        .StoreFilesInLocalDisk(builder.Configuration.GetInstance<FileManagementLocalDiskOptions>("Avatars"));
 
     options.AddCategory("Documents")
         .SetValidExtensions(new[] { ".docx", ".pdf" })
         .StoreInfoInMongoDb()
-        .StoreFilesInLocalStorage(builder.Configuration.GetInstance<FileManagementLocalStorageOptions>("Documents"));
+        .StoreFilesInLocalDisk(builder.Configuration.GetInstance<FileManagementLocalDiskOptions>("Documents"));
 });
 
 // Disabling automatic model state validation

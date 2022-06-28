@@ -57,11 +57,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FileManagement", "FileManag
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.FileManagement.Repositories.MongoDB", "FileManagement\uBeac.Core.Repositories.FileManagement.MongoDB\uBeac.Core.FileManagement.Repositories.MongoDB.csproj", "{6B9F2368-1F55-43C0-9DDD-1CDE744F3118}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.FileManagement.Providers.LocalStorage", "FileManagement\uBeac.Core.Providers.FileManagement.LocalStorage\uBeac.Core.FileManagement.Providers.LocalStorage.csproj", "{6780E437-7D94-4B08-9A25-CA6698C5D8DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.FileManagement.Providers.LocalDisk", "FileManagement\uBeac.Core.Providers.FileManagement.LocalDisk\uBeac.Core.FileManagement.Providers.LocalDisk.csproj", "{6780E437-7D94-4B08-9A25-CA6698C5D8DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.FileManagement.Abstractions", "FileManagement\uBeac.Core.FileManagement.Abstractions\uBeac.Core.FileManagement.Abstractions.csproj", "{71C569AC-28C8-4268-81A2-964D7C48EBAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.FileManagement.Abstractions", "FileManagement\uBeac.Core.FileManagement.Abstractions\uBeac.Core.FileManagement.Abstractions.csproj", "{71C569AC-28C8-4268-81A2-964D7C48EBAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.FileManagement", "FileManagement\uBeac.Core.FileManagement\uBeac.Core.FileManagement.csproj", "{2D14DD45-130F-4B6B-B2CD-5F3F7AD28F96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.FileManagement", "FileManagement\uBeac.Core.FileManagement\uBeac.Core.FileManagement.csproj", "{2D14DD45-130F-4B6B-B2CD-5F3F7AD28F96}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "Identity\Tests\API\API.csproj", "{04D4D6DE-2782-4A0D-9B74-1FF5141BE112}"
 EndProject

@@ -1,11 +1,11 @@
 ﻿namespace uBeac.FileManagement.LocalStorage;
 
-public class LocalStorageFileProvider : IFileProvider
+public class LocalDiskFileProvider : IFileProvider
 {
-    protected readonly FileManagementLocalStorageOptions Options;
+    protected readonly FileManagementLocalDiskOptions Options;
     protected readonly string DirPath;
 
-    public LocalStorageFileProvider(FileManagementLocalStorageOptions options)
+    public LocalDiskFileProvider(FileManagementLocalDiskOptions options)
     {
         Options = options;
 
@@ -13,7 +13,7 @@ public class LocalStorageFileProvider : IFileProvider
         if (!Directory.Exists(DirPath)) Directory.CreateDirectory(DirPath);
     }
 
-    public string Name => nameof(LocalStorageFileProvider);
+    public string Name => nameof(LocalDiskFileProvider);
 
     public async Task Create(FileStream fileStream, string fileName, CancellationToken cancellationToken = default)
     {
