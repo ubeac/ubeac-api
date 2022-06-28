@@ -6,7 +6,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public class FileManagementBuilder<TKey, TEntity> : IFileManagementBuilder<TKey, TEntity>
     where TKey : IEquatable<TKey>
-    where TEntity : IFileEntity<TKey>
+    where TEntity : IFileEntity<TKey>, new()
 {
     protected readonly IServiceCollection Services;
 
@@ -33,7 +33,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddFileManagement<TKey, TEntity>(this IServiceCollection services, Action<IFileManagementBuilder<TKey, TEntity>> options)
         where TKey : IEquatable<TKey>
-        where TEntity : IFileEntity<TKey>
+        where TEntity : IFileEntity<TKey>, new()
     {
         var builder = new FileManagementBuilder<TKey, TEntity>(services);
         options.Invoke(builder);
@@ -44,7 +44,7 @@ public static class ServiceCollectionExtensions
     }
 
     public static IServiceCollection AddFileManagement<TEntity>(this IServiceCollection services, Action<IFileManagementBuilder<Guid, TEntity>> options)
-        where TEntity : IFileEntity
+        where TEntity : IFileEntity, new()
         => AddFileManagement<Guid, TEntity>(services, options);
 
     public static IServiceCollection AddFileManagement(this IServiceCollection services, Action<IFileManagementBuilder<Guid, FileEntity>> options)

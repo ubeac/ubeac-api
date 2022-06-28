@@ -5,7 +5,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public class FileServiceBuilder<TKey, TEntity> : IFileServiceBuilder<TKey, TEntity>
     where TKey : IEquatable<TKey>
-    where TEntity : IFileEntity<TKey>
+    where TEntity : IFileEntity<TKey>, new()
 {
     public List<Func<IServiceProvider, IFileValidator>> Validators { get; } = new();
     public Func<IServiceProvider, IFileRepository<TKey, TEntity>> Repository { get; set; }
