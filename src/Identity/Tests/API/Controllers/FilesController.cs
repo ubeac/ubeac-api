@@ -24,4 +24,16 @@ public class FilesController : BaseController
             Extension = Path.GetExtension(file.FileName)
         }, cancellationToken);
     }
+
+    [HttpPost]
+    public async Task Document([FromForm] IFormFile file, CancellationToken cancellationToken = default)
+    {
+        await using var stream = file.OpenReadStream();
+        await FileManager.Create(new CreateFileRequest
+        {
+            Stream = stream,
+            Category = "Documents",
+            Extension = Path.GetExtension(file.FileName)
+        }, cancellationToken);
+    }
 }
