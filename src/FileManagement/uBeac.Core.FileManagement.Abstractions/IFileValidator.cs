@@ -2,7 +2,7 @@
 
 public interface IFileValidator
 {
-    IFileValidationResult Validate(CreateFileRequest request);
+    IFileValidationResult Validate(FileModel model);
 }
 
 public interface IFileValidationResult

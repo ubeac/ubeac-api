@@ -21,29 +21,45 @@ public class FileService<TKey, TEntity> : IFileService<TKey, TEntity>
     public async Task<IEnumerable<IFileEntity>> Search(SearchFileRequest request, CancellationToken cancellationToken = default)
         => (IEnumerable<IFileEntity>) await Search(request as SearchFileRequest<TKey>, cancellationToken);
 
-    public async Task Create(CreateFileRequest request, TEntity entity, CancellationToken cancellationToken = default)
+    public async Task<FileModel> Get(GetFileRequest request, CancellationToken cancellationToken = default)
     {
-        ThrowExceptionIfNotValid(request);
+        var entity = (await Search(new SearchFileRequest
+        {
+            Category = request.Category,
+            Names = new[] { request.Name }
+        }, cancellationToken)).First();
+
+        return new FileModel
+        {
+            Stream = await Provider.Get(entity.Name, cancellationToken),
+            Category = request.Category,
+            Extension = entity.Extension
+        };
+    }
+
+    public async Task Create(FileModel model, TEntity entity, CancellationToken cancellationToken = default)
+    {
+        ThrowExceptionIfNotValid(model);
 
         var fileName = Path.GetRandomFileName();
 
         entity.Name = fileName;
-        entity.Extension = request.Extension;
+        entity.Extension = model.Extension;
         entity.Provider = Provider.Name;
-        entity.Category = request.Category;
+        entity.Category = model.Category;
 
-        await Provider.Create(request.Stream, fileName, cancellationToken);
+        await Provider.Create(model.Stream, fileName, cancellationToken);
         await Repository.Create(entity, cancellationToken);
     }
 
-    public async Task Create(CreateFileRequest request, CancellationToken cancellationToken = default)
+    public async Task Create(FileModel model, CancellationToken cancellationToken = default)
     {
-        await Create(request, new TEntity(), cancellationToken);
+        await Create(model, new TEntity(), cancellationToken);
     }
 
-    protected void ThrowExceptionIfNotValid(CreateFileRequest request) => Validators.ForEach(validator =>
+    protected void ThrowExceptionIfNotValid(FileModel model) => Validators.ForEach(validator =>
     {
-        var result = validator.Validate(request);
+        var result = validator.Validate(model);
         if (!result.Validated) throw result.Exception;
     });
 }

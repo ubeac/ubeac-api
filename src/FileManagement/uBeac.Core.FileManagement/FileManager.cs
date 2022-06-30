@@ -27,22 +27,28 @@ public class FileManager : IFileManager
         return await Search<Guid, TEntity>(request, cancellationToken);
     }
 
-    public async Task Create(CreateFileRequest request, CancellationToken cancellationToken = default)
+    public async Task Create(FileModel model, CancellationToken cancellationToken = default)
     {
-        var service = GetService(request.Category);
-        await service.Create(request, cancellationToken);
+        var service = GetService(model.Category);
+        await service.Create(model, cancellationToken);
     }
 
-    public async Task Create<TKey, TEntity>(CreateFileRequest request, TEntity entity, CancellationToken cancellationToken = default) where TKey : IEquatable<TKey> where TEntity : IFileEntity<TKey>
+    public async Task Create<TKey, TEntity>(FileModel model, TEntity entity, CancellationToken cancellationToken = default) where TKey : IEquatable<TKey> where TEntity : IFileEntity<TKey>
     {
-        var service = GetService(request.Category);
+        var service = GetService(model.Category);
         if (service is not IFileService<TKey, TEntity> entityService) throw new Exception("No file service registered for your entity.");
-        await entityService.Create(request, entity, cancellationToken);
+        await entityService.Create(model, entity, cancellationToken);
     }
 
-    public async Task Create<TEntity>(CreateFileRequest request, TEntity entity, CancellationToken cancellationToken = default) where TEntity : IFileEntity
+    public async Task Create<TEntity>(FileModel model, TEntity entity, CancellationToken cancellationToken = default) where TEntity : IFileEntity
     {
-        await Create<Guid, TEntity>(request, entity, cancellationToken);
+        await Create<Guid, TEntity>(model, entity, cancellationToken);
+    }
+
+    public async Task<FileModel> Get(GetFileRequest request, CancellationToken cancellationToken = default)
+    {
+        var service = GetService(request.Category);
+        return await service.Get(request, cancellationToken);
     }
 
     protected IFileService GetService(string category) => Categories.Single(c => c.CategoryName == category).Service;

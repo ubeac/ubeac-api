@@ -17,12 +17,19 @@ public class AvatarsController : BaseController
     public async Task Upload([FromForm] IFormFile file, CancellationToken cancellationToken = default)
     {
         await using var stream = file.OpenReadStream();
-        await FileManager.Create(new CreateFileRequest
+        await FileManager.Create(new FileModel
         {
             Stream = stream,
             Category = "Avatars",
             Extension = Path.GetExtension(file.FileName)
         }, cancellationToken);
+    }
+
+    [HttpPost]
+    public async Task<FileStreamResult> Download([FromBody] GetFileRequest request, CancellationToken cancellationToken = default)
+    {
+        var response = await FileManager.Get(request, cancellationToken);
+        return new FileStreamResult(response.Stream, "application/octet-stream") { FileDownloadName = $"{request.Name}.{response.Extension}" };
     }
 
     [HttpPost]

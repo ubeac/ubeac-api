@@ -27,9 +27,7 @@ public class LocalDiskFileProvider : IFileProvider
     public async Task<FileStream> Get(string fileName, CancellationToken cancellationToken = default)
     {
         var path = GetFilePath(fileName);
-
-        await using var readStream = new FileStream(path, FileMode.Open, FileAccess.Read);
-        return readStream;
+        return new FileStream(path, FileMode.Open, FileAccess.Read); ;
     }
 
     protected string GetFilePath(string fileName) => Path.Combine(DirPath, fileName);
