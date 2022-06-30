@@ -15,6 +15,12 @@ public class FileService<TKey, TEntity> : IFileService<TKey, TEntity>
         Provider = provider;
     }
 
+    public async Task<IEnumerable<TEntity>> Search(SearchFileRequest<TKey> request, CancellationToken cancellationToken = default)
+        => await Repository.Search(request, cancellationToken);
+
+    public async Task<IEnumerable<IFileEntity>> Search(SearchFileRequest request, CancellationToken cancellationToken = default)
+        => (IEnumerable<IFileEntity>) await Search(request as SearchFileRequest<TKey>, cancellationToken);
+
     public async Task Create(CreateFileRequest request, TEntity entity, CancellationToken cancellationToken = default)
     {
         ThrowExceptionIfNotValid(request);
