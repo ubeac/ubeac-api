@@ -9,9 +9,8 @@ public class FileExtensionValidator : IFileValidator
         ValidExtensions = validExtensions.Select(e => e.ToUpper()).ToArray();
     }
 
-    public IFileValidationResult Validate(FileStream fileStream)
+    public IFileValidationResult Validate(CreateFileRequest request)
     {
-        var extension = Path.GetExtension(fileStream.Name).ToUpper();
-        return ValidExtensions.Contains(extension) ? new FileValidationResult() : new FileValidationResult(new Exception("File extension is not valid!"));
+        return ValidExtensions.Contains(request.Extension.ToUpper()) ? new FileValidationResult() : new FileValidationResult(new Exception("File extension is not valid!"));
     }
 }

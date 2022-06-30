@@ -15,12 +15,12 @@ public class LocalDiskFileProvider : IFileProvider
 
     public string Name => nameof(LocalDiskFileProvider);
 
-    public async Task Create(FileStream fileStream, string fileName, CancellationToken cancellationToken = default)
+    public async Task Create(Stream stream, string fileName, CancellationToken cancellationToken = default)
     {
         var path = GetFilePath(fileName);
 
         await using var createStream = new FileStream(path, FileMode.Create, FileAccess.Write);
-        await fileStream.CopyToAsync(createStream, cancellationToken);
+        await stream.CopyToAsync(createStream, cancellationToken);
 
     }
 

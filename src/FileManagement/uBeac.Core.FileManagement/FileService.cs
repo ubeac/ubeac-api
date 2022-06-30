@@ -15,30 +15,29 @@ public class FileService<TKey, TEntity> : IFileService<TKey, TEntity>
         Provider = provider;
     }
 
-    public async Task Create(FileStream fileStream, string category, TEntity entity, CancellationToken cancellationToken = default)
+    public async Task Create(CreateFileRequest request, TEntity entity, CancellationToken cancellationToken = default)
     {
-        ThrowExceptionIfNotValid(fileStream);
+        ThrowExceptionIfNotValid(request);
 
         var fileName = Path.GetRandomFileName();
-        var fileExtension = Path.GetExtension(fileStream.Name);
 
         entity.Name = fileName;
-        entity.Extension = fileExtension;
+        entity.Extension = request.Extension;
         entity.Provider = Provider.Name;
-        entity.Category = category;
+        entity.Category = request.Category;
 
-        await Provider.Create(fileStream, fileName, cancellationToken);
+        await Provider.Create(request.Stream, fileName, cancellationToken);
         await Repository.Create(entity, cancellationToken);
     }
 
-    public async Task Create(FileStream fileStream, string category, CancellationToken cancellationToken = default)
+    public async Task Create(CreateFileRequest request, CancellationToken cancellationToken = default)
     {
-        await Create(fileStream, category, new TEntity(), cancellationToken);
+        await Create(request, new TEntity(), cancellationToken);
     }
 
-    protected void ThrowExceptionIfNotValid(FileStream fileStream) => Validators.ForEach(validator =>
+    protected void ThrowExceptionIfNotValid(CreateFileRequest request) => Validators.ForEach(validator =>
     {
-        var result = validator.Validate(fileStream);
+        var result = validator.Validate(request);
         if (!result.Validated) throw result.Exception;
     });
 }
