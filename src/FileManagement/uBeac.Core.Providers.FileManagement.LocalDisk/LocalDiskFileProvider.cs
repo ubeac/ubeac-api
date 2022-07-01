@@ -1,6 +1,6 @@
 ﻿namespace uBeac.FileManagement.LocalStorage;
 
-public class LocalDiskFileProvider : IFileProvider
+public class LocalDiskFileProvider : IFileStorageProvider
 {
     protected readonly FileManagementLocalDiskOptions Options;
     protected readonly string DirPath;

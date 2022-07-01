@@ -6,9 +6,9 @@ public class FileService<TKey, TEntity> : IFileService<TKey, TEntity>
 {
     protected readonly List<IFileValidator> Validators;
     protected readonly IFileRepository<TKey, TEntity> Repository;
-    protected readonly IFileProvider Provider;
+    protected readonly IFileStorageProvider Provider;
 
-    public FileService(IEnumerable<IFileValidator> validators, IFileRepository<TKey, TEntity> repository, IFileProvider provider)
+    public FileService(IEnumerable<IFileValidator> validators, IFileRepository<TKey, TEntity> repository, IFileStorageProvider provider)
     {
         Validators = validators.ToList();
         Repository = repository;
@@ -37,7 +37,7 @@ public class FileService<TKey, TEntity> : IFileService<TKey, TEntity>
         };
     }
 
-    public async Task Create(FileModel model, TEntity entity, CancellationToken cancellationToken = default)
+    public async Task<TEntity> Create(FileModel model, TEntity entity, CancellationToken cancellationToken = default)
     {
         ThrowExceptionIfNotValid(model);
 
@@ -50,11 +50,13 @@ public class FileService<TKey, TEntity> : IFileService<TKey, TEntity>
 
         await Provider.Create(model.Stream, fileName, cancellationToken);
         await Repository.Create(entity, cancellationToken);
+
+        return entity;
     }
 
-    public async Task Create(FileModel model, CancellationToken cancellationToken = default)
+    public async Task<IFileEntity> Create(FileModel model, CancellationToken cancellationToken = default)
     {
-        await Create(model, new TEntity(), cancellationToken);
+        return (IFileEntity) await Create(model, new TEntity(), cancellationToken);
     }
 
     protected void ThrowExceptionIfNotValid(FileModel model) => Validators.ForEach(validator =>
@@ -67,7 +69,7 @@ public class FileService<TKey, TEntity> : IFileService<TKey, TEntity>
 public class FileService<TEntity> : FileService<Guid, TEntity>, IFileService<TEntity>
     where TEntity : IFileEntity, new()
 {
-    public FileService(IEnumerable<IFileValidator> validators, IFileRepository<TEntity> repository, IFileProvider provider) : base(validators, repository, provider)
+    public FileService(IEnumerable<IFileValidator> validators, IFileRepository<TEntity> repository, IFileStorageProvider provider) : base(validators, repository, provider)
     {
     }
 }

@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Repository\uBeac.Core.Repositories.MongoDB\uBeac.Core.Repositories.MongoDB.csproj" />
     <ProjectReference Include="..\uBeac.Core.FileManagement.Abstractions\uBeac.Core.FileManagement.Abstractions.csproj" />
   </ItemGroup>
 

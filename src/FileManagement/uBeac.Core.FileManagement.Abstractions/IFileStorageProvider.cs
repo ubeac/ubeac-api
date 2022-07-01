@@ -1,6 +1,6 @@
 ﻿namespace uBeac.FileManagement;
 
-public interface IFileProvider
+public interface IFileStorageProvider
 {
     string Name { get; }
 

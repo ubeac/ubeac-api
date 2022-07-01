@@ -1,6 +1,7 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using uBeac.FileManagement.LocalStorage;
+using uBeac.FileManagement.MongoDB;
 using uBeac.Repositories.History.MongoDB;
 using uBeac.Repositories.MongoDB;
 using uBeac.Web;
@@ -24,17 +25,22 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
+builder.Services.AddScoped<MongoFileRepository>();
+
 builder.Services.AddFileManagement(options =>
 {
+    var avatarsLocalDiskOptions = builder.Configuration.GetInstance<FileManagementLocalDiskOptions>("Avatars");
+    var documentsLocalDiskOptions = builder.Configuration.GetInstance<FileManagementLocalDiskOptions>("Documents");
+
     options.AddCategory("Avatars")
         .SetValidExtensions(new[] { ".png", ".jpg", ".jpeg", ".bmp" })
-        .StoreInfoInMongoDb()
-        .StoreFilesInLocalDisk(builder.Configuration.GetInstance<FileManagementLocalDiskOptions>("Avatars"));
+        .StoreInfoIn<MongoFileRepository>()
+        .StoreFilesIn(new LocalDiskFileProvider(avatarsLocalDiskOptions));
 
     options.AddCategory("Documents")
         .SetValidExtensions(new[] { ".docx", ".pdf" })
-        .StoreInfoInMongoDb()
-        .StoreFilesInLocalDisk(builder.Configuration.GetInstance<FileManagementLocalDiskOptions>("Documents"));
+        .StoreInfoIn<MongoFileRepository>()
+        .StoreFilesIn(new LocalDiskFileProvider(documentsLocalDiskOptions));
 });
 
 // Disabling automatic model state validation

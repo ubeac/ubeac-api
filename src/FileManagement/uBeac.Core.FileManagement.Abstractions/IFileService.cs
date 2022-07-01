@@ -5,10 +5,8 @@ namespace uBeac.FileManagement;
 public interface IFileService : IService
 {
     Task<IEnumerable<IFileEntity>> Search(SearchFileRequest request, CancellationToken cancellationToken = default);
-
     Task<FileModel> Get(GetFileRequest request, CancellationToken cancellationToken = default);
-
-    Task Create(FileModel model, CancellationToken cancellationToken = default);
+    Task<IFileEntity> Create(FileModel model, CancellationToken cancellationToken = default);
 }
 
 public interface IFileService<TKey, TEntity> : IFileService
@@ -16,8 +14,7 @@ public interface IFileService<TKey, TEntity> : IFileService
     where TEntity : IFileEntity<TKey>
 {
     Task<IEnumerable<TEntity>> Search(SearchFileRequest<TKey> request, CancellationToken cancellationToken = default);
-
-    Task Create(FileModel model, TEntity entity, CancellationToken cancellationToken = default);
+    Task<TEntity> Create(FileModel model, TEntity entity, CancellationToken cancellationToken = default);
 }
 
 public interface IFileService<TEntity> : IFileService<Guid, TEntity>

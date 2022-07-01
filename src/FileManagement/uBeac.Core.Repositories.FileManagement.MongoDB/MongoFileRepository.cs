@@ -36,3 +36,10 @@ public class MongoFileRepository<TEntity, TContext> : MongoFileRepository<Guid, 
     {
     }
 }
+
+public class MongoFileRepository : MongoFileRepository<FileEntity, MongoDBContext>
+{
+    public MongoFileRepository(MongoDBContext mongoDbContext, IApplicationContext applicationContext) : base(mongoDbContext, applicationContext)
+    {
+    }
+}

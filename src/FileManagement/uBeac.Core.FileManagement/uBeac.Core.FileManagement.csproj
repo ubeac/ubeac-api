@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\uBeac.Core.FileManagement.Abstractions\uBeac.Core.FileManagement.Abstractions.csproj" />
+    <ProjectReference Include="..\uBeac.Core.FileManagement.Infrastructure\uBeac.Core.FileManagement.Services.csproj" />
   </ItemGroup>
 
 </Project>

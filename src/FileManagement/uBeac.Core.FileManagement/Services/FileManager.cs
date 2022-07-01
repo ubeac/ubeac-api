@@ -2,9 +2,9 @@
 
 public class FileManager : IFileManager
 {
-    protected readonly List<IFileCategory> Categories;
+    protected readonly List<FileCategory> Categories;
 
-    public FileManager(IEnumerable<IFileCategory> categories)
+    public FileManager(IEnumerable<FileCategory> categories)
     {
         Categories = categories.ToList();
     }
@@ -27,22 +27,22 @@ public class FileManager : IFileManager
         return await Search<Guid, TEntity>(request, cancellationToken);
     }
 
-    public async Task Create(FileModel model, CancellationToken cancellationToken = default)
+    public async Task<IFileEntity> Create(FileModel model, CancellationToken cancellationToken = default)
     {
         var service = GetService(model.Category);
-        await service.Create(model, cancellationToken);
+        return await service.Create(model, cancellationToken);
     }
 
-    public async Task Create<TKey, TEntity>(FileModel model, TEntity entity, CancellationToken cancellationToken = default) where TKey : IEquatable<TKey> where TEntity : IFileEntity<TKey>
+    public async Task<TEntity> Create<TKey, TEntity>(FileModel model, TEntity entity, CancellationToken cancellationToken = default) where TKey : IEquatable<TKey> where TEntity : IFileEntity<TKey>
     {
         var service = GetService(model.Category);
         if (service is not IFileService<TKey, TEntity> entityService) throw new Exception("No file service registered for your entity.");
-        await entityService.Create(model, entity, cancellationToken);
+        return await entityService.Create(model, entity, cancellationToken);
     }
 
-    public async Task Create<TEntity>(FileModel model, TEntity entity, CancellationToken cancellationToken = default) where TEntity : IFileEntity
+    public async Task <TEntity>Create<TEntity>(FileModel model, TEntity entity, CancellationToken cancellationToken = default) where TEntity : IFileEntity
     {
-        await Create<Guid, TEntity>(model, entity, cancellationToken);
+        return await Create<Guid, TEntity>(model, entity, cancellationToken);
     }
 
     public async Task<FileModel> Get(GetFileRequest request, CancellationToken cancellationToken = default)

@@ -65,6 +65,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.FileManagement",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "Identity\Tests\API\API.csproj", "{04D4D6DE-2782-4A0D-9B74-1FF5141BE112}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.FileManagement.Services", "FileManagement\uBeac.Core.FileManagement.Infrastructure\uBeac.Core.FileManagement.Services.csproj", "{50BE9416-E281-4FF1-BE56-B7CCC4A70869}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -167,6 +169,10 @@ Global
 		{04D4D6DE-2782-4A0D-9B74-1FF5141BE112}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04D4D6DE-2782-4A0D-9B74-1FF5141BE112}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04D4D6DE-2782-4A0D-9B74-1FF5141BE112}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50BE9416-E281-4FF1-BE56-B7CCC4A70869}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50BE9416-E281-4FF1-BE56-B7CCC4A70869}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50BE9416-E281-4FF1-BE56-B7CCC4A70869}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50BE9416-E281-4FF1-BE56-B7CCC4A70869}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -195,6 +201,7 @@ Global
 		{6780E437-7D94-4B08-9A25-CA6698C5D8DA} = {0010CB43-FD6D-4C91-91D9-3065ACBAC2E1}
 		{71C569AC-28C8-4268-81A2-964D7C48EBAC} = {0010CB43-FD6D-4C91-91D9-3065ACBAC2E1}
 		{2D14DD45-130F-4B6B-B2CD-5F3F7AD28F96} = {0010CB43-FD6D-4C91-91D9-3065ACBAC2E1}
+		{50BE9416-E281-4FF1-BE56-B7CCC4A70869} = {0010CB43-FD6D-4C91-91D9-3065ACBAC2E1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {247F9BF0-18BB-4A57-BB3E-2870DDAEF0D1}

@@ -14,10 +14,10 @@ public class AvatarsController : BaseController
     }
 
     [HttpPost]
-    public async Task Upload([FromForm] IFormFile file, CancellationToken cancellationToken = default)
+    public async Task<IFileEntity> Upload([FromForm] IFormFile file, CancellationToken cancellationToken = default)
     {
         await using var stream = file.OpenReadStream();
-        await FileManager.Create(new FileModel
+        return await FileManager.Create(new FileModel
         {
             Stream = stream,
             Category = "Avatars",
