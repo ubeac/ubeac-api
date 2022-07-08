@@ -3,6 +3,6 @@
     "Preload": true,
     "IncludeSubDomains": true,
     "MaxAge": 30,
-    "ExcludedHosts": [ "example.com", "www.example.com" ]
+    "ExcludedHosts": []
   }
 }
