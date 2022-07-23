@@ -15,12 +15,7 @@ builder.Configuration.AddJsonConfig(builder.Environment);
 //builder.Services.AddDefaultBsonSerializers();
 
 // Adding http logging
-builder.Services.AddMongoDbHttpLogging(() =>
-{
-    var options = builder.Configuration.GetInstance<MongoDbHttpLogOptions>("HttpLogging");
-    options.ConnectionString = builder.Configuration.GetConnectionString("HttpLoggingConnection");
-    return options;
-});
+builder.Services.AddMongoDbHttpLogging<MongoDBContext>(builder.Configuration.GetInstance<MongoDbHttpLogOptions>("HttpLogging"));
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
