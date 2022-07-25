@@ -1,4 +1,6 @@
-﻿namespace API;
+﻿using uBeac.FileManagement;
+
+namespace API;
 
 public class AccountsController : AccountsControllerBase<User>
 {
