@@ -6,10 +6,12 @@ namespace API;
 public class LoginRequest
 {
     [Required]
+    [LogIgnore]
     public string UserName { get; set; }
 
     [Required]
     [DataType(DataType.Password)]
+    [LogIgnore]
     public string Password { get; set; }
 }
 
