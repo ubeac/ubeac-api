@@ -67,7 +67,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Providers.FileMa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Services.FileManagement.Abstractions", "FileManagement\uBeac.Core.Services.FileManagement.Abstractions\uBeac.Core.Services.FileManagement.Abstractions.csproj", "{EA9BA74E-EE81-40E5-976A-EAB7C586F3D8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "Identity\Tests\API\API.csproj", "{1DB81852-0912-4139-BCC8-00EACF923088}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "Identity\Tests\API\API.csproj", "{B8CF6F1F-5BA8-41E3-BDB9-951A64A3C95B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -175,10 +175,10 @@ Global
 		{EA9BA74E-EE81-40E5-976A-EAB7C586F3D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA9BA74E-EE81-40E5-976A-EAB7C586F3D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA9BA74E-EE81-40E5-976A-EAB7C586F3D8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1DB81852-0912-4139-BCC8-00EACF923088}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1DB81852-0912-4139-BCC8-00EACF923088}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1DB81852-0912-4139-BCC8-00EACF923088}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1DB81852-0912-4139-BCC8-00EACF923088}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8CF6F1F-5BA8-41E3-BDB9-951A64A3C95B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8CF6F1F-5BA8-41E3-BDB9-951A64A3C95B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8CF6F1F-5BA8-41E3-BDB9-951A64A3C95B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8CF6F1F-5BA8-41E3-BDB9-951A64A3C95B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

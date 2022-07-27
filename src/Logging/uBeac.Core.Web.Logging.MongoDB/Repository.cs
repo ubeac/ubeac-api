@@ -18,7 +18,7 @@ public class MongoDbHttpLogRepository<TContext> : IHttpLogRepository
     public async Task Create(HttpLog log, CancellationToken cancellationToken = default)
     {
         var collectionName = Options.GetCollectionName(log.StatusCode);
-        var collection = GetCollection(Context.Database, collectionName);
+        var collection = GetCollection(Context.Database, collectionName).WithWriteConcern(WriteConcern.Unacknowledged);
         await collection.InsertOneAsync(log, new InsertOneOptions(), cancellationToken);
     }
 
