@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
 
 namespace uBeac.Web.Logging;
 
@@ -21,8 +22,8 @@ internal sealed class HttpLoggingMiddleware
         try
         {
             var stopwatch = Stopwatch.StartNew();
-            
-            var requestBody = await ReadRequestBody(context.Request);
+
+            //var requestBody = await ReadRequestBody(context.Request);                        
 
             var originalResponseStream = context.Response.Body;
             await using var responseMemoryStream = new MemoryStream();
@@ -41,7 +42,10 @@ internal sealed class HttpLoggingMiddleware
             }
             finally
             {
-                var responseBody = await ReadResponseBody(context, originalResponseStream, responseMemoryStream);
+                //var responseBody = await ReadResponseBody(context, originalResponseStream, responseMemoryStream);
+                await ReadResponseBody(context, originalResponseStream, responseMemoryStream);
+                var requestBody = JsonConvert.SerializeObject(context.Items["LogRequestBody"]);
+                var responseBody = JsonConvert.SerializeObject(context.Items["LogResponseBody"]);
 
                 stopwatch.Stop();
 
@@ -51,7 +55,7 @@ internal sealed class HttpLoggingMiddleware
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Occurred a unhandled exception when logging HTTP request.");
+            logger.LogError(e, "An unhandled exception has occured during logging HTTP request.");
         }
     }
 
@@ -98,4 +102,5 @@ internal sealed class HttpLoggingMiddleware
     {
         await repository.Create(log);
     }
+        
 }

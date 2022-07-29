@@ -18,7 +18,7 @@ builder.Configuration.AddJsonConfig(builder.Environment);
 builder.Services.AddMongoDbHttpLogging<MongoDBContext>(builder.Configuration.GetInstance<MongoDbHttpLogOptions>("HttpLogging"));
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddControllers();
+builder.Services.AddControllers(options => options.Filters.Add<CriticalDataHandlerFilter>());
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 // Disabling automatic model state validation
@@ -111,15 +111,17 @@ app.UseHstsOnProduction(builder.Environment);
 app.UseCorsPolicy(corsPolicyOptions);
 
 app.UseHttpsRedirection();
+
+app.UseHttpLoggingMiddleware();
+
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.UseAuthentication();
-app.UseAuthorization();
-
 app.UseCoreSwagger();
 
-app.UseHttpLoggingMiddleware();
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapControllers();
 
