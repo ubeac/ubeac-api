@@ -51,7 +51,7 @@ public static class ServiceExtensions
             options.Preload = hsts.Preload;
             options.IncludeSubDomains = hsts.IncludeSubDomains;
             options.MaxAge = TimeSpan.FromDays(hsts.MaxAge);
-            foreach (var host in hsts.ExcludedHosts) options.ExcludedHosts.Add(host);
+            if (hsts.ExcludedHosts != null) foreach (var host in hsts.ExcludedHosts) options.ExcludedHosts.Add(host);
         });
 
         return services;
