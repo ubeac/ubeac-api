@@ -107,19 +107,18 @@ builder.Services
 
 var app = builder.Build();
 
+app.UseHttpsRedirection();
 app.UseHstsOnProduction(builder.Environment);
 app.UseCorsPolicy(corsPolicyOptions);
 
-app.UseHttpsRedirection();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.UseAuthentication();
-app.UseAuthorization();
-
 app.UseCoreSwagger();
 
+app.UseAuthentication();
 app.UseHttpLoggingMiddleware();
+app.UseAuthorization();
 
 app.MapControllers();
 
