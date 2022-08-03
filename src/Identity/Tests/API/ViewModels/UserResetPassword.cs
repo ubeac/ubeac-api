@@ -12,6 +12,5 @@ public class ResetPasswordRequest
 
     [Required] 
     [DataType(DataType.Password)]
-    [LogIgnore]
     public string NewPassword { get; set; }
 }

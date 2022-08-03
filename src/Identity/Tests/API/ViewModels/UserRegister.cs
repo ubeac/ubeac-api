@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace API;
 
+[LogIgnore]
 public class RegisterRequest
 {
     [Required]

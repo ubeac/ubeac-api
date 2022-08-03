@@ -6,13 +6,19 @@ namespace API;
 public class LoginRequest
 {
     [Required]
-    [LogIgnore]
+    [LogIgnore("-----")]
     public string UserName { get; set; }
 
     [Required]
     [DataType(DataType.Password)]
-    [LogIgnore]
+    [LogIgnore("*****")]
     public string Password { get; set; }
+
+    public AltLoginRequest Nested { get; set; }
+    public LoginRequest()
+    {
+        Nested = new AltLoginRequest();
+    }
 }
 
 public class LoginResponse
@@ -23,4 +29,21 @@ public class LoginResponse
     public string Token { get; set; }
     public string RefreshToken { get; set; }
     public DateTime Expiry { get; set; }
+}
+
+public class AltLoginRequest
+{
+    public int MyProperty { get; set; }
+    [LogIgnore("")]
+    public string MyProperty1 { get; set; }
+    [LogIgnore(null)]
+    public decimal MyProperty2 { get; set; }
+    public List<SecondLevel> MyProperty3 { get; set; }
+}
+
+public class SecondLevel
+{
+    public int MyProperty { get; set; }
+    [LogIgnore]
+    public string MyProperty1 { get; set; }
 }

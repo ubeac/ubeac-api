@@ -21,6 +21,12 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
         return true.ToResult();
     }
 
+    [HttpGet]
+    public virtual async Task Test(int id, string name)
+    {
+
+    }
+
     [HttpPost]
     public virtual async Task<IResult<SignInResult<TUserKey>>> Login([FromBody] LoginRequest model, CancellationToken cancellationToken = default)
     {
