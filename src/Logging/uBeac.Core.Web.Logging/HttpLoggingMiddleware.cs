@@ -2,8 +2,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using Microsoft.Net.Http.Headers;
 
 namespace uBeac.Web.Logging;
 
@@ -16,7 +14,7 @@ internal sealed class HttpLoggingMiddleware
         _next = next;
     }
 
-    public async Task Invoke(HttpContext context, IHttpLogRepository repository, IApplicationContext appContext, ILogger<HttpLoggingMiddleware> logger)
+    public async Task Invoke(HttpContext context, IHttpLogRepository repository, IApplicationContext appContext, IDebugger debugger)
     {
         try
         {
@@ -49,9 +47,9 @@ internal sealed class HttpLoggingMiddleware
                 await Log(logModel, repository);
             }
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            logger.LogError(e, "Occurred a unhandled exception when logging HTTP request.");
+            debugger.Add(ex.Message);
         }
     }
 

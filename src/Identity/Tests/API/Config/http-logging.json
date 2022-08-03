@@ -2,6 +2,7 @@
   "HttpLogging": {
     "Status200CollectionName": "Status200X",
     "Status400CollectionName": "Status400X",
-    "Status500CollectionName": "Status500X"
+    "Status500CollectionName": "Status500X",
+    "BypassLogTime": 300 // Number of seconds to bypass insert log if there is an issue with Log DB
   }
 }

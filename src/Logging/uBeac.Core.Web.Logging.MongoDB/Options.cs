@@ -5,6 +5,7 @@ public class MongoDbHttpLogOptions
     public string Status200CollectionName { get; set; }
     public string Status400CollectionName { get; set; }
     public string Status500CollectionName { get; set; }
+    public int BypassLogTime { get; set; } // Number of seconds to bypass insert log if there is an issue with Log DB
 
     public string GetCollectionName(int statusCode) => statusCode switch
     {
