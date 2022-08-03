@@ -19,7 +19,7 @@ public class MongoDbHttpLogRepository<TContext> : IHttpLogRepository
     {
         var collectionName = Options.GetCollectionName(log.StatusCode);
         var collection = GetCollection(Context.Database, collectionName).WithWriteConcern(WriteConcern.Unacknowledged);
-        await collection.InsertOneAsync(log, new InsertOneOptions(), cancellationToken);
+        collection.InsertOneAsync(log, cancellationToken);
     }
 
     protected virtual IMongoCollection<HttpLog> GetCollection(IMongoDatabase database, string collectionName)

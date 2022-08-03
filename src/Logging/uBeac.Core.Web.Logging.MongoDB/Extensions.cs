@@ -6,9 +6,10 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class Extensions
 {
-    public static IServiceCollection AddMongoDbHttpLogging<TContext>(this IServiceCollection services, MongoDbHttpLogOptions options)
-        where TContext : IMongoDBContext
+    public static IServiceCollection AddMongoDbHttpLogging<TContext>(this IServiceCollection services, string connectionString, MongoDbHttpLogOptions options)
+        where TContext : class, IMongoDBContext
     {
+        services.AddMongo<TContext>(connectionString);
         services.AddSingleton(options);
         services.AddScoped<IHttpLogRepository, MongoDbHttpLogRepository<TContext>>();
         return services;

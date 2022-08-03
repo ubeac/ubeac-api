@@ -2,7 +2,6 @@
 
 public class MongoDbHttpLogOptions
 {
-    public string ConnectionString { get; set; }
     public string Status200CollectionName { get; set; }
     public string Status400CollectionName { get; set; }
     public string Status500CollectionName { get; set; }

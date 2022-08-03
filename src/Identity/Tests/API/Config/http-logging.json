@@ -1,7 +1,7 @@
 {
   "HttpLogging": {
-    "Status200CollectionName": "Status200",
-    "Status400CollectionName": "Status400",
-    "Status500CollectionName": "Status500"
+    "Status200CollectionName": "Status200X",
+    "Status400CollectionName": "Status400X",
+    "Status500CollectionName": "Status500X"
   }
 }
