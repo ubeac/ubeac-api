@@ -31,14 +31,19 @@ public class MongoDbHttpLogRepository<TContext> : IHttpLogRepository
                 await collection.InsertOneAsync(log, new InsertOneOptions(), cancellationToken);
                 return;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                _memoryCache.Set(CacheKey, true, TimeSpan.FromSeconds(Options.BypassLogTime));
-                throw;
+                if (ex.GetType() == typeof(TimeoutException))
+                {
+                    _memoryCache.Set(CacheKey, true, TimeSpan.FromSeconds(Options.BypassLogTimeOut));
+                    new Exception("HttpLog: A timeout occurred during connection to the Database!");
+                }
+
+                throw new Exception("HttpLog: Error in insert log to Database!");
             }
         }
         else
-            throw new Exception("Error in creating HttpLog");
+            throw new Exception("HttpLog: Log wasn't inserted in database during wait time!");
     }
 
     protected virtual IMongoCollection<HttpLog> GetCollection(IMongoDatabase database, string collectionName)
