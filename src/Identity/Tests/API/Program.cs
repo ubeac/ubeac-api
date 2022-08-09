@@ -15,12 +15,7 @@ builder.Configuration.AddJsonConfig(builder.Environment);
 //builder.Services.AddDefaultBsonSerializers();
 
 // Adding http logging
-builder.Services.AddMongoDbHttpLogging(() =>
-{
-    var options = builder.Configuration.GetInstance<MongoDbHttpLogOptions>("HttpLogging");
-    options.ConnectionString = builder.Configuration.GetConnectionString("HttpLoggingConnection");
-    return options;
-});
+builder.Services.AddMongoDbHttpLogging<HttpLogMongoDBContext>("HttpLoggingConnection", builder.Configuration.GetInstance<MongoDbHttpLogOptions>("HttpLogging"));
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
@@ -112,19 +107,18 @@ builder.Services
 
 var app = builder.Build();
 
+app.UseHttpsRedirection();
 app.UseHstsOnProduction(builder.Environment);
 app.UseCorsPolicy(corsPolicyOptions);
 
-app.UseHttpsRedirection();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.UseAuthentication();
-app.UseAuthorization();
-
 app.UseCoreSwagger();
 
+app.UseAuthentication();
 app.UseHttpLoggingMiddleware();
+app.UseAuthorization();
 
 app.MapControllers();
 

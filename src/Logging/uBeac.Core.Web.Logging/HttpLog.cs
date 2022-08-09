@@ -11,7 +11,7 @@ public sealed class HttpLog : Entity
     public HttpLog()
     {
         var dateTime = DateTime.Now;
-        var assembly = Assembly.GetExecutingAssembly();
+        var assembly = Assembly.GetEntryAssembly();
         var assemblyName = assembly.GetName();
         var process = Process.GetCurrentProcess();
         var thread = Thread.CurrentThread;
@@ -47,7 +47,6 @@ public sealed class HttpLog : Entity
     public string MachineName { get; set; }
     public string EnvironmentName { get; set; }
     public string EnvironmentUserName { get; set; }
-    public string UserAgent { get; set; }
 
     public IApplicationContext Context { get; set; }
 

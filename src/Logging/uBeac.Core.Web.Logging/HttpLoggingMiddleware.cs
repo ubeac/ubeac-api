@@ -2,7 +2,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Net.Http.Headers;
 
 namespace uBeac.Web.Logging;
 
@@ -15,35 +14,42 @@ internal sealed class HttpLoggingMiddleware
         _next = next;
     }
 
-    public async Task Invoke(HttpContext context, IHttpLogRepository repository, IApplicationContext appContext)
+    public async Task Invoke(HttpContext context, IHttpLogRepository repository, IApplicationContext appContext, IDebugger debugger)
     {
-        var stopwatch = Stopwatch.StartNew();
-
-        var requestBody = await ReadRequestBody(context.Request);
-
-        var originalResponseStream = context.Response.Body;
-        await using var responseMemoryStream = new MemoryStream();
-        context.Response.Body = responseMemoryStream;
-
-        Exception exception = null;
-
         try
         {
-            await _next(context);
+            var stopwatch = Stopwatch.StartNew();
+            
+            var requestBody = await ReadRequestBody(context.Request);
+
+            var originalResponseStream = context.Response.Body;
+            await using var responseMemoryStream = new MemoryStream();
+            context.Response.Body = responseMemoryStream;
+
+            Exception exception = null;
+
+            try
+            {
+                await _next(context);
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+                throw;
+            }
+            finally
+            {
+                var responseBody = await ReadResponseBody(context, originalResponseStream, responseMemoryStream);
+
+                stopwatch.Stop();
+
+                var logModel = CreateLogModel(context, appContext, requestBody, responseBody, stopwatch.ElapsedMilliseconds, exception != null ? 500 : null, exception);
+                await Log(logModel, repository);
+            }
         }
         catch (Exception ex)
         {
-            exception = ex;
-            throw;
-        }
-        finally
-        {
-            var responseBody = await ReadResponseBody(context, originalResponseStream, responseMemoryStream);
-
-            stopwatch.Stop();
-
-            var logModel = CreateLogModel(context, appContext, requestBody, responseBody, stopwatch.ElapsedMilliseconds, exception != null ? 500 : null, exception);
-            await Log(logModel, repository);
+            debugger.Add(ex.Message);
         }
     }
 
@@ -81,8 +87,7 @@ internal sealed class HttpLoggingMiddleware
             StatusCode = statusCode ?? context.Response.StatusCode,
             Duration = duration,
             Context = appContext,
-            Exception = exception == null ? null : new ExceptionModel(exception),
-            UserAgent = context.Request.Headers[HeaderNames.UserAgent].ToString()
+            Exception = exception == null ? null : new ExceptionModel(exception)
         };
     }
 
