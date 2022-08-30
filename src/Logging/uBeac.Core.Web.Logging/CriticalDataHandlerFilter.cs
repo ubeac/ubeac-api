@@ -6,27 +6,30 @@ namespace uBeac.Web.Logging;
 
 public class CriticalDataHandlerFilter : IActionFilter
 {
+    private readonly IDebugger _debugger;
     private readonly JsonSerializerSettings settings = new JsonSerializerSettings
     {
         ContractResolver = new LogIgnoreResolver(),
-        Formatting = Formatting.Indented
+        Formatting = Formatting.Indented,        
     };
+    public CriticalDataHandlerFilter(IDebugger debugger)
+    {
+        _debugger = debugger;
+    }
     public void OnActionExecuted(ActionExecutedContext context)
     {
         try
         {
-            var result = ((ObjectResult)context.Result).Value;
-            //var responseProps = result.GetType().GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(LogIgnoreAttribute))).ToList();
-            //foreach (var prop in responseProps)
-            //{
-            //    prop.SetValue(result, default);
-            //}
-            context.HttpContext.Items["LogResponseBody"] = result != null ? JsonConvert.SerializeObject(result, settings) : null;
+            if (context.Result.GetType() != typeof(EmptyResult))
+            {
+                var result = ((ObjectResult)context.Result).Value;
+                context.HttpContext.Items["LogResponseBody"] = result != null ? JsonConvert.SerializeObject(result, settings) : null;
+            }
         }
         catch (Exception ex)
         {
-
-        }        
+            _debugger.Add("HttpLogging: " + ex.Message);
+        }
     }
 
     public void OnActionExecuting(ActionExecutingContext context)

@@ -36,14 +36,15 @@ public class AltLoginRequest
     public int MyProperty { get; set; }
     [LogIgnore("")]
     public string MyProperty1 { get; set; }
-    [LogIgnore(null)]
+    [LogIgnore("")]
     public decimal MyProperty2 { get; set; }
+    [LogIgnore]
     public List<SecondLevel> MyProperty3 { get; set; }
 }
+
 
 public class SecondLevel
 {
     public int MyProperty { get; set; }
-    [LogIgnore]
     public string MyProperty1 { get; set; }
 }

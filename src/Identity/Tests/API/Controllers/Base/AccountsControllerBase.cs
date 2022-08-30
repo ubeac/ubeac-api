@@ -22,9 +22,9 @@ public abstract class AccountsControllerBase<TUserKey, TUser> : BaseController
     }
 
     [HttpGet]
-    public virtual async Task Test(int id, string name)
+    public virtual async Task<IResult<bool>> Test(int id, string name)
     {
-
+        return (await Task.FromResult(true)).ToResult();
     }
 
     [HttpPost]

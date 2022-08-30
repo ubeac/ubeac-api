@@ -2,8 +2,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 
 namespace uBeac.Web.Logging;
@@ -17,7 +15,7 @@ internal sealed class HttpLoggingMiddleware
         _next = next;
     }
 
-    public async Task Invoke(HttpContext context, IHttpLogRepository repository, IApplicationContext appContext, ILogger<HttpLoggingMiddleware> logger)
+    public async Task Invoke(HttpContext context, IHttpLogRepository repository, IApplicationContext appContext, IDebugger debugger)
     {
         try
         {
@@ -53,22 +51,22 @@ internal sealed class HttpLoggingMiddleware
                 await Log(logModel, repository);
             }
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            logger.LogError(e, "An unhandled exception has occured during logging HTTP request.");
+            debugger.Add(ex.Message);
         }
     }
 
-    private async Task<string> ReadRequestBody(HttpRequest request)
-    {
-        request.EnableBuffering();
+    //private async Task<string> ReadRequestBody(HttpRequest request)
+    //{
+    //    request.EnableBuffering();
 
-        using var reader = new StreamReader(request.Body, encoding: Encoding.UTF8, detectEncodingFromByteOrderMarks: false, leaveOpen: true);
-        var requestBody = await reader.ReadToEndAsync();
-        request.Body.Position = 0;
+    //    using var reader = new StreamReader(request.Body, encoding: Encoding.UTF8, detectEncodingFromByteOrderMarks: false, leaveOpen: true);
+    //    var requestBody = await reader.ReadToEndAsync();
+    //    request.Body.Position = 0;
 
-        return requestBody;
-    }
+    //    return requestBody;
+    //}
 
     private async Task<string> ReadResponseBody(HttpContext context, Stream originalResponseStream, Stream memoryStream)
     {
@@ -93,8 +91,7 @@ internal sealed class HttpLoggingMiddleware
             StatusCode = statusCode ?? context.Response.StatusCode,
             Duration = duration,
             Context = appContext,
-            Exception = exception == null ? null : new ExceptionModel(exception),
-            UserAgent = context.Request.Headers[HeaderNames.UserAgent].ToString()
+            Exception = exception == null ? null : new ExceptionModel(exception)
         };
     }
 

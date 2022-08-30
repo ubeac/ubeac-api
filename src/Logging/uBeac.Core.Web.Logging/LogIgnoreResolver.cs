@@ -10,23 +10,25 @@ public class LogIgnoreResolver : DefaultContractResolver
     {
         JsonProperty result = base.CreateProperty(member, memberSerialization);
         PropertyInfo property = member as PropertyInfo;
-
+        
         LogIgnoreAttribute attribute = (LogIgnoreAttribute)result.AttributeProvider.GetAttributes(typeof(LogIgnoreAttribute), true).FirstOrDefault();
 
         if (attribute != null)
         {
-            var x = GetType(attribute.Value);
-            if (x == typeof(LogIgnoreAttribute))
+            if (attribute.Value is null)
+            {
                 result.Ignored = true;
-            else
-                result.ValueProvider = new LogIgnoreValueProvider(property, attribute.Value);
-        }            
+                return result;
+            }
+
+            if (attribute.Value.ToString() == "")
+                attribute.Value = property.PropertyType == typeof(string) ? "" : null;
+
+            result.ValueProvider = new LogIgnoreValueProvider(property, attribute.Value);
+        }
 
         return result;
     }
-
-    private Type GetType<T>(T obj) => typeof(T);
-
 }
 
 public class LogIgnoreValueProvider : IValueProvider
@@ -47,6 +49,6 @@ public class LogIgnoreValueProvider : IValueProvider
 
     public object GetValue(object target)
     {
-        return _value;        
+        return _value;
     }
 }
