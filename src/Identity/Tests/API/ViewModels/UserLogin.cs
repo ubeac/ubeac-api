@@ -1,20 +1,17 @@
-﻿using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace API;
 
 public class LoginRequest
 {
     [Required]
-    [LogIgnore("-----")]
     public string UserName { get; set; }
 
-    [Required]
-    [DataType(DataType.Password)]
-    [LogIgnore("*****")]
+    [Required, DataType(DataType.Password), LogReplaceValue("***")]
     public string Password { get; set; }
 
     public AltLoginRequest Nested { get; set; }
+
     public LoginRequest()
     {
         Nested = new AltLoginRequest();
@@ -34,12 +31,9 @@ public class LoginResponse
 public class AltLoginRequest
 {
     public int MyProperty { get; set; }
-    [LogIgnore("")]
-    public string MyProperty1 { get; set; }
-    [LogIgnore("")]
-    public decimal MyProperty2 { get; set; }
-    [LogIgnore]
-    public List<SecondLevel> MyProperty3 { get; set; }
+    [LogIgnore] public string MyProperty1 { get; set; }
+    [LogIgnore] public decimal MyProperty2 { get; set; }
+    [LogIgnore] public List<SecondLevel> MyProperty3 { get; set; }
 }
 
 

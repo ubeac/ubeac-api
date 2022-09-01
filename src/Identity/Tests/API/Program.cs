@@ -18,7 +18,7 @@ builder.Configuration.AddJsonConfig(builder.Environment);
 builder.Services.AddMongoDbHttpLogging<HttpLogMongoDBContext>("HttpLoggingConnection", builder.Configuration.GetInstance<MongoDbHttpLogOptions>("HttpLogging"));
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddControllers(options => options.Filters.Add<CriticalDataHandlerFilter>());
+builder.Services.AddControllers(options => options.Filters.Add<HttpLogDataHandlingFilter>());
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 // Disabling automatic model state validation
