@@ -11,7 +11,7 @@ public sealed class HttpLog : Entity
     public HttpLog()
     {
         var dateTime = DateTime.Now;
-        var assembly = Assembly.GetExecutingAssembly();
+        var assembly = Assembly.GetEntryAssembly();
         var assemblyName = assembly.GetName();
         var process = Process.GetCurrentProcess();
         var thread = Thread.CurrentThread;
@@ -25,7 +25,7 @@ public sealed class HttpLog : Entity
         MemoryUsage = process.PrivateMemorySize64;
         MachineName = Environment.MachineName;
         EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
-        EnvironmentUserName = Environment.UserName;
+        EnvironmentUserName = Environment.UserName;        
     }
 
     public DateTime Time { get; set; }

@@ -9,24 +9,22 @@ using uBeac.Repositories.MongoDB;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
-public static class MongoDBServicesExtensions
+public static class RepositoryExtensions
 {
     public static IServiceCollection AddMongo<TMongoDbContext>(this IServiceCollection services, string connectionString)
-       where TMongoDbContext : class, IMongoDBContext
+        where TMongoDbContext : class, IMongoDBContext
     {
-        services.AddScoped(provider =>
+        services.TryAddSingleton(provider =>
         {
             var configuration = provider.GetService<IConfiguration>();
             var connString = configuration.GetConnectionString(connectionString);
-            return typeof(TMongoDbContext) == typeof(MongoDBContext)
-                ? new MongoDBOptions(connString)
-                : new MongoDBOptions<TMongoDbContext>(connString);
+            return new MongoDBOptions<TMongoDbContext>(connString);
         });
 
-        services.TryAddScoped<TMongoDbContext>();
-        services.TryAddScoped<IMongoDBContext, TMongoDbContext>();
+        services.TryAddSingleton<TMongoDbContext>();
+        services.TryAddSingleton<IMongoDBContext, TMongoDbContext>();
 
-        services.TryAddScoped(provider =>
+        services.TryAddSingleton(provider =>
         {
             var appContextType = provider.CreateScope().ServiceProvider.GetRequiredService<IApplicationContext>().GetType();
 
