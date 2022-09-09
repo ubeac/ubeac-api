@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using uBeac.Web;
 
@@ -66,7 +62,8 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
             Email = user.Email,
             EmailConfirmed = user.EmailConfirmed,
             PhoneNumber = user.PhoneNumber,
-            PhoneNumberConfirmed = user.PhoneNumberConfirmed
+            PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+            Enabled = user.Enabled
         };
         return userVm.ToResult();
     }
@@ -82,7 +79,8 @@ public abstract class UsersControllerBase<TUserKey, TUser> : BaseController
             Email = u.Email,
             EmailConfirmed = u.EmailConfirmed,
             PhoneNumber = u.PhoneNumber,
-            PhoneNumberConfirmed = u.PhoneNumberConfirmed
+            PhoneNumberConfirmed = u.PhoneNumberConfirmed,
+            Enabled = u.Enabled
         });
         return usersVm.ToListResult();
     }
