@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using uBeac.Identity;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -14,10 +15,11 @@ public static class UserExtensions
         return services;
     }
 
-    public static IServiceCollection AddUserService<TUserService, TUser>(this IServiceCollection services)
+    public static IServiceCollection AddUserService<TUserService, TUser>(this IServiceCollection services, IConfiguration config)
         where TUser : User
         where TUserService : class, IUserService<TUser>
     {
+        services.Configure<UserRegisterOptions>(config.GetSection("UserRegisterOptions"));
         services.AddScoped<IUserService<TUser>, TUserService>();
         return services;
     }

@@ -18,8 +18,9 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
     protected readonly IEmailProvider EmailProvider;
     protected readonly IApplicationContext AppContext;
     protected readonly IHttpContextAccessor Accessor;
+    protected readonly UserRegisterOptions Options;
 
-    public UserService(UserManager<TUser> userManager, ITokenService<TUserKey, TUser> tokenService, IUserTokenRepository<TUserKey> userTokenRepository, IEmailProvider emailProvider, IApplicationContext appContext, IHttpContextAccessor accessor)
+    public UserService(UserManager<TUser> userManager, ITokenService<TUserKey, TUser> tokenService, IUserTokenRepository<TUserKey> userTokenRepository, IEmailProvider emailProvider, IApplicationContext appContext, IHttpContextAccessor accessor, Microsoft.Extensions.Options.IOptions<UserRegisterOptions> options)
     {
         UserManager = userManager;
         TokenService = tokenService;
@@ -27,6 +28,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         EmailProvider = emailProvider;
         AppContext = appContext;
         Accessor = accessor;
+        Options = options.Value;
     }
 
     public virtual async Task Create(TUser user, string password, CancellationToken cancellationToken = default)
@@ -42,6 +44,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         user.Email = email;
         user.EmailConfirmed = false;
         user.PhoneNumberConfirmed = false;
+        user.Enabled = Options.EnableUserOnRegister;
         await Create(user, password, cancellationToken);
         return user;
     }
@@ -230,7 +233,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
 public class UserService<TUser> : UserService<Guid, TUser>, IUserService<TUser>
     where TUser : User
 {
-    public UserService(UserManager<TUser> userManager, ITokenService<TUser> tokenService, IUserTokenRepository userTokenRepository, IEmailProvider emailProvider, IApplicationContext appContext, IHttpContextAccessor accessor) : base(userManager, tokenService, userTokenRepository, emailProvider, appContext, accessor)
+    public UserService(UserManager<TUser> userManager, ITokenService<TUser> tokenService, IUserTokenRepository userTokenRepository, IEmailProvider emailProvider, IApplicationContext appContext, IHttpContextAccessor accessor, Microsoft.Extensions.Options.IOptions<UserRegisterOptions> options) : base(userManager, tokenService, userTokenRepository, emailProvider, appContext, accessor, options)
     {
     }
 }
