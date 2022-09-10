@@ -61,7 +61,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Repositories.Ent
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Repositories.EntityFramework.InMemory", "Repository\uBeac.Core.Repositories.EntityFramework.InMemory\uBeac.Core.Repositories.EntityFramework.InMemory.csproj", "{5DD6BE78-8DAD-482A-B831-DDF297BB4391}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Identity.EntityFramework", "Identity\uBeac.Core.Identity.EntityFramework\uBeac.Core.Identity.EntityFramework.csproj", "{8A07BA04-F0EE-49C9-B653-6878A7C64F05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Identity.EntityFramework", "Identity\uBeac.Core.Identity.EntityFramework\uBeac.Core.Identity.EntityFramework.csproj", "{8A07BA04-F0EE-49C9-B653-6878A7C64F05}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{EA4A3C91-FB93-49E8-8DF9-8CE86C150F71}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Identity", "Identity\uBeac.Core.Identity\uBeac.Core.Identity.csproj", "{6B8ED371-70A7-4345-82D0-698FE4E95A09}"
@@ -75,6 +76,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Identity.Jwt", "Identity\uBeac.Core.Identity.Jwt\uBeac.Core.Identity.Jwt.csproj", "{6BD1B9F9-5A0F-4A43-A657-F8B31896EDE0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{6D83110C-1361-45E1-A638-6BC37F0B968F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.EntityFramework.API", "Examples\Identity.EntityFramework.API\Identity.EntityFramework.API.csproj", "{4F225ADF-DE8F-4E29-9A7A-5D398CF65C53}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Web.Logging.EntityFramework", "Logging\uBeac.Core.Web.Logging.EntityFramework\uBeac.Core.Web.Logging.EntityFramework.csproj", "{003E8085-4979-415C-A662-A00820959851}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -198,6 +203,14 @@ Global
 		{6BD1B9F9-5A0F-4A43-A657-F8B31896EDE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BD1B9F9-5A0F-4A43-A657-F8B31896EDE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BD1B9F9-5A0F-4A43-A657-F8B31896EDE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F225ADF-DE8F-4E29-9A7A-5D398CF65C53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F225ADF-DE8F-4E29-9A7A-5D398CF65C53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F225ADF-DE8F-4E29-9A7A-5D398CF65C53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F225ADF-DE8F-4E29-9A7A-5D398CF65C53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{003E8085-4979-415C-A662-A00820959851}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{003E8085-4979-415C-A662-A00820959851}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{003E8085-4979-415C-A662-A00820959851}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{003E8085-4979-415C-A662-A00820959851}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -232,6 +245,8 @@ Global
 		{9D7D2782-2067-4B55-990B-ABF03939C1B3} = {EA4A3C91-FB93-49E8-8DF9-8CE86C150F71}
 		{FAAE32CA-48F3-4F26-BF22-39DDDDF57770} = {6D83110C-1361-45E1-A638-6BC37F0B968F}
 		{6BD1B9F9-5A0F-4A43-A657-F8B31896EDE0} = {EA4A3C91-FB93-49E8-8DF9-8CE86C150F71}
+		{4F225ADF-DE8F-4E29-9A7A-5D398CF65C53} = {6D83110C-1361-45E1-A638-6BC37F0B968F}
+		{003E8085-4979-415C-A662-A00820959851} = {117FC7BE-0153-4819-9A27-0FDA22132FA1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {247F9BF0-18BB-4A57-BB3E-2870DDAEF0D1}

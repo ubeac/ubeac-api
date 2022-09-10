@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>disable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Common\uBeac.Core.Common\uBeac.Core.Common.csproj" />
+		<ProjectReference Include="..\..\Common\uBeac.Core.Configuration\uBeac.Core.Configuration.csproj" />
+		<ProjectReference Include="..\..\Identity\uBeac.Core.Identity.EntityFramework\uBeac.Core.Identity.EntityFramework.csproj" />
+		<ProjectReference Include="..\..\Logging\uBeac.Core.Web.Logging.EntityFramework\uBeac.Core.Web.Logging.EntityFramework.csproj" />
+		<ProjectReference Include="..\..\Repository\uBeac.Core.Repositories.EntityFramework.SQLServer\uBeac.Core.Repositories.EntityFramework.SQLServer.csproj" />
+		<ProjectReference Include="..\..\Repository\uBeac.Core.Repositories.History.Extensions\uBeac.Core.Repositories.History.Extensions.csproj" />
+		<ProjectReference Include="..\..\Web\uBeac.Core.Web.Common\uBeac.Core.Web.Common.csproj" />
+		<ProjectReference Include="..\..\Web\uBeac.Core.Web.Jwt\uBeac.Core.Web.Jwt.csproj" />
+		<ProjectReference Include="..\..\Web\uBeac.Core.Web.Swagger\uBeac.Core.Web.Swagger.csproj" />
+		<ProjectReference Include="..\..\Identity\uBeac.Core.Identity.Common\uBeac.Core.Identity.Common.csproj" />
+		<ProjectReference Include="..\..\Identity\uBeac.Core.Identity.Jwt\uBeac.Core.Identity.Jwt.csproj" />
+		<ProjectReference Include="..\..\Identity\uBeac.Core.Identity\uBeac.Core.Identity.csproj" />
+	</ItemGroup>
+
+</Project>
