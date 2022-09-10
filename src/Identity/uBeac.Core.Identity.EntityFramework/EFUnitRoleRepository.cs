@@ -9,7 +9,7 @@ public class EFUnitRoleRepository<TUnitRoleKey, TUnitRole, TContext> : EFEntityR
     where TUnitRole : UnitRole<TUnitRoleKey>
     where TContext : DbContext
 {
-    public EFUnitRoleRepository(TContext dbContext, IApplicationContext applicationContext, HistoryFactory historyFactory) : base(dbContext, applicationContext, historyFactory)
+    public EFUnitRoleRepository(TContext dbContext, IApplicationContext applicationContext, IHistoryManager historyManager) : base(dbContext, applicationContext, historyManager)
     {
     }
 }
@@ -18,7 +18,7 @@ public class EFUnitRoleRepository<TUnitRole, TContext> : EFUnitRoleRepository<Gu
     where TUnitRole : UnitRole
     where TContext : DbContext
 {
-    public EFUnitRoleRepository(TContext dbContext, IApplicationContext applicationContext, HistoryFactory historyFactory) : base(dbContext, applicationContext, historyFactory)
+    public EFUnitRoleRepository(TContext dbContext, IApplicationContext applicationContext, IHistoryManager historyManager) : base(dbContext, applicationContext, historyManager)
     {
     }
 }

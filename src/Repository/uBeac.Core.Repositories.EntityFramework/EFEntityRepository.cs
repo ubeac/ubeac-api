@@ -11,15 +11,15 @@ public class EFEntityRepository<TKey, TEntity, TContext> : IEntityRepository<TKe
 {
     protected readonly TContext DbContext;
     protected readonly IApplicationContext ApplicationContext;
-    protected readonly HistoryFactory HistoryFactory;
+    protected readonly IHistoryManager HistoryManager;
     protected readonly DbSet<TEntity> DbSet;
 
-    public EFEntityRepository(TContext dbContext, IApplicationContext applicationContext, HistoryFactory historyFactory)
+    public EFEntityRepository(TContext dbContext, IApplicationContext applicationContext, IHistoryManager historyManager)
     {
         DbContext = dbContext;
         DbSet = dbContext.Set<TEntity>();
         ApplicationContext = applicationContext;
-        HistoryFactory = historyFactory;
+        HistoryManager = historyManager;
     }
 
     public IQueryable<TEntity> AsQueryable() => DbSet.AsNoTracking();
@@ -28,12 +28,7 @@ public class EFEntityRepository<TKey, TEntity, TContext> : IEntityRepository<TKe
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var historyRepositories = HistoryFactory.GetRepositories<TEntity>();
-
-        foreach (var repository in historyRepositories)
-        {
-            await repository.Add(entity, actionName, cancellationToken);
-        }
+        await HistoryManager.Write(entity, actionName, cancellationToken);
     }
 
     public virtual async Task Create(TEntity entity, string actionName, CancellationToken cancellationToken = default)
@@ -147,7 +142,7 @@ public class EFEntityRepository<TEntity, TContext> : EFEntityRepository<Guid, TE
     where TEntity : class, IEntity
     where TContext : EFDbContext
 {
-    public EFEntityRepository(TContext dbContext, IApplicationContext applicationContext, HistoryFactory historyFactory) : base(dbContext, applicationContext, historyFactory)
+    public EFEntityRepository(TContext dbContext, IApplicationContext applicationContext, IHistoryManager historyManager) : base(dbContext, applicationContext, historyManager)
     {
     }
 }

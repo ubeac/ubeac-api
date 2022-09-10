@@ -9,7 +9,7 @@ public class EFUnitRepository<TUnitKey, TUnit, TContext> : EFEntityRepository<TU
     where TUnit : Unit<TUnitKey>
     where TContext : DbContext
 {
-    public EFUnitRepository(TContext dbContext, IApplicationContext applicationContext, HistoryFactory historyFactory) : base(dbContext, applicationContext, historyFactory)
+    public EFUnitRepository(TContext dbContext, IApplicationContext applicationContext, IHistoryManager historyManager) : base(dbContext, applicationContext, historyManager)
     {
     }
 
@@ -21,7 +21,7 @@ public class EFUnitRepository<TUnit, TContext> : EFUnitRepository<Guid, TUnit, T
     where TUnit : Unit
     where TContext : DbContext
 {
-    public EFUnitRepository(TContext dbContext, IApplicationContext applicationContext, HistoryFactory historyFactory) : base(dbContext, applicationContext, historyFactory)
+    public EFUnitRepository(TContext dbContext, IApplicationContext applicationContext, IHistoryManager historyManager) : base(dbContext, applicationContext, historyManager)
     {
     }
 }

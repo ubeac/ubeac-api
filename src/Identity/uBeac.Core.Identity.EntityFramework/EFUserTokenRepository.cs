@@ -8,7 +8,7 @@ public class EFUserTokenRepository<TUserKey, TContext> : EFEntityRepository<TUse
     where TUserKey : IEquatable<TUserKey>
     where TContext : DbContext
 {
-    public EFUserTokenRepository(TContext dbContext, IApplicationContext applicationContext, HistoryFactory historyFactory) : base(dbContext, applicationContext, historyFactory)
+    public EFUserTokenRepository(TContext dbContext, IApplicationContext applicationContext, IHistoryManager historyManager) : base(dbContext, applicationContext, historyManager)
     {
     }
 }
@@ -16,7 +16,7 @@ public class EFUserTokenRepository<TUserKey, TContext> : EFEntityRepository<TUse
 public class EFUserTokenRepository<TContext> : EFUserTokenRepository<Guid, TContext>, IUserTokenRepository
     where TContext : DbContext
 {
-    public EFUserTokenRepository(TContext dbContext, IApplicationContext applicationContext, HistoryFactory historyFactory) : base(dbContext, applicationContext, historyFactory)
+    public EFUserTokenRepository(TContext dbContext, IApplicationContext applicationContext, IHistoryManager historyManager) : base(dbContext, applicationContext, historyManager)
     {
     }
 }

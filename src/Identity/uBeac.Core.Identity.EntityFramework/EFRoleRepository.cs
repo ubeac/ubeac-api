@@ -9,7 +9,7 @@ public class EFRoleRepository<TRoleKey, TRole, TContext> : EFEntityRepository<TR
     where TRole : Role<TRoleKey>
     where TContext : DbContext
 {
-    public EFRoleRepository(TContext dbContext, IApplicationContext applicationContext, HistoryFactory historyFactory) : base(dbContext, applicationContext, historyFactory)
+    public EFRoleRepository(TContext dbContext, IApplicationContext applicationContext, IHistoryManager historyManager) : base(dbContext, applicationContext, historyManager)
     {
     }
 }
@@ -18,7 +18,7 @@ public class EFRoleRepository<TRole, TContext> : EFRoleRepository<Guid, TRole, T
     where TRole : Role
     where TContext : DbContext
 {
-    public EFRoleRepository(TContext dbContext, IApplicationContext applicationContext, HistoryFactory historyFactory) : base(dbContext, applicationContext, historyFactory)
+    public EFRoleRepository(TContext dbContext, IApplicationContext applicationContext, IHistoryManager historyManager) : base(dbContext, applicationContext, historyManager)
     {
     }
 }

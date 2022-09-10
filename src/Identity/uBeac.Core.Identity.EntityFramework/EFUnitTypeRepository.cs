@@ -9,7 +9,7 @@ public class EFUnitTypeRepository<TUnitTypeKey, TUnitType, TContext> : EFEntityR
     where TUnitType : UnitType<TUnitTypeKey>
     where TContext : DbContext
 {
-    public EFUnitTypeRepository(TContext dbContext, IApplicationContext applicationContext, HistoryFactory historyFactory) : base(dbContext, applicationContext, historyFactory)
+    public EFUnitTypeRepository(TContext dbContext, IApplicationContext applicationContext, IHistoryManager historyManager) : base(dbContext, applicationContext, historyManager)
     {
     }
 }
@@ -18,7 +18,7 @@ public class EFUnitTypeRepository<TUnitType, TContext> : EFUnitTypeRepository<Gu
     where TUnitType : UnitType
     where TContext : DbContext
 {
-    public EFUnitTypeRepository(TContext dbContext, IApplicationContext applicationContext, HistoryFactory historyFactory) : base(dbContext, applicationContext, historyFactory)
+    public EFUnitTypeRepository(TContext dbContext, IApplicationContext applicationContext, IHistoryManager historyManager) : base(dbContext, applicationContext, historyManager)
     {
     }
 }

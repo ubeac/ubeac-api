@@ -9,7 +9,7 @@ public class EFUserRepository<TUserKey, TUser, TContext> : EFEntityRepository<TU
     where TUser : User<TUserKey>
     where TContext : DbContext
 {
-    public EFUserRepository(TContext dbContext, IApplicationContext applicationContext, HistoryFactory historyFactory) : base(dbContext, applicationContext, historyFactory)
+    public EFUserRepository(TContext dbContext, IApplicationContext applicationContext, IHistoryManager historyManager) : base(dbContext, applicationContext, historyManager)
     {
     }
 }
@@ -18,7 +18,7 @@ public class EFUserRepository<TUser, TContext> : EFUserRepository<Guid, TUser, T
     where TUser : User
     where TContext : DbContext
 {
-    public EFUserRepository(TContext dbContext, IApplicationContext applicationContext, HistoryFactory historyFactory) : base(dbContext, applicationContext, historyFactory)
+    public EFUserRepository(TContext dbContext, IApplicationContext applicationContext, IHistoryManager historyManager) : base(dbContext, applicationContext, historyManager)
     {
     }
 }
