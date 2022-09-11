@@ -1,18 +1,19 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
-using uBeac.Identity.EntityFramework;
+using uBeac.Repositories.History.MongoDB;
 using uBeac.Web;
 using uBeac.Web.Logging;
 using uBeac.Web.Logging.EntityFramework;
 
 var builder = WebApplication.CreateBuilder(args);
+var assemblyName = typeof(Program).Assembly.GetName().Name;
 
 // Adding json config files (IConfiguration)
 builder.Configuration.AddJsonConfig(builder.Environment);
 
 // Adding http logging
-// builder.Services.AddSqlServerDatabase<HttpLogDbContext>(builder.Configuration.GetConnectionString("HttpLoggingConnection"));
-// builder.Services.AddEFHttpLogging<HttpLogDbContext>();
+builder.Services.AddSqlServerDatabase<HttpLogDbContext>(builder.Configuration.GetConnectionString("HttpLoggingConnection"), assemblyName);
+builder.Services.AddEFHttpLogging<HttpLogDbContext>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
@@ -34,11 +35,11 @@ builder.Services.AddDebugger();
 builder.Services.AddCoreSwaggerWithJWT("Example");
 
 // Adding mongodb
-builder.Services.AddSqlServerDatabase<IdentityCoreDbContext>(builder.Configuration.GetConnectionString("DefaultConnection"));
+builder.Services.AddSqlServerDatabase<IdentityCoreDbContext>(builder.Configuration.GetConnectionString("DefaultConnection"), assemblyName);
 
 // Adding history
-// builder.Services.AddMongo<HistoryMongoDBContext>("HistoryConnection");
-// builder.Services.AddHistory<MongoDBHistoryRepository>().For<User>();
+builder.Services.AddMongo<HistoryMongoDBContext>("HistoryConnection");
+builder.Services.AddHistory<MongoDBHistoryRepository>().For<User>();
 
 // Adding CORS
 var corsPolicyOptions = builder.Configuration.GetSection("CorsPolicy");
@@ -98,7 +99,7 @@ app.UseStaticFiles();
 app.UseCoreSwagger();
 
 app.UseAuthentication();
-// app.UseHttpLoggingMiddleware();
+app.UseHttpLoggingMiddleware();
 app.UseAuthorization();
 
 app.MapControllers();

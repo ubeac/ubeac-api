@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Reflection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -25,7 +24,7 @@ public sealed class HttpLog : Entity
         MemoryUsage = process.PrivateMemorySize64;
         MachineName = Environment.MachineName;
         EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
-        EnvironmentUserName = Environment.UserName;        
+        EnvironmentUserName = Environment.UserName;
     }
 
     public DateTime Time { get; set; }
@@ -82,7 +81,7 @@ public class HttpRequestLog
     public string ContentType { get; set; }
     public long? ContentLength { get; set; }
     public string Body { get; set; }
-    public IDictionary<string, string> Headers { get; set; }
+    public Dictionary<string, string> Headers { get; set; }
 }
 
 public class HttpResponseLog
@@ -100,7 +99,7 @@ public class HttpResponseLog
     public string ContentType { get; set; }
     public long? ContentLength { get; set; }
     public string Body { get; set; }
-    public IDictionary<string, string> Headers { get; set; }
+    public Dictionary<string, string> Headers { get; set; }
 }
 
 public class ExceptionModel
@@ -109,7 +108,6 @@ public class ExceptionModel
 
     public ExceptionModel(Exception exception)
     {
-        Data = exception.Data;
         HelpLink = exception.HelpLink;
         HResult = exception.HResult;
         Message = exception.Message;
@@ -117,7 +115,6 @@ public class ExceptionModel
         StackTrace = exception.StackTrace;
     }
 
-    public IDictionary Data { get; set; }
     public string HelpLink { get; set; }
     public int HResult { get; set; }
     public string Message { get; set; }
@@ -127,7 +124,7 @@ public class ExceptionModel
 
 internal static class HeaderDictionaryExtensions
 {
-    public static IDictionary<string, string> ToStringDictionary(this IHeaderDictionary dictionary)
+    public static Dictionary<string, string> ToStringDictionary(this IHeaderDictionary dictionary)
     {
         var result = new Dictionary<string, string>();
 
