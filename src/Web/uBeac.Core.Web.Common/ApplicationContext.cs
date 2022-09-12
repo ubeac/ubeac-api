@@ -13,12 +13,12 @@ public class ApplicationContext : IApplicationContext
         Accessor = accessor;
         if (Accessor is null) return;
 
-        TraceId = Accessor.HttpContext?.TraceIdentifier;
-        UniqueId = Accessor.HttpContext?.Request?.Headers?.FirstOrDefault(_ => _.Key.Equals(UidHeaderKey, StringComparison.OrdinalIgnoreCase)).Value;
-        SessionId = Accessor.HttpContext?.Request?.Headers?.FirstOrDefault(_ => _.Key.Equals(SidHeaderKey, StringComparison.OrdinalIgnoreCase)).Value;
-        UserName = Accessor.HttpContext?.User?.Identity?.Name;
-        UserIp = Accessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
-        Language = Accessor.HttpContext?.Request?.GetTypedHeaders().AcceptLanguage.FirstOrDefault()?.Value.Value ?? "en-US";
+        TraceId = Accessor?.HttpContext?.TraceIdentifier;
+        UniqueId = Accessor?.HttpContext?.Request?.Headers?.FirstOrDefault(_ => _.Key.Equals(UidHeaderKey, StringComparison.OrdinalIgnoreCase)).Value;
+        SessionId = Accessor?.HttpContext?.Request?.Headers?.FirstOrDefault(_ => _.Key.Equals(SidHeaderKey, StringComparison.OrdinalIgnoreCase)).Value;
+        UserName = Accessor?.HttpContext?.User?.Identity?.Name;
+        UserIp = Accessor?.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+        Language = Accessor?.HttpContext?.Request?.GetTypedHeaders().AcceptLanguage.FirstOrDefault()?.Value.Value ?? "en-US";
     }
 
     public string TraceId { get; set; }

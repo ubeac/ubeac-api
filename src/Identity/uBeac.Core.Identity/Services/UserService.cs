@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using System.Data.Entity;
 
 namespace uBeac.Identity;
 
@@ -133,7 +134,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
     public async Task<IEnumerable<TUser>> GetAll(CancellationToken cancellationToken = default)
     {
         // TODO: Check this: ToListAsync() is not working - throws exception! For this reason, the ToList() method is used
-        return await Task.Run(() => UserManager.Users.ToList(), cancellationToken);
+        return await UserManager.Users.ToListAsync(cancellationToken);
     }
 
     public virtual Task<TUser> GetById(TUserKey id, CancellationToken cancellationToken = default)
