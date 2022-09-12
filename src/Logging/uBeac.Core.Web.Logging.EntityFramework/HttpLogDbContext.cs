@@ -18,11 +18,14 @@ public class HttpLogDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new HttpLogEntityConfiguration(AppContext));
+        modelBuilder.ApplyConfiguration(new HttpLogEntityConfiguration<EFHttpLog2xx>(AppContext));
+        modelBuilder.ApplyConfiguration(new HttpLogEntityConfiguration<EFHttpLog4xx>(AppContext));
+        modelBuilder.ApplyConfiguration(new HttpLogEntityConfiguration<EFHttpLog5xx>(AppContext));
+
         base.OnModelCreating(modelBuilder);
     }
     
-    public virtual DbSet<HttpLog> HttpLogs2xx { get; set; }
-    public virtual DbSet<HttpLog> HttpLogs4xx { get; set; }
-    public virtual DbSet<HttpLog> HttpLogs5xx { get; set; }
+    public virtual DbSet<EFHttpLog2xx> HttpLogs2xx { get; set; }
+    public virtual DbSet<EFHttpLog4xx> HttpLogs4xx { get; set; }
+    public virtual DbSet<EFHttpLog5xx> HttpLogs5xx { get; set; }
 }

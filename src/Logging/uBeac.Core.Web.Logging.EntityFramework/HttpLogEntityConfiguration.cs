@@ -4,7 +4,8 @@ using uBeac.Repositories.EntityFramework;
 
 namespace uBeac.Web.Logging.EntityFramework;
 
-public class HttpLogEntityConfiguration : IEntityTypeConfiguration<HttpLog>
+public class HttpLogEntityConfiguration<THttpLog> : IEntityTypeConfiguration<THttpLog>
+    where THttpLog : HttpLog
 {
     protected readonly Type AppContextType;
 
@@ -13,7 +14,7 @@ public class HttpLogEntityConfiguration : IEntityTypeConfiguration<HttpLog>
         AppContextType = appContext.GetType();
     }
 
-    public virtual void Configure(EntityTypeBuilder<HttpLog> builder)
+    public virtual void Configure(EntityTypeBuilder<THttpLog> builder)
     {
         builder.OwnsOne(x => x.Exception);
 

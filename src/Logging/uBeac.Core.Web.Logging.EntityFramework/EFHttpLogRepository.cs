@@ -12,14 +12,21 @@ public class EFHttpLogRepository<TContext> : IHttpLogRepository
 
     public async Task Create(HttpLog log, CancellationToken cancellationToken = default)
     {
-        var table = log.StatusCode switch
+        switch (log.StatusCode)
         {
-            < 500 and >= 400 => Context.HttpLogs4xx,
-            >= 500 => Context.HttpLogs5xx,
-            _ => Context.HttpLogs2xx
-        };
+            case < 500 and >= 400:
+                await Context.HttpLogs4xx.AddAsync(new EFHttpLog4xx(log), cancellationToken);
+                break;
 
-        await table.AddAsync(log, cancellationToken);
+            case >= 500:
+                await Context.HttpLogs5xx.AddAsync(new EFHttpLog5xx(log), cancellationToken);
+                break;
+
+            default:
+                await Context.HttpLogs2xx.AddAsync(new EFHttpLog2xx(log), cancellationToken);
+                break;
+        }
+
         await Context.SaveChangesAsync(cancellationToken);
     }
 }

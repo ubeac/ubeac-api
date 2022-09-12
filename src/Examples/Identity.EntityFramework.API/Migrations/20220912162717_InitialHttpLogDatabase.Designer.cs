@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using uBeac.Web.Logging.EntityFramework;
 
@@ -11,9 +12,10 @@ using uBeac.Web.Logging.EntityFramework;
 namespace Identity.EntityFramework.API.Migrations
 {
     [DbContext(typeof(HttpLogDbContext))]
-    partial class HttpLogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220912162717_InitialHttpLogDatabase")]
+    partial class InitialHttpLogDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

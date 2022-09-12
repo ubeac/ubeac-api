@@ -11,6 +11,7 @@ public class ApplicationContext : IApplicationContext
     public ApplicationContext(IHttpContextAccessor accessor)
     {
         Accessor = accessor;
+        if (Accessor is null) return;
 
         TraceId = Accessor.HttpContext?.TraceIdentifier;
         UniqueId = Accessor.HttpContext?.Request?.Headers?.FirstOrDefault(_ => _.Key.Equals(UidHeaderKey, StringComparison.OrdinalIgnoreCase)).Value;

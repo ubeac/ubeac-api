@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http.Extensions;
 
 namespace uBeac.Web.Logging;
 
-public sealed class HttpLog : Entity
+public class HttpLog : Entity
 {
     public HttpLog()
     {
@@ -25,6 +25,26 @@ public sealed class HttpLog : Entity
         MachineName = Environment.MachineName;
         EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
         EnvironmentUserName = Environment.UserName;
+    }
+
+    public HttpLog(HttpLog log)
+    {
+        Time = log.Time;
+        Request = log.Request;
+        Response = log.Response;
+        StatusCode = log.StatusCode;
+        Duration = log.Duration;
+        AssemblyName = log.AssemblyName;
+        AssemblyVersion = log.AssemblyVersion;
+        ProcessId = log.ProcessId;
+        ProcessName = log.ProcessName;
+        ThreadId = log.ThreadId;
+        MemoryUsage = log.MemoryUsage;
+        MachineName = log.MachineName;
+        EnvironmentName = log.EnvironmentName;
+        EnvironmentUserName = log.EnvironmentUserName;
+        Context = log.Context;
+        Exception = log.Exception;
     }
 
     public DateTime Time { get; set; }
