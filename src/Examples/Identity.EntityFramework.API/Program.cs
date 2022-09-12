@@ -1,6 +1,6 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
-using uBeac.Repositories.History.MongoDB;
+using uBeac.Repositories.History.EntityFramework;
 using uBeac.Web;
 using uBeac.Web.Logging;
 using uBeac.Web.Logging.EntityFramework;
@@ -38,8 +38,8 @@ builder.Services.AddCoreSwaggerWithJWT("Example");
 builder.Services.AddSqlServerDatabase<IdentityCoreDbContext>(builder.Configuration.GetConnectionString("DefaultConnection"), assemblyName);
 
 // Adding history
-builder.Services.AddMongo<HistoryMongoDBContext>("HistoryConnection");
-builder.Services.AddHistory<MongoDBHistoryRepository>().For<User>();
+builder.Services.AddSqlServerDatabase<HistoryDbContext>(builder.Configuration.GetConnectionString("HistoryConnection"), assemblyName);
+builder.Services.AddHistory<EFHistoryRepository>().For<User>();
 
 // Adding CORS
 var corsPolicyOptions = builder.Configuration.GetSection("CorsPolicy");

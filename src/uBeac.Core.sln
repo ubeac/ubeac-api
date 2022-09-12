@@ -81,6 +81,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.EntityFramework.AP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Web.Logging.EntityFramework", "Logging\uBeac.Core.Web.Logging.EntityFramework\uBeac.Core.Web.Logging.EntityFramework.csproj", "{003E8085-4979-415C-A662-A00820959851}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Repositories.History.EntityFramework", "Repository\uBeac.Core.Repositories.History.EntityFramework\uBeac.Core.Repositories.History.EntityFramework.csproj", "{76058220-6E9C-4F79-ACEB-E2C5A956834D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -211,6 +213,10 @@ Global
 		{003E8085-4979-415C-A662-A00820959851}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{003E8085-4979-415C-A662-A00820959851}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{003E8085-4979-415C-A662-A00820959851}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76058220-6E9C-4F79-ACEB-E2C5A956834D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76058220-6E9C-4F79-ACEB-E2C5A956834D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76058220-6E9C-4F79-ACEB-E2C5A956834D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76058220-6E9C-4F79-ACEB-E2C5A956834D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -247,6 +253,7 @@ Global
 		{6BD1B9F9-5A0F-4A43-A657-F8B31896EDE0} = {EA4A3C91-FB93-49E8-8DF9-8CE86C150F71}
 		{4F225ADF-DE8F-4E29-9A7A-5D398CF65C53} = {6D83110C-1361-45E1-A638-6BC37F0B968F}
 		{003E8085-4979-415C-A662-A00820959851} = {117FC7BE-0153-4819-9A27-0FDA22132FA1}
+		{76058220-6E9C-4F79-ACEB-E2C5A956834D} = {2939E5A7-F1C3-4853-9F35-31EB64C08036}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {247F9BF0-18BB-4A57-BB3E-2870DDAEF0D1}
