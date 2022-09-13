@@ -16,6 +16,10 @@ public class IdentityCoreDbContext<TUser, TRole, TKey>: IdentityDbContext<TUser,
     public IdentityCoreDbContext()
     {
     }
+
+    public virtual DbSet<Unit> Units { get; set; }
+    public virtual DbSet<UnitType> UnitTypes { get; set; }
+    public virtual DbSet<UnitRole> UnitRoles { get; set; }
 }
 
 public class IdentityCoreDbContext : IdentityCoreDbContext<User, Role, Guid>
