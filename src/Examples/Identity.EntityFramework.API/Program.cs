@@ -1,4 +1,7 @@
 using System.Reflection;
+using Identity.EntityFramework.API.DBContext;
+using Identity.EntityFramework.API.Repositories;
+using Identity.EntityFramework.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using uBeac.Repositories.History.EntityFramework;
 using uBeac.Web;
@@ -36,6 +39,7 @@ builder.Services.AddCoreSwaggerWithJWT("Example");
 
 // Adding mongodb
 builder.Services.AddSqlServerDatabase<IdentityCoreDbContext>(builder.Configuration.GetConnectionString("DefaultConnection"), assemblyName);
+builder.Services.AddSqlServerDatabase<ApplicationDbContext>(builder.Configuration.GetConnectionString("DefaultConnection"), assemblyName);
 
 // Adding history
 builder.Services.AddSqlServerDatabase<HistoryDbContext>(builder.Configuration.GetConnectionString("HistoryConnection"), assemblyName);
@@ -60,13 +64,19 @@ builder.Services.AddEFUnitRepository<IdentityCoreDbContext, Unit>();
 builder.Services.AddEFUnitTypeRepository<IdentityCoreDbContext, UnitType>();
 builder.Services.AddEFUnitRoleRepository<IdentityCoreDbContext, UnitRole>();
 
+builder.Services.AddScoped<ICourseRepository, CourseRepository<ApplicationDbContext>>();
+builder.Services.AddScoped<IStudentRepository, StudentRepository<ApplicationDbContext>>();
+
 // Adding services
-builder.Services.AddUserService<UserService<User>, User>();
+builder.Services.AddScoped<IAppUserService, AppUserService>();
+builder.Services.AddUserService<AppUserService, User>();
 builder.Services.AddRoleService<RoleService<Role>, Role>();
 builder.Services.AddUserRoleService<UserRoleService<User>, User>();
 builder.Services.AddUnitService<UnitService<Unit>, Unit>();
 builder.Services.AddUnitTypeService<UnitTypeService<UnitType>, UnitType>();
 builder.Services.AddUnitRoleService<UnitRoleService<UnitRole>, UnitRole>();
+builder.Services.AddService<IStudentService, StudentService>();
+builder.Services.AddService<ICourseService, CourseService>();
 
 // Adding jwt provider
 builder.Services.AddJwtService<User>(builder.Configuration);

@@ -8,6 +8,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.8">		  
+		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.8">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -28,6 +30,10 @@
 		<ProjectReference Include="..\..\Identity\uBeac.Core.Identity.Common\uBeac.Core.Identity.Common.csproj" />
 		<ProjectReference Include="..\..\Identity\uBeac.Core.Identity.Jwt\uBeac.Core.Identity.Jwt.csproj" />
 		<ProjectReference Include="..\..\Identity\uBeac.Core.Identity\uBeac.Core.Identity.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Migrations\" />
 	</ItemGroup>
 
 </Project>

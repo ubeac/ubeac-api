@@ -52,7 +52,10 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         var user = await UserManager.FindByNameAsync(username);
 
         // Validate user password
-        if (user is null || !user.Enabled || !await UserManager.CheckPasswordAsync(user, password)) throw new Exception("User doesn't exist or username/password is not valid!");
+        if (!user.Enabled) 
+            throw new Exception("User is not enabled. Please contact website administrator!");
+        if (user is null || !await UserManager.CheckPasswordAsync(user, password)) 
+            throw new Exception("User doesn't exist or username/password is not valid!");
 
         // Generate token
         var token = await TokenService.Generate(user);
@@ -134,7 +137,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
     public async Task<IEnumerable<TUser>> GetAll(CancellationToken cancellationToken = default)
     {
         // TODO: Check this: ToListAsync() is not working - throws exception! For this reason, the ToList() method is used
-        return await UserManager.Users.ToListAsync(cancellationToken);
+        return await Task.Run(() => UserManager.Users.ToList(), cancellationToken);
     }
 
     public virtual Task<TUser> GetById(TUserKey id, CancellationToken cancellationToken = default)
