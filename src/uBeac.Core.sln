@@ -47,8 +47,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Web.Jwt", "Web\u
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Repositories.History.Abstractions", "Repository\uBeac.Core.Repositories.History.Abstractions\uBeac.Core.Repositories.History.Abstractions.csproj", "{96DBDDB5-59A7-4011-ABD0-DB27E3B2C05F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Repositories.History.Extensions", "Repository\uBeac.Core.Repositories.History.Extensions\uBeac.Core.Repositories.History.Extensions.csproj", "{AAA5B1BE-4216-4ADB-9FB3-B03D35CF8D03}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Repositories.History.MongoDB", "Repository\uBeac.Core.Repositories.History.MongoDB\uBeac.Core.Repositories.History.MongoDB.csproj", "{CA77313D-6D97-4F91-9818-B729FA0359D2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Web.Logging.MongoDB", "Logging\uBeac.Core.Web.Logging.MongoDB\uBeac.Core.Web.Logging.MongoDB.csproj", "{2D538398-EAC9-4A18-8459-74CA9E499F4E}"
@@ -81,7 +79,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.EntityFramework.AP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Web.Logging.EntityFramework", "Logging\uBeac.Core.Web.Logging.EntityFramework\uBeac.Core.Web.Logging.EntityFramework.csproj", "{003E8085-4979-415C-A662-A00820959851}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Repositories.History.EntityFramework", "Repository\uBeac.Core.Repositories.History.EntityFramework\uBeac.Core.Repositories.History.EntityFramework.csproj", "{76058220-6E9C-4F79-ACEB-E2C5A956834D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Repositories.History.EntityFramework", "Repository\uBeac.Core.Repositories.History.EntityFramework\uBeac.Core.Repositories.History.EntityFramework.csproj", "{76058220-6E9C-4F79-ACEB-E2C5A956834D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -153,10 +151,6 @@ Global
 		{96DBDDB5-59A7-4011-ABD0-DB27E3B2C05F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96DBDDB5-59A7-4011-ABD0-DB27E3B2C05F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96DBDDB5-59A7-4011-ABD0-DB27E3B2C05F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AAA5B1BE-4216-4ADB-9FB3-B03D35CF8D03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AAA5B1BE-4216-4ADB-9FB3-B03D35CF8D03}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AAA5B1BE-4216-4ADB-9FB3-B03D35CF8D03}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AAA5B1BE-4216-4ADB-9FB3-B03D35CF8D03}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CA77313D-6D97-4F91-9818-B729FA0359D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CA77313D-6D97-4F91-9818-B729FA0359D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA77313D-6D97-4F91-9818-B729FA0359D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -238,7 +232,6 @@ Global
 		{3D9D0F87-1A8A-4D2E-8F1A-CF398CD8D2FA} = {D910F4C0-CDE2-422F-A476-CDB87D8008A6}
 		{2B7FB004-FE75-4196-A263-C4A768499970} = {37B6F062-3F0A-47F0-A418-FFFDA49D6D17}
 		{96DBDDB5-59A7-4011-ABD0-DB27E3B2C05F} = {2939E5A7-F1C3-4853-9F35-31EB64C08036}
-		{AAA5B1BE-4216-4ADB-9FB3-B03D35CF8D03} = {2939E5A7-F1C3-4853-9F35-31EB64C08036}
 		{CA77313D-6D97-4F91-9818-B729FA0359D2} = {2939E5A7-F1C3-4853-9F35-31EB64C08036}
 		{2D538398-EAC9-4A18-8459-74CA9E499F4E} = {117FC7BE-0153-4819-9A27-0FDA22132FA1}
 		{907A1743-ACDA-43FF-894E-619219E82D6F} = {2939E5A7-F1C3-4853-9F35-31EB64C08036}

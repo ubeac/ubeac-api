@@ -1,27 +1,17 @@
 ﻿namespace uBeac;
 
-public interface IHistoryEntity<TKey> : IEntity<TKey>
-    where TKey : IEquatable<TKey>
+public interface IHistoryEntity<TData> : IEntity
 {
-    object Data { get; set; }
+    TData Data { get; set; }
     string ActionName { get; set; }
     DateTime CreatedAt { get; set; }
     IApplicationContext Context { get; set; }
 }
 
-public interface IHistoryEntity : IEntity, IHistoryEntity<Guid>
+public sealed class HistoryEntity<TData> : Entity, IHistoryEntity<TData>
 {
-}
-
-public class HistoryEntity<TKey> : Entity<TKey>, IHistoryEntity<TKey>
-    where TKey : IEquatable<TKey>
-{
-    public virtual object Data { get; set; }
-    public virtual string ActionName { get; set; }
-    public virtual DateTime CreatedAt { get; set; }
-    public virtual IApplicationContext Context { get; set; }
-}
-
-public class HistoryEntity : HistoryEntity<Guid>, IHistoryEntity
-{
+    public TData Data { get; set; }
+    public string ActionName { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public IApplicationContext Context { get; set; }
 }

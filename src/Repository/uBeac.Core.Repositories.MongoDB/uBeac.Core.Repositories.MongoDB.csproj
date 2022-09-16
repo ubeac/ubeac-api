@@ -26,7 +26,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\uBeac.Core.Repositories.Abstractions\uBeac.Core.Repositories.Abstractions.csproj" />
-		<ProjectReference Include="..\uBeac.Core.Repositories.History.MongoDB\uBeac.Core.Repositories.History.MongoDB.csproj" />
+		<ProjectReference Include="..\uBeac.Core.Repositories.History.Abstractions\uBeac.Core.Repositories.History.Abstractions.csproj" />
 	</ItemGroup>
 
 </Project>
