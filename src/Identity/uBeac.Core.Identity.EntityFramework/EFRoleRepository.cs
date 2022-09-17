@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using uBeac.Repositories;
 using uBeac.Repositories.EntityFramework;
-using uBeac.Repositories.History;
 
 namespace uBeac.Identity.EntityFramework;
 
@@ -9,7 +9,7 @@ public class EFRoleRepository<TRoleKey, TRole, TContext> : EFEntityRepository<TR
     where TRole : Role<TRoleKey>
     where TContext : DbContext
 {
-    public EFRoleRepository(TContext dbContext, IApplicationContext applicationContext, IHistoryManager historyManager) : base(dbContext, applicationContext, historyManager)
+    public EFRoleRepository(TContext dbContext, IApplicationContext applicationContext, IEntityEventManager<TRoleKey, TRole> eventManager) : base(dbContext, applicationContext, eventManager)
     {
     }
 }
@@ -18,7 +18,7 @@ public class EFRoleRepository<TRole, TContext> : EFRoleRepository<Guid, TRole, T
     where TRole : Role
     where TContext : DbContext
 {
-    public EFRoleRepository(TContext dbContext, IApplicationContext applicationContext, IHistoryManager historyManager) : base(dbContext, applicationContext, historyManager)
+    public EFRoleRepository(TContext dbContext, IApplicationContext applicationContext, IEntityEventManager<TRole> eventManager) : base(dbContext, applicationContext, eventManager)
     {
     }
 }

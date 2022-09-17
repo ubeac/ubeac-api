@@ -1,4 +1,5 @@
 using System.Reflection;
+using API;
 using Microsoft.AspNetCore.Mvc;
 using uBeac.Repositories.History.EntityFramework;
 using uBeac.Web;
@@ -39,7 +40,7 @@ builder.Services.AddSqlServerDatabase<IdentityCoreDbContext>(builder.Configurati
 
 // Adding history
 builder.Services.AddSqlServerDatabase<HistoryDbContext>(builder.Configuration.GetConnectionString("HistoryConnection"), assemblyName);
-builder.Services.AddHistory<EFHistoryRepository>().For<User>();
+builder.Services.AddEntityFrameworkHistory<HistoryDbContext>().For<User>();
 
 // Adding CORS
 var corsPolicyOptions = builder.Configuration.GetSection("CorsPolicy");
@@ -53,6 +54,7 @@ builder.Services.AddHttpsPolicy(hstsOptions);
 builder.Services.AddEmailProvider(builder.Configuration);
 
 // Adding repositories
+builder.Services.AddEntityEventHandling();
 builder.Services.AddEFUserRepository<IdentityCoreDbContext, User>();
 builder.Services.AddEFUserTokenRepository<IdentityCoreDbContext>();
 builder.Services.AddEFRoleRepository<IdentityCoreDbContext, Role>();

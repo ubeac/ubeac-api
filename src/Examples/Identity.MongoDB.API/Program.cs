@@ -1,5 +1,6 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
+using uBeac.Repositories;
 using uBeac.Repositories.History.MongoDB;
 using uBeac.Repositories.MongoDB;
 using uBeac.Web;
@@ -37,8 +38,7 @@ builder.Services.AddCoreSwaggerWithJWT("Example");
 builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
 
 // Adding history
-builder.Services.AddMongo<HistoryMongoDBContext>("HistoryConnection");
-builder.Services.AddHistory<MongoDBHistoryRepository>().For<User>();
+builder.Services.AddMongoHistory<MongoDBContext>().For<User>();
 
 // Adding CORS
 var corsPolicyOptions = builder.Configuration.GetSection("CorsPolicy");
@@ -52,6 +52,7 @@ builder.Services.AddHttpsPolicy(hstsOptions);
 builder.Services.AddEmailProvider(builder.Configuration);
 
 // Adding repositories
+builder.Services.AddEntityEventHandling();
 builder.Services.AddMongoDBUserRepository<MongoDBContext, User>();
 builder.Services.AddMongoDBUserTokenRepository<MongoDBContext>();
 builder.Services.AddMongoDBRoleRepository<MongoDBContext, Role>();

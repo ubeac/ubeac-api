@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using uBeac.Repositories;
 using uBeac.Repositories.EntityFramework;
-using uBeac.Repositories.History;
 
 namespace uBeac.Identity.EntityFramework;
 
@@ -9,7 +9,7 @@ public class EFUserRepository<TUserKey, TUser, TContext> : EFEntityRepository<TU
     where TUser : User<TUserKey>
     where TContext : DbContext
 {
-    public EFUserRepository(TContext dbContext, IApplicationContext applicationContext, IHistoryManager historyManager) : base(dbContext, applicationContext, historyManager)
+    public EFUserRepository(TContext dbContext, IApplicationContext applicationContext, IEntityEventManager<TUserKey, TUser> eventManager) : base(dbContext, applicationContext, eventManager)
     {
     }
 }
@@ -18,7 +18,7 @@ public class EFUserRepository<TUser, TContext> : EFUserRepository<Guid, TUser, T
     where TUser : User
     where TContext : DbContext
 {
-    public EFUserRepository(TContext dbContext, IApplicationContext applicationContext, IHistoryManager historyManager) : base(dbContext, applicationContext, historyManager)
+    public EFUserRepository(TContext dbContext, IApplicationContext applicationContext, IEntityEventManager<TUser> eventManager) : base(dbContext, applicationContext, eventManager)
     {
     }
 }

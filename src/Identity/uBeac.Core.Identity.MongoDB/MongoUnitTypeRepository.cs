@@ -1,5 +1,5 @@
 ﻿using MongoDB.Driver;
-using uBeac.Repositories.History;
+using uBeac.Repositories;
 using uBeac.Repositories.MongoDB;
 
 namespace uBeac.Identity.MongoDB;
@@ -10,7 +10,7 @@ public class MongoUnitTypeRepository<TKey, TUnitType, TContext> : MongoEntityRep
     where TContext : IMongoDBContext
 {
 
-    public MongoUnitTypeRepository(TContext mongoDbContext, IApplicationContext appContext, IHistoryManager history) : base(mongoDbContext, appContext, history)
+    public MongoUnitTypeRepository(TContext mongoDbContext, IApplicationContext appContext, IEntityEventManager<TKey, TUnitType> eventManager) : base(mongoDbContext, appContext, eventManager)
     {
         // Create Indexes
         try
@@ -31,7 +31,7 @@ public class MongoUnitTypeRepository<TUnitType, TContext> : MongoUnitTypeReposit
     where TUnitType : UnitType
     where TContext : IMongoDBContext
 {
-    public MongoUnitTypeRepository(TContext mongoDbContext, IApplicationContext appContext, IHistoryManager history) : base(mongoDbContext, appContext, history)
+    public MongoUnitTypeRepository(TContext mongoDbContext, IApplicationContext appContext, IEntityEventManager<TUnitType> eventManager) : base(mongoDbContext, appContext, eventManager)
     {
     }
 }

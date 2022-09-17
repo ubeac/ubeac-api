@@ -11,6 +11,7 @@ public static class HistoryBuilderExtensions
         services.TryAddScoped<IHistoryManager, HistoryManager>();
 
         services.AddScoped<IEntityRepository<HistoryEntity<TData>>, TRepository>();
+        services.AddScoped<IGeneralEntityEventHandler, HistoryEventHandler>();
 
         return builder;
     }

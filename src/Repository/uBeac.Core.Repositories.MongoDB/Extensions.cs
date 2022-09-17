@@ -4,7 +4,6 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using uBeac;
-using uBeac.Repositories;
 using uBeac.Repositories.MongoDB;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -41,21 +40,6 @@ public static class RepositoryExtensions
             };
         });
 
-        return services;
-    }
-
-    public static IServiceCollection AddRepository<TInterface, TImplementation>(this IServiceCollection services)
-        where TInterface : IRepository
-        where TImplementation : class, IRepository
-    {
-        services.TryAddScoped(typeof(TInterface), typeof(TImplementation));
-        return services;
-
-    }
-
-    public static IServiceCollection AddRepository(this IServiceCollection services, Type interfaceType, Type implementationType)
-    {
-        services.TryAddScoped(interfaceType, implementationType);
         return services;
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using uBeac.Repositories.History;
 
 namespace uBeac.Repositories.EntityFramework;
 
@@ -11,37 +10,29 @@ public class EFEntityRepository<TKey, TEntity, TContext> : IEntityRepository<TKe
 {
     protected readonly TContext DbContext;
     protected readonly IApplicationContext ApplicationContext;
-    protected readonly IHistoryManager HistoryManager;
+    protected readonly IEntityEventManager<TKey, TEntity> EventManager;
     protected readonly DbSet<TEntity> DbSet;
 
-    public EFEntityRepository(TContext dbContext, IApplicationContext applicationContext, IHistoryManager historyManager)
+    public EFEntityRepository(TContext dbContext, IApplicationContext applicationContext, IEntityEventManager<TKey, TEntity> eventManager)
     {
         DbContext = dbContext;
         DbSet = dbContext.Set<TEntity>();
         ApplicationContext = applicationContext;
-        HistoryManager = historyManager;
+        EventManager = eventManager;
     }
 
     public IQueryable<TEntity> AsQueryable() => DbSet.AsNoTracking();
-
-    protected virtual async Task AddToHistory(TEntity entity, string actionName, CancellationToken cancellationToken = default)
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-
-        await HistoryManager.Write(entity, actionName, cancellationToken);
-    }
 
     public virtual async Task Create(TEntity entity, string actionName, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        // If the entity is extend from IAuditEntity, the audit properties (CreatedAt, CreatedBy, etc.) should be set
-        if (entity is IAuditEntity<TKey> audit) SetPropertiesOnCreate(audit, ApplicationContext);
+        await EventManager.OnCreating(entity, actionName, cancellationToken);
 
         await DbSet.AddAsync(entity, cancellationToken);
         await SaveChangesAsync(cancellationToken);
 
-        await AddToHistory(entity, actionName, cancellationToken);
+        await EventManager.OnCreated(entity, actionName, cancellationToken);
     }
 
     public virtual async Task Create(TEntity entity, CancellationToken cancellationToken = default)
@@ -49,15 +40,35 @@ public class EFEntityRepository<TKey, TEntity, TContext> : IEntityRepository<TKe
         await Create(entity, nameof(Create), cancellationToken);
     }
 
+    public async Task Delete(TEntity entity, string actionName, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        await EventManager.OnDeleting(entity, actionName, cancellationToken);
+
+        DbSet.Remove(entity);
+        await SaveChangesAsync(cancellationToken);
+
+        await EventManager.OnDeleted(entity, actionName, cancellationToken);
+    }
+
+    public async Task Delete(TEntity entity, CancellationToken cancellationToken = default)
+    {
+        await Delete(entity, nameof(Delete), cancellationToken);
+    }
+
     public virtual async Task Delete(TKey id, string actionName, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         var entity = await GetById(id, cancellationToken);
+
+        await EventManager.OnDeleting(entity, actionName, cancellationToken);
+
         DbSet.Remove(entity);
         await SaveChangesAsync(cancellationToken);
 
-        await AddToHistory(entity, actionName, cancellationToken);
+        await EventManager.OnDeleted(entity, actionName, cancellationToken);
     }
 
     public virtual async Task Delete(TKey id, CancellationToken cancellationToken = default)
@@ -98,13 +109,12 @@ public class EFEntityRepository<TKey, TEntity, TContext> : IEntityRepository<TKe
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        // If the entity is extend from IAuditEntity, the audit properties (LastUpdatedAt, LastUpdatedBy, etc.) should be set
-        if (entity is IAuditEntity<TKey> audit) SetPropertiesOnUpdate(audit, ApplicationContext);
+        await EventManager.OnUpdating(entity, actionName, cancellationToken);
 
         DbSet.Update(entity);
         await SaveChangesAsync(cancellationToken);
 
-        await AddToHistory(entity, actionName, cancellationToken);
+        await EventManager.OnUpdated(entity, actionName, cancellationToken);
     }
 
     public virtual async Task Update(TEntity entity, CancellationToken cancellationToken = default)
@@ -116,33 +126,13 @@ public class EFEntityRepository<TKey, TEntity, TContext> : IEntityRepository<TKe
     {
         await DbContext.SaveChangesAsync(cancellationToken);
     }
-
-    private void SetPropertiesOnCreate(IAuditEntity<TKey> entity, IApplicationContext appContext)
-    {
-        var now = DateTime.Now;
-        var userName = appContext.UserName;
-
-        entity.CreatedAt = now;
-        entity.CreatedBy = userName;
-        entity.LastUpdatedAt = now;
-        entity.LastUpdatedBy = userName;
-    }
-
-    private void SetPropertiesOnUpdate(IAuditEntity<TKey> entity, IApplicationContext appContext)
-    {
-        var now = DateTime.Now;
-        var userName = appContext.UserName;
-
-        entity.LastUpdatedAt = now;
-        entity.LastUpdatedBy = userName;
-    }
 }
 
 public class EFEntityRepository<TEntity, TContext> : EFEntityRepository<Guid, TEntity, TContext>, IEntityRepository<TEntity>
     where TEntity : class, IEntity
     where TContext : EFDbContext
 {
-    public EFEntityRepository(TContext dbContext, IApplicationContext applicationContext, IHistoryManager historyManager) : base(dbContext, applicationContext, historyManager)
+    public EFEntityRepository(TContext dbContext, IApplicationContext applicationContext, IEntityEventManager<TEntity> historyManager) : base(dbContext, applicationContext, historyManager)
     {
     }
 }

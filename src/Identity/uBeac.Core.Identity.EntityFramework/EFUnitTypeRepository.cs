@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using uBeac.Repositories;
 using uBeac.Repositories.EntityFramework;
-using uBeac.Repositories.History;
 
 namespace uBeac.Identity.EntityFramework;
 
@@ -9,7 +9,7 @@ public class EFUnitTypeRepository<TUnitTypeKey, TUnitType, TContext> : EFEntityR
     where TUnitType : UnitType<TUnitTypeKey>
     where TContext : DbContext
 {
-    public EFUnitTypeRepository(TContext dbContext, IApplicationContext applicationContext, IHistoryManager historyManager) : base(dbContext, applicationContext, historyManager)
+    public EFUnitTypeRepository(TContext dbContext, IApplicationContext applicationContext, IEntityEventManager<TUnitTypeKey, TUnitType> eventManager) : base(dbContext, applicationContext, eventManager)
     {
     }
 }
@@ -18,7 +18,7 @@ public class EFUnitTypeRepository<TUnitType, TContext> : EFUnitTypeRepository<Gu
     where TUnitType : UnitType
     where TContext : DbContext
 {
-    public EFUnitTypeRepository(TContext dbContext, IApplicationContext applicationContext, IHistoryManager historyManager) : base(dbContext, applicationContext, historyManager)
+    public EFUnitTypeRepository(TContext dbContext, IApplicationContext applicationContext, IEntityEventManager<TUnitType> eventManager) : base(dbContext, applicationContext, eventManager)
     {
     }
 }

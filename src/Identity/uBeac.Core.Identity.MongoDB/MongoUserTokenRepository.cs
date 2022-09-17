@@ -1,4 +1,4 @@
-﻿using uBeac.Repositories.History;
+﻿using uBeac.Repositories;
 using uBeac.Repositories.MongoDB;
 
 namespace uBeac.Identity.MongoDB;
@@ -7,7 +7,7 @@ public class MongoUserTokenRepository<TUserKey, TContext> : MongoEntityRepositor
     where TUserKey : IEquatable<TUserKey>
     where TContext : IMongoDBContext
 {
-    public MongoUserTokenRepository(TContext mongoDbContext, IApplicationContext appContext, IHistoryManager history) : base(mongoDbContext, appContext, history)
+    public MongoUserTokenRepository(TContext mongoDbContext, IApplicationContext appContext, IEntityEventManager<TUserKey, UserToken<TUserKey>> eventManager) : base(mongoDbContext, appContext, eventManager)
     {
     }
 }
@@ -15,8 +15,7 @@ public class MongoUserTokenRepository<TUserKey, TContext> : MongoEntityRepositor
 public class MongoUserTokenRepository<TContext> : MongoUserTokenRepository<Guid, TContext>, IUserTokenRepository
     where TContext : IMongoDBContext
 {
-    public MongoUserTokenRepository(TContext mongoDbContext, IApplicationContext appContext, IHistoryManager history) : base(mongoDbContext, appContext, history)
+    public MongoUserTokenRepository(TContext mongoDbContext, IApplicationContext appContext, IEntityEventManager<Guid, UserToken<Guid>> eventManager) : base(mongoDbContext, appContext, eventManager)
     {
     }
 }
-

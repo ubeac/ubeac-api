@@ -1,4 +1,4 @@
-﻿using uBeac.Repositories.History;
+﻿using uBeac.Repositories;
 using uBeac.Repositories.MongoDB;
 
 namespace uBeac.Identity.MongoDB;
@@ -8,7 +8,7 @@ public class MongoUnitRoleRepository<TKey, TUnitRole, TContext> : MongoEntityRep
     where TUnitRole : UnitRole<TKey>
     where TContext : IMongoDBContext
 {
-    public MongoUnitRoleRepository(TContext mongoDbContext, IApplicationContext appContext, IHistoryManager history) : base(mongoDbContext, appContext, history)
+    public MongoUnitRoleRepository(TContext mongoDbContext, IApplicationContext appContext, IEntityEventManager<TKey, TUnitRole> eventManager) : base(mongoDbContext, appContext, eventManager)
     {
     }
 }
@@ -17,7 +17,7 @@ public class MongoUnitRoleRepository<TUnitRole, TContext> : MongoUnitRoleReposit
     where TUnitRole : UnitRole
     where TContext : IMongoDBContext
 {
-    public MongoUnitRoleRepository(TContext mongoDbContext, IApplicationContext appContext, IHistoryManager history) : base(mongoDbContext, appContext, history)
+    public MongoUnitRoleRepository(TContext mongoDbContext, IApplicationContext appContext, IEntityEventManager<TUnitRole> eventManager) : base(mongoDbContext, appContext, eventManager)
     {
     }
 }

@@ -1,7 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Linq.Expressions;
-using uBeac.Repositories.History;
 
 namespace uBeac.Repositories.MongoDB;
 
@@ -15,16 +14,17 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
     protected readonly IMongoDatabase MongoDatabase;
     protected readonly TContext MongoDbContext;
     protected readonly IApplicationContext ApplicationContext;
-    protected readonly IHistoryManager History;
 
-    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext applicationContext, IHistoryManager history)
+    protected readonly IEntityEventManager<TKey, TEntity> EventManager;
+
+    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext applicationContext, IEntityEventManager<TKey, TEntity> eventManager)
     {
         MongoDatabase = mongoDbContext.Database;
         Collection = mongoDbContext.Database.GetCollection<TEntity>(GetCollectionName());
         BsonCollection = mongoDbContext.Database.GetCollection<BsonDocument>(GetCollectionName());
         MongoDbContext = mongoDbContext;
         ApplicationContext = applicationContext;
-        History = history;
+        EventManager = eventManager;
     }
 
     protected virtual string GetCollectionName()
@@ -32,15 +32,27 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         return typeof(TEntity).Name;
     }
 
-    public virtual async Task Delete(TKey id, string actionName, CancellationToken cancellationToken = default)
+    public async Task Delete(TEntity entity, CancellationToken cancellationToken = default)
+    {
+        await Delete(entity, nameof(Delete), cancellationToken);
+    }
+
+    public async Task Delete(TEntity entity, string actionName, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var idFilter = Builders<TEntity>.Filter.Eq(doc => doc.Id, id);
+        await EventManager.OnDeleting(entity, actionName, cancellationToken);
 
-        var entity = await Collection.FindOneAndDeleteAsync(idFilter, null, cancellationToken);
+        var idFilter = Builders<TEntity>.Filter.Eq(doc => doc.Id, entity.Id);
+        await Collection.DeleteOneAsync(idFilter, null, cancellationToken);
 
-        await History.Write(entity, actionName, cancellationToken);
+        await EventManager.OnDeleted(entity, actionName, cancellationToken);
+    }
+
+    public virtual async Task Delete(TKey id, string actionName, CancellationToken cancellationToken = default)
+    {
+        var entity = await GetById(id, cancellationToken);
+        await Delete(entity, actionName, cancellationToken);
     }
 
     public virtual async Task Delete(TKey id, CancellationToken cancellationToken = default)
@@ -54,7 +66,7 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
 
         var filter = Builders<TEntity>.Filter.Empty;
 
-        return (await Collection.FindAsync(filter, null, cancellationToken)).ToEnumerable();        
+        return (await Collection.FindAsync(filter, null, cancellationToken)).ToEnumerable();
     }
 
     public virtual async Task<TEntity> GetById(TKey id, CancellationToken cancellationToken = default)
@@ -62,7 +74,6 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         cancellationToken.ThrowIfCancellationRequested();
 
         var idFilter = Builders<TEntity>.Filter.Eq(x => x.Id, id);
-
         var findResult = await Collection.FindAsync(idFilter, null, cancellationToken);
 
         return await findResult.SingleOrDefaultAsync(cancellationToken);
@@ -73,7 +84,6 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
         cancellationToken.ThrowIfCancellationRequested();
 
         var idsFilter = Builders<TEntity>.Filter.In(x => x.Id, ids);
-
         var findResult = await Collection.FindAsync(idsFilter, null, cancellationToken);
 
         return await findResult.ToListAsync(cancellationToken);
@@ -83,12 +93,11 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        // If the entity is extend from IAuditEntity, the audit properties (CreatedAt, CreatedBy, etc.) should be set
-        if (entity is IAuditEntity<TKey> audit) SetPropertiesOnCreate(audit, ApplicationContext);
+        await EventManager.OnCreating(entity, actionName, cancellationToken);
 
         await Collection.InsertOneAsync(entity, null, cancellationToken);
 
-        await History.Write(entity, actionName, cancellationToken);
+        await EventManager.OnCreated(entity, actionName, cancellationToken);
     }
 
     public virtual async Task Create(TEntity entity, CancellationToken cancellationToken = default)
@@ -100,14 +109,12 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        // If the entity is extend from IAuditEntity, the audit properties (LastUpdatedAt, LastUpdatedBy, etc.) should be set
-        if (entity is IAuditEntity<TKey> audit) SetPropertiesOnUpdate(audit, ApplicationContext);
+        await EventManager.OnUpdating(entity, actionName, cancellationToken);
 
         var idFilter = Builders<TEntity>.Filter.Eq(x => x.Id, entity.Id);
-
         await Collection.FindOneAndReplaceAsync(idFilter, entity, null, cancellationToken);
 
-        await History.Write(entity, actionName, cancellationToken);
+        await EventManager.OnUpdated(entity, actionName, cancellationToken);
     }
 
     public virtual async Task Update(TEntity entity, CancellationToken cancellationToken = default)
@@ -124,33 +131,13 @@ public class MongoEntityRepository<TKey, TEntity, TContext> : IEntityRepository<
     }
 
     public IQueryable<TEntity> AsQueryable() => Collection.AsQueryable();
-
-    private void SetPropertiesOnCreate(IAuditEntity<TKey> entity, IApplicationContext appContext)
-    {
-        var now = DateTime.Now;
-        var userName = appContext.UserName;
-
-        entity.CreatedAt = now;
-        entity.CreatedBy = userName;
-        entity.LastUpdatedAt = now;
-        entity.LastUpdatedBy = userName;
-    }
-
-    private void SetPropertiesOnUpdate(IAuditEntity<TKey> entity, IApplicationContext appContext)
-    {
-        var now = DateTime.Now;
-        var userName = appContext.UserName;
-
-        entity.LastUpdatedAt = now;
-        entity.LastUpdatedBy = userName;
-    }
 }
 
 public class MongoEntityRepository<TEntity, TContext> : MongoEntityRepository<Guid, TEntity, TContext>, IEntityRepository<TEntity>
     where TEntity : IEntity
     where TContext : IMongoDBContext
 {
-    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext applicationContext, IHistoryManager history) : base(mongoDbContext, applicationContext, history)
+    public MongoEntityRepository(TContext mongoDbContext, IApplicationContext applicationContext, IEntityEventManager<TEntity> eventManager) : base(mongoDbContext, applicationContext, eventManager)
     {
     }
 }
