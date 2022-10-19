@@ -4,7 +4,7 @@ namespace uBeac.Web;
 
 public class ApplicationContext : IApplicationContext
 {
-    protected readonly IHttpContextAccessor Accessor;
+    protected static IHttpContextAccessor Accessor;
     protected const string SidHeaderKey = "sid";
     protected const string UidHeaderKey = "uid";
 
@@ -26,4 +26,6 @@ public class ApplicationContext : IApplicationContext
     public string UserName { get; set; }
     public string UserIp { get; set; }
     public string Language { get; set; }
+
+    public static bool IsInRole(string role) => Accessor.HttpContext.User.IsInRole(role);    
 }
