@@ -16,4 +16,5 @@ public class InsertUserRequest
 
     public virtual string Email { get; set; }
     public virtual bool EmailConfirmed { get; set; }
+    public virtual bool Enabled { get; set; } = true;
 }

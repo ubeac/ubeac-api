@@ -63,7 +63,7 @@ builder.Services.AddMongoDBUnitTypeRepository<MongoDBContext, UnitType>();
 builder.Services.AddMongoDBUnitRoleRepository<MongoDBContext, UnitRole>();
 
 // Adding services
-builder.Services.AddUserService<UserService<User>, User>();
+builder.Services.AddUserService<UserService<User>, User>(builder.Configuration);
 builder.Services.AddRoleService<RoleService<Role>, Role>();
 builder.Services.AddUserRoleService<UserRoleService<User>, User>();
 builder.Services.AddUnitService<UnitService<Unit>, Unit>();
