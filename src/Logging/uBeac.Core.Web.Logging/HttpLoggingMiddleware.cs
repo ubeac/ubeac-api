@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
 
 namespace uBeac.Web.Logging;
 
@@ -13,7 +12,7 @@ internal sealed class HttpLoggingMiddleware
         _next = next;
     }
 
-    public async Task Invoke(HttpContext context, IHttpLogRepository repository, IApplicationContext appContext, IDebugger debugger)
+    public async Task Invoke(HttpContext context, IHttpLogRepository repository, IApplicationContext appContext, IDebugger debugger, IHttpLogChanges httpLogChanges)
     {
         try
         {
@@ -31,14 +30,11 @@ internal sealed class HttpLoggingMiddleware
             }
             finally
             {
-                if (context.LogIgnored() is false)
+                stopwatch.Stop();
+
+                if (!httpLogChanges.ContainsKey(LogConstants.LOG_IGNORED) || httpLogChanges[LogConstants.LOG_IGNORED] is false)
                 {
-                    var requestBody = JsonConvert.SerializeObject(context.GetLogRequestBody() ?? new {});
-                    var responseBody = JsonConvert.SerializeObject(context.GetLogResponseBody() ?? new {});
-
-                    stopwatch.Stop();
-
-                    var model = context.CreateLogModel(appContext, requestBody, responseBody, stopwatch.ElapsedMilliseconds, exception != null ? 500 : null, exception);
+                    var model = context.CreateLogModel(appContext, httpLogChanges[LogConstants.REQUEST_BODY].ToString(), httpLogChanges[LogConstants.RESPONSE_BODY].ToString(), stopwatch.ElapsedMilliseconds, exception != null ? 500 : null, exception);
                     await Log(model, repository);
                 }
             }

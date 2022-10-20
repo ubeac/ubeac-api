@@ -9,6 +9,12 @@ namespace uBeac.Web.Logging;
 
 public class HttpLogDataHandlingFilter : IActionFilter, IOrderedFilter
 {
+    private readonly IHttpLogChanges _httpLogChanges;
+
+    public HttpLogDataHandlingFilter(IHttpLogChanges httpLogChanges)
+    {
+        _httpLogChanges = httpLogChanges;
+    }
     private readonly JsonSerializerSettings _serializationSettings = new()
     {
         ContractResolver = new JsonLogResolver(),
@@ -22,12 +28,13 @@ public class HttpLogDataHandlingFilter : IActionFilter, IOrderedFilter
         var ignoredController = context.Controller.GetType().IsIgnored();
         var ignoredAction = ((ControllerActionDescriptor)context.ActionDescriptor).MethodInfo.IsIgnored();
         _logIgnored = ignoredController || ignoredAction;
-        context.HttpContext.SetLogIgnored(_logIgnored);
+        _httpLogChanges.Add(LogConstants.LOG_IGNORED, _logIgnored);
         if (_logIgnored) return;
 
-        var requestArgs = context.ActionArguments.Where(arg => arg.Value == null || arg.Value.GetType() != typeof(CancellationToken)).ToList();
+        var requestArgs = context.ActionArguments.Where(arg => arg.Value != null && arg.Value.GetType() != typeof(CancellationToken)).ToList();
         var logRequestBody = JsonConvert.SerializeObject(requestArgs, _serializationSettings);
-        context.HttpContext.SetLogRequestBody(logRequestBody);
+
+        _httpLogChanges.Add(LogConstants.REQUEST_BODY, logRequestBody);
     }
 
     public void OnActionExecuted(ActionExecutedContext context)
@@ -37,13 +44,14 @@ public class HttpLogDataHandlingFilter : IActionFilter, IOrderedFilter
         if (context.Result == null || context.Result.GetType() == typeof(EmptyResult))
         {
             var emptyResult = JsonConvert.SerializeObject(new { }, _serializationSettings);
-            context.HttpContext.SetLogResponseBody(emptyResult);
+            _httpLogChanges.Add(LogConstants.RESPONSE_BODY, emptyResult);
             return;
         }
 
         var resultValue = ((ObjectResult)context.Result).Value;
         var logResponseBody = resultValue != null ? JsonConvert.SerializeObject(resultValue, _serializationSettings) : null;
-        context.HttpContext.SetLogResponseBody(logResponseBody);
+
+        _httpLogChanges.Add(LogConstants.RESPONSE_BODY, logResponseBody);
     }
 
     public int Order => int.MaxValue;
@@ -65,7 +73,7 @@ internal class JsonLogResolver : CamelCasePropertyNamesContractResolver
             var replaceValue = member.GetReplaceValue();
             result.ValueProvider = new ReplaceValueProvider(replaceValue);
         }
-        
+
         return result;
     }
 }
