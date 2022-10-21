@@ -50,6 +50,7 @@ internal sealed class HttpLoggingMiddleware
         catch (Exception ex)
         {
             debugger.Add(ex.Message);
+            throw;
         }
     }
 
