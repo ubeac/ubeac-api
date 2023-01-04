@@ -2,6 +2,7 @@
 
 namespace API;
 
+[LogIgnore]
 public class RegisterRequest
 {
     [Required]

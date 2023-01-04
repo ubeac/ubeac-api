@@ -19,10 +19,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.Abstractions" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
