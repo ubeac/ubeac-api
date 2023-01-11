@@ -43,6 +43,13 @@ builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
 builder.Services.AddMongo<HistoryMongoDBContext>("HistoryConnection");
 builder.Services.AddHistory<MongoDBHistoryRepository>().For<User>();
 
+// Adding template rendering
+builder.Services.AddTemplateRendering(templateRendering =>
+{
+    templateRendering.UseMongoDB<MongoDBContext>(); // It's not required, If you don't want storing your templates in the database, remove it!
+    templateRendering.UseMustacheRenderer();
+});
+
 // Adding CORS
 var corsPolicyOptions = builder.Configuration.GetSection("CorsPolicy");
 builder.Services.AddCorsPolicy(corsPolicyOptions);
