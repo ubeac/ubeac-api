@@ -67,6 +67,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "uBeac.Core.Identity.Jwt", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{6D83110C-1361-45E1-A638-6BC37F0B968F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Localization", "Localization", "{EE87A38C-14CA-4138-9D76-1FC098040A4B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Localization.Abstractions", "Localization\uBeac.Core.Localization.Abstractions\uBeac.Core.Localization.Abstractions.csproj", "{6BF8D20E-9ADB-41B0-A84C-0D6025C90496}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Localization.Repositories.MongoDB", "Localization\uBeac.Core.Localization.Repositories.MongoDB\uBeac.Core.Localization.Repositories.MongoDB.csproj", "{C25E8E88-D406-458F-BBDC-C600F36922D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Localization.Repositories.Json", "Localization\uBeac.Core.Localization.Repositories.Json\uBeac.Core.Localization.Repositories.Json.csproj", "{66E6F2EE-3EC3-47ED-A5FC-EE3F4F0A3F42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uBeac.Core.Localization", "Localization\uBeac.Core.Localization\uBeac.Core.Localization.csproj", "{1D857AC9-4E7F-4841-8E6D-94D6302FA345}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -169,6 +179,22 @@ Global
 		{6BD1B9F9-5A0F-4A43-A657-F8B31896EDE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BD1B9F9-5A0F-4A43-A657-F8B31896EDE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BD1B9F9-5A0F-4A43-A657-F8B31896EDE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BF8D20E-9ADB-41B0-A84C-0D6025C90496}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BF8D20E-9ADB-41B0-A84C-0D6025C90496}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BF8D20E-9ADB-41B0-A84C-0D6025C90496}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BF8D20E-9ADB-41B0-A84C-0D6025C90496}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C25E8E88-D406-458F-BBDC-C600F36922D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C25E8E88-D406-458F-BBDC-C600F36922D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C25E8E88-D406-458F-BBDC-C600F36922D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C25E8E88-D406-458F-BBDC-C600F36922D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66E6F2EE-3EC3-47ED-A5FC-EE3F4F0A3F42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66E6F2EE-3EC3-47ED-A5FC-EE3F4F0A3F42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66E6F2EE-3EC3-47ED-A5FC-EE3F4F0A3F42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66E6F2EE-3EC3-47ED-A5FC-EE3F4F0A3F42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D857AC9-4E7F-4841-8E6D-94D6302FA345}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D857AC9-4E7F-4841-8E6D-94D6302FA345}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D857AC9-4E7F-4841-8E6D-94D6302FA345}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D857AC9-4E7F-4841-8E6D-94D6302FA345}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -198,6 +224,10 @@ Global
 		{9D7D2782-2067-4B55-990B-ABF03939C1B3} = {EA4A3C91-FB93-49E8-8DF9-8CE86C150F71}
 		{FAAE32CA-48F3-4F26-BF22-39DDDDF57770} = {6D83110C-1361-45E1-A638-6BC37F0B968F}
 		{6BD1B9F9-5A0F-4A43-A657-F8B31896EDE0} = {EA4A3C91-FB93-49E8-8DF9-8CE86C150F71}
+		{6BF8D20E-9ADB-41B0-A84C-0D6025C90496} = {EE87A38C-14CA-4138-9D76-1FC098040A4B}
+		{C25E8E88-D406-458F-BBDC-C600F36922D3} = {EE87A38C-14CA-4138-9D76-1FC098040A4B}
+		{66E6F2EE-3EC3-47ED-A5FC-EE3F4F0A3F42} = {EE87A38C-14CA-4138-9D76-1FC098040A4B}
+		{1D857AC9-4E7F-4841-8E6D-94D6302FA345} = {EE87A38C-14CA-4138-9D76-1FC098040A4B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {247F9BF0-18BB-4A57-BB3E-2870DDAEF0D1}

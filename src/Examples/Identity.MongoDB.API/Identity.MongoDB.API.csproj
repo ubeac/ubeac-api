@@ -13,6 +13,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Common\uBeac.Core.Common\uBeac.Core.Common.csproj" />
     <ProjectReference Include="..\..\Common\uBeac.Core.Configuration\uBeac.Core.Configuration.csproj" />
+    <ProjectReference Include="..\..\Localization\uBeac.Core.Localization.Repositories.Json\uBeac.Core.Localization.Repositories.Json.csproj" />
+    <ProjectReference Include="..\..\Localization\uBeac.Core.Localization\uBeac.Core.Localization.csproj" />
     <ProjectReference Include="..\..\Logging\uBeac.Core.Web.Logging.MongoDB\uBeac.Core.Web.Logging.MongoDB.csproj" />
     <ProjectReference Include="..\..\Repository\uBeac.Core.Repositories.History.Extensions\uBeac.Core.Repositories.History.Extensions.csproj" />
     <ProjectReference Include="..\..\Repository\uBeac.Core.Repositories.History.MongoDB\uBeac.Core.Repositories.History.MongoDB.csproj" />

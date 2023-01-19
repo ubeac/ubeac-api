@@ -1,5 +1,6 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
+using uBeac.Localization;
 using uBeac.Repositories.History.MongoDB;
 using uBeac.Repositories.MongoDB;
 using uBeac.Web;
@@ -17,6 +18,7 @@ builder.Configuration.AddJsonConfig(builder.Environment);
 // Adding http logging
 builder.Services.AddMongoDbHttpLogging<HttpLogMongoDBContext>("HttpLoggingConnection", builder.Configuration.GetInstance<MongoDbHttpLogOptions>("HttpLogging"));
 
+builder.Services.AddMemoryCache();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -42,6 +44,13 @@ builder.Services.AddMongo<MongoDBContext>("DefaultConnection");
 // Adding history
 builder.Services.AddMongo<HistoryMongoDBContext>("HistoryConnection");
 builder.Services.AddHistory<MongoDBHistoryRepository>().For<User>();
+
+// Adding localization
+builder.Services.AddCustomLocalization(localization =>
+{
+    localization.UseJsonFiles();
+    localization.UseInMemoryCaching();
+});
 
 // Adding CORS
 var corsPolicyOptions = builder.Configuration.GetSection("CorsPolicy");
