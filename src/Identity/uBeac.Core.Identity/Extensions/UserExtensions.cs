@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using uBeac;
 using uBeac.Identity;
+using uBeac.Identity.Seeders;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -39,13 +41,10 @@ public static class UserExtensions
         if (configureOptions is not null)
         {
             // Register options
-            var options = builder.Services.RegisterUserOptions(configureOptions);
+            builder.Services.RegisterUserOptions(configureOptions);
 
             // Insert default values
-            var scope = builder.Services.BuildServiceProvider().CreateScope();
-            var userService = scope.ServiceProvider.GetRequiredService<IUserService<TUserKey, TUser>>();
-            var userRoleService = scope.ServiceProvider.GetRequiredService<IUserRoleService<TUserKey, TUser>>();
-            userService.InsertAdminUserAndAssignRole(userRoleService, options.AdminRole, options.AdminUser, options.AdminPassword);
+            builder.Services.AddScoped<IDataSeeder, UserSeeder<TUserKey, TUser>>();
         }
 
         return builder;
@@ -65,13 +64,10 @@ public static class UserExtensions
         if (configureOptions is not null)
         {
             // Register options
-            var options = builder.Services.RegisterUserOptions(configureOptions);
+            builder.Services.RegisterUserOptions(configureOptions);
 
             // Insert default values
-            var scope = builder.Services.BuildServiceProvider().CreateScope();
-            var userService = scope.ServiceProvider.GetRequiredService<IUserService<TUser>>();
-            var userRoleService = scope.ServiceProvider.GetRequiredService<IUserRoleService<TUser>>();
-            userService.InsertAdminUserAndAssignRole(userRoleService, options.AdminRole, options.AdminUser, options.AdminPassword);
+            builder.Services.AddScoped<IDataSeeder, UserSeeder<TUser>>();
         }
 
         return builder;
@@ -113,11 +109,11 @@ public static class UserExtensions
         where TUserKey : IEquatable<TUserKey>
         where TUser : User<TUserKey>
     {
+        var options = new UserOptions<TUserKey, TUser>();
+        configureOptions(options);
+
         // Register IOptions<UserOptions<,>>
         services.Configure(configureOptions);
-
-        // Get UserOptions<,> from ServiceProvider
-        var options = services.BuildServiceProvider().GetRequiredService<Options.IOptions<UserOptions<TUserKey, TUser>>>().Value;
 
         // Register UserOptions<,> without IOptions
         services.AddSingleton<UserOptions<TUserKey, TUser>>(options);
@@ -128,42 +124,15 @@ public static class UserExtensions
     private static UserOptions<TUser> RegisterUserOptions<TUser>(this IServiceCollection services, Action<UserOptions<TUser>> configureOptions)
         where TUser : User
     {
+        var options = new UserOptions<TUser>();
+        configureOptions(options);
+
         // Register IOptions<UserOptions<,>>
         services.Configure(configureOptions);
-
-        // Get UserOptions<,> from ServiceProvider
-        var options = services.BuildServiceProvider().GetRequiredService<Options.IOptions<UserOptions<TUser>>>().Value;
 
         // Register UserOptions<,> without IOptions
         services.AddSingleton<UserOptions<TUser>>(options);
 
         return options;
-    }
-
-    private static void InsertAdminUserAndAssignRole<TUserKey, TUser>(this IUserService<TUserKey, TUser> userService, IUserRoleService<TUserKey, TUser> userRoleService, string role, TUser user, string password)
-        where TUserKey : IEquatable<TUserKey>
-        where TUser : User<TUserKey>
-    {
-        if (user is null || password is null) return;
-
-        // If user was not inserted before, insert it
-        try
-        {
-            if (userService.ExistsUserName(user.UserName).Result is false)
-            {
-                userService.Create(user, password).Wait();
-                if (role is not null) userRoleService.AddRoles(user.Id, new List<string> { role }).Wait();
-            }
-        }
-        catch (Exception)
-        {
-            // ignored
-        }
-    }
-
-    private static void InsertAdminUserAndAssignRole<TUser>(this IUserService<TUser> userService, IUserRoleService<TUser> userRoleService, string role, TUser user, string password)
-        where TUser : User
-    {
-        userService.InsertAdminUserAndAssignRole<Guid, TUser>(userRoleService, role, user, password);
     }
 }

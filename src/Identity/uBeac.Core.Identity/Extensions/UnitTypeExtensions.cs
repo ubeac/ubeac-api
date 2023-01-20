@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using uBeac;
 using uBeac.Identity;
+using uBeac.Identity.Seeders;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -29,12 +31,10 @@ public static class UnitTypeExtensions
         if (configureOptions is not null)
         {
             // Register options
-            var options = builder.Services.RegisterUnitTypeOptions(configureOptions);
+            builder.Services.RegisterUnitTypeOptions(configureOptions);
 
             // Insert default values
-            builder.Services.BuildServiceProvider().CreateScope().ServiceProvider
-                .GetRequiredService<IUnitTypeService<TUnitTypeKey, TUnitType>>()
-                .InsertDefaultUnitTypes(options.DefaultValues);
+            builder.Services.AddScoped<IDataSeeder, UnitTypeSeeder<TUnitTypeKey, TUnitType>>();
         }
 
         return builder;
@@ -46,12 +46,10 @@ public static class UnitTypeExtensions
         if (configureOptions is not null)
         {
             // Register options
-            var options = builder.Services.RegisterUnitTypeOptions(configureOptions);
+            builder.Services.RegisterUnitTypeOptions(configureOptions);
 
             // Insert default values
-            builder.Services.BuildServiceProvider().CreateScope().ServiceProvider
-                .GetRequiredService<IUnitTypeService<TUnitType>>()
-                .InsertDefaultUnitTypes(options.DefaultValues);
+            builder.Services.AddScoped<IDataSeeder, UnitTypeSeeder<TUnitType>>();
         }
 
         return builder;
@@ -61,11 +59,11 @@ public static class UnitTypeExtensions
         where TUnitTypeKey : IEquatable<TUnitTypeKey>
         where TUnitType : UnitType<TUnitTypeKey>
     {
+        var options = new UnitTypeOptions<TUnitTypeKey, TUnitType>();
+        configureOptions(options);
+
         // Register IOptions<UnitTypeOptions<,>>
         services.Configure(configureOptions);
-
-        // Get UnitTypeOptions<,> from ServiceProvider
-        var options = services.BuildServiceProvider().GetRequiredService<Options.IOptions<UnitTypeOptions<TUnitTypeKey, TUnitType>>>().Value;
 
         // Register UnitTypeOptions<,> without IOptions
         services.AddSingleton<UnitTypeOptions<TUnitTypeKey, TUnitType>>(options);
@@ -76,43 +74,15 @@ public static class UnitTypeExtensions
     private static UnitTypeOptions<TUnitType> RegisterUnitTypeOptions<TUnitType>(this IServiceCollection services, Action<UnitTypeOptions<TUnitType>> configureOptions)
         where TUnitType : UnitType
     {
+        var options = new UnitTypeOptions<TUnitType>();
+        configureOptions(options);
+
         // Register IOptions<UnitTypeOptions<,>>
         services.Configure(configureOptions);
-
-        // Get UnitTypeOptions<,> from ServiceProvider
-        var options = services.BuildServiceProvider().GetRequiredService<Options.IOptions<UnitTypeOptions<TUnitType>>>().Value;
 
         // Register UnitTypeOptions<,> without IOptions
         services.AddSingleton<UnitTypeOptions<TUnitType>>(options);
 
         return options;
-    }
-
-    private static void InsertDefaultUnitTypes<TUnitTypeKey, TUnitType>(this IUnitTypeService<TUnitTypeKey, TUnitType> service, IEnumerable<TUnitType> values)
-        where TUnitTypeKey : IEquatable<TUnitTypeKey>
-        where TUnitType : UnitType<TUnitTypeKey>
-    {
-        if (values is null || values.Any() is false) return;
-        foreach (var unitType in values)
-        {
-            try
-            {
-                // If unit type was not inserted before, insert it
-                if (service.Exists(unitType.Code).Result is false)
-                {
-                    service.Create(unitType).Wait();
-                }
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
-        }
-    }
-
-    private static void InsertDefaultUnitTypes<TUnitType>(this IUnitTypeService<TUnitType> service, IEnumerable<TUnitType> values)
-        where TUnitType : UnitType
-    {
-        service.InsertDefaultUnitTypes<Guid, TUnitType>(values);
     }
 }
