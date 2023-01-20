@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using uBeac;
 using uBeac.Identity;
+using uBeac.Identity.Seeders;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -29,12 +31,10 @@ public static class UnitExtensions
         if (configureOptions is not null)
         {
             // Register options
-            var options = builder.Services.RegisterUnitOptions(configureOptions);
+            builder.Services.RegisterUnitOptions(configureOptions);
 
             // Insert default values
-            builder.Services.BuildServiceProvider().CreateScope().ServiceProvider
-                .GetRequiredService<IUnitService<TUnitKey, TUnit>>()
-                .InsertDefaultUnits(options.DefaultValues);
+            builder.Services.AddScoped<IDataSeeder, UnitSeeder<TUnitKey, TUnit>>();
         }
 
         return builder;
@@ -46,12 +46,10 @@ public static class UnitExtensions
         if (configureOptions is not null)
         {
             // Register options
-            var options = builder.Services.RegisterUnitOptions(configureOptions);
+            builder.Services.RegisterUnitOptions(configureOptions);
 
             // Insert default values
-            builder.Services.BuildServiceProvider().CreateScope().ServiceProvider
-                .GetRequiredService<IUnitService<TUnit>>()
-                .InsertDefaultUnits(options.DefaultValues);
+            builder.Services.AddScoped<IDataSeeder, UnitSeeder<TUnit>>();
         }
 
         return builder;
@@ -61,12 +59,12 @@ public static class UnitExtensions
         where TUnitKey : IEquatable<TUnitKey>
         where TUnit : Unit<TUnitKey>
     {
+        var options = new UnitOptions<TUnitKey, TUnit>();
+        configureOptions(options);
+
         // Register IOptions<UnitOptions<,>>
         services.Configure(configureOptions);
-
-        // Get UnitOptions<,> from ServiceProvider
-        var options = services.BuildServiceProvider().GetRequiredService<Options.IOptions<UnitOptions<TUnitKey, TUnit>>>().Value;
-
+        
         // Register UnitOptions<,> without IOptions
         services.AddSingleton<UnitOptions<TUnitKey, TUnit>>(options);
 
@@ -76,50 +74,15 @@ public static class UnitExtensions
     private static UnitOptions<TUnit> RegisterUnitOptions<TUnit>(this IServiceCollection services, Action<UnitOptions<TUnit>> configureOptions)
         where TUnit : Unit
     {
+        var options = new UnitOptions<TUnit>();
+        configureOptions(options);
+
         // Register IOptions<UnitOptions<,>>
         services.Configure(configureOptions);
-
-        // Get UnitOptions<,> from ServiceProvider
-        var options = services.BuildServiceProvider().GetRequiredService<Options.IOptions<UnitOptions<TUnit>>>().Value;
-
+        
         // Register UnitOptions<,> without IOptions
         services.AddSingleton<UnitOptions<TUnit>>(options);
 
         return options;
-    }
-
-    private static void InsertDefaultUnits<TUnitKey, TUnit>(this IUnitService<TUnitKey, TUnit> service, IEnumerable<TUnit> values)
-        where TUnitKey : IEquatable<TUnitKey>
-        where TUnit : Unit<TUnitKey>
-    {
-        if (values is null || values.Any() is false) return;
-
-        // Insert default values
-        foreach (var unit in values)
-        {
-            try
-            {
-                // If unit was not inserted before, insert it
-                if (service.Exists(unit.Code, unit.Type).Result is false)
-                {
-                    // Set parent id
-                    var parent = unit.GetParentUnit();
-                    if (parent != null) unit.ParentUnitId = parent.Id;
-
-                    // Insert
-                    service.Create(unit).Wait();
-                }
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
-        }
-    }
-
-    private static void InsertDefaultUnits<TUnit>(this IUnitService<TUnit> service, IEnumerable<TUnit> values)
-        where TUnit : Unit
-    {
-        service.InsertDefaultUnits<Guid, TUnit>(values);
     }
 }

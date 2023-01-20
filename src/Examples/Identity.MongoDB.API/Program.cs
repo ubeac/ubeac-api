@@ -107,6 +107,8 @@ builder.Services
 
 var app = builder.Build();
 
+app.SeedData();
+
 app.UseHttpsRedirection();
 app.UseHstsOnProduction(builder.Environment);
 app.UseCorsPolicy(corsPolicyOptions);
