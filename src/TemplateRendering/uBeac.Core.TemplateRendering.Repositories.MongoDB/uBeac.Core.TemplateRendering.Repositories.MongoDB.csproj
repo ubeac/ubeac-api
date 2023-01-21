@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Repository\uBeac.Core.Repositories.MongoDB\uBeac.Core.Repositories.MongoDB.csproj" />
+    <ProjectReference Include="..\uBeac.Core.TemplateRendering.Abstractions\uBeac.Core.TemplateRendering.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
