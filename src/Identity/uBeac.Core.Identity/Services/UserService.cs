@@ -86,7 +86,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         return string.IsNullOrEmpty(userId) ? default : Task.FromResult(userId.GetTypedKey<TUserKey>());
     }
 
-    public async Task ChangePassword(TUser user, string newPassword, CancellationToken cancellationToken = default)
+    public virtual async Task ChangePassword(TUser user, string newPassword, CancellationToken cancellationToken = default)
     {
         var token = await UserManager.GeneratePasswordResetTokenAsync(user);
         var result = await UserManager.ResetPasswordAsync(user, token, newPassword);
@@ -94,7 +94,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         result.ThrowIfInvalid();
     }
 
-    public async Task<IEnumerable<Claim>> GetClaims(TUser user, CancellationToken cancellationToken = default)
+    public virtual async Task<IEnumerable<Claim>> GetClaims(TUser user, CancellationToken cancellationToken = default)
     {
         var claims = new List<Claim>
         {
@@ -116,7 +116,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         await UserManager.UpdateAsync(entity);
     }
 
-    public async Task<bool> ExistsUserName(string userName, CancellationToken cancellationToken = default)
+    public virtual async Task<bool> ExistsUserName(string userName, CancellationToken cancellationToken = default)
     {
         userName = userName.ToUpperInvariant();
         return await UserManager.FindByNameAsync(userName) != null;
@@ -133,7 +133,7 @@ public class UserService<TUserKey, TUser> : IUserService<TUserKey, TUser>
         return true;
     }
 
-    public async Task<IEnumerable<TUser>> GetAll(CancellationToken cancellationToken = default)
+    public virtual async Task<IEnumerable<TUser>> GetAll(CancellationToken cancellationToken = default)
     {
         // TODO: Check this: ToListAsync() is not working - throws exception! For this reason, the ToList() method is used
         return await Task.Run(() => UserManager.Users.ToList(), cancellationToken);
