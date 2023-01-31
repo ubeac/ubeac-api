@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<PackageId>uBeac.BackgroundTasks.Logging.MongoDB</PackageId>
+		<Authors>uBeac</Authors>
+		<PackageIcon>ubeac-logo.jpg</PackageIcon>
+		<PackageProjectUrl>https://github.com/ubeac/ubeac-api</PackageProjectUrl>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Repository\uBeac.Core.Repositories.MongoDB\uBeac.Core.Repositories.MongoDB.csproj" />
+		<ProjectReference Include="..\uBeac.Core.BackgroundTasks.Logging\uBeac.Core.BackgroundTasks.Logging.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\..\ubeac-logo.jpg">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+</Project>
