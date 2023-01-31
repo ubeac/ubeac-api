@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using uBeac.Identity.Jwt;
 
 namespace uBeac.Identity;
 
@@ -23,9 +24,12 @@ public class JwtTokenService<TUserKey, TUser> : IJwtTokenService<TUserKey, TUser
 {
     protected readonly JwtOptions Options;
 
-    public JwtTokenService(Microsoft.Extensions.Options.IOptions<JwtOptions> options)
+    protected readonly UserJwtClaimsManager<TUserKey, TUser> ClaimsManager;
+
+    public JwtTokenService(Microsoft.Extensions.Options.IOptions<JwtOptions> options, UserJwtClaimsManager<TUserKey, TUser> claimsManager)
     {
         Options = options.Value;
+        ClaimsManager = claimsManager;
     }
 
     public virtual async Task<TokenResult> Generate(TUser user)
@@ -76,21 +80,9 @@ public class JwtTokenService<TUserKey, TUser> : IJwtTokenService<TUserKey, TUser
         };
     }
 
-    protected virtual List<Claim> GetJwtClaims(TUser user)
+    protected virtual IReadOnlyList<Claim> GetJwtClaims(TUser user)
     {
-        var userId = user.Id.ToString();
-        var result = new List<Claim>
-        {
-            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new(JwtRegisteredClaimNames.Iat, DateTime.Now.ToLongDateString()),
-            new(JwtRegisteredClaimNames.Sub, userId),
-            new(ClaimTypes.NameIdentifier, userId),
-            new(ClaimTypes.Name, user.UserName)
-        };
-        if (!string.IsNullOrWhiteSpace(user.NormalizedEmail)) result.Add(new Claim(ClaimTypes.Email, user.NormalizedEmail));
-        if (!string.IsNullOrWhiteSpace(user.PhoneNumber)) result.Add(new Claim(ClaimTypes.Email, user.PhoneNumber));
-        result.AddRange(user.Roles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));
-        return result;
+        return ClaimsManager.GetClaims(user);
     }
 
     public virtual async Task<TUserKey> Validate(string accessToken)
@@ -154,7 +146,7 @@ public class JwtTokenService<TUserKey, TUser> : IJwtTokenService<TUserKey, TUser
 public class JwtTokenService<TUser> : JwtTokenService<Guid, TUser>, IJwtTokenService<TUser>
     where TUser : User
 {
-    public JwtTokenService(Microsoft.Extensions.Options.IOptions<JwtOptions> options) : base(options)
+    public JwtTokenService(Microsoft.Extensions.Options.IOptions<JwtOptions> options, UserJwtClaimsManager<TUser> claimsManager) : base(options, claimsManager)
     {
     }
 }
