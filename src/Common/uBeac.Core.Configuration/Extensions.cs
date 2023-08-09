@@ -4,9 +4,9 @@ namespace Microsoft.Extensions.Configuration
 {
     public static class Extensions
     {
-        public static IConfigurationBuilder AddJsonConfig(this IConfigurationBuilder configBuilder, IHostEnvironment env, string configFolder = "\\Config\\")
+        public static IConfigurationBuilder AddJsonConfig(this IConfigurationBuilder configBuilder, IHostEnvironment env, string configFolder = "Config")
         {
-            var folderName = env.ContentRootPath + configFolder;
+            var folderName = Path.Join(env.ContentRootPath, configFolder);
 
             // setting base path for config folder
             configBuilder.SetBasePath(folderName);
